@@ -65,19 +65,15 @@ const Navbar = () => {
                             alt="Medcity Study Abroad - Study Abroad Consultancy"
                             width={150}
                             height={50}
-                            priority
-                            sizes="
-                (max-width: 640px) 108px,
-                (max-width: 1024px) 120px,
-                150px
-              "
+                            preload
+                            sizes="(max-width: 640px) 108px, (max-width: 1024px) 120px, 150px"
                             className="
-                h-9
-                w-auto
-                object-contain
-                sm:h-10
-                lg:h-12
-              "
+    h-9
+    w-auto
+    object-contain
+    sm:h-10
+    lg:h-12
+  "
                         />
                     </Link>
 

@@ -1,16 +1,21 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { X } from "lucide-react";
 
 import FreeCounsellingForm from "./FreeCounsellingForm";
 
 const CounsellingModal = ({ open, close }) => {
+    const [mounted, setMounted] = useState(false);
     const closeButtonRef = useRef(null);
 
     useEffect(() => {
-        if (!open) return;
+        setMounted(true);
+    }, []);
+
+    useEffect(() => {
+        if (!open || !mounted) return;
 
         const previousOverflow = document.body.style.overflow;
 
@@ -32,9 +37,9 @@ const CounsellingModal = ({ open, close }) => {
             document.body.style.overflow = previousOverflow;
             document.removeEventListener("keydown", handleKeyDown);
         };
-    }, [open, close]);
+    }, [open, mounted, close]);
 
-    if (!open || typeof document === "undefined") {
+    if (!open || !mounted) {
         return null;
     }
 

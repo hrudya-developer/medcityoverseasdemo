@@ -1,9 +1,9 @@
-import Image from "next/image";
+import Carousel from "@/components/carousel/Carousel";
 
 export default function Home() {
   return (
     <>
-      <h1>Welcome</h1>
+      <Carousel />
     </>
   );
 }
