@@ -1,8 +1,12 @@
 import { Nunito, Ubuntu } from "next/font/google";
+import StoreProvider from "@/lib/redux/StoreProvider";
 import "./globals.css";
 
 import Topbar from "@/components/header/Topbar";
 import Navbar from "@/components/header/Navbar";
+import Footer from "@/components/footer/Footer";
+import BottomBar from "@/components/footer/BottomBar";
+
 
 const nunito = Nunito({
   subsets: ["latin"],
@@ -86,10 +90,10 @@ export const metadata = {
 
     images: [
       {
-        url: "/images/og/home-og.webp",
+        url: "/og-images/contact.webp",
         width: 1200,
         height: 630,
-        alt: "Medcity Overseas",
+        alt: "Contact Medcity Study Abroad",
       },
     ],
   },
@@ -123,7 +127,7 @@ export default function RootLayout({ children }) {
         ${nunito.variable}
         ${ubuntu.variable}
         h-full
-        scroll-smooth
+        scroll-smooth data-scroll-behavior="smooth"
       `}
       suppressHydrationWarning
     >
@@ -143,8 +147,12 @@ export default function RootLayout({ children }) {
         <Navbar />
 
         <main id="main-content" className="flex-1">
-          {children}
+          <StoreProvider>
+            {children}
+          </StoreProvider>
         </main>
+        <Footer />
+        <BottomBar />
       </body>
     </html>
   );

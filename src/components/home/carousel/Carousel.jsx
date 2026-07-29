@@ -1,14 +1,12 @@
-import Link from "next/link";
-
 import HeroSocialLinks from "./HeroSocialLinks";
-import WebsiteSwitchVertical from "../header/WebsiteSwitchVertical";
+import WebsiteSwitchVertical from "../../header/WebsiteSwitchVertical";
 import HeroVideo from "./HeroVideo";
 
 const Carousel = () => {
     return (
         <section
             id="hero-section"
-            aria-labelledby="hero-heading"
+            aria-label="Medcity Study Abroad introduction"
             className="
         relative
         isolate
@@ -20,18 +18,18 @@ const Carousel = () => {
             <div
                 className="
           relative
-          min-h-[calc(100svh-4rem)]
           w-full
           overflow-hidden
           bg-black
-          lg:min-h-[calc(100svh-4.75rem)]
+
+          aspect-video
+
+          max-md:h-[calc(100svh-4rem)]
+          max-md:aspect-auto
         "
             >
-                {/* Responsive desktop/mobile video */}
                 <HeroVideo />
 
-
-                {/* Desktop website switch */}
                 <div
                     className="
             absolute
@@ -46,7 +44,6 @@ const Carousel = () => {
                     <WebsiteSwitchVertical />
                 </div>
 
-                {/* Desktop social links */}
                 <HeroSocialLinks />
             </div>
         </section>

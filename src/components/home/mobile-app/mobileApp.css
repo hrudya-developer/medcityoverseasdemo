@@ -1,0 +1,148 @@
+@keyframes appPhoneFloat {
+
+    0%,
+    100% {
+        transform:
+            translate3d(-50%, -50%, 0) rotate(-1.5deg);
+    }
+
+    50% {
+        transform:
+            translate3d(-50%, calc(-50% - 9px), 0) rotate(0deg);
+    }
+}
+
+@keyframes appOrbitClockwise {
+    from {
+        transform:
+            translate(-50%, -50%) rotate(0deg);
+    }
+
+    to {
+        transform:
+            translate(-50%, -50%) rotate(360deg);
+    }
+}
+
+@keyframes appOrbitCounterClockwise {
+    from {
+        transform:
+            translate(-50%, -50%) rotate(360deg);
+    }
+
+    to {
+        transform:
+            translate(-50%, -50%) rotate(0deg);
+    }
+}
+
+@keyframes appIconFloat {
+
+    0%,
+    100% {
+        transform:
+            translateY(0) rotate(0deg);
+    }
+
+    50% {
+        transform:
+            translateY(-8px) rotate(3deg);
+    }
+}
+
+@keyframes appGlowPulse {
+
+    0%,
+    100% {
+        opacity: 0.42;
+        transform:
+            translate(-50%, -50%) scale(0.96);
+    }
+
+    50% {
+        opacity: 0.72;
+        transform:
+            translate(-50%, -50%) scale(1.04);
+    }
+}
+
+@keyframes appPlatformPulse {
+
+    0%,
+    100% {
+        opacity: 0.52;
+        transform:
+            translateX(-50%) scaleX(0.94);
+    }
+
+    50% {
+        opacity: 0.8;
+        transform:
+            translateX(-50%) scaleX(1.03);
+    }
+}
+
+@keyframes appSparklePulse {
+
+    0%,
+    100% {
+        opacity: 0.25;
+        transform:
+            scale(0.7) rotate(0deg);
+    }
+
+    50% {
+        opacity: 1;
+        transform:
+            scale(1.2) rotate(45deg);
+    }
+}
+
+.app-phone-float {
+    animation:
+        appPhoneFloat 5s ease-in-out infinite;
+    will-change: transform;
+}
+
+.app-orbit-clockwise {
+    animation:
+        appOrbitClockwise 24s linear infinite;
+}
+
+.app-orbit-counter {
+    animation:
+        appOrbitCounterClockwise 18s linear infinite;
+}
+
+.app-icon-float {
+    animation:
+        appIconFloat 4.2s ease-in-out infinite;
+}
+
+.app-glow-pulse {
+    animation:
+        appGlowPulse 4s ease-in-out infinite;
+}
+
+.app-platform-pulse {
+    animation:
+        appPlatformPulse 4.5s ease-in-out infinite;
+}
+
+.app-sparkle-pulse {
+    animation:
+        appSparklePulse 2.8s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .app-phone-float,
+    .app-orbit-clockwise,
+    .app-orbit-counter,
+    .app-icon-float,
+    .app-glow-pulse,
+    .app-platform-pulse,
+    .app-sparkle-pulse {
+        animation: none;
+    }
+}

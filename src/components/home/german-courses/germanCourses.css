@@ -1,0 +1,15 @@
+.german-home-swiper,
+.ausbildung-video-swiper {
+    width: 100%;
+}
+
+.german-home-swiper .swiper-slide,
+.ausbildung-video-swiper .swiper-slide {
+    height: auto;
+}
+
+.german-home-swiper .swiper-button-disabled,
+.ausbildung-video-swiper .swiper-button-disabled {
+    cursor: not-allowed;
+    opacity: 0.4;
+}
