@@ -90,7 +90,7 @@ export default function MobileAppRightSection({
             </div>
 
             {/* Heading */}
-            <h2
+            <h1
                 id="mobile-app-heading"
                 className="
                     mt-5
@@ -119,7 +119,7 @@ export default function MobileAppRightSection({
                 >
                     Mobile App
                 </span>
-            </h2>
+            </h1>
 
             {/* Description */}
             <p

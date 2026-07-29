@@ -43,7 +43,7 @@ const Navbar = () => {
                             alt="Medcity Study Abroad"
                             width={150}
                             height={50}
-                            preload
+                            priority
                             sizes="(max-width: 640px) 108px, (max-width: 1024px) 120px, 150px"
                             className="h-9 w-auto object-contain sm:h-10 lg:h-12"
                         />

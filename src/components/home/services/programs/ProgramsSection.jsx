@@ -103,7 +103,7 @@ function ProgramsHeader() {
                 </span>
             </div>
 
-            <h2
+            <h1
                 id="programs-heading"
                 className="
           font-nunito
@@ -129,7 +129,7 @@ function ProgramsHeader() {
                 >
                     Study Abroad Opportunities
                 </span>
-            </h2>
+            </h1>
 
             <p className="mx-auto mt-4 max-w-3xl text-base font-bold text-gray-900">
                 Your trusted gateway to international education, university admissions,

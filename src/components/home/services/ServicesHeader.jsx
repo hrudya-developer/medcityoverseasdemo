@@ -37,7 +37,7 @@ export default function ServicesHeader() {
                 Overseas Education Consultants
             </div>
 
-            <h2
+            <h1
                 id="essential-services-title"
                 className="
                     mt-5 text-balance
@@ -63,7 +63,7 @@ export default function ServicesHeader() {
                 >
                     One Place
                 </span>
-            </h2>
+            </h1>
 
             <p
                 id="essential-services-description"

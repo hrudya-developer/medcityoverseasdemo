@@ -43,7 +43,7 @@ export default function DestinationHeader() {
                 Explore. Learn. Grow
             </p>
 
-            <h2
+            <h1
                 id="destinations-heading"
                 className="
                     mt-4
@@ -68,7 +68,7 @@ export default function DestinationHeader() {
                 >
                     Destinations
                 </span>
-            </h2>
+            </h1>
 
             <p
                 className="
