@@ -1,10 +1,18 @@
+
+import OurBranches from "@/components/home/branches-section/OurBranches";
 import Carousel from "@/components/home/carousel/Carousel";
 import DestinationsSection from "@/components/home/destinations/DestinationsSection";
+import FAQ from "@/components/home/FAQ/FAQ";
+import CounsellingSection from "@/components/home/free-counselling/CounsellingSection";
 import GermanCoursesLayout from "@/components/home/german-courses/GermanCoursesLayout";
 import MobileApp from "@/components/home/mobile-app/MobileApp";
 import SearchSection from "@/components/home/searchSection/SearchSection";
 import ProgramsSection from "@/components/home/services/programs/ProgramsSection";
 import ServicesSection from "@/components/home/services/ServicesSection";
+import EssentialServices from "@/components/home/students-essential-services/EssentialServices";
+import SASteps from "@/components/home/study-abroad-steps/SASteps";
+import TestimonialSection from "@/components/home/testimonials/TestimonialSection";
+
 
 export default function Home() {
   const jsonLd = {
@@ -42,6 +50,12 @@ export default function Home() {
       <DestinationsSection />
       <MobileApp />
       <GermanCoursesLayout />
+      <EssentialServices />
+      <SASteps />
+      <TestimonialSection />
+      <CounsellingSection />
+      <OurBranches />
+      <FAQ />
     </>
   );
 }

@@ -8,6 +8,15 @@ export const searchApi = createApi({
 
     baseQuery: fetchBaseQuery({
         baseUrl: "/api",
+
+        prepareHeaders: (headers) => {
+            headers.set(
+                "Accept",
+                "application/json"
+            );
+
+            return headers;
+        },
     }),
 
     keepUnusedDataFor: 300,
@@ -16,13 +25,20 @@ export const searchApi = createApi({
         getDestinations: builder.query({
             query: (uid = 0) => ({
                 url: "/search/destinations",
+
                 params: {
                     uid,
                 },
             }),
 
-            transformResponse: (response) =>
-                response?.destinations || [],
+            transformResponse: (
+                response
+            ) =>
+                Array.isArray(
+                    response?.destinations
+                )
+                    ? response.destinations
+                    : [],
         }),
 
         getUniversities: builder.query({
@@ -31,14 +47,21 @@ export const searchApi = createApi({
                 uid = 0,
             }) => ({
                 url: "/search/universities",
+
                 params: {
                     countryId,
                     uid,
                 },
             }),
 
-            transformResponse: (response) =>
-                response?.universities || [],
+            transformResponse: (
+                response
+            ) =>
+                Array.isArray(
+                    response?.universities
+                )
+                    ? response.universities
+                    : [],
         }),
 
         getMainCourses: builder.query({
@@ -47,57 +70,88 @@ export const searchApi = createApi({
                 uid = 0,
             }) => ({
                 url: "/search/main-courses",
+
                 params: {
                     universityId,
                     uid,
                 },
             }),
 
-            transformResponse: (response) =>
-                response?.courses || [],
-        }),
-
-        getPopularCourses: builder.query({
-            query: (uid = 0) => ({
-                url: "/popular-courses",
-                params: {
-                    uid,
-                },
-            }),
-
-            transformResponse: (response) => ({
-                courses: Array.isArray(
+            transformResponse: (
+                response
+            ) =>
+                Array.isArray(
                     response?.courses
                 )
                     ? response.courses
                     : [],
-
-                imagePath:
-                    response?.imagePath || "",
-            }),
         }),
 
-        getAllDestinations: builder.query({
-            query: (uid = 0) => ({
-                url: "/all-destinations",
-                method: "POST",
-                body: {
-                    uid,
-                },
+        getPopularCourses:
+            builder.query({
+                query: (uid = 0) => ({
+                    url: "/popular-courses",
+
+                    params: {
+                        uid,
+                    },
+                }),
+
+                transformResponse: (
+                    response
+                ) => ({
+                    courses:
+                        Array.isArray(
+                            response?.courses
+                        )
+                            ? response.courses
+                            : [],
+
+                    imagePath:
+                        response?.imagePath ||
+                        "",
+                }),
             }),
 
-            transformResponse: (
-                response
-            ) => ({
-                destinations:
-                    response?.destinations ??
-                    [],
+        getAllDestinations:
+            builder.query({
+                query: (uid = 0) => ({
+                    url: "/all-destinations",
 
-                imagePath:
-                    response?.imagePath ??
-                    "",
+                    method: "POST",
+
+                    body: {
+                        uid,
+                    },
+                }),
+
+                transformResponse: (
+                    response
+                ) => ({
+                    destinations:
+                        Array.isArray(
+                            response?.destinations
+                        )
+                            ? response.destinations
+                            : [],
+
+                    imagePath:
+                        response?.imagePath ||
+                        "",
+                }),
+
+                transformErrorResponse: (
+                    response
+                ) => ({
+                    status:
+                        response?.status,
+
+                    message:
+                        response?.data
+                            ?.message ||
+                        "Unable to load destinations.",
+                }),
             }),
-        }),
 
         searchCourses: builder.query({
             query: ({
@@ -108,6 +162,7 @@ export const searchApi = createApi({
                 offset = 0,
             }) => ({
                 url: "/search/courses",
+
                 params: {
                     countryId,
                     universityId,
@@ -118,21 +173,26 @@ export const searchApi = createApi({
             }),
         }),
 
-        getCourseDetails: builder.query({
-            query: ({
-                courseId,
-                uid = 0,
-            }) => ({
-                url: "/search/course-details",
-                params: {
+        getCourseDetails:
+            builder.query({
+                query: ({
                     courseId,
-                    uid,
-                },
-            }),
+                    uid = 0,
+                }) => ({
+                    url: "/search/course-details",
 
-            transformResponse: (response) =>
-                response?.course || null,
-        }),
+                    params: {
+                        courseId,
+                        uid,
+                    },
+                }),
+
+                transformResponse: (
+                    response
+                ) =>
+                    response?.course ||
+                    null,
+            }),
     }),
 });
 
@@ -143,5 +203,5 @@ export const {
     useGetPopularCoursesQuery,
     useLazySearchCoursesQuery,
     useGetCourseDetailsQuery,
-    useGetAllDestinationsQuery
+    useGetAllDestinationsQuery,
 } = searchApi;

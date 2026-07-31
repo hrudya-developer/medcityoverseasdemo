@@ -1,65 +1,93 @@
 import { NextResponse } from "next/server";
 
-const DESTINATIONS_API_URL =
-    "https://overseas.technocitysolutions.com/public/api/getDestinations";
+import {
+    postOverseasForm,
+} from "@/lib/overseasApi";
 
-export async function POST() {
+const DEFAULT_IMAGE_PATH =
+    "https://overseas.technocitysolutions.com/public/uploads/destination";
+
+const cleanPath = (path) => {
+    if (!path) {
+        return DEFAULT_IMAGE_PATH;
+    }
+
+    return String(path).replace(/\/+$/, "");
+};
+
+const getDestinations = (result) => {
+    if (Array.isArray(result?.destinations)) {
+        return result.destinations;
+    }
+
+    if (Array.isArray(result?.data)) {
+        return result.data;
+    }
+
+    return [];
+};
+
+export async function POST(request) {
     try {
-        const formData = new FormData();
+        let body = {};
 
-        formData.append(
-            "api",
-            process.env.OVERSEAS_API_KEY ||
-            "overseas@Miak2023"
-        );
+        try {
+            body = await request.json();
+        } catch {
+            body = {};
+        }
 
-        formData.append("uid", "0");
+        const uid = Number(body?.uid ?? 0);
 
-        const response = await fetch(
-            DESTINATIONS_API_URL,
+        const result = await postOverseasForm(
+            "getDestinations",
             {
-                method: "POST",
-                body: formData,
+                uid: Number.isFinite(uid)
+                    ? uid
+                    : 0,
+            },
+            {
                 next: {
                     revalidate: 3600,
+                    tags: ["destinations"],
                 },
             }
         );
 
-        const result = await response.json();
+        return NextResponse.json(
+            {
+                success: true,
 
-        if (!response.ok) {
-            return NextResponse.json(
-                {
-                    message:
-                        result?.message ||
-                        "Unable to load destinations.",
+                destinations:
+                    getDestinations(result),
+
+                imagePath: cleanPath(
+                    result?.destinations_image_path
+                ),
+            },
+            {
+                status: 200,
+
+                headers: {
+                    "Cache-Control":
+                        "public, s-maxage=3600, stale-while-revalidate=86400",
                 },
-                {
-                    status: response.status,
-                }
-            );
-        }
-
-        return NextResponse.json({
-            destinations: Array.isArray(
-                result?.destinations
-            )
-                ? result.destinations
-                : [],
-
-            imagePath:
-                result?.destinations_image_path ||
-                "",
-        });
+            }
+        );
     } catch (error) {
         console.error(
-            "Destinations API error:",
-            error
+            "All destinations route error:",
+            error instanceof Error
+                ? error.message
+                : error
         );
 
         return NextResponse.json(
             {
+                success: false,
+                destinations: [],
+                imagePath:
+                    DEFAULT_IMAGE_PATH,
                 message:
                     "Unable to load destinations.",
             },
