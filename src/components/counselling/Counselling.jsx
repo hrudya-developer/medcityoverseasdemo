@@ -547,7 +547,7 @@ function CounsellingVisual() {
     return (
         <div className="relative flex min-h-[520px] flex-col justify-center overflow-hidden rounded-[30px] p-8 sm:p-10 lg:min-h-full">
             <Image
-                src={counsellingImage}
+                src={"/assets/counselling.webp"}
                 alt="Student receiving study abroad counselling"
                 fill
                 priority={false}
@@ -589,10 +589,12 @@ function CounsellingVisual() {
                 className="absolute right-6 top-10 z-10 hidden w-24 lg:block"
             >
                 <Image
-                    src={aeroplanePath}
-                    alt=""
+                    src={"/assets/study-abroad-path.webp"}
+                    alt="study abroad pathway"
                     className="h-auto w-full"
                     sizes="96px"
+                    width={96}
+                    height={96}
                 />
             </div>
         </div>

@@ -94,7 +94,7 @@ const CounsellingVisual = () => {
                         items-center gap-2
                         rounded-full
                         border border-white/20
-                        bg-white/10
+                        bg-logoYellow/20
                         px-4 py-2
                         text-xs font-bold
                         uppercase

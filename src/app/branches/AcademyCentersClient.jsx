@@ -7,6 +7,7 @@ import BackgroundDecorations from "./components/BackgroundDecorations";
 import BranchControls from "./components/BranchControls";
 import BranchGrid from "./components/BranchGrid";
 import { centers } from "./data/centersData";
+import FAQ from "@/components/home/FAQ/FAQ";
 
 const INITIAL_VISIBLE = 6;
 const LOAD_COUNT = 3;
@@ -98,6 +99,7 @@ export default function AcademyCentersClient() {
                     )}
                 </div>
             </section>
+            <FAQ />
         </main>
     );
 }

@@ -245,13 +245,13 @@ const ContactInfo = () => {
                             id="offices-heading"
                             className="
                 text-3xl font-extrabold
-                leading-tight text-slate-900
+                leading-tight text-darkPrimary
                 sm:text-4xl
                 lg:text-5xl
               "
                         >
-                            Our{" "}
-                            <span className="text-primary">
+                            Our Head & Corporate{" "}
+                            <span className="text-darkPrimary">
                                 Offices
                             </span>
                         </h2>

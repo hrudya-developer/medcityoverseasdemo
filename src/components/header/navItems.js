@@ -9,7 +9,7 @@ const navItems = [
     },
     {
         name: "Universities",
-        path: "/universities",
+        path: "/all-universities",
     },
     {
         name: "Courses",

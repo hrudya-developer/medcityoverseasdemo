@@ -658,8 +658,8 @@ function CounsellingVisual() {
             data-aos="fade-up"
         >
             <Image
-                src={counsellingImage}
-                alt=""
+                src={/assets/counselling.webp}
+                alt="study-abroad-counselling"
                 fill
                 sizes="
           (max-width: 1023px) 100vw,
@@ -769,7 +769,7 @@ function CounsellingVisual() {
         "
             >
                 <Image
-                    src={aeroplanePath}
+                    src={"/assets/study-abroad-path.webp"}
                     alt=""
                     sizes="96px"
                     className="h-auto w-full"

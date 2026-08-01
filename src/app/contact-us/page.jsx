@@ -1,6 +1,11 @@
+import FAQ from "@/components/home/FAQ/FAQ";
+import OurBranches from "@/components/home/branches-section/OurBranches";
+
 import ContactForm from "./ContactForm";
 import ContactHero from "./ContactHero";
 import ContactInfo from "./ContactInfo";
+
+import CounsellingSection from "@/components/home/free-counselling/CounsellingSection";
 
 const SITE_URL = "https://medcityoverseas.com";
 const PAGE_URL = `${SITE_URL}/contact-us`;
@@ -11,6 +16,7 @@ const SEO_TITLE =
 
 const SEO_DESCRIPTION =
     "Contact Medcity Study Abroad, Kerala's trusted overseas education consultants. Get free counselling for admissions, courses and student visas.";
+
 const BUSINESS_PHONE = "+91-9048059999";
 const BUSINESS_EMAIL = "medcitykochi@miak.in";
 
@@ -35,13 +41,15 @@ export const metadata = {
     ],
 
     alternates: {
-        canonical: "/contact-us",
+        canonical: PAGE_URL,
     },
 
     openGraph: {
         title: SEO_TITLE,
+
         description:
             "Speak with Medcity Study Abroad experts for personalised overseas education, university admission and visa guidance.",
+
         type: "website",
         url: PAGE_URL,
         siteName: "Medcity Study Abroad",
@@ -49,10 +57,11 @@ export const metadata = {
 
         images: [
             {
-                url: "/images/contact-us-og.webp",
+                url: OG_IMAGE,
                 width: 1200,
                 height: 630,
-                alt: "Contact Medcity Study Abroad consultants",
+                alt:
+                    "Contact Medcity Study Abroad consultants",
                 type: "image/webp",
             },
         ],
@@ -61,12 +70,15 @@ export const metadata = {
     twitter: {
         card: "summary_large_image",
         title: SEO_TITLE,
+
         description:
             "Get expert support with course selection, university applications and student visa guidance.",
+
         images: [
             {
-                url: "/images/contact-us-og.webp",
-                alt: "Contact Medcity Study Abroad consultants",
+                url: OG_IMAGE,
+                alt:
+                    "Contact Medcity Study Abroad consultants",
             },
         ],
     },
@@ -104,7 +116,8 @@ const contactPageSchema = {
     about: {
         "@type": "EducationalOrganization",
         "@id": `${SITE_URL}/#organization`,
-        name: "Medcity International Overseas Corporation",
+        name:
+            "Medcity International Overseas Corporation",
         alternateName: "Medcity Study Abroad",
         url: `${SITE_URL}/`,
         logo: `${SITE_URL}/logo.png`,
@@ -128,7 +141,10 @@ const contactPageSchema = {
                 telephone: BUSINESS_PHONE,
                 email: BUSINESS_EMAIL,
                 areaServed: "IN",
-                availableLanguage: ["English", "Malayalam"],
+                availableLanguage: [
+                    "English",
+                    "Malayalam",
+                ],
             },
         ],
     },
@@ -160,7 +176,9 @@ export default function ContactUsPage() {
             <script
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{
-                    __html: JSON.stringify(contactPageSchema).replace(
+                    __html: JSON.stringify(
+                        contactPageSchema
+                    ).replace(
                         /</g,
                         "\\u003c"
                     ),
@@ -170,18 +188,39 @@ export default function ContactUsPage() {
             <main id="main-content">
                 <ContactHero />
 
-                <section
+                {/* <section
                     id="contact-form"
                     aria-labelledby="contact-form-heading"
+                    className="scroll-mt-24"
                 >
                     <h2
                         id="contact-form-heading"
                         className="sr-only"
                     >
-                        Contact our study abroad counsellors
+                        Contact our study abroad
+                        counsellors
                     </h2>
 
                     <ContactForm />
+                </section> */}
+
+                <section>
+                    <CounsellingSection />
+                </section>
+
+                <section
+                    id="contact-information"
+                    aria-labelledby="contact-information-heading"
+                >
+                    <h2
+                        id="contact-information-heading"
+                        className="sr-only"
+                    >
+                        Medcity Study Abroad contact
+                        information
+                    </h2>
+
+                    <ContactInfo />
                 </section>
 
                 <section
@@ -192,11 +231,26 @@ export default function ContactUsPage() {
                         id="branches-heading"
                         className="sr-only"
                     >
-                        Find a Medcity Study Abroad branch near you
+                        Find a Medcity Study Abroad
+                        branch near you
                     </h2>
 
+                    <OurBranches />
+                </section>
 
-                    <ContactInfo />
+                <section
+                    id="contact-faq"
+                    aria-labelledby="contact-faq-heading"
+                >
+                    <h2
+                        id="contact-faq-heading"
+                        className="sr-only"
+                    >
+                        Frequently asked questions
+                        about contacting Medcity
+                    </h2>
+
+                    <FAQ />
                 </section>
             </main>
         </>

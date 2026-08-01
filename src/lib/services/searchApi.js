@@ -7,7 +7,7 @@ export const searchApi = createApi({
     reducerPath: "searchApi",
 
     baseQuery: fetchBaseQuery({
-        baseUrl: "/api",
+        baseUrl: "/api/",
 
         prepareHeaders: (headers) => {
             headers.set(
@@ -24,16 +24,13 @@ export const searchApi = createApi({
     endpoints: (builder) => ({
         getDestinations: builder.query({
             query: (uid = 0) => ({
-                url: "/search/destinations",
-
+                url: "search/destinations",
                 params: {
                     uid,
                 },
             }),
 
-            transformResponse: (
-                response
-            ) =>
+            transformResponse: (response) =>
                 Array.isArray(
                     response?.destinations
                 )
@@ -54,9 +51,7 @@ export const searchApi = createApi({
                 },
             }),
 
-            transformResponse: (
-                response
-            ) =>
+            transformResponse: (response) =>
                 Array.isArray(
                     response?.universities
                 )
@@ -69,7 +64,7 @@ export const searchApi = createApi({
                 universityId,
                 uid = 0,
             }) => ({
-                url: "/search/main-courses",
+                url: "search/main-courses",
 
                 params: {
                     universityId,
@@ -77,9 +72,7 @@ export const searchApi = createApi({
                 },
             }),
 
-            transformResponse: (
-                response
-            ) =>
+            transformResponse: (response) =>
                 Array.isArray(
                     response?.courses
                 )
@@ -87,71 +80,58 @@ export const searchApi = createApi({
                     : [],
         }),
 
-        getPopularCourses:
-            builder.query({
-                query: (uid = 0) => ({
-                    url: "/popular-courses",
+        getPopularCourses: builder.query({
+            query: (uid = 0) => ({
+                url: "popular-courses",
 
-                    params: {
-                        uid,
-                    },
-                }),
-
-                transformResponse: (
-                    response
-                ) => ({
-                    courses:
-                        Array.isArray(
-                            response?.courses
-                        )
-                            ? response.courses
-                            : [],
-
-                    imagePath:
-                        response?.imagePath ||
-                        "",
-                }),
+                params: {
+                    uid,
+                },
             }),
 
-        getAllDestinations:
-            builder.query({
-                query: (uid = 0) => ({
-                    url: "/all-destinations",
+            transformResponse: (response) => ({
+                courses:
+                    Array.isArray(
+                        response?.courses
+                    )
+                        ? response.courses
+                        : [],
 
-                    method: "POST",
-
-                    body: {
-                        uid,
-                    },
-                }),
-
-                transformResponse: (
-                    response
-                ) => ({
-                    destinations:
-                        Array.isArray(
-                            response?.destinations
-                        )
-                            ? response.destinations
-                            : [],
-
-                    imagePath:
-                        response?.imagePath ||
-                        "",
-                }),
-
-                transformErrorResponse: (
-                    response
-                ) => ({
-                    status:
-                        response?.status,
-
-                    message:
-                        response?.data
-                            ?.message ||
-                        "Unable to load destinations.",
-                }),
+                imagePath:
+                    response?.imagePath || "",
             }),
+        }),
+
+        getAllDestinations: builder.query({
+            query: (uid = 0) => ({
+                url: "all-destinations",
+                method: "POST",
+
+                body: {
+                    uid,
+                },
+            }),
+
+            transformResponse: (response) => ({
+                destinations:
+                    Array.isArray(
+                        response?.destinations
+                    )
+                        ? response.destinations
+                        : [],
+
+                imagePath:
+                    response?.imagePath || "",
+            }),
+
+            transformErrorResponse: (response) => ({
+                status: response?.status,
+
+                message:
+                    response?.data?.message ||
+                    "Unable to load destinations.",
+            }),
+        }),
 
         searchCourses: builder.query({
             query: ({
@@ -161,7 +141,7 @@ export const searchApi = createApi({
                 uid = 0,
                 offset = 0,
             }) => ({
-                url: "/search/courses",
+                url: "search/courses",
 
                 params: {
                     countryId,
@@ -173,26 +153,22 @@ export const searchApi = createApi({
             }),
         }),
 
-        getCourseDetails:
-            builder.query({
-                query: ({
+        getCourseDetails: builder.query({
+            query: ({
+                courseId,
+                uid = 0,
+            }) => ({
+                url: "search/course-details",
+
+                params: {
                     courseId,
-                    uid = 0,
-                }) => ({
-                    url: "/search/course-details",
-
-                    params: {
-                        courseId,
-                        uid,
-                    },
-                }),
-
-                transformResponse: (
-                    response
-                ) =>
-                    response?.course ||
-                    null,
+                    uid,
+                },
             }),
+
+            transformResponse: (response) =>
+                response?.course || null,
+        }),
     }),
 });
 

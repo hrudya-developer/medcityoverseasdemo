@@ -21,7 +21,7 @@ export default function SearchSection({
                 className="
                     relative isolate
                     w-full overflow-hidden
-                    bg-[#030416]
+                    bg-[#000]
                     py-12
                     sm:py-14
                     lg:py-16

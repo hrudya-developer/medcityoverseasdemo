@@ -12,6 +12,7 @@ import ServicesSection from "@/components/home/services/ServicesSection";
 import EssentialServices from "@/components/home/students-essential-services/EssentialServices";
 import SASteps from "@/components/home/study-abroad-steps/SASteps";
 import TestimonialSection from "@/components/home/testimonials/TestimonialSection";
+import DepartureStoriesSection from "@/components/home/departure-videos/DepartureStoriesSection";
 
 
 export default function Home() {
@@ -48,6 +49,7 @@ export default function Home() {
       <ServicesSection />
       <ProgramsSection />
       <DestinationsSection />
+      <DepartureStoriesSection />
       <MobileApp />
       <GermanCoursesLayout />
       <EssentialServices />

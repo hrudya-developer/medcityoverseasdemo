@@ -1,21 +1,28 @@
 import { NextResponse } from "next/server";
 
 import {
-    postOverseasJson,
+    postOverseasForm,
 } from "@/lib/overseasApi";
 
-const getId = (item) =>
-    String(
-        item?.id ||
-        item?.u_id ||
-        item?.university_id ||
-        ""
-    );
+const getUniversities = (result) => {
+    if (Array.isArray(result?.universities)) {
+        return result.universities;
+    }
 
-const getName = (item) =>
-    item?.name ||
-    item?.university ||
-    item?.university_name ||
+    if (Array.isArray(result?.data)) {
+        return result.data;
+    }
+
+    return [];
+};
+
+const getUniversityImagePath = (
+    result
+) =>
+    result?.universities_image_path ||
+    result?.university_image_path ||
+    result?.universityImagePath ||
+    result?.imagePath ||
     "";
 
 export async function GET(request) {
@@ -29,9 +36,19 @@ export async function GET(request) {
         const uid =
             searchParams.get("uid") || "0";
 
+        const offset =
+            searchParams.get("offset") || "0";
+
+        const keyword =
+            searchParams.get("keyword") ||
+            "alluniversities";
+
         if (!countryId) {
             return NextResponse.json(
                 {
+                    success: false,
+                    universities: [],
+                    universityImagePath: "",
                     message:
                         "countryId is required.",
                 },
@@ -42,49 +59,54 @@ export async function GET(request) {
         }
 
         const result =
-            await postOverseasJson(
+            await postOverseasForm(
                 "getUniversitybyOffset",
                 {
                     uid,
                     id: countryId,
-                    offset: 0,
-                    keyword: "alluniversities",
+                    offset,
+                    keyword,
+                },
+                {
+                    cache: "no-store",
                 }
             );
 
-        const source = Array.isArray(
-            result?.data
-        )
-            ? result.data
-            : Array.isArray(
-                result?.universities
-            )
-                ? result.universities
-                : [];
+        return NextResponse.json(
+            {
+                success: true,
 
-        const universities = source
-            .map((item) => ({
-                id: getId(item),
-                name: getName(item),
-            }))
-            .filter(
-                (item) => item.id && item.name
-            );
+                universities:
+                    getUniversities(result),
 
-        return NextResponse.json({
-            universities,
-        });
+                universityImagePath:
+                    getUniversityImagePath(
+                        result
+                    ),
+
+                nextOffset:
+                    result?.nextoffset ??
+                    null,
+            },
+            {
+                status: 200,
+            }
+        );
     } catch (error) {
         console.error(
-            "University search API error:",
-            error
+            "Universities route error:",
+            error instanceof Error
+                ? error.message
+                : error
         );
 
         return NextResponse.json(
             {
+                success: false,
+                universities: [],
+                universityImagePath: "",
                 message:
-                    error?.message ||
-                    "Failed to load universities.",
+                    "Unable to load universities.",
             },
             {
                 status: 500,
