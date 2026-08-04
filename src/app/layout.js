@@ -1,44 +1,77 @@
-import { Nunito, Ubuntu } from "next/font/google";
+import {
+  Nunito,
+  Ubuntu,
+} from "next/font/google";
+
 import StoreProvider from "@/lib/redux/StoreProvider";
-import "./globals.css";
 
 import Topbar from "@/components/header/Topbar";
 import Navbar from "@/components/header/Navbar";
 import Footer from "@/components/footer/Footer";
 import BottomBar from "@/components/footer/BottomBar";
 
+import "./globals.css";
 
 const nunito = Nunito({
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800"],
-  style: ["normal", "italic"],
+
+  weight: [
+    "400",
+    "500",
+    "600",
+    "700",
+    "800",
+  ],
+
+  style: [
+    "normal",
+    "italic",
+  ],
+
   display: "swap",
-  variable: "--font-nunito-loaded",
-  preload: true,
+
+  variable:
+    "--font-nunito-loaded",
 });
 
 const ubuntu = Ubuntu({
   subsets: ["latin"],
-  weight: ["400", "500", "700"],
-  style: ["normal", "italic"],
+
+  weight: [
+    "400",
+    "500",
+    "700",
+  ],
+
+  style: [
+    "normal",
+    "italic",
+  ],
+
   display: "swap",
-  variable: "--font-ubuntu-loaded",
-  preload: true,
+
+  variable:
+    "--font-ubuntu-loaded",
 });
 
 export const metadata = {
-  metadataBase: new URL("https://medcityoverseas.com"),
+  metadataBase: new URL(
+    "https://medcityoverseas.com"
+  ),
 
   title: {
     default:
       "Study Abroad Consultants in Kerala | Medcity Overseas & Medcity Study Abroad",
-    template: "%s | Medcity Overseas",
+
+    template:
+      "%s | Medcity Overseas",
   },
 
   description:
-    "Medcity Overseas (Medcity Study Abroad) is one of Kerala's leading overseas education consultants, helping students study in Germany, the UK, Canada, Australia, Ireland, New Zealand and other top destinations. Get expert counselling, university admissions, student visa assistance, scholarships, immigration support and language training.",
+    "Medcity Overseas, also known as Medcity Study Abroad, helps students study in Germany, the UK, Canada, Australia, Ireland, New Zealand and other destinations through expert counselling, university admissions, student visa assistance, scholarships and language training.",
 
-  applicationName: "Medcity Overseas",
+  applicationName:
+    "Medcity Overseas",
 
   authors: [
     {
@@ -46,8 +79,11 @@ export const metadata = {
     },
   ],
 
-  creator: "Medcity Overseas",
-  publisher: "Medcity Overseas",
+  creator:
+    "Medcity Overseas",
+
+  publisher:
+    "Medcity Overseas",
 
   keywords: [
     "Medcity Overseas",
@@ -80,79 +116,111 @@ export const metadata = {
       "Study Abroad Consultants in Kerala | Medcity Overseas",
 
     description:
-      "Study in Germany, UK, Canada, Australia and more with expert counselling, admissions, scholarships, visa assistance and language training from Medcity Overseas.",
+      "Study in Germany, the UK, Canada, Australia and more with expert counselling, admissions, scholarships, visa assistance and language training from Medcity Overseas.",
 
     url: "/",
-    siteName: "Medcity Overseas",
 
-    locale: "en_IN",
-    type: "website",
+    siteName:
+      "Medcity Overseas",
+
+    locale:
+      "en_IN",
+
+    type:
+      "website",
 
     images: [
       {
-        url: "/og-images/contact.webp",
+        url:
+          "/og-images/contact.webp",
+
         width: 1200,
+
         height: 630,
-        alt: "Contact Medcity Study Abroad",
+
+        alt:
+          "Medcity Overseas study abroad counselling",
       },
     ],
   },
 
   twitter: {
-    card: "summary_large_image",
+    card:
+      "summary_large_image",
+
     title:
       "Study Abroad Consultants in Kerala | Medcity Overseas",
 
     description:
       "Explore international universities, admissions, scholarships and visa guidance with Medcity Overseas.",
 
-    images: ["/images/og/home-og.webp"],
+    images: [
+      "/og-images/contact.webp",
+    ],
+  },
+
+  robots: {
+    index: true,
+    follow: true,
+
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview":
+        "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
   },
 };
 
 export const viewport = {
-  width: "device-width",
+  width:
+    "device-width",
+
   initialScale: 1,
+
   maximumScale: 5,
-  themeColor: "#c01f53",
-  colorScheme: "light",
+
+  themeColor:
+    "#c01f53",
+
+  colorScheme:
+    "light",
 };
 
-export default function RootLayout({ children }) {
+export default function RootLayout({
+  children,
+}) {
   return (
     <html
       lang="en"
       data-theme="mytheme"
+      data-scroll-behavior="smooth"
       className={`
-        ${nunito.variable}
-        ${ubuntu.variable}
-        h-full
-        scroll-smooth data-scroll-behavior="smooth"
-      `}
-      suppressHydrationWarning
+                ${nunito.variable}
+                ${ubuntu.variable}
+                h-full
+                scroll-smooth
+            `}
     >
-      <body
-        className="
-          flex
-          min-h-full
-          flex-col
-          bg-white
-          font-nunito
-          text-slate-900
-          antialiased
-        "
-      >
-        <Topbar />
+      <body className="flex min-h-full flex-col bg-white font-nunito text-slate-900 antialiased">
+        <StoreProvider>
+          <Topbar />
 
-        <Navbar />
+          <Navbar />
 
-        <main id="main-content" className="flex-1">
-          <StoreProvider>
+          <main
+            id="main-content"
+            className="flex-1"
+          >
             {children}
-          </StoreProvider>
-        </main>
-        <Footer />
-        <BottomBar />
+          </main>
+
+          <Footer />
+
+          <BottomBar />
+        </StoreProvider>
       </body>
     </html>
   );

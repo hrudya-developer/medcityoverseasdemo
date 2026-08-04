@@ -47,9 +47,12 @@ export default function Home() {
       <Carousel />
       <SearchSection />
       <ServicesSection />
+
       <ProgramsSection />
+
       <DestinationsSection />
       <DepartureStoriesSection />
+
       <MobileApp />
       <GermanCoursesLayout />
       <EssentialServices />

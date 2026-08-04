@@ -20,25 +20,37 @@ import WebsiteSwitchHorizontal from "./WebsiteSwitchHorizontal";
 
 const menuItems = [
     {
+        name: "About Us",
+        description:
+            "Learn more about Medcity Study Abroad",
+        path: "/about-us",
+        icon: Sparkles,
+        iconBox:
+            "bg-primary/10 text-primary group-hover:bg-primary group-hover:text-white",
+    },
+    {
         name: "Destinations",
-        description: "Explore countries worldwide",
-        path: "/destinationList",
+        description:
+            "Explore study destinations worldwide",
+        path: "/destinations",
         icon: MapPin,
         iconBox:
             "bg-secondary/10 text-secondary group-hover:bg-secondary group-hover:text-white",
     },
     {
         name: "Universities",
-        description: "Find your ideal institution",
-        path: "/allUniversities",
+        description:
+            "Find your ideal university",
+        path: "/all-universities",
         icon: University,
         iconBox:
             "bg-primary/10 text-primary group-hover:bg-primary group-hover:text-white",
     },
     {
         name: "Courses",
-        description: "Discover suitable programs",
-        path: "/courseSearch",
+        description:
+            "Discover programs and courses",
+        path: "/courses",
         icon: BookOpenText,
         iconBox:
             "bg-amber-100 text-amber-700 group-hover:bg-amber-400 group-hover:text-slate-900",
@@ -322,7 +334,7 @@ const MobileMenu = ({
 
                             <li>
                                 <MobileMenuLink
-                                    href="/studyAbroadBlog"
+                                    href="/blogs"
                                     name="Blogs"
                                     description="Read insights and student guides"
                                     icon={Rss}

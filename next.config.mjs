@@ -5,7 +5,15 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "overseas.technocitysolutions.com",
+        hostname:
+          "overseas.technocitysolutions.com",
+        pathname:
+          "/public/uploads/destination/**",
+      },
+      {
+        protocol: "https",
+        hostname:
+          "overseas.technocitysolutions.com",
         pathname: "/public/images/**",
       },
       {

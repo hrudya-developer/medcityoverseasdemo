@@ -73,8 +73,10 @@ const UniversityCard = ({
                 "
             />
 
+
+
             <Link
-                href={universityHref}
+                href={`/university-details/${university.id}`}
                 aria-label={`View details for ${universityName}`}
                 className="flex h-full w-full flex-col"
             >
@@ -314,14 +316,16 @@ const UniversityCard = ({
                             pt-5
                         "
                     >
-                        <span
-                            className="
+                        <Link href={`/university-details/${university.id}`}>
+                            <span
+                                className="
                                 text-sm font-extrabold
                                 text-primary
                             "
-                        >
-                            View university
-                        </span>
+                            >
+                                View university
+                            </span>
+                        </Link>
 
                         <span
                             aria-hidden="true"

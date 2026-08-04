@@ -30,7 +30,6 @@ export default function CourseDetailsHero({
         relative mx-auto
         min-h-[400px]
         w-full
-        max-w-[1600px]
         overflow-hidden
         bg-cover
         bg-center
@@ -65,7 +64,7 @@ export default function CourseDetailsHero({
             <div
                 className="
                     relative mx-auto
-                    flex min-h-[420px]
+                    flex min-h-[420px] max-w-9xl
                     items-center
                     px-5 py-10
                     sm:px-8

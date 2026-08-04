@@ -31,6 +31,7 @@ import {
 const UniversitiesByCountry = ({
     initialCountryId,
     initialCountryName = "",
+    embedded = false,
 }) => {
     const router = useRouter();
 

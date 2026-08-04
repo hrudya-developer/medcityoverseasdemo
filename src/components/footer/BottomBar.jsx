@@ -57,15 +57,12 @@ const BottomBar = () => {
             flex
             flex-col
             items-center
-            justify-between
+            justify-center
             gap-3
             sm:flex-row
           "
                 >
-                    <p className="text-center text-[11px] text-white/75 sm:text-left">
-                        © {currentYear} Medcity International Overseas Corporation. All
-                        rights reserved.
-                    </p>
+
 
                     <nav aria-label="Medcity social media links">
                         <ul className="flex items-center justify-center gap-2">
@@ -86,7 +83,7 @@ const BottomBar = () => {
                         w-8
                         items-center
                         justify-center
-                        rounded-lg
+                        rounded-full
                         bg-darkPrimary
                         text-lg
                         text-white

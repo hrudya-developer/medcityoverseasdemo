@@ -1,11 +1,19 @@
 "use client";
 
-const MobileMenuButton = ({
+import {
+    Menu,
+    X,
+} from "lucide-react";
+
+export default function MobileMenuButton({
     mobileOpen,
     setMobileOpen,
-}) => {
+}) {
     const toggleMobileMenu = () => {
-        setMobileOpen((previousState) => !previousState);
+        setMobileOpen(
+            (currentState) =>
+                !currentState
+        );
     };
 
     return (
@@ -13,36 +21,27 @@ const MobileMenuButton = ({
             type="button"
             onClick={toggleMobileMenu}
             aria-expanded={mobileOpen}
+            aria-controls="mobile-navigation"
             aria-label={
                 mobileOpen
                     ? "Close navigation menu"
                     : "Open navigation menu"
             }
-            className="
-        flex
-        h-9
-        w-9
-        items-center
-        justify-center
-        rounded-full
-        text-xl
-        text-white
-        transition-colors
-        duration-200
-        hover:bg-white/10
-        focus-visible:outline-none
-        focus-visible:ring-2
-        focus-visible:ring-white
-        focus-visible:ring-offset-2
-        focus-visible:ring-offset-primary
-        lg:hidden
-      "
+            className="grid size-10 place-content-center rounded-full border border-white/15 bg-white/10 text-white shadow-sm backdrop-blur-md transition-all duration-300 hover:scale-105 hover:bg-white hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-primary lg:hidden"
         >
-            <span aria-hidden="true">
-                {mobileOpen ? "×" : "☰"}
-            </span>
+            {mobileOpen ? (
+                <X
+                    size={22}
+                    strokeWidth={2.4}
+                    aria-hidden="true"
+                />
+            ) : (
+                <Menu
+                    size={22}
+                    strokeWidth={2.4}
+                    aria-hidden="true"
+                />
+            )}
         </button>
     );
-};
-
-export default MobileMenuButton;
+}

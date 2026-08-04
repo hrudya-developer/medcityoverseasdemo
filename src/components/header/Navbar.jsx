@@ -1,42 +1,55 @@
 "use client";
 
-import { memo, useState } from "react";
+import {
+    useCallback,
+    useState,
+} from "react";
+
 import Image from "next/image";
 import Link from "next/link";
 
+import CounsellingModal from "../counselling/CounsellingModal";
 import DesktopNavigation from "./DesktopNavigation";
-import NavbarActions from "./NavbarActions";
 import MobileMenu from "./MobileMenu";
 import MobileMenuButton from "./MobileMenuButton";
-// import CounsellingModal from "./CounsellingModal";
+import NavbarActions from "./NavbarActions";
 
-const Navbar = () => {
-    const [mobileOpen, setMobileOpen] = useState(false);
-    // const [showCounselling, setShowCounselling] =
-    //     useState(false);
+export default function Navbar() {
+    const [
+        mobileOpen,
+        setMobileOpen,
+    ] = useState(false);
 
-    const closeMobileMenu = () => {
-        setMobileOpen(false);
-    };
+    const [
+        counsellingOpen,
+        setCounsellingOpen,
+    ] = useState(false);
 
-    // const openCounsellingPopup = () => {
-    //     closeMobileMenu();
-    //     setShowCounselling(true);
-    // };
+    const closeMobileMenu =
+        useCallback(() => {
+            setMobileOpen(false);
+        }, []);
 
-    // const closeCounsellingPopup = () => {
-    //     setShowCounselling(false);
-    // };
+    const openCounsellingPopup =
+        useCallback(() => {
+            setMobileOpen(false);
+            setCounsellingOpen(true);
+        }, []);
+
+    const closeCounsellingPopup =
+        useCallback(() => {
+            setCounsellingOpen(false);
+        }, []);
 
     return (
         <>
-            <header className="sticky top-0 z-50 bg-primary">
-                <div className="relative mx-auto flex h-16 max-w-9xl items-center justify-between px-4 sm:px-6 lg:h-[76px] lg:px-8">
+            <header className="sticky top-0 z-50 bg-primary shadow-[0_5px_20px_rgba(99,26,51,0.16)]">
+                <div className="relative mx-auto flex h-16 w-full max-w-[1600px] items-center px-4 sm:px-6 lg:h-[76px] lg:px-8">
                     <Link
                         href="/"
                         aria-label="Medcity Study Abroad home"
                         onClick={closeMobileMenu}
-                        className="shrink-0"
+                        className="relative z-10 inline-flex shrink-0 items-center"
                     >
                         <Image
                             src="/logo.png"
@@ -44,42 +57,45 @@ const Navbar = () => {
                             width={150}
                             height={50}
                             priority
-                            sizes="(max-width: 640px) 108px, (max-width: 1024px) 120px, 150px"
                             className="h-9 w-auto object-contain sm:h-10 lg:h-12"
                         />
                     </Link>
 
                     <DesktopNavigation />
 
-                    {/* <NavbarActions
+                    <NavbarActions
                         openCounsellingPopup={
                             openCounsellingPopup
                         }
-                    /> */}
+                    />
 
-                    <div className="relative lg:hidden">
+                    <div className="ml-auto flex items-center lg:hidden">
                         <MobileMenuButton
-                            mobileOpen={mobileOpen}
-                            setMobileOpen={setMobileOpen}
-                        />
-
-                        {/* <MobileMenu
-                            open={mobileOpen}
-                            closeMenu={closeMobileMenu}
-                            openCounsellingPopup={
-                                openCounsellingPopup
+                            mobileOpen={
+                                mobileOpen
                             }
-                        /> */}
+                            setMobileOpen={
+                                setMobileOpen
+                            }
+                        />
                     </div>
                 </div>
             </header>
 
-            {/* <CounsellingModal
-                open={showCounselling}
-                close={closeCounsellingPopup}
-            /> */}
+            <MobileMenu
+                open={mobileOpen}
+                closeMenu={closeMobileMenu}
+                openCounsellingPopup={
+                    openCounsellingPopup
+                }
+            />
+
+            <CounsellingModal
+                open={counsellingOpen}
+                onClose={
+                    closeCounsellingPopup
+                }
+            />
         </>
     );
-};
-
-export default memo(Navbar);
+}
