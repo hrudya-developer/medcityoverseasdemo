@@ -1,12 +1,29 @@
-import {
-    NextResponse,
-} from "next/server";
+import { NextResponse } from "next/server";
 
 const API_URL =
     "https://overseas.technocitysolutions.com/public/api/getCommunityPosts";
 
+const API_KEY =
+    process.env.OVERSEAS_API_KEY;
+
 export async function GET(request) {
     try {
+        if (!API_KEY) {
+            console.error(
+                "OVERSEAS_API_KEY is missing."
+            );
+
+            return NextResponse.json(
+                {
+                    message:
+                        "Community API configuration is missing.",
+                },
+                {
+                    status: 500,
+                }
+            );
+        }
+
         const { searchParams } =
             new URL(request.url);
 
@@ -23,8 +40,7 @@ export async function GET(request) {
 
         formData.append(
             "api",
-            process.env
-                .OVERSEAS_API_KEY
+            API_KEY
         );
 
         formData.append(
@@ -43,25 +59,58 @@ export async function GET(request) {
                 method: "POST",
                 body: formData,
                 cache: "no-store",
+                headers: {
+                    Accept:
+                        "application/json",
+                },
             }
         );
 
         const contentType =
             response.headers.get(
                 "content-type"
+            ) || "";
+
+        const rawResponse =
+            await response.text();
+
+        if (!response.ok) {
+            console.error(
+                "Community API request failed:",
+                {
+                    status:
+                        response.status,
+                    body:
+                        rawResponse.slice(
+                            0,
+                            500
+                        ),
+                }
             );
 
+            return NextResponse.json(
+                {
+                    message:
+                        "Unable to load community posts.",
+                },
+                {
+                    status:
+                        response.status,
+                }
+            );
+        }
+
         if (
-            !contentType?.includes(
+            !contentType.includes(
                 "application/json"
             )
         ) {
-            const text =
-                await response.text();
-
             console.error(
                 "Community API returned non-JSON:",
-                text
+                rawResponse.slice(
+                    0,
+                    500
+                )
             );
 
             return NextResponse.json(
@@ -75,51 +124,69 @@ export async function GET(request) {
             );
         }
 
-        const result =
-            await response.json();
+        let result;
 
-        if (!response.ok) {
+        try {
+            result =
+                JSON.parse(rawResponse);
+        } catch (error) {
+            console.error(
+                "Unable to parse community API response:",
+                error
+            );
+
             return NextResponse.json(
                 {
                     message:
-                        result?.message ||
-                        "Unable to load community posts.",
+                        "Community API returned invalid JSON.",
                 },
                 {
-                    status:
-                        response.status,
+                    status: 502,
                 }
             );
         }
 
         const posts =
-            Array.isArray(
-                result?.posts
-            )
+            Array.isArray(result?.posts)
                 ? result.posts
-                : [];
+                : Array.isArray(
+                    result?.post
+                )
+                    ? result.post
+                    : [];
 
         const imagePath =
             result?.post_image_path ||
             result?.posts_image_path ||
+            result?.imagePath ||
             "";
 
         const nextOffset =
             result?.nextoffset ??
             result?.next_offset ??
+            result?.nextOffset ??
             null;
 
-        return NextResponse.json({
-            success:
-                result?.status === true,
-            posts,
-            imagePath,
-            nextOffset,
-        });
+        return NextResponse.json(
+            {
+                success: true,
+                posts,
+                imagePath,
+                nextOffset,
+            },
+            {
+                status: 200,
+            }
+        );
     } catch (error) {
         console.error(
             "Community posts route error:",
-            error
+            {
+                message:
+                    error?.message,
+                cause:
+                    error?.cause,
+            }
         );
 
         return NextResponse.json(

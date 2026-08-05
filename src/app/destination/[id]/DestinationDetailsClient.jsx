@@ -228,18 +228,14 @@ export default function DestinationDetailsClient({
 
     return (
         <>
-            <main className="overflow-hidden bg-[#f8fafc]">
+            <div className="overflow-hidden bg-[#f8fafc]">
                 <DestinationHero
                     country={country}
-                    countryName={
-                        countryName
-                    }
+                    countryName={countryName}
                     image={safeImage}
                     flag={safeFlag}
                     onOpenCounselling={() =>
-                        setShowCounselling(
-                            true
-                        )
+                        setShowCounselling(true)
                     }
                 />
 
@@ -249,17 +245,13 @@ export default function DestinationDetailsClient({
 
                 <AboutDestination
                     country={country}
-                    countryName={
-                        countryName
-                    }
+                    countryName={countryName}
                     image={safeImage}
                     flag={safeFlag}
                 />
 
                 <WhyChoose
-                    countryName={
-                        countryName
-                    }
+                    countryName={countryName}
                     attractions={
                         normalizedAttractions
                     }
@@ -268,34 +260,23 @@ export default function DestinationDetailsClient({
                 <DestinationUniversities
                     countryId={countryId}
                     countryName={countryName}
-                    universities={universities}
+                    universities={
+                        universities
+                    }
                     universityImagePath={
                         universityImagePath
                     }
                 />
 
                 <DestinationCTA
-                    countryName={
-                        countryName
-                    }
+                    countryName={countryName}
                     onOpenCounselling={() =>
-                        setShowCounselling(
-                            true
-                        )
+                        setShowCounselling(true)
                     }
                 />
 
                 <FAQ />
-            </main>
-
-            {/* <CounsellingModal
-                open={showCounselling}
-                onClose={() =>
-                    setShowCounselling(
-                        false
-                    )
-                }
-            /> */}
+            </div>
         </>
     );
 }
@@ -621,11 +602,7 @@ function DestinationCTA({
                         </p>
                     </div>
 
-                    <button
-                        type="button"
-                        onClick={
-                            onOpenCounselling
-                        }
+                    <Link href="/contact-us"
                         className="group inline-flex min-h-14 shrink-0 items-center justify-center gap-3 rounded-xl bg-white px-7 font-bold text-darkPrimary shadow-lg transition hover:-translate-y-1 hover:bg-logoYellow"
                     >
                         Get Free Counselling
@@ -635,7 +612,7 @@ function DestinationCTA({
                             aria-hidden="true"
                             className="transition-transform group-hover:translate-x-1"
                         />
-                    </button>
+                    </Link>
                 </div>
             </div>
         </section>

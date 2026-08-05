@@ -43,7 +43,7 @@ export const searchApi = createApi({
                 countryId,
                 uid = 0,
             }) => ({
-                url: "/search/universities",
+                url: "search/universities",
 
                 params: {
                     countryId,

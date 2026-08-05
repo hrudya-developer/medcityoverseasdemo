@@ -1,21 +1,13 @@
 "use client";
 
-import {
-    useEffect,
-    useId,
-} from "react";
-
+import { useEffect, useId } from "react";
 import { createPortal } from "react-dom";
 import { X } from "lucide-react";
-import CounsellingIntro from "../home/free-counselling/CounsellingIntro";
+
+import CustomScrollbar from "@/components/SimpleBar";
 import CounsellingForm from "../home/free-counselling/CounsellingForm";
 
-
-
-export default function CounsellingModal({
-    open,
-    onClose,
-}) {
+export default function CounsellingModal({ open, onClose }) {
     const titleId = useId();
 
     useEffect(() => {
@@ -23,11 +15,8 @@ export default function CounsellingModal({
             return undefined;
         }
 
-        const previousOverflow =
-            document.body.style.overflow;
-
-        document.body.style.overflow =
-            "hidden";
+        const previousOverflow = document.body.style.overflow;
+        document.body.style.overflow = "hidden";
 
         const handleEscape = (event) => {
             if (event.key === "Escape") {
@@ -35,19 +24,11 @@ export default function CounsellingModal({
             }
         };
 
-        document.addEventListener(
-            "keydown",
-            handleEscape
-        );
+        document.addEventListener("keydown", handleEscape);
 
         return () => {
-            document.body.style.overflow =
-                previousOverflow;
-
-            document.removeEventListener(
-                "keydown",
-                handleEscape
-            );
+            document.body.style.overflow = previousOverflow;
+            document.removeEventListener("keydown", handleEscape);
         };
     }, [open, onClose]);
 
@@ -58,26 +39,24 @@ export default function CounsellingModal({
     return createPortal(
         <div
             role="presentation"
-            className="fixed inset-0 z-[10000] flex items-center justify-center p-3 sm:p-5"
+            className="fixed inset-0 z-[10000] flex items-center justify-center p-4 sm:p-6"
         >
+            {/* Backdrop */}
             <button
                 type="button"
                 aria-label="Close counselling form"
                 onClick={onClose}
-                className="absolute inset-0 cursor-default bg-black/75 backdrop-blur-sm"
+                className="absolute inset-0 cursor-default bg-black/70 backdrop-blur-md"
             />
 
-            <section
-                role="dialog"
-                aria-modal="true"
-                aria-labelledby={titleId}
-                className="relative z-10 max-h-[94dvh] w-full max-w-[1380px] overflow-y-auto rounded-[30px] bg-[#f7f9fd] shadow-[0_30px_100px_rgba(0,0,0,0.35)]"
-            >
+            {/* Modal wrapper */}
+            <div className="relative z-10 w-full max-w-[750px]">
+                {/* Close button */}
                 <button
                     type="button"
                     onClick={onClose}
                     aria-label="Close counselling modal"
-                    className="absolute right-3 top-3 z-30 grid size-11 place-items-center rounded-full border border-white/20 bg-black/50 text-white shadow-lg backdrop-blur-md transition hover:rotate-90 hover:bg-white hover:text-primary sm:right-5 sm:top-5"
+                    className="absolute -right-2 -top-12 z-30 grid size-10 place-items-center rounded-full bg-primary text-white shadow-[0_10px_30px_rgba(0,0,0,0.3)] transition duration-300 hover:rotate-90 hover:scale-110 hover:bg-primary/90 focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/30 sm:-right-3 sm:-top-3"
                 >
                     <X
                         className="size-5"
@@ -85,23 +64,32 @@ export default function CounsellingModal({
                     />
                 </button>
 
-                <h2
-                    id={titleId}
-                    className="sr-only"
+                {/* Modal */}
+                <section
+                    role="dialog"
+                    aria-modal="true"
+                    aria-labelledby={titleId}
+                    className="relative w-full overflow-hidden rounded-[26px] border border-white/60 bg-[#f7f9fd] shadow-[0_30px_100px_rgba(0,0,0,0.4)]"
                 >
-                    Request free counselling
-                </h2>
+                    <h2
+                        id={titleId}
+                        className="sr-only"
+                    >
+                        Request free counselling
+                    </h2>
 
-                <div className="grid min-h-[680px] items-stretch lg:grid-cols-[0.9fr_1.1fr]">
-                    <div className="hidden p-4 lg:block">
-                        <CounsellingIntro />
-                    </div>
-
-                    <div className="p-3 sm:p-5 lg:p-6">
-                        <CounsellingForm />
-                    </div>
-                </div>
-            </section>
+                    <CustomScrollbar
+                        className="max-h-[82dvh]"
+                        autoHide={false}
+                    >
+                        <div className="p-3 pr-5 sm:p-4 sm:pr-6">
+                            <div className="mx-auto w-full max-w-[700px]">
+                                <CounsellingForm onSuccess={onClose} />
+                            </div>
+                        </div>
+                    </CustomScrollbar>
+                </section>
+            </div>
         </div>,
         document.body
     );

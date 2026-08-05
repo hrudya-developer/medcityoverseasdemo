@@ -287,15 +287,7 @@ const UniversitiesByCountry = ({
     return (
         <section
             aria-labelledby="universities-heading"
-            className="
-                min-h-screen
-                bg-[#f6f8fc]
-                px-4 py-8
-                sm:px-6
-                lg:px-8
-                lg:py-12
-            "
-        >
+            className="min-h-screen bg-[#f6f8fc] px-4 py-8 sm:px-6 lg:px-8 lg:py-12">
             <div
                 className="
                     mx-auto grid

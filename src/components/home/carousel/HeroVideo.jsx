@@ -1,6 +1,7 @@
 "use client";
 
 import {
+    useCallback,
     useEffect,
     useRef,
     useState,
@@ -18,8 +19,7 @@ const DESKTOP_POSTER =
 const MOBILE_POSTER =
     "/assets/hero-mobile-poster.webp";
 
-const MOBILE_QUERY =
-    "(max-width: 767px)";
+const MOBILE_QUERY = "(max-width: 767px)";
 
 const HeroVideo = () => {
     const videoRef = useRef(null);
@@ -27,69 +27,69 @@ const HeroVideo = () => {
     const [isVideoReady, setIsVideoReady] =
         useState(false);
 
+    const handleVideoReady = useCallback(() => {
+        setIsVideoReady(true);
+    }, []);
+
     useEffect(() => {
         const video = videoRef.current;
 
-        if (!video) {
-            return;
-        }
+        if (!video) return;
 
-        const mediaQuery =
-            window.matchMedia(
-                MOBILE_QUERY
-            );
+        const mobileMediaQuery =
+            window.matchMedia(MOBILE_QUERY);
 
         const reducedMotionQuery =
             window.matchMedia(
                 "(prefers-reduced-motion: reduce)"
             );
 
-        const loadCorrectVideo =
-            async () => {
-                setIsVideoReady(false);
+        let cancelled = false;
 
-                const nextVideoSource =
-                    mediaQuery.matches
-                        ? MOBILE_VIDEO
-                        : DESKTOP_VIDEO;
+        const updateVideoSource = async () => {
+            if (cancelled) return;
 
-                if (
-                    video.getAttribute("src") !==
-                    nextVideoSource
-                ) {
-                    video.src =
-                        nextVideoSource;
+            const nextSource =
+                mobileMediaQuery.matches
+                    ? MOBILE_VIDEO
+                    : DESKTOP_VIDEO;
 
-                    video.load();
-                }
+            setIsVideoReady(false);
 
-                if (
-                    reducedMotionQuery.matches
-                ) {
-                    return;
-                }
+            if (
+                video.getAttribute("src") !==
+                nextSource
+            ) {
+                video.pause();
+                video.src = nextSource;
+                video.load();
+            }
 
-                try {
-                    await video.play();
-                } catch {
-                    // Autoplay can be blocked.
-                }
-            };
+            if (reducedMotionQuery.matches) return;
 
-        void loadCorrectVideo();
+            try {
+                await video.play();
+            } catch { }
+        };
 
-        mediaQuery.addEventListener(
+        void updateVideoSource();
+
+        mobileMediaQuery.addEventListener(
             "change",
-            loadCorrectVideo
+            updateVideoSource
         );
 
         return () => {
-            mediaQuery.removeEventListener(
+            cancelled = true;
+
+            mobileMediaQuery.removeEventListener(
                 "change",
-                loadCorrectVideo
+                updateVideoSource
             );
 
             video.pause();
+            video.removeAttribute("src");
+            video.load();
         };
     }, []);
 
@@ -97,16 +97,7 @@ const HeroVideo = () => {
         <div className="absolute inset-0 overflow-hidden bg-black">
             <picture
                 aria-hidden="true"
-                className={`
-          absolute inset-0
-          transition-opacity
-          duration-300
-          ease-out
-          ${isVideoReady
-                        ? "pointer-events-none opacity-0"
-                        : "opacity-100"
-                    }
-        `}
+                className={`absolute inset-0 transition-opacity duration-300 ease-out ${isVideoReady ? "pointer-events-none opacity-0" : "opacity-100"}`}
             >
                 <source
                     media={MOBILE_QUERY}
@@ -120,90 +111,39 @@ const HeroVideo = () => {
                     height={1080}
                     fetchPriority="high"
                     decoding="async"
-                    className="
-            h-full
-            w-full
-            object-cover
-            object-center
-            md:object-top
-          "
+                    className="h-full w-full object-cover object-center md:object-top"
                 />
             </picture>
 
             <video
                 ref={videoRef}
-                autoPlay
                 muted
                 loop
                 playsInline
-                preload="auto"
+                preload="metadata"
                 disablePictureInPicture
                 controlsList="nodownload noplaybackrate nofullscreen"
                 aria-hidden="true"
                 tabIndex={-1}
-                onLoadedData={() =>
-                    setIsVideoReady(true)
-                }
-                onPlaying={() =>
-                    setIsVideoReady(true)
-                }
-                className={`
-          absolute inset-0
-          h-full w-full
-          object-cover
-          object-[center_35%]
-          transition-opacity
-          duration-300
-          ease-out
-          md:object-center
-          lg:object-top
-          ${isVideoReady
-                        ? "opacity-100"
-                        : "opacity-0"
-                    }
-        `}
+                onLoadedData={handleVideoReady}
+                onCanPlay={handleVideoReady}
+                onPlaying={handleVideoReady}
+                className={`absolute inset-0 h-full w-full object-cover object-[center_35%] transition-opacity duration-300 ease-out md:object-center lg:object-top ${isVideoReady ? "opacity-100" : "opacity-0"}`}
             />
 
             <div
                 aria-hidden="true"
-                className="
-          pointer-events-none
-          absolute inset-0
-          bg-gradient-to-r
-          from-black/20
-          via-transparent
-          to-black/20
-          md:from-black/10
-          md:to-black/10
-        "
+                className="pointer-events-none absolute inset-0 bg-gradient-to-r from-black/20 via-transparent to-black/20 md:from-black/10 md:to-black/10"
             />
 
             <div
                 aria-hidden="true"
-                className="
-          pointer-events-none
-          absolute inset-x-0 bottom-0
-          h-28
-          bg-gradient-to-t
-          from-black/45
-          via-black/15
-          to-transparent
-          sm:h-36
-          lg:h-44
-        "
+                className="pointer-events-none absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-black/45 via-black/15 to-transparent sm:h-36 lg:h-44"
             />
 
             <div
                 aria-hidden="true"
-                className="
-          pointer-events-none
-          absolute inset-x-0 top-0
-          h-16
-          bg-gradient-to-b
-          from-black/25
-          to-transparent
-          md:h-24
-        "
+                className="pointer-events-none absolute inset-x-0 top-0 h-16 bg-gradient-to-b from-black/25 to-transparent md:h-24"
             />
         </div>
     );

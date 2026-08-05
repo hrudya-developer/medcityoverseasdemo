@@ -1,51 +1,51 @@
 import CommunityPostsClient from "./CommunityPostsClient";
 
-const SITE_URL =
-    "https://medcityoverseas.com";
+const SITE_URL = "https://medcityoverseas.com";
+const PAGE_PATH = "/community-posts";
+const PAGE_URL = `${SITE_URL}${PAGE_PATH}`;
 
-const PAGE_URL =
-    `${SITE_URL}/community-posts`;
+const OG_IMAGE_PATH =
+    "/og-images/community-posts-og.webp";
 
-const OG_IMAGE =
-    `${SITE_URL}/og-images/community-posts-og.webp`;
+const PAGE_TITLE =
+    "Study Abroad Community Stories and Updates";
+
+const PAGE_DESCRIPTION =
+    "Explore student stories, study abroad opportunities, international education updates and community announcements from Medcity Overseas.";
 
 export const metadata = {
-    title:
-        "Study Abroad Community Posts & Student Updates | Medcity",
-
-    description:
-        "Explore study abroad community posts, student stories, international education updates, opportunities and announcements from Medcity Study Abroad.",
+    title: PAGE_TITLE,
+    description: PAGE_DESCRIPTION,
 
     keywords: [
         "study abroad community",
-        "student study abroad stories",
-        "international education updates",
+        "international student stories",
         "study abroad opportunities",
-        "overseas education news",
+        "overseas education updates",
         "student community posts",
-        "Medcity Study Abroad",
+        "Medcity Overseas community",
     ],
 
     alternates: {
-        canonical: PAGE_URL,
+        canonical: PAGE_PATH,
     },
 
     openGraph: {
-        title:
-            "Study Abroad Community Posts | Medcity",
-        description:
-            "Read student stories, international education updates, opportunities and announcements from the Medcity global community.",
-        url: PAGE_URL,
-        siteName: "Medcity Study Abroad",
         type: "website",
         locale: "en_IN",
+        url: PAGE_PATH,
+        siteName: "Medcity Overseas",
+        title:
+            "Study Abroad Community Stories and Updates | Medcity Overseas",
+        description:
+            "Read student stories, overseas education updates, study opportunities and announcements from the Medcity Overseas community.",
         images: [
             {
-                url: OG_IMAGE,
+                url: OG_IMAGE_PATH,
                 width: 1200,
                 height: 630,
                 alt:
-                    "Medcity Study Abroad Community Posts",
+                    "Study abroad community stories and updates from Medcity Overseas",
             },
         ],
     },
@@ -53,15 +53,16 @@ export const metadata = {
     twitter: {
         card: "summary_large_image",
         title:
-            "Study Abroad Community Posts | Medcity",
+            "Study Abroad Community Stories | Medcity Overseas",
         description:
-            "Explore student stories, updates and international study opportunities.",
-        images: [OG_IMAGE],
+            "Explore student experiences, international education updates and study abroad opportunities.",
+        images: [OG_IMAGE_PATH],
     },
 
     robots: {
         index: true,
         follow: true,
+
         googleBot: {
             index: true,
             follow: true,
@@ -75,27 +76,33 @@ export const metadata = {
 const structuredData = {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
-
-    name:
-        "Study Abroad Community Posts",
-
-    description:
-        "Student stories, study abroad updates, opportunities and announcements from Medcity Study Abroad.",
-
+    "@id": `${PAGE_URL}#webpage`,
     url: PAGE_URL,
+    name: PAGE_TITLE,
+    description: PAGE_DESCRIPTION,
+    inLanguage: "en-IN",
 
     isPartOf: {
         "@type": "WebSite",
-        name: "Medcity Study Abroad",
+        "@id": `${SITE_URL}/#website`,
         url: SITE_URL,
+        name: "Medcity Overseas",
     },
 
     publisher: {
         "@type": "Organization",
-        name: "Medcity Study Abroad",
+        "@id": `${SITE_URL}/#organization`,
+        name: "Medcity Overseas",
         url: SITE_URL,
     },
 };
+
+function serializeJsonLd(data) {
+    return JSON.stringify(data).replace(
+        /</g,
+        "\\u003c"
+    );
+}
 
 export default function CommunityPostsPage() {
     return (
@@ -103,9 +110,10 @@ export default function CommunityPostsPage() {
             <script
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{
-                    __html: JSON.stringify(
-                        structuredData
-                    ),
+                    __html:
+                        serializeJsonLd(
+                            structuredData
+                        ),
                 }}
             />
 

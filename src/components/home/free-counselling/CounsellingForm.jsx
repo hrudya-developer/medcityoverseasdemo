@@ -140,7 +140,7 @@ const flattenDestinations = (data) => {
     });
 };
 
-const CounsellingForm = () => {
+const CounsellingForm = ({ onSuccess, }) => {
     const [formData, setFormData] =
         useState(INITIAL_FORM_DATA);
 
@@ -354,12 +354,10 @@ const CounsellingForm = () => {
         setErrors({});
     };
 
-    const handleSubmit = async (
-        event
-    ) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
 
-        if (!validateForm()) {
+        if (!validateForm() || submitting) {
             return;
         }
 
@@ -370,12 +368,10 @@ const CounsellingForm = () => {
                 "/api/counselling",
                 {
                     method: "POST",
-
                     headers: {
                         "Content-Type":
                             "application/json",
                     },
-
                     body: JSON.stringify({
                         ...formData,
                         mobile,
@@ -395,24 +391,28 @@ const CounsellingForm = () => {
             }
 
             resetForm();
+            setSubmitting(false);
 
-            await Swal.fire({
-                icon: "success",
+            // This closes the modal.
+            onSuccess?.();
 
-                title:
-                    "Submitted Successfully!",
-
-                text:
-                    result?.message ||
-                    "Our team will contact you soon.",
-
-                confirmButtonText:
-                    "OK",
-
-                confirmButtonColor:
-                    "#c01f53",
-            });
+            // Show Swal after the modal closes.
+            window.setTimeout(() => {
+                Swal.fire({
+                    icon: "success",
+                    title:
+                        "Submitted Successfully!",
+                    text:
+                        result?.message ||
+                        "Our team will contact you soon.",
+                    confirmButtonText: "OK",
+                    confirmButtonColor:
+                        "#c01f53",
+                });
+            }, 150);
         } catch (error) {
+            setSubmitting(false);
+
             console.error(
                 "Counselling form error:",
                 error
@@ -420,26 +420,17 @@ const CounsellingForm = () => {
 
             await Swal.fire({
                 icon: "error",
-
-                title:
-                    "Submission Failed",
-
+                title: "Submission Failed",
                 text:
                     error instanceof Error
                         ? error.message
                         : "Please try again.",
-
-                confirmButtonText:
-                    "OK",
-
+                confirmButtonText: "OK",
                 confirmButtonColor:
                     "#631A33",
             });
-        } finally {
-            setSubmitting(false);
         }
     };
-
     const destinationLoading =
         destinationsLoading ||
         destinationsFetching;

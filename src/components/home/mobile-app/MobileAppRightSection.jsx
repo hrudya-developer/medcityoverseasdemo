@@ -271,9 +271,7 @@ export default function MobileAppRightSection({
                     />
                 </a>
 
-                <a
-                    href={`#${counsellingSectionId}`}
-                    onClick={onCounsellingClick}
+                <button onClick={onCounsellingClick}
                     className="
                         group
                         inline-flex
@@ -344,7 +342,7 @@ export default function MobileAppRightSection({
                             Talk to our experts
                         </span>
                     </span>
-                </a>
+                </button>
             </div>
 
             {/* Trust indicators */}

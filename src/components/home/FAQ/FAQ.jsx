@@ -17,6 +17,7 @@ import {
 
 import FAQRight from "./FAQRight";
 import { faqItems } from "./faqData";
+import Link from "next/link";
 
 const SITE_URL = "https://medcityoverseas.com";
 const COUNSELLING_SECTION_ID = "gfc_wrapper";
@@ -441,9 +442,7 @@ const FAQ = ({
               </span>
             </button>
 
-            <button
-              type="button"
-              onClick={scrollToCounselling}
+            <Link href="/contact-us"
               aria-label="Talk to a Medcity study abroad expert"
               className="
                 group inline-flex min-h-[50px]
@@ -481,7 +480,7 @@ const FAQ = ({
                   group-hover:translate-x-1
                 "
               />
-            </button>
+            </Link>
           </div>
         </div>
       </section>

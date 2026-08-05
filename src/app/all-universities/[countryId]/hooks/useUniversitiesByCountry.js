@@ -28,8 +28,8 @@ const useUniversitiesByCountry = ({
     ] = useState(null);
 
     const [
-        loading,
-        setLoading,
+        isFetching,
+        setIsFetching,
     ] = useState(false);
 
     const [
@@ -42,114 +42,136 @@ const useUniversitiesByCountry = ({
         setReloadKey,
     ] = useState(0);
 
+    /*
+     * Stores the country whose request has completed.
+     * This prevents the empty state from appearing
+     * before useEffect starts the next request.
+     */
+    const [
+        resolvedCountryId,
+        setResolvedCountryId,
+    ] = useState(null);
+
+    const normalizedCountryId = countryId
+        ? String(countryId)
+        : "";
+
+    const loading =
+        Boolean(normalizedCountryId) &&
+        (
+            isFetching ||
+            resolvedCountryId !== normalizedCountryId
+        );
+
     useEffect(() => {
-        if (!countryId) {
+        if (!normalizedCountryId) {
             setUniversities([]);
             setUniversityImagePath("");
             setNextOffset(null);
-            setLoading(false);
+            setIsFetching(false);
             setError("");
+            setResolvedCountryId(null);
 
-            return;
+            return undefined;
         }
 
-        const controller =
-            new AbortController();
+        const controller = new AbortController();
 
-        const loadUniversities =
-            async () => {
-                try {
-                    setLoading(true);
-                    setError("");
+        const loadUniversities = async () => {
+            try {
+                setIsFetching(true);
+                setError("");
 
-                    const params =
-                        new URLSearchParams({
-                            countryId:
-                                String(
-                                    countryId
-                                ),
-                            uid:
-                                String(uid),
-                            offset:
-                                String(offset),
-                            keyword,
-                        });
+                const params = new URLSearchParams({
+                    countryId: normalizedCountryId,
+                    uid: String(uid),
+                    offset: String(offset),
+                    keyword,
+                });
 
-                    const response =
-                        await fetch(
-                            `/api/search/universities?${params.toString()}`,
-                            {
-                                method: "GET",
-                                cache: "no-store",
-                                signal:
-                                    controller.signal,
-                                headers: {
-                                    Accept:
-                                        "application/json",
-                                },
-                            }
-                        );
-
-                    const result =
-                        await response.json();
-
-                    if (!response.ok) {
-                        throw new Error(
-                            result?.message ||
-                            "Unable to load universities."
-                        );
+                const response = await fetch(
+                    `/api/search/universities?${params.toString()}`,
+                    {
+                        method: "GET",
+                        cache: "no-store",
+                        signal: controller.signal,
+                        headers: {
+                            Accept: "application/json",
+                        },
                     }
+                );
 
-                    setUniversities(
-                        Array.isArray(
-                            result?.universities
-                        )
-                            ? result.universities
-                            : []
-                    );
+                const result = await response.json();
 
-                    setUniversityImagePath(
-                        result?.universityImagePath ||
-                        result?.universities_image_path ||
-                        result?.imagePath ||
-                        ""
-                    );
-
-                    setNextOffset(
-                        result?.nextOffset ??
-                        result?.nextoffset ??
-                        null
-                    );
-                } catch (error) {
-                    if (
-                        error?.name ===
-                        "AbortError"
-                    ) {
-                        return;
-                    }
-
-                    console.error(
-                        "University loading error:",
-                        error
-                    );
-
-                    setUniversities([]);
-                    setUniversityImagePath("");
-                    setNextOffset(null);
-
-                    setError(
-                        error?.message ||
+                if (!response.ok) {
+                    throw new Error(
+                        result?.message ||
                         "Unable to load universities."
                     );
-                } finally {
-                    if (
-                        !controller.signal
-                            .aborted
-                    ) {
-                        setLoading(false);
-                    }
                 }
-            };
+
+                if (controller.signal.aborted) {
+                    return;
+                }
+
+                setUniversities(
+                    Array.isArray(result?.universities)
+                        ? result.universities
+                        : []
+                );
+
+                setUniversityImagePath(
+                    result?.universityImagePath ||
+                    result?.universities_image_path ||
+                    result?.imagePath ||
+                    ""
+                );
+
+                setNextOffset(
+                    result?.nextOffset ??
+                    result?.nextoffset ??
+                    null
+                );
+
+                setResolvedCountryId(
+                    normalizedCountryId
+                );
+            } catch (requestError) {
+                if (
+                    requestError?.name ===
+                    "AbortError"
+                ) {
+                    return;
+                }
+
+                console.error(
+                    "University loading error:",
+                    requestError
+                );
+
+                setUniversities([]);
+                setUniversityImagePath("");
+                setNextOffset(null);
+
+                setError(
+                    requestError?.message ||
+                    "Unable to load universities."
+                );
+
+                /*
+                 * Mark this country as resolved so the
+                 * error state can display instead of
+                 * keeping the loading skeleton forever.
+                 */
+                setResolvedCountryId(
+                    normalizedCountryId
+                );
+            } finally {
+                if (!controller.signal.aborted) {
+                    setIsFetching(false);
+                }
+            }
+        };
 
         loadUniversities();
 
@@ -157,7 +179,7 @@ const useUniversitiesByCountry = ({
             controller.abort();
         };
     }, [
-        countryId,
+        normalizedCountryId,
         uid,
         offset,
         keyword,
@@ -165,10 +187,12 @@ const useUniversitiesByCountry = ({
     ]);
 
     const refetch = useCallback(() => {
-        setReloadKey(
-            (current) =>
-                current + 1
-        );
+        /*
+         * Immediately switch to the loading state
+         * before the retry request begins.
+         */
+        setResolvedCountryId(null);
+        setReloadKey((current) => current + 1);
     }, []);
 
     return {

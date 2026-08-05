@@ -1,11 +1,25 @@
 const SITE_URL = "https://medcityoverseas.com";
-const IS_PRODUCTION = process.env.VERCEL_ENV === "production";
-// or: process.env.NEXT_PUBLIC_VERCEL_URL check / hostname check, depending on how you detect it
+
+/*
+ * Set SITE_ENV=production only for the real production deployment.
+ *
+ * Production:
+ * SITE_ENV=production
+ *
+ * Preview/staging:
+ * SITE_ENV=preview
+ */
+const IS_PRODUCTION = process.env.SITE_ENV === "production";
 
 export default function robots() {
     if (!IS_PRODUCTION) {
         return {
-            rules: [{ userAgent: "*", disallow: "/" }],
+            rules: [
+                {
+                    userAgent: "*",
+                    disallow: "/",
+                },
+            ],
         };
     }
 
@@ -24,10 +38,10 @@ export default function robots() {
                     "/otp-verification/",
                     "/create-account/",
                     "/private/",
-                    "/_next/",
                 ],
             },
         ],
+
         sitemap: `${SITE_URL}/sitemap.xml`,
         host: SITE_URL,
     };

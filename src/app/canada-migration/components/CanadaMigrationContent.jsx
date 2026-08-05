@@ -7,59 +7,87 @@ import CanadaPRSteps from "./CanadaPRSteps";
 
 export default function CanadaMigrationContent() {
     return (
-        <main className="overflow-hidden bg-white">
-            <CanadaMigrationHero />
+        <>
+            <div className="overflow-hidden bg-white">
+                <CanadaMigrationHero />
 
-            <CanadaMigrationBenefits />
+                <CanadaMigrationBenefits />
 
-            <CanadaPRSteps />
+                <CanadaPRSteps />
 
-            <CanadaImmigrationPrograms />
+                <CanadaImmigrationPrograms />
 
-            <MigrationDisclaimer />
+                <MigrationDisclaimer />
 
-            <section
-                aria-label="Canada migration frequently asked questions"
-                className="
-                    mx-auto max-w-7xl
-                    px-4 py-14
-                    sm:px-6
-                    lg:px-8 lg:py-20
-                "
-            >
-                <FAQ />
-            </section>
-        </main>
+                <section
+                    aria-labelledby="canada-migration-faq-heading"
+                    className="
+            mx-auto max-w-7xl
+            px-4 py-14
+            sm:px-6
+            lg:px-8 lg:py-20
+          "
+                >
+                    <h2
+                        id="canada-migration-faq-heading"
+                        className="sr-only"
+                    >
+                        Canada Migration Frequently Asked Questions
+                    </h2>
+
+                    <FAQ />
+                </section>
+            </div>
+        </>
     );
 }
 
 function MigrationDisclaimer() {
     return (
         <aside
+            aria-labelledby="canada-migration-disclaimer-heading"
             className="
-                mx-auto max-w-7xl
-                px-4 pt-12
-                sm:px-6
-                lg:px-8
-            "
-            aria-label="Immigration information disclaimer"
+        mx-auto max-w-7xl
+        px-4 pt-12
+        sm:px-6
+        lg:px-8
+      "
         >
             <div
                 className="
-                    rounded-2xl
-                    border border-amber-200
-                    bg-amber-50
-                    px-5 py-4
-                    text-sm leading-6
-                    text-amber-950
-                "
+          rounded-2xl
+          border border-amber-200
+          bg-amber-50
+          px-5 py-5
+          text-sm leading-6
+          text-amber-950
+        "
             >
-                Immigration requirements, eligibility
-                rules, fees, processing times and draw
-                criteria can change. The information on
-                this page is general guidance and should
-                be confirmed with the relevant Canadian
-                immigration authority before applying.
+                <h2
+                    id="canada-migration-disclaimer-heading"
+                    className="font-bold"
+                >
+                    Important immigration information
+                </h2>
+
+                <p className="mt-2">
+                    The information on this page is general
+                    information only and does not constitute
+                    legal or immigration advice. Canadian
+                    immigration programs, eligibility rules,
+                    invitation criteria, fees, occupation
+                    requirements and processing arrangements
+                    may change without notice.
+                </p>
+
+                <p className="mt-2">
+                    Always verify current requirements through
+                    Immigration, Refugees and Citizenship Canada
+                    or consult an appropriately authorized
+                    Canadian immigration professional before
+                    submitting an application or making financial
+                    decisions.
+                </p>
             </div>
         </aside>
     );

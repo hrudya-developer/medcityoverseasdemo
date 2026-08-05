@@ -1,21 +1,21 @@
 import FAQ from "@/components/home/FAQ/FAQ";
 import OurBranches from "@/components/home/branches-section/OurBranches";
+import CounsellingSection from "@/components/home/free-counselling/CounsellingSection";
 
-import ContactForm from "./ContactForm";
 import ContactHero from "./ContactHero";
 import ContactInfo from "./ContactInfo";
 
-import CounsellingSection from "@/components/home/free-counselling/CounsellingSection";
-
 const SITE_URL = "https://medcityoverseas.com";
-const PAGE_URL = `${SITE_URL}/contact-us`;
-const OG_IMAGE = `${SITE_URL}/images/contact-us-og.webp`;
+const PAGE_PATH = "/contact-us";
+const PAGE_URL = `${SITE_URL}${PAGE_PATH}`;
 
-const SEO_TITLE =
-    "Contact Study Abroad Consultants in Kerala | Medcity";
+const OG_IMAGE_PATH = "/images/contact-us-og.webp";
+const OG_IMAGE_URL = `${SITE_URL}${OG_IMAGE_PATH}`;
 
-const SEO_DESCRIPTION =
-    "Contact Medcity Study Abroad, Kerala's trusted overseas education consultants. Get free counselling for admissions, courses and student visas.";
+const PAGE_TITLE = "Contact Study Abroad Consultants in Kerala";
+
+const PAGE_DESCRIPTION =
+    "Contact Medcity Overseas for study abroad counselling, overseas university admissions, course selection, scholarship guidance, student visa assistance and language training across Kerala.";
 
 const BUSINESS_PHONE = "+91-9048059999";
 const BUSINESS_EMAIL = "medcitykochi@miak.in";
@@ -28,40 +28,35 @@ const SOCIAL_PROFILES = [
 ];
 
 export const metadata = {
-    title: SEO_TITLE,
-    description: SEO_DESCRIPTION,
+    /*
+     * Your root layout title template appends:
+     * | Medcity Overseas
+     *
+     * Final title:
+     * Contact Study Abroad Consultants in Kerala | Medcity Overseas
+     */
+    title: PAGE_TITLE,
 
-    keywords: [
-        "contact study abroad consultants Kerala",
-        "overseas education consultants Kerala",
-        "study abroad counselling Kerala",
-        "university admission assistance",
-        "student visa guidance Kerala",
-        "Medcity Study Abroad",
-    ],
+    description: PAGE_DESCRIPTION,
 
     alternates: {
-        canonical: PAGE_URL,
+        canonical: PAGE_PATH,
     },
 
     openGraph: {
-        title: SEO_TITLE,
-
-        description:
-            "Speak with Medcity Study Abroad experts for personalised overseas education, university admission and visa guidance.",
-
         type: "website",
-        url: PAGE_URL,
-        siteName: "Medcity Study Abroad",
         locale: "en_IN",
-
+        url: PAGE_PATH,
+        siteName: "Medcity Overseas",
+        title: `${PAGE_TITLE} | Medcity Overseas`,
+        description:
+            "Speak with Medcity Overseas counsellors for personalised guidance on courses, international universities, admissions, scholarships and student visas.",
         images: [
             {
-                url: OG_IMAGE,
+                url: OG_IMAGE_PATH,
                 width: 1200,
                 height: 630,
-                alt:
-                    "Contact Medcity Study Abroad consultants",
+                alt: "Contact Medcity Overseas study abroad consultants in Kerala",
                 type: "image/webp",
             },
         ],
@@ -69,18 +64,10 @@ export const metadata = {
 
     twitter: {
         card: "summary_large_image",
-        title: SEO_TITLE,
-
+        title: `${PAGE_TITLE} | Medcity Overseas`,
         description:
-            "Get expert support with course selection, university applications and student visa guidance.",
-
-        images: [
-            {
-                url: OG_IMAGE,
-                alt:
-                    "Contact Medcity Study Abroad consultants",
-            },
-        ],
+            "Get expert support with course selection, overseas university applications, scholarships and student visa guidance.",
+        images: [OG_IMAGE_PATH],
     },
 
     robots: {
@@ -99,76 +86,111 @@ export const metadata = {
 
 const contactPageSchema = {
     "@context": "https://schema.org",
-    "@type": "ContactPage",
-    "@id": `${PAGE_URL}#contact-page`,
-    url: PAGE_URL,
-    name: "Contact Medcity Study Abroad",
-    description: SEO_DESCRIPTION,
-    inLanguage: "en-IN",
 
-    isPartOf: {
-        "@type": "WebSite",
-        "@id": `${SITE_URL}/#website`,
-        url: `${SITE_URL}/`,
-        name: "Medcity Study Abroad",
-    },
+    "@graph": [
+        {
+            "@type": "ContactPage",
+            "@id": `${PAGE_URL}/#webpage`,
+            url: PAGE_URL,
+            name: `${PAGE_TITLE} | Medcity Overseas`,
+            description: PAGE_DESCRIPTION,
+            image: {
+                "@type": "ImageObject",
+                url: OG_IMAGE_URL,
+                width: 1200,
+                height: 630,
+            },
+            inLanguage: "en-IN",
 
-    about: {
-        "@type": "EducationalOrganization",
-        "@id": `${SITE_URL}/#organization`,
-        name:
-            "Medcity International Overseas Corporation",
-        alternateName: "Medcity Study Abroad",
-        url: `${SITE_URL}/`,
-        logo: `${SITE_URL}/logo.png`,
-        image: OG_IMAGE,
-        telephone: BUSINESS_PHONE,
-        email: BUSINESS_EMAIL,
+            isPartOf: {
+                "@id": `${SITE_URL}/#website`,
+            },
 
-        address: {
-            "@type": "PostalAddress",
-            addressLocality: "Kochi",
-            addressRegion: "Kerala",
-            addressCountry: "IN",
+            about: {
+                "@id": `${SITE_URL}/#organization`,
+            },
+
+            publisher: {
+                "@id": `${SITE_URL}/#organization`,
+            },
+
+            breadcrumb: {
+                "@id": `${PAGE_URL}/#breadcrumb`,
+            },
+
+            mainEntity: {
+                "@id": `${PAGE_URL}/#contact-options`,
+            },
         },
 
-        sameAs: SOCIAL_PROFILES,
+        {
+            "@type": "BreadcrumbList",
+            "@id": `${PAGE_URL}/#breadcrumb`,
 
-        contactPoint: [
-            {
-                "@type": "ContactPoint",
-                contactType: "customer service",
-                telephone: BUSINESS_PHONE,
-                email: BUSINESS_EMAIL,
-                areaServed: "IN",
-                availableLanguage: [
-                    "English",
-                    "Malayalam",
-                ],
-            },
-        ],
-    },
+            itemListElement: [
+                {
+                    "@type": "ListItem",
+                    position: 1,
+                    name: "Home",
+                    item: SITE_URL,
+                },
+                {
+                    "@type": "ListItem",
+                    position: 2,
+                    name: "Contact Us",
+                    item: PAGE_URL,
+                },
+            ],
+        },
 
-    breadcrumb: {
-        "@type": "BreadcrumbList",
-        "@id": `${PAGE_URL}#breadcrumb`,
+        {
+            "@type": "ItemList",
+            "@id": `${PAGE_URL}/#contact-options`,
+            name: "Medcity Overseas Contact Options",
+            numberOfItems: 2,
+            itemListOrder: "https://schema.org/ItemListOrderUnordered",
 
-        itemListElement: [
-            {
-                "@type": "ListItem",
-                position: 1,
-                name: "Home",
-                item: `${SITE_URL}/`,
-            },
-            {
-                "@type": "ListItem",
-                position: 2,
-                name: "Contact Us",
-                item: PAGE_URL,
-            },
-        ],
-    },
+            itemListElement: [
+                {
+                    "@type": "ListItem",
+                    position: 1,
+
+                    item: {
+                        "@type": "ContactPoint",
+                        "@id": `${PAGE_URL}/#phone-contact`,
+                        contactType: "study abroad counselling",
+                        telephone: BUSINESS_PHONE,
+                        areaServed: {
+                            "@type": "Country",
+                            name: "India",
+                        },
+                        availableLanguage: ["English", "Malayalam"],
+                    },
+                },
+                {
+                    "@type": "ListItem",
+                    position: 2,
+
+                    item: {
+                        "@type": "ContactPoint",
+                        "@id": `${PAGE_URL}/#email-contact`,
+                        contactType: "customer support",
+                        email: BUSINESS_EMAIL,
+                        areaServed: {
+                            "@type": "Country",
+                            name: "India",
+                        },
+                        availableLanguage: ["English", "Malayalam"],
+                    },
+                },
+            ],
+        },
+    ],
 };
+
+function serializeJsonLd(data) {
+    return JSON.stringify(data).replace(/</g, "\\u003c");
+}
 
 export default function ContactUsPage() {
     return (
@@ -176,35 +198,21 @@ export default function ContactUsPage() {
             <script
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{
-                    __html: JSON.stringify(
-                        contactPageSchema
-                    ).replace(
-                        /</g,
-                        "\\u003c"
-                    ),
+                    __html: serializeJsonLd(contactPageSchema),
                 }}
             />
 
-            <main id="main-content">
+            {/*
+       * RootLayout already provides:
+       *
+       * <main id="main-content">{children}</main>
+       *
+       * Do not create another main element here.
+       */}
+            <div className="overflow-hidden bg-white">
                 <ContactHero />
 
-                {/* <section
-                    id="contact-form"
-                    aria-labelledby="contact-form-heading"
-                    className="scroll-mt-24"
-                >
-                    <h2
-                        id="contact-form-heading"
-                        className="sr-only"
-                    >
-                        Contact our study abroad
-                        counsellors
-                    </h2>
-
-                    <ContactForm />
-                </section> */}
-
-                <section>
+                <section aria-label="Book a free study abroad counselling session">
                     <CounsellingSection />
                 </section>
 
@@ -216,8 +224,7 @@ export default function ContactUsPage() {
                         id="contact-information-heading"
                         className="sr-only"
                     >
-                        Medcity Study Abroad contact
-                        information
+                        Contact Medcity Overseas
                     </h2>
 
                     <ContactInfo />
@@ -225,14 +232,13 @@ export default function ContactUsPage() {
 
                 <section
                     id="our-branches"
-                    aria-labelledby="branches-heading"
+                    aria-labelledby="contact-branches-heading"
                 >
                     <h2
-                        id="branches-heading"
+                        id="contact-branches-heading"
                         className="sr-only"
                     >
-                        Find a Medcity Study Abroad
-                        branch near you
+                        Find a Medcity Overseas branch near you
                     </h2>
 
                     <OurBranches />
@@ -246,13 +252,12 @@ export default function ContactUsPage() {
                         id="contact-faq-heading"
                         className="sr-only"
                     >
-                        Frequently asked questions
-                        about contacting Medcity
+                        Contact and counselling frequently asked questions
                     </h2>
 
                     <FAQ />
                 </section>
-            </main>
+            </div>
         </>
     );
 }

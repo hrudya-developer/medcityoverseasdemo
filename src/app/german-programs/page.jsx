@@ -1,127 +1,156 @@
 import GermanProgramsClient from "./GermanProgramsClient";
 
-const SITE_URL =
-    "https://medcityoverseas.com";
+const SITE_URL = "https://medcityoverseas.com";
+const PAGE_PATH = "/german-programs";
+const PAGE_URL = `${SITE_URL}${PAGE_PATH}`;
 
-const PAGE_URL =
-    `${SITE_URL}/german-programs`;
+const OG_IMAGE_PATH = "/og-images/german-programs-og.webp";
+const OG_IMAGE_URL = `${SITE_URL}${OG_IMAGE_PATH}`;
 
-const OG_IMAGE =
-    `${SITE_URL}/og-images/german-programs-og.webp`;
+const PAGE_TITLE = "German Study, Ausbildung and Career Programs";
+
+const PAGE_DESCRIPTION =
+  "Explore German university study programs, Ausbildung vocational training and career pathways for international students with guidance from Medcity Overseas.";
 
 export const metadata = {
-    title:
-        "German Programs for International Students | Medcity",
+  /*
+   * RootLayout adds:
+   * | Medcity Overseas
+   */
+  title: PAGE_TITLE,
 
+  description: PAGE_DESCRIPTION,
+
+  alternates: {
+    canonical: PAGE_PATH,
+  },
+
+  openGraph: {
+    type: "website",
+    locale: "en_IN",
+    url: PAGE_PATH,
+    siteName: "Medcity Overseas",
+    title: `${PAGE_TITLE} | Medcity Overseas`,
     description:
-        "Explore German study, Ausbildung and career programs for international students. Discover education, training and employment pathways in Germany with Medcity Study Abroad.",
-
-    keywords: [
-        "German programs for international students",
-        "study in Germany",
-        "Ausbildung programs Germany",
-        "German career programs",
-        "vocational training Germany",
-        "Germany education consultants",
-        "work and study in Germany",
-        "Medcity German programs",
+      "Discover university study options, Ausbildung vocational training and career pathways in Germany for international students.",
+    images: [
+      {
+        url: OG_IMAGE_PATH,
+        width: 1200,
+        height: 630,
+        alt: "German study, Ausbildung and career programs for international students",
+        type: "image/webp",
+      },
     ],
+  },
 
-    alternates: {
-        canonical: PAGE_URL,
-    },
+  twitter: {
+    card: "summary_large_image",
+    title: `${PAGE_TITLE} | Medcity Overseas`,
+    description:
+      "Explore German university programs, Ausbildung training and international career pathways.",
+    images: [OG_IMAGE_PATH],
+  },
 
-    openGraph: {
-        title:
-            "German Study and Ausbildung Programs | Medcity",
-        description:
-            "Explore study, Ausbildung and career pathways in Germany for international students.",
-        url: PAGE_URL,
-        siteName: "Medcity Study Abroad",
-        type: "website",
-        locale: "en_IN",
-        images: [
-            {
-                url: OG_IMAGE,
-                width: 1200,
-                height: 630,
-                alt:
-                    "German study and Ausbildung programs",
-            },
-        ],
-    },
+  robots: {
+    index: true,
+    follow: true,
 
-    twitter: {
-        card: "summary_large_image",
-        title:
-            "German Programs for International Students | Medcity",
-        description:
-            "Discover German study, vocational training and career pathways.",
-        images: [OG_IMAGE],
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
     },
-
-    robots: {
-        index: true,
-        follow: true,
-        googleBot: {
-            index: true,
-            follow: true,
-            "max-image-preview":
-                "large",
-            "max-snippet": -1,
-            "max-video-preview":
-                -1,
-        },
-    },
+  },
 };
 
 const structuredData = {
-    "@context":
-        "https://schema.org",
+  "@context": "https://schema.org",
 
-    "@type":
-        "CollectionPage",
+  "@graph": [
+    {
+      "@type": "CollectionPage",
+      "@id": `${PAGE_URL}/#webpage`,
+      url: PAGE_URL,
+      name: PAGE_TITLE,
+      description: PAGE_DESCRIPTION,
 
-    name:
-        "German Programs for International Students",
+      image: {
+        "@type": "ImageObject",
+        url: OG_IMAGE_URL,
+        width: 1200,
+        height: 630,
+      },
 
-    description:
-        "German study, Ausbildung, vocational training and career pathways for international students.",
+      inLanguage: "en-IN",
 
-    url:
-        PAGE_URL,
+      isPartOf: {
+        "@id": `${SITE_URL}/#website`,
+      },
 
-    isPartOf: {
-        "@type": "WebSite",
-        name:
-            "Medcity Study Abroad",
-        url:
-            SITE_URL,
+      about: [
+        {
+          "@type": "Thing",
+          name: "Study in Germany",
+        },
+        {
+          "@type": "Thing",
+          name: "Ausbildung vocational training",
+        },
+        {
+          "@type": "Thing",
+          name: "Career pathways in Germany",
+        },
+      ],
+
+      publisher: {
+        "@id": `${SITE_URL}/#organization`,
+      },
+
+      breadcrumb: {
+        "@id": `${PAGE_URL}/#breadcrumb`,
+      },
     },
 
-    provider: {
-        "@type": "Organization",
-        name:
-            "Medcity Study Abroad",
-        url:
-            SITE_URL,
+    {
+      "@type": "BreadcrumbList",
+      "@id": `${PAGE_URL}/#breadcrumb`,
+
+      itemListElement: [
+        {
+          "@type": "ListItem",
+          position: 1,
+          name: "Home",
+          item: SITE_URL,
+        },
+        {
+          "@type": "ListItem",
+          position: 2,
+          name: "German Programs",
+          item: PAGE_URL,
+        },
+      ],
     },
+  ],
 };
 
-export default function GermanProgramsPage() {
-    return (
-        <>
-            <script
-                type="application/ld+json"
-                dangerouslySetInnerHTML={{
-                    __html:
-                        JSON.stringify(
-                            structuredData
-                        ),
-                }}
-            />
+function serializeJsonLd(data) {
+  return JSON.stringify(data).replace(/</g, "\\u003c");
+}
 
-            <GermanProgramsClient />
-        </>
-    );
+export default function GermanProgramsPage() {
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: serializeJsonLd(structuredData),
+        }}
+      />
+
+      <GermanProgramsClient />
+    </>
+  );
 }

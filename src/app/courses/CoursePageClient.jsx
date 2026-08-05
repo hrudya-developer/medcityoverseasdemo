@@ -27,20 +27,32 @@ const heroStats = [
 
 export default function CoursePageClient() {
     const scrollToSearch = () => {
-        document.getElementById("course-search")?.scrollIntoView({
-            behavior: "smooth",
-            block: "start",
-        });
+        document
+            .getElementById("course-search")
+            ?.scrollIntoView({
+                behavior: "smooth",
+                block: "start",
+            });
     };
 
     return (
-        <main className="overflow-hidden bg-white">
-            <CourseHero onSearchClick={scrollToSearch} />
+        <div className="overflow-hidden bg-white">
+            <CourseHero
+                onSearchClick={scrollToSearch}
+            />
 
             <section
                 id="course-search"
+                aria-labelledby="course-search-heading"
                 className="relative z-20 scroll-mt-24 bg-black"
             >
+                <h2
+                    id="course-search-heading"
+                    className="sr-only"
+                >
+                    Search international courses
+                </h2>
+
                 <SearchSection
                     title="Search International Courses"
                     description="Choose your destination, university and preferred study area to discover programs that match your academic and career goals."
@@ -51,7 +63,7 @@ export default function CoursePageClient() {
             <StudyTabContent />
 
             <FAQ />
-        </main>
+        </div>
     );
 }
 

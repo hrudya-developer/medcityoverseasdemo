@@ -2,68 +2,67 @@ import FAQ from "@/components/home/FAQ/FAQ";
 import StudyTabContent from "@/components/home/services/programs/StudyTabContent";
 
 const SITE_URL = "https://medcityoverseas.com";
-const PAGE_URL = `${SITE_URL}/popular-courses`;
-const OG_IMAGE = `${SITE_URL}/og-images/popular-courses-og.webp`;
+const PAGE_PATH = "/popular-courses";
+const PAGE_URL = `${SITE_URL}${PAGE_PATH}`;
+
+const OG_IMAGE_PATH = "/og-images/popular-courses-og.webp";
+const OG_IMAGE_URL = `${SITE_URL}${OG_IMAGE_PATH}`;
+
+const PAGE_TITLE = "Popular Study Abroad Courses and Programs";
+
+const PAGE_DESCRIPTION =
+    "Explore popular study abroad courses offered by international universities. Compare programs, study destinations and career opportunities with guidance from Medcity Overseas.";
 
 export const metadata = {
-    title:
-        "Popular Study Abroad Courses | Top International Programs | Medcity",
+    /*
+     * Your root layout adds:
+     * | Medcity Overseas
+     */
+    title: PAGE_TITLE,
 
-    description:
-        "Explore the most popular study abroad courses offered by leading international universities. Compare programs, discover career opportunities and choose the right course with Medcity Study Abroad.",
-
-    keywords: [
-        "popular study abroad courses",
-        "international courses",
-        "top study abroad programs",
-        "study abroad degrees",
-        "overseas education courses",
-        "Germany courses",
-        "UK courses",
-        "Canada courses",
-        "Australia courses",
-        "Medcity Study Abroad",
-    ],
+    description: PAGE_DESCRIPTION,
 
     alternates: {
-        canonical: PAGE_URL,
+        canonical: PAGE_PATH,
     },
 
     openGraph: {
-        title:
-            "Popular Study Abroad Courses | Medcity Study Abroad",
-        description:
-            "Browse the most in-demand international study programs across top universities worldwide.",
-
-        url: PAGE_URL,
-        siteName: "Medcity Study Abroad",
         type: "website",
         locale: "en_IN",
+        url: PAGE_PATH,
+        siteName: "Medcity Overseas",
+
+        title: `${PAGE_TITLE} | Medcity Overseas`,
+
+        description:
+            "Browse popular international study programs across leading universities and study destinations.",
 
         images: [
             {
-                url: OG_IMAGE,
+                url: OG_IMAGE_PATH,
                 width: 1200,
                 height: 630,
-                alt: "Popular Study Abroad Courses",
+                alt: "Popular study abroad courses and international programs",
+                type: "image/webp",
             },
         ],
     },
 
     twitter: {
         card: "summary_large_image",
-        title:
-            "Popular Study Abroad Courses | Medcity",
+
+        title: `${PAGE_TITLE} | Medcity Overseas`,
 
         description:
-            "Discover the most popular international study programs and universities.",
+            "Discover popular international university courses, study programs and career pathways.",
 
-        images: [OG_IMAGE],
+        images: [OG_IMAGE_PATH],
     },
 
     robots: {
         index: true,
         follow: true,
+
         googleBot: {
             index: true,
             follow: true,
@@ -76,25 +75,138 @@ export const metadata = {
 
 const structuredData = {
     "@context": "https://schema.org",
-    "@type": "CollectionPage",
-    name: "Popular Study Abroad Courses",
-    description:
-        "Browse the most popular international study programs offered by universities around the world.",
 
-    url: PAGE_URL,
+    "@graph": [
+        {
+            "@type": "CollectionPage",
+            "@id": `${PAGE_URL}/#webpage`,
 
-    isPartOf: {
-        "@type": "WebSite",
-        name: "Medcity Study Abroad",
-        url: SITE_URL,
-    },
+            url: PAGE_URL,
+            name: PAGE_TITLE,
+            description: PAGE_DESCRIPTION,
 
-    provider: {
-        "@type": "Organization",
-        name: "Medcity Study Abroad",
-        url: SITE_URL,
-    },
+            image: {
+                "@type": "ImageObject",
+                url: OG_IMAGE_URL,
+                width: 1200,
+                height: 630,
+            },
+
+            inLanguage: "en-IN",
+
+            isPartOf: {
+                "@id": `${SITE_URL}/#website`,
+            },
+
+            about: [
+                {
+                    "@type": "Thing",
+                    name: "Study abroad courses",
+                },
+                {
+                    "@type": "Thing",
+                    name: "International university programs",
+                },
+                {
+                    "@type": "Thing",
+                    name: "Overseas higher education",
+                },
+            ],
+
+            publisher: {
+                "@id": `${SITE_URL}/#organization`,
+            },
+
+            breadcrumb: {
+                "@id": `${PAGE_URL}/#breadcrumb`,
+            },
+
+            mainEntity: {
+                "@id": `${PAGE_URL}/#popular-course-categories`,
+            },
+        },
+
+        {
+            "@type": "BreadcrumbList",
+            "@id": `${PAGE_URL}/#breadcrumb`,
+
+            itemListElement: [
+                {
+                    "@type": "ListItem",
+                    position: 1,
+                    name: "Home",
+                    item: SITE_URL,
+                },
+                {
+                    "@type": "ListItem",
+                    position: 2,
+                    name: "Popular Courses",
+                    item: PAGE_URL,
+                },
+            ],
+        },
+
+        {
+            "@type": "ItemList",
+            "@id": `${PAGE_URL}/#popular-course-categories`,
+
+            name: "Popular Study Abroad Course Categories",
+
+            description:
+                "Popular international study areas and course categories available through overseas universities.",
+
+            itemListOrder:
+                "https://schema.org/ItemListOrderUnordered",
+
+            itemListElement: [
+                {
+                    "@type": "ListItem",
+                    position: 1,
+                    item: {
+                        "@type": "Thing",
+                        name: "Business and Management",
+                    },
+                },
+                {
+                    "@type": "ListItem",
+                    position: 2,
+                    item: {
+                        "@type": "Thing",
+                        name: "Engineering and Technology",
+                    },
+                },
+                {
+                    "@type": "ListItem",
+                    position: 3,
+                    item: {
+                        "@type": "Thing",
+                        name: "Computer Science and Information Technology",
+                    },
+                },
+                {
+                    "@type": "ListItem",
+                    position: 4,
+                    item: {
+                        "@type": "Thing",
+                        name: "Healthcare and Life Sciences",
+                    },
+                },
+                {
+                    "@type": "ListItem",
+                    position: 5,
+                    item: {
+                        "@type": "Thing",
+                        name: "Hospitality and Tourism",
+                    },
+                },
+            ],
+        },
+    ],
 };
+
+function serializeJsonLd(data) {
+    return JSON.stringify(data).replace(/</g, "\\u003c");
+}
 
 export default function PopularCoursesPage() {
     return (
@@ -102,14 +214,41 @@ export default function PopularCoursesPage() {
             <script
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{
-                    __html: JSON.stringify(
-                        structuredData
-                    ),
+                    __html: serializeJsonLd(structuredData),
                 }}
             />
 
-            <StudyTabContent />
-            <FAQ />
+            <div className="overflow-hidden bg-white">
+
+                <section
+                    aria-labelledby="popular-course-list-heading"
+                    className="mt-10"
+                >
+                    <h2
+                        id="popular-course-list-heading"
+                        className="sr-only"
+                    >
+                        Browse popular international course categories
+                    </h2>
+
+                    <StudyTabContent />
+                </section>
+
+                <section
+                    id="popular-courses-faq"
+                    aria-labelledby="popular-courses-faq-heading"
+                    className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8 lg:py-20"
+                >
+                    <h2
+                        id="popular-courses-faq-heading"
+                        className="sr-only"
+                    >
+                        Popular study abroad courses frequently asked questions
+                    </h2>
+
+                    <FAQ />
+                </section>
+            </div>
         </>
     );
 }

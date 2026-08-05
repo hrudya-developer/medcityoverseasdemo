@@ -223,7 +223,7 @@ const UniversityCard = ({
 
                     <span
                         className="
-                            absolute right-4 top-4
+                            absolute right-4 top-1
                             z-20 inline-flex
                             items-center rounded-full
                             border border-slate-200/80
@@ -316,16 +316,16 @@ const UniversityCard = ({
                             pt-5
                         "
                     >
-                        <Link href={`/university-details/${university.id}`}>
-                            <span
-                                className="
+
+                        <span
+                            className="
                                 text-sm font-extrabold
                                 text-primary
                             "
-                            >
-                                View university
-                            </span>
-                        </Link>
+                        >
+                            View university
+                        </span>
+
 
                         <span
                             aria-hidden="true"

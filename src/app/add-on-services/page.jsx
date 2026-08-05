@@ -1,68 +1,62 @@
 import AddOnServicesClient from "./AddOnServicesClient";
 
-const SITE_URL =
-    "https://medcityoverseas.com";
+const SITE_URL = "https://medcityoverseas.com";
+const PAGE_PATH = "/add-on-services";
+const PAGE_URL = `${SITE_URL}${PAGE_PATH}`;
+const OG_IMAGE_PATH = "/og-images/add-on-services-og.webp";
+const OG_IMAGE_URL = `${SITE_URL}${OG_IMAGE_PATH}`;
 
-const PAGE_URL =
-    `${SITE_URL}/add-on-services`;
+const PAGE_TITLE = "Study Abroad Add-On Services";
 
-const OG_IMAGE =
-    `${SITE_URL}/og-images/add-on-services-og.webp`;
+const PAGE_DESCRIPTION =
+    "Explore Medcity Overseas add-on services for university admissions, student visas, education finance, accommodation, travel, pre-departure preparation and complete study abroad support.";
 
 export const metadata = {
-    title:
-        "Study Abroad Add-On Services | Student Support | Medcity",
+    /*
+     * Your root layout uses:
+     * template: "%s | Medcity Overseas"
+     *
+     * Final title:
+     * Study Abroad Add-On Services | Medcity Overseas
+     */
+    title: PAGE_TITLE,
 
-    description:
-        "Explore Medcity Study Abroad add-on services including admissions assistance, visa guidance, education finance, accommodation, travel and complete student support.",
-
-    keywords: [
-        "study abroad add-on services",
-        "student visa assistance",
-        "study abroad accommodation",
-        "education loan guidance",
-        "overseas admission support",
-        "pre departure support",
-        "study abroad travel assistance",
-        "Medcity Study Abroad services",
-    ],
+    description: PAGE_DESCRIPTION,
 
     alternates: {
-        canonical: PAGE_URL,
+        canonical: PAGE_PATH,
     },
 
     openGraph: {
-        title:
-            "Study Abroad Add-On Services | Medcity",
-        description:
-            "Get professional support for admissions, visas, finance, accommodation, travel and every stage of your study abroad journey.",
-        url: PAGE_URL,
-        siteName: "Medcity Study Abroad",
         type: "website",
         locale: "en_IN",
+        url: PAGE_PATH,
+        siteName: "Medcity Overseas",
+        title: `${PAGE_TITLE} | Medcity Overseas`,
+        description:
+            "Get expert support for university admissions, student visas, education finance, accommodation, travel and every stage of your study abroad journey.",
         images: [
             {
-                url: OG_IMAGE,
+                url: OG_IMAGE_PATH,
                 width: 1200,
                 height: 630,
-                alt:
-                    "Medcity Study Abroad Add-On Services",
+                alt: "Study abroad add-on services from Medcity Overseas",
             },
         ],
     },
 
     twitter: {
         card: "summary_large_image",
-        title:
-            "Study Abroad Add-On Services | Medcity",
+        title: `${PAGE_TITLE} | Medcity Overseas`,
         description:
-            "Explore complete student support services for your overseas education journey.",
-        images: [OG_IMAGE],
+            "Explore admissions, visa, finance, accommodation, travel and pre-departure support for international students.",
+        images: [OG_IMAGE_PATH],
     },
 
     robots: {
         index: true,
         follow: true,
+
         googleBot: {
             index: true,
             follow: true,
@@ -73,26 +67,119 @@ export const metadata = {
     },
 };
 
-const structuredData = {
+const services = [
+    {
+        name: "University Admission Assistance",
+        description:
+            "Application guidance and admission support for international universities and colleges.",
+    },
+    {
+        name: "Student Visa Assistance",
+        description:
+            "Guidance for student visa documentation, applications and interview preparation.",
+    },
+    {
+        name: "Education Finance Guidance",
+        description:
+            "Support for understanding education loans and other study abroad funding options.",
+    },
+    {
+        name: "Student Accommodation Assistance",
+        description:
+            "Guidance for finding suitable accommodation near the student's institution.",
+    },
+    {
+        name: "Study Abroad Travel Assistance",
+        description:
+            "Support for travel planning and preparation before departure.",
+    },
+    {
+        name: "Pre-Departure Support",
+        description:
+            "Practical preparation and guidance for students before beginning their overseas education.",
+    },
+];
+
+const pageJsonLd = {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
-    name:
-        "Medcity Study Abroad Add-On Services",
-    description:
-        "Professional support services for admissions, visas, finance, accommodation, travel and overseas education.",
+    "@id": `${PAGE_URL}/#webpage`,
     url: PAGE_URL,
+    name: `${PAGE_TITLE} | Medcity Overseas`,
+    description: PAGE_DESCRIPTION,
+    image: {
+        "@type": "ImageObject",
+        url: OG_IMAGE_URL,
+        width: 1200,
+        height: 630,
+    },
     isPartOf: {
-        "@type": "WebSite",
-        name: "Medcity Study Abroad",
-        url: SITE_URL,
+        "@id": `${SITE_URL}/#website`,
     },
-    provider: {
-        "@type": "Organization",
-        name: "Medcity Study Abroad",
-        url: SITE_URL,
-        telephone: "+91-8943280333",
+    about: {
+        "@id": `${SITE_URL}/#organization`,
     },
+    breadcrumb: {
+        "@id": `${PAGE_URL}/#breadcrumb`,
+    },
+    mainEntity: {
+        "@id": `${PAGE_URL}/#service-list`,
+    },
+    inLanguage: "en-IN",
 };
+
+const serviceListJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "@id": `${PAGE_URL}/#service-list`,
+    name: "Medcity Overseas Study Abroad Add-On Services",
+    numberOfItems: services.length,
+    itemListOrder: "https://schema.org/ItemListOrderAscending",
+
+    itemListElement: services.map((service, index) => ({
+        "@type": "ListItem",
+        position: index + 1,
+        item: {
+            "@type": "Service",
+            "@id": `${PAGE_URL}/#service-${index + 1}`,
+            name: service.name,
+            description: service.description,
+            url: PAGE_URL,
+            provider: {
+                "@id": `${SITE_URL}/#organization`,
+            },
+            areaServed: {
+                "@type": "Country",
+                name: "India",
+            },
+        },
+    })),
+};
+
+const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "@id": `${PAGE_URL}/#breadcrumb`,
+
+    itemListElement: [
+        {
+            "@type": "ListItem",
+            position: 1,
+            name: "Home",
+            item: SITE_URL,
+        },
+        {
+            "@type": "ListItem",
+            position: 2,
+            name: "Add-On Services",
+            item: PAGE_URL,
+        },
+    ],
+};
+
+function serializeJsonLd(data) {
+    return JSON.stringify(data).replace(/</g, "\\u003c");
+}
 
 export default function AddOnServicesPage() {
     return (
@@ -100,9 +187,21 @@ export default function AddOnServicesPage() {
             <script
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{
-                    __html: JSON.stringify(
-                        structuredData
-                    ),
+                    __html: serializeJsonLd(pageJsonLd),
+                }}
+            />
+
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{
+                    __html: serializeJsonLd(serviceListJsonLd),
+                }}
+            />
+
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{
+                    __html: serializeJsonLd(breadcrumbJsonLd),
                 }}
             />
 

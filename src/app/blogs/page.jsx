@@ -1,20 +1,21 @@
 import StudyAbroadBlogClient from "./StudyAbroadBlogClient";
 
-const SITE_URL =
-    "https://medcityoverseas.com";
-
-const PAGE_URL =
-    `${SITE_URL}/study-abroad-blog`;
+const SITE_URL = "https://medcityoverseas.com";
+const PAGE_PATH = "/blogs";
+const PAGE_URL = `${SITE_URL}${PAGE_PATH}`;
 
 const OG_IMAGE =
     `${SITE_URL}/og-images/study-abroad-blog-og.webp`;
 
-export const metadata = {
-    title:
-        "Study Abroad Blogs, Visa Tips & Student Guides | Medcity",
+const PAGE_TITLE =
+    "Study Abroad Blogs, Visa Tips & Student Guides";
 
-    description:
-        "Read expert study abroad blogs covering student visas, scholarships, university admissions, destinations, courses and international student experiences.",
+const PAGE_DESCRIPTION =
+    "Read expert study abroad blogs covering student visas, scholarships, university admissions, destinations, courses and international student experiences.";
+
+export const metadata = {
+    title: PAGE_TITLE,
+    description: PAGE_DESCRIPTION,
 
     keywords: [
         "study abroad blogs",
@@ -28,7 +29,7 @@ export const metadata = {
     ],
 
     alternates: {
-        canonical: PAGE_URL,
+        canonical: PAGE_PATH,
     },
 
     openGraph: {
@@ -36,8 +37,9 @@ export const metadata = {
             "Study Abroad Blogs and Student Guides | Medcity",
         description:
             "Explore expert advice on visas, scholarships, admissions, destinations and international student life.",
-        url: PAGE_URL,
-        siteName: "Medcity Study Abroad",
+        url: PAGE_PATH,
+        siteName:
+            "Medcity Study Abroad",
         type: "website",
         locale: "en_IN",
         images: [
@@ -52,7 +54,8 @@ export const metadata = {
     },
 
     twitter: {
-        card: "summary_large_image",
+        card:
+            "summary_large_image",
         title:
             "Study Abroad Blogs and Student Guides | Medcity",
         description:
@@ -63,10 +66,12 @@ export const metadata = {
     robots: {
         index: true,
         follow: true,
+
         googleBot: {
             index: true,
             follow: true,
-            "max-image-preview": "large",
+            "max-image-preview":
+                "large",
             "max-snippet": -1,
             "max-video-preview": -1,
         },
@@ -76,17 +81,28 @@ export const metadata = {
 const structuredData = {
     "@context": "https://schema.org",
     "@type": "Blog",
+    "@id": `${PAGE_URL}#blog`,
     name:
         "Medcity Study Abroad Blog",
     description:
         "Study abroad articles covering visas, scholarships, admissions, destinations and student experiences.",
     url: PAGE_URL,
+    inLanguage: "en-IN",
+
     publisher: {
         "@type": "Organization",
-        name: "Medcity Study Abroad",
+        name:
+            "Medcity Study Abroad",
         url: SITE_URL,
     },
 };
+
+function serializeJsonLd(data) {
+    return JSON.stringify(data).replace(
+        /</g,
+        "\\u003c"
+    );
+}
 
 export default function StudyAbroadBlogPage() {
     return (
@@ -94,9 +110,10 @@ export default function StudyAbroadBlogPage() {
             <script
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{
-                    __html: JSON.stringify(
-                        structuredData
-                    ),
+                    __html:
+                        serializeJsonLd(
+                            structuredData
+                        ),
                 }}
             />
 

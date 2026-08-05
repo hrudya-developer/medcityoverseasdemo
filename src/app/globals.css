@@ -191,6 +191,7 @@ body.swal2-shown {
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
+  border-radius: 50px;
 }
 
 ::-webkit-scrollbar-track {
@@ -200,6 +201,8 @@ body.swal2-shown {
 ::-webkit-scrollbar-thumb {
   border-radius: 999px;
   background-color: var(--color-darkPrimary);
+  min-height: 35px;
+  max-height: 80px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
@@ -364,4 +367,26 @@ body.swal2-shown {
   ::-webkit-scrollbar {
     width: 5px;
   }
+}
+
+/* Counselling modal custom scrollbar */
+
+.simplebar-track.simplebar-vertical {
+  top: 18px;
+  right: 6px;
+  bottom: 18px;
+  width: 6px;
+  background: transparent;
+}
+
+.simplebar-scrollbar::before {
+  background-color: var(--color-darkPrimary) !important;
+  border-radius: 9999px !important;
+  opacity: 1;
+  width: 6px !important;
+}
+
+.simplebar-scrollbar:hover::before {
+  background-color: var(--color-primary) !important;
+
 }

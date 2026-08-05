@@ -47,39 +47,13 @@ export default function SearchForm({
             : undefined;
 
     return (
-        <div
-            className="
-                relative overflow-hidden
-                rounded-[30px]
-                border border-white/10
-                bg-white/[0.07]
-                p-3
-                shadow-[0_30px_80px_rgba(0,0,0,0.35)]
-                backdrop-blur-2xl
-                sm:p-4
-                lg:p-5
-            "
-        >
+        <div className="relative overflow-hidden rounded-[30px] border border-white/10 bg-white/[0.07] p-3 shadow-[0_30px_80px_rgba(0,0,0,0.35)] backdrop-blur-2xl sm:p-4 lg:p-5">
             <div
                 aria-hidden="true"
-                className="
-                    absolute inset-x-12 top-0
-                    h-px
-                    bg-gradient-to-r
-                    from-transparent
-                    via-primary/70
-                    to-transparent
-                "
+                className="absolute inset-x-12 top-0 h-px bg-gradient-to-r from-transparent via-primary/70 to-transparent"
             />
 
-            <div
-                className="
-                    grid grid-cols-1 gap-3
-                    md:grid-cols-2
-                    xl:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_minmax(0,1fr)_190px]
-                    xl:items-stretch
-                "
-            >
+            <div className="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_minmax(0,1fr)_190px] xl:items-stretch">
                 <SearchField
                     icon={MapPin}
                     step="01"
@@ -89,27 +63,19 @@ export default function SearchForm({
                     <Select
                         instanceId="country-search"
                         value={selectedCountry}
-                        onChange={
-                            onCountryChange
-                        }
+                        onChange={onCountryChange}
                         options={countryOptions}
                         placeholder={
                             destinationsLoading
                                 ? "Loading destinations..."
                                 : "Select destination"
                         }
-                        isLoading={
-                            destinationsLoading
-                        }
-                        isDisabled={
-                            destinationsLoading
-                        }
+                        isLoading={destinationsLoading}
+                        isDisabled={destinationsLoading}
                         isSearchable
                         isClearable
                         styles={selectStyles}
-                        menuPortalTarget={
-                            portalTarget
-                        }
+                        menuPortalTarget={portalTarget}
                         menuPosition="fixed"
                         noOptionsMessage={() =>
                             "No destinations found"
@@ -121,22 +87,14 @@ export default function SearchForm({
                     icon={School}
                     step="02"
                     label="University"
-                    active={Boolean(
-                        universityId
-                    )}
+                    active={Boolean(universityId)}
                     disabled={!countryId}
                 >
                     <Select
                         instanceId="university-search"
-                        value={
-                            selectedUniversity
-                        }
-                        onChange={
-                            onUniversityChange
-                        }
-                        options={
-                            universityOptions
-                        }
+                        value={selectedUniversity}
+                        onChange={onUniversityChange}
+                        options={universityOptions}
                         placeholder={
                             !countryId
                                 ? "Select destination first"
@@ -150,15 +108,11 @@ export default function SearchForm({
                             !countryId ||
                             universitiesLoading
                         }
-                        isLoading={
-                            universitiesLoading
-                        }
+                        isLoading={universitiesLoading}
                         isSearchable
                         isClearable
                         styles={selectStyles}
-                        menuPortalTarget={
-                            portalTarget
-                        }
+                        menuPortalTarget={portalTarget}
                         menuPosition="fixed"
                         noOptionsMessage={() =>
                             "No universities found"
@@ -176,9 +130,7 @@ export default function SearchForm({
                     <Select
                         instanceId="course-search"
                         value={selectedCourse}
-                        onChange={
-                            onCourseChange
-                        }
+                        onChange={onCourseChange}
                         options={courseOptions}
                         placeholder={
                             !universityId
@@ -194,15 +146,11 @@ export default function SearchForm({
                             coursesLoading ||
                             !courseOptions.length
                         }
-                        isLoading={
-                            coursesLoading
-                        }
+                        isLoading={coursesLoading}
                         isSearchable
                         isClearable
                         styles={selectStyles}
-                        menuPortalTarget={
-                            portalTarget
-                        }
+                        menuPortalTarget={portalTarget}
                         menuPosition="fixed"
                         noOptionsMessage={() =>
                             "No courses found"
@@ -221,15 +169,9 @@ export default function SearchForm({
             </div>
 
             <SearchProgress
-                countrySelected={Boolean(
-                    countryId
-                )}
-                universitySelected={Boolean(
-                    universityId
-                )}
-                courseSelected={Boolean(
-                    courseId
-                )}
+                countrySelected={Boolean(countryId)}
+                universitySelected={Boolean(universityId)}
+                courseSelected={Boolean(courseId)}
             />
         </div>
     );

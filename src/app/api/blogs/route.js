@@ -1,17 +1,35 @@
-import {
-    NextResponse,
-} from "next/server";
+import { NextResponse } from "next/server";
 
 const API_URL =
     "https://overseas.technocitysolutions.com/public/api/getBlog";
 
+const API_KEY =
+    process.env.OVERSEAS_API_KEY;
+
 export async function GET(request) {
     try {
+        if (!API_KEY) {
+            console.error(
+                "OVERSEAS_API_KEY is missing."
+            );
+
+            return NextResponse.json(
+                {
+                    message:
+                        "Blog API configuration is missing.",
+                },
+                {
+                    status: 500,
+                }
+            );
+        }
+
         const { searchParams } =
             new URL(request.url);
 
         const uid =
             searchParams.get("uid") ||
+            searchParams.get("id") ||
             "0";
 
         const formData =
@@ -19,10 +37,13 @@ export async function GET(request) {
 
         formData.append(
             "api",
-            process.env
-                .OVERSEAS_API_KEY
+            API_KEY
         );
 
+        /*
+         * This matches your previously
+         * working implementation.
+         */
         formData.append(
             "uid",
             uid
@@ -34,25 +55,58 @@ export async function GET(request) {
                 method: "POST",
                 body: formData,
                 cache: "no-store",
+                headers: {
+                    Accept:
+                        "application/json",
+                },
             }
         );
 
         const contentType =
             response.headers.get(
                 "content-type"
+            ) || "";
+
+        const rawResponse =
+            await response.text();
+
+        if (!response.ok) {
+            console.error(
+                "Blog API request failed:",
+                {
+                    status:
+                        response.status,
+                    body:
+                        rawResponse.slice(
+                            0,
+                            500
+                        ),
+                }
             );
 
+            return NextResponse.json(
+                {
+                    message:
+                        "Unable to load blogs.",
+                },
+                {
+                    status:
+                        response.status,
+                }
+            );
+        }
+
         if (
-            !contentType?.includes(
+            !contentType.includes(
                 "application/json"
             )
         ) {
-            const text =
-                await response.text();
-
             console.error(
                 "Blog API returned non-JSON:",
-                text
+                rawResponse.slice(
+                    0,
+                    500
+                )
             );
 
             return NextResponse.json(
@@ -66,42 +120,63 @@ export async function GET(request) {
             );
         }
 
-        const result =
-            await response.json();
+        let result;
 
-        if (!response.ok) {
+        try {
+            result =
+                JSON.parse(rawResponse);
+        } catch (error) {
+            console.error(
+                "Unable to parse blog API response:",
+                error
+            );
+
             return NextResponse.json(
                 {
                     message:
-                        result?.message ||
-                        "Unable to load blogs.",
+                        "Blog API returned invalid JSON.",
                 },
                 {
-                    status:
-                        response.status,
+                    status: 502,
                 }
             );
         }
 
         const blogs =
-            Array.isArray(
-                result?.blog
-            )
-                ? result.blog
+            Array.isArray(result?.blog)
+                ? result.blog.filter(
+                    (blog) =>
+                        String(
+                            blog?.status ??
+                            "1"
+                        ) === "1"
+                )
                 : [];
 
         const imagePath =
-            result?.blog_image_path ||
-            "";
+            typeof result?.blog_image_path ===
+                "string"
+                ? result.blog_image_path
+                : "";
 
-        return NextResponse.json({
-            blogs,
-            imagePath,
-        });
+        return NextResponse.json(
+            {
+                blogs,
+                imagePath,
+            },
+            {
+                status: 200,
+            }
+        );
     } catch (error) {
         console.error(
             "Blog route error:",
-            error
+            {
+                message:
+                    error?.message,
+                cause:
+                    error?.cause,
+            }
         );
 
         return NextResponse.json(

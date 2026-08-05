@@ -1,8 +1,6 @@
 "use client";
 
-import {
-    useState,
-} from "react";
+import { useState } from "react";
 
 import {
     Globe2,
@@ -31,33 +29,40 @@ const CountrySidebar = ({
             aria-label="Study destinations"
             className="
                 h-fit
+                min-w-0
                 lg:sticky
                 lg:top-24
             "
         >
             <div
                 className="
+                    min-w-0
                     overflow-hidden
                     rounded-[24px]
-                    border border-slate-200
+                    border
+                    border-slate-200
                     bg-white
                     shadow-[0_18px_45px_rgba(15,23,42,0.08)]
                 "
             >
                 <SidebarHeader
-                    destinationCount={
-                        destinations.length
-                    }
+                    destinationCount={destinations.length}
                 />
 
                 <div
                     className="
-                        max-h-[560px]
-                        overflow-y-auto
-                        overscroll-contain
+                        min-w-0
+                        overflow-x-auto
+                        overflow-y-hidden
+                        overscroll-x-contain
                         p-3
                         [scrollbar-color:#c01f53_#f1f5f9]
                         [scrollbar-width:thin]
+
+                        lg:max-h-[560px]
+                        lg:overflow-x-hidden
+                        lg:overflow-y-auto
+                        lg:overscroll-y-contain
                     "
                 >
                     {loading ? (
@@ -66,10 +71,22 @@ const CountrySidebar = ({
                         <SidebarError
                             onRetry={onRetry}
                         />
-                    ) : destinations.length >
-                        0 ? (
+                    ) : destinations.length > 0 ? (
                         <nav aria-label="Country selection">
-                            <ul className="space-y-1.5">
+                            <ul
+                                className="
+                                    flex
+                                    w-max
+                                    min-w-full
+                                    items-center
+                                    gap-2
+
+                                    lg:block
+                                    lg:w-auto
+                                    lg:min-w-0
+                                    lg:space-y-1.5
+                                "
+                            >
                                 {destinations.map(
                                     (
                                         destination,
@@ -103,14 +120,16 @@ const CountrySidebar = ({
                                                     id ||
                                                     `${name}-${index}`
                                                 }
+                                                className="
+                                                    shrink-0
+                                                    lg:w-full
+                                                "
                                             >
                                                 <CountryButton
                                                     destination={
                                                         destination
                                                     }
-                                                    countryId={
-                                                        id
-                                                    }
+                                                    countryId={id}
                                                     countryName={
                                                         name
                                                     }
@@ -148,18 +167,24 @@ const SidebarHeader = ({
     return (
         <div
             className="
-                border-b border-slate-100
+                border-b
+                border-slate-100
                 bg-gradient-to-r
                 from-white
                 to-primary/[0.025]
-                px-5 py-5
+                px-4
+                py-4
+                sm:px-5
+                sm:py-5
             "
         >
             <div className="flex items-center gap-3">
                 <span
                     aria-hidden="true"
                     className="
-                        flex h-10 w-10
+                        flex
+                        h-10
+                        w-10
                         shrink-0
                         items-center
                         justify-center
@@ -172,7 +197,7 @@ const SidebarHeader = ({
                 </span>
 
                 <div className="min-w-0 flex-1">
-                    <h2 className="text-lg font-black text-slate-950">
+                    <h2 className="text-base font-black text-slate-950 sm:text-lg">
                         All Countries
                     </h2>
 
@@ -184,10 +209,13 @@ const SidebarHeader = ({
                 {destinationCount > 0 && (
                     <span
                         className="
-                            shrink-0 rounded-full
+                            shrink-0
+                            rounded-full
                             bg-secondary/10
-                            px-2.5 py-1
-                            text-[10px] font-bold
+                            px-2.5
+                            py-1
+                            text-[10px]
+                            font-bold
                             text-secondary
                         "
                     >
@@ -238,13 +266,26 @@ const CountryButton = ({
             aria-pressed={active}
             aria-label={`View universities in ${countryName}`}
             className={`
-                group flex w-full
-                items-center gap-3
+                group
+                flex
+                min-w-max
+                items-center
+                gap-2
+                whitespace-nowrap
                 rounded-xl
-                px-3.5 py-3
-                text-left text-sm
+                px-3
+                py-2.5
+                text-left
+                text-sm
                 font-bold
-                transition-all duration-300
+                transition-all
+                duration-300
+
+                lg:w-full
+                lg:min-w-0
+                lg:gap-3
+                lg:px-3.5
+                lg:py-3
 
                 focus-visible:outline-none
                 focus-visible:ring-2
@@ -272,13 +313,21 @@ const CountryButton = ({
             <span
                 aria-hidden="true"
                 className={`
-                    relative flex h-9 w-9
-                    shrink-0 items-center
+                    relative
+                    flex
+                    h-8
+                    w-8
+                    shrink-0
+                    items-center
                     justify-center
                     overflow-hidden
-                    rounded-full border
+                    rounded-full
+                    border
                     transition-colors
                     duration-300
+
+                    lg:h-9
+                    lg:w-9
 
                     ${active
                         ? `
@@ -304,14 +353,16 @@ const CountryButton = ({
                             setFlagFailed(true);
                         }}
                         className="
-                            h-full w-full
+                            h-full
+                            w-full
                             object-cover
                         "
                     />
                 ) : (
                     <MapPin
                         className={`
-                            h-4 w-4
+                            h-4
+                            w-4
 
                             ${active
                                 ? "text-white"
@@ -322,7 +373,15 @@ const CountryButton = ({
                 )}
             </span>
 
-            <span className="min-w-0 flex-1 truncate">
+            <span
+                className="
+                    max-w-[150px]
+                    truncate
+                    lg:min-w-0
+                    lg:max-w-none
+                    lg:flex-1
+                "
+            >
                 {countryName}
             </span>
 
@@ -330,8 +389,10 @@ const CountryButton = ({
                 <span
                     aria-hidden="true"
                     className="
-                        h-2 w-2
-                        shrink-0 rounded-full
+                        h-2
+                        w-2
+                        shrink-0
+                        rounded-full
                         bg-logoYellow
                         shadow-[0_0_10px_rgba(247,236,34,0.8)]
                     "
@@ -351,16 +412,23 @@ const SidebarLoading = () => {
             role="status"
             aria-live="polite"
             className="
-                flex min-h-[220px]
-                flex-col items-center
+                flex
+                min-h-[110px]
+                min-w-full
+                flex-col
+                items-center
                 justify-center
-                px-4 text-center
+                px-4
+                text-center
+
+                lg:min-h-[220px]
             "
         >
             <LoaderCircle
                 aria-hidden="true"
                 className="
-                    h-7 w-7
+                    h-7
+                    w-7
                     animate-spin
                     text-primary
                 "
@@ -380,18 +448,28 @@ const SidebarError = ({
         <div
             role="alert"
             className="
-                flex min-h-[220px]
-                flex-col items-center
+                flex
+                min-h-[140px]
+                min-w-full
+                flex-col
+                items-center
                 justify-center
-                px-4 py-8
+                px-4
+                py-6
                 text-center
+
+                lg:min-h-[220px]
+                lg:py-8
             "
         >
             <span
                 aria-hidden="true"
                 className="
-                    flex h-11 w-11
-                    items-center justify-center
+                    flex
+                    h-11
+                    w-11
+                    items-center
+                    justify-center
                     rounded-xl
                     bg-red-50
                     text-red-500
@@ -405,8 +483,7 @@ const SidebarError = ({
             </p>
 
             <p className="mt-1 text-xs leading-5 text-slate-500">
-                Please check your connection and
-                try again.
+                Please check your connection and try again.
             </p>
 
             {typeof onRetry === "function" && (
@@ -414,12 +491,16 @@ const SidebarError = ({
                     type="button"
                     onClick={onRetry}
                     className="
-                        mt-4 inline-flex
-                        items-center gap-2
+                        mt-4
+                        inline-flex
+                        items-center
+                        gap-2
                         rounded-xl
                         bg-primary
-                        px-4 py-2.5
-                        text-xs font-bold
+                        px-4
+                        py-2.5
+                        text-xs
+                        font-bold
                         text-white
                         transition
                         hover:bg-darkPrimary
@@ -446,18 +527,28 @@ const SidebarEmpty = () => {
         <div
             role="status"
             className="
-                flex min-h-[220px]
-                flex-col items-center
+                flex
+                min-h-[140px]
+                min-w-full
+                flex-col
+                items-center
                 justify-center
-                px-4 py-8
+                px-4
+                py-6
                 text-center
+
+                lg:min-h-[220px]
+                lg:py-8
             "
         >
             <span
                 aria-hidden="true"
                 className="
-                    flex h-11 w-11
-                    items-center justify-center
+                    flex
+                    h-11
+                    w-11
+                    items-center
+                    justify-center
                     rounded-xl
                     bg-slate-100
                     text-slate-400
@@ -471,8 +562,7 @@ const SidebarEmpty = () => {
             </p>
 
             <p className="mt-1 text-xs leading-5 text-slate-500">
-                Study destinations are currently
-                unavailable.
+                Study destinations are currently unavailable.
             </p>
         </div>
     );

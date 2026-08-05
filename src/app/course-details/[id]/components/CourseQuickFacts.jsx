@@ -105,7 +105,7 @@ export default function CourseQuickFacts({
                                     intakes !==
                                     intakesRaw &&
                                     intakesRaw && (
-                                        <p className="mt-1 text-sm text-primary">
+                                        <p className="mt-1 text-sm text-primary line-clamp-1 hover:cursor-pointer hover:underline" title={intakesRaw}>
                                             {intakesRaw}
                                         </p>
                                     )}

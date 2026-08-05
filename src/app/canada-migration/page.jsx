@@ -1,65 +1,77 @@
 import CanadaMigrationContent from "./components/CanadaMigrationContent";
 
 const SITE_URL = "https://medcityoverseas.com";
-const PAGE_URL = `${SITE_URL}/canada-migration`;
-const OG_IMAGE = `${SITE_URL}/og-images/canada-migration-og.webp`;
+const PAGE_PATH = "/canada-migration";
+const PAGE_URL = `${SITE_URL}${PAGE_PATH}`;
+
+const OG_IMAGE_PATH =
+    "/og-images/canada-migration-og.webp";
+
+const OG_IMAGE_URL =
+    `${SITE_URL}${OG_IMAGE_PATH}`;
+
+const PAGE_TITLE =
+    "Canada Immigration Programs and PR Pathways";
+
+const PAGE_DESCRIPTION =
+    "Explore Canadian immigration pathways including Express Entry, Provincial Nominee Programs, family sponsorship, work permits and permanent residence options, with general guidance from Medcity Overseas.";
 
 export const metadata = {
-    title:
-        "Canada Immigration Programs & PR Pathways | Medcity",
+    /*
+     * Your root layout title template adds:
+     * | Medcity Overseas
+     *
+     * Final title:
+     * Canada Immigration Programs and PR Pathways
+     * | Medcity Overseas
+     */
+    title: PAGE_TITLE,
 
-    description:
-        "Explore Canada immigration programs including Express Entry, Provincial Nominee Programs, Start-Up Visa, family sponsorship, work permits and permanent residence guidance.",
-
-    keywords: [
-        "Canada immigration programs",
-        "Canada PR",
-        "Canada Express Entry",
-        "Canada Provincial Nominee Program",
-        "Canada Start-Up Visa",
-        "Canada family sponsorship",
-        "Canada work permit",
-        "migrate to Canada",
-        "Canada immigration consultants Kerala",
-        "Medcity Canada migration",
-    ],
+    description: PAGE_DESCRIPTION,
 
     alternates: {
-        canonical: PAGE_URL,
+        canonical: PAGE_PATH,
     },
 
     openGraph: {
-        title:
-            "Canada Immigration Programs & PR Pathways | Medcity",
-        description:
-            "Understand Canadian permanent residence, Express Entry, PNP, work permits, family sponsorship and business immigration pathways.",
-        url: PAGE_URL,
-        siteName: "Medcity Study Abroad",
-        locale: "en_IN",
         type: "website",
+        locale: "en_IN",
+        url: PAGE_PATH,
+        siteName: "Medcity Overseas",
+
+        title:
+            "Canada Immigration Programs and PR Pathways | Medcity Overseas",
+
+        description:
+            "Learn about Express Entry, Provincial Nominee Programs, family sponsorship, work permits and other Canadian immigration options.",
+
         images: [
             {
-                url: OG_IMAGE,
+                url: OG_IMAGE_PATH,
                 width: 1200,
                 height: 630,
                 alt:
-                    "Canada immigration and permanent residence programs",
+                    "Canada immigration and permanent residence pathway information",
             },
         ],
     },
 
     twitter: {
         card: "summary_large_image",
+
         title:
-            "Canada Immigration Programs & PR Pathways | Medcity",
+            "Canada Immigration and PR Pathways | Medcity Overseas",
+
         description:
-            "Explore Express Entry, PNP, work permits, family sponsorship and other Canada immigration pathways.",
-        images: [OG_IMAGE],
+            "Explore Express Entry, provincial nomination, family sponsorship, work permits and Canadian permanent residence pathways.",
+
+        images: [OG_IMAGE_PATH],
     },
 
     robots: {
         index: true,
         follow: true,
+
         googleBot: {
             index: true,
             follow: true,
@@ -70,48 +82,160 @@ export const metadata = {
     },
 };
 
-const collectionSchema = {
-    "@context": "https://schema.org",
-    "@type": "CollectionPage",
-    name: "Canada Immigration Programs",
-    description:
-        "Information about Canadian immigration, permanent residence, work permits, family sponsorship and business immigration pathways.",
-    url: PAGE_URL,
-    isPartOf: {
-        "@type": "WebSite",
-        name: "Medcity Study Abroad",
-        url: SITE_URL,
+const immigrationPrograms = [
+    {
+        name: "Express Entry",
+        description:
+            "Canada's online system for managing applications from skilled workers under eligible federal economic immigration programs.",
     },
-    about: {
-        "@type": "Thing",
-        name: "Canadian immigration programs",
+    {
+        name: "Provincial Nominee Program",
+        description:
+            "Permanent residence pathways for applicants nominated by participating Canadian provinces or territories.",
     },
-    provider: {
-        "@type": "Organization",
-        name: "Medcity Study Abroad",
-        url: SITE_URL,
-        telephone: "+91-8943280333",
+    {
+        name: "Family Sponsorship",
+        description:
+            "Immigration pathways through which eligible Canadian citizens and permanent residents may sponsor qualifying family members.",
     },
-};
+    {
+        name: "Canadian Work Permits",
+        description:
+            "Temporary authorization pathways that may allow eligible foreign nationals to work in Canada.",
+    },
+    {
+        name: "Permanent Residence Pathways",
+        description:
+            "Federal, provincial and family-based programs through which eligible applicants may seek Canadian permanent residence.",
+    },
+    {
+        name: "Start-Up Visa Program",
+        description:
+            "A federal entrepreneur immigration program that is currently paused for new applications, while previously accepted applications continue to be processed.",
+    },
+];
 
-const breadcrumbSchema = {
+const structuredData = {
     "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    itemListElement: [
+
+    "@graph": [
         {
-            "@type": "ListItem",
-            position: 1,
-            name: "Home",
-            item: SITE_URL,
+            "@type": "CollectionPage",
+            "@id": `${PAGE_URL}/#webpage`,
+
+            url: PAGE_URL,
+
+            name:
+                "Canada Immigration Programs and PR Pathways",
+
+            description: PAGE_DESCRIPTION,
+
+            image: {
+                "@type": "ImageObject",
+                url: OG_IMAGE_URL,
+                width: 1200,
+                height: 630,
+            },
+
+            inLanguage: "en-IN",
+
+            isPartOf: {
+                "@id": `${SITE_URL}/#website`,
+            },
+
+            about: [
+                {
+                    "@type": "Thing",
+                    name: "Canadian immigration",
+                },
+                {
+                    "@type": "Thing",
+                    name: "Canadian permanent residence",
+                },
+                {
+                    "@type": "Thing",
+                    name: "Express Entry",
+                },
+            ],
+
+            publisher: {
+                "@id": `${SITE_URL}/#organization`,
+            },
+
+            breadcrumb: {
+                "@id": `${PAGE_URL}/#breadcrumb`,
+            },
+
+            mainEntity: {
+                "@id": `${PAGE_URL}/#immigration-programs`,
+            },
         },
+
         {
-            "@type": "ListItem",
-            position: 2,
-            name: "Canada Migration",
-            item: PAGE_URL,
+            "@type": "BreadcrumbList",
+            "@id": `${PAGE_URL}/#breadcrumb`,
+
+            itemListElement: [
+                {
+                    "@type": "ListItem",
+                    position: 1,
+                    name: "Home",
+                    item: SITE_URL,
+                },
+                {
+                    "@type": "ListItem",
+                    position: 2,
+                    name: "Canada Migration",
+                    item: PAGE_URL,
+                },
+            ],
+        },
+
+        {
+            "@type": "ItemList",
+            "@id": `${PAGE_URL}/#immigration-programs`,
+
+            name:
+                "Canada Immigration Programs and Pathways",
+
+            description:
+                "Overview of Canadian immigration, work permit, family sponsorship and permanent residence pathways.",
+
+            numberOfItems:
+                immigrationPrograms.length,
+
+            itemListOrder:
+                "https://schema.org/ItemListOrderUnordered",
+
+            itemListElement:
+                immigrationPrograms.map(
+                    (program, index) => ({
+                        "@type": "ListItem",
+                        position: index + 1,
+
+                        item: {
+                            "@type": "Thing",
+
+                            "@id":
+                                `${PAGE_URL}/#program-${index + 1}`,
+
+                            name: program.name,
+                            description:
+                                program.description,
+                            url: PAGE_URL,
+                        },
+                    })
+                ),
         },
     ],
 };
+
+function serializeJsonLd(data) {
+    return JSON.stringify(data).replace(
+        /</g,
+        "\\u003c"
+    );
+}
 
 export default function CanadaMigrationPage() {
     return (
@@ -120,18 +244,8 @@ export default function CanadaMigrationPage() {
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{
                     __html:
-                        JSON.stringify(
-                            collectionSchema
-                        ),
-                }}
-            />
-
-            <script
-                type="application/ld+json"
-                dangerouslySetInnerHTML={{
-                    __html:
-                        JSON.stringify(
-                            breadcrumbSchema
+                        serializeJsonLd(
+                            structuredData
                         ),
                 }}
             />

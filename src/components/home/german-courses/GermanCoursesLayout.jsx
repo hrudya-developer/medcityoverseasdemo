@@ -183,7 +183,7 @@ export default function GermanCoursesLayout() {
                         </p>
 
                         <Link
-                            href="/germanPopularCourses"
+                            href="/german-programs"
                             className="
                                 mt-7
                                 inline-flex

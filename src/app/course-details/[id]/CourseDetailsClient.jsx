@@ -17,6 +17,7 @@ import EnglishRequirements from "./components/EnglishRequirements";
 import {
     formatCourseDetails,
 } from "./utils/courseDetailsHelpers";
+import FAQ from "@/components/home/FAQ/FAQ";
 
 export default function CourseDetailsClient({
     id,
@@ -121,6 +122,7 @@ export default function CourseDetailsClient({
                     details.universityName
                 }
             />
+            <FAQ />
         </main>
     );
 }
