@@ -30,7 +30,7 @@ export default function NavbarActions({
             </button>
 
             <Link
-                href="/login-via-otp"
+                href="/login"
                 className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-white/70 bg-white/5 px-4 text-sm font-bold text-white backdrop-blur-md transition-all duration-300 hover:-translate-y-0.5 hover:bg-white hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-primary"
             >
                 <UserRound

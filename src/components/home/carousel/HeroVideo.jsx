@@ -8,10 +8,10 @@ import {
 } from "react";
 
 const DESKTOP_VIDEO =
-    "/videos/medcity2025.15f1bf21a50a5d60cdae.mp4";
+    "/videos/study-abroad-desktop.mp4";
 
 const MOBILE_VIDEO =
-    "/videos/mobilemedcity2.e47b58ad13ce13294963.mp4";
+    "/videos/study-abroad-mobile.mp4";
 
 const DESKTOP_POSTER =
     "/assets/hero-desktop-poster.webp";

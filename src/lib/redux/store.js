@@ -1,22 +1,18 @@
-import {
-    configureStore,
-} from "@reduxjs/toolkit";
+import { configureStore } from "@reduxjs/toolkit";
+import { setupListeners } from "@reduxjs/toolkit/query";
 
-import {
-    searchApi,
-} from "@/lib/services/searchApi";
+import { searchApi } from "@/lib/services/searchApi";
+import { germanProgramsApi } from "@/lib/services/germanProgramsApi";
+import { testimonialsApi } from "@/lib/services/testimonialsApi";
+import { loginApi } from "@/lib/services/loginApi";
 
-import {
-    germanProgramsApi,
-} from "@/lib/services/germanProgramsApi";
+import authReducer from "@/lib/redux/slices/authSlice";
 
-import {
-    testimonialsApi,
-} from "@/lib/services/testimonialsApi";
-
-export const makeStore = () =>
-    configureStore({
+export const makeStore = () => {
+    const store = configureStore({
         reducer: {
+            auth: authReducer,
+
             [searchApi.reducerPath]:
                 searchApi.reducer,
 
@@ -25,18 +21,24 @@ export const makeStore = () =>
 
             [testimonialsApi.reducerPath]:
                 testimonialsApi.reducer,
+
+            [loginApi.reducerPath]:
+                loginApi.reducer,
         },
 
-        middleware: (
-            getDefaultMiddleware
-        ) =>
+        middleware: (getDefaultMiddleware) =>
             getDefaultMiddleware().concat(
                 searchApi.middleware,
                 germanProgramsApi.middleware,
-                testimonialsApi.middleware
+                testimonialsApi.middleware,
+                loginApi.middleware,
             ),
 
         devTools:
-            process.env.NODE_ENV !==
-            "production",
+            process.env.NODE_ENV !== "production",
     });
+
+    setupListeners(store.dispatch);
+
+    return store;
+};

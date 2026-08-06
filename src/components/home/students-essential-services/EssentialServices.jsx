@@ -10,7 +10,7 @@ const EssentialServices = () => {
             className="
         relative isolate overflow-hidden
         bg-[url('/assets/students-essential-services.webp')]
-        bg-cover bg-center bg-no-repeat
+        bg-cover bg-center bg-no-repeat bg-fixed
         px-4 py-16
         sm:px-6 sm:py-20
         lg:px-8 lg:py-24

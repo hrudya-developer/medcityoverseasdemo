@@ -215,7 +215,7 @@ const DepartureStoriesSection = () => {
         relative isolate overflow-hidden
         bg-[#070b1d]
         py-12
-        lg:py-14
+        lg:py-14 bg-fixed
     "
             style={{
                 backgroundImage: `
