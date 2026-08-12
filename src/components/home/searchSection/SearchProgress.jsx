@@ -1,3 +1,5 @@
+import cn from "@/lib/cn";
+
 export default function SearchProgress({
     countrySelected,
     universitySelected,
@@ -38,10 +40,10 @@ function ProgressItem({
     return (
         <div className="flex items-center gap-2 whitespace-nowrap">
             <span
-                className={`grid size-7 place-content-center rounded-full text-[10px] font-black transition-all ${completed
+                className={cn(`grid size-7 place-content-center rounded-full text-[10px] font-black transition-all ${completed
                         ? "bg-primary text-white shadow-[0_6px_16px_rgba(192,31,83,0.32)]"
                         : "border border-white/15 bg-white/5 text-white/45"
-                    }`}
+                    }`)}
             >
                 {completed ? "✓" : number}
             </span>
@@ -65,10 +67,10 @@ function ProgressLine({
     return (
         <span
             aria-hidden="true"
-            className={`h-px w-8 transition-colors md:w-12 lg:w-20 ${completed
+            className={cn(`h-px w-8 transition-colors md:w-12 lg:w-20 ${completed
                     ? "bg-primary"
                     : "bg-white/10"
-                }`}
+                }`)}
         />
     );
 }

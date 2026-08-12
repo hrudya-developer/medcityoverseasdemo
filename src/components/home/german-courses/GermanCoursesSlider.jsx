@@ -63,35 +63,13 @@ export default function GermanCoursesSlider({
     return (
         <div className="relative">
             <div
-                className="
-                    mb-5
-                    flex
-                    justify-center
-                    gap-3
-                    lg:justify-end
-                "
+                className="mb-5 flex justify-center gap-3 lg:justify-end"
             >
                 <button
                     ref={previousButtonRef}
                     type="button"
                     aria-label="Show previous German program"
-                    className="
-                        grid
-                        h-11
-                        w-11
-                        place-items-center
-                        rounded-full
-                        border
-                        border-slate-200
-                        bg-white
-                        text-darkPrimary
-                        shadow-md
-                        transition
-                        hover:bg-primary
-                        hover:text-white
-                        disabled:cursor-not-allowed
-                        disabled:opacity-40
-                    "
+                    className="grid h-11 w-11 place-items-center rounded-full border border-slate-200 bg-white text-darkPrimary shadow-md transition hover:bg-primary hover:text-white disabled:cursor-not-allowed disabled:opacity-40"
                 >
                     <ChevronLeft
                         aria-hidden="true"
@@ -103,20 +81,7 @@ export default function GermanCoursesSlider({
                     ref={nextButtonRef}
                     type="button"
                     aria-label="Show next German program"
-                    className="
-                        grid
-                        h-11
-                        w-11
-                        place-items-center
-                        rounded-full
-                        bg-primary
-                        text-white
-                        shadow-md
-                        transition
-                        hover:bg-darkPrimary
-                        disabled:cursor-not-allowed
-                        disabled:opacity-40
-                    "
+                    className="grid h-11 w-11 place-items-center rounded-full bg-primary text-white shadow-md transition hover:bg-darkPrimary disabled:cursor-not-allowed disabled:opacity-40"
                 >
                     <ChevronRight
                         aria-hidden="true"
@@ -149,11 +114,7 @@ export default function GermanCoursesSlider({
                         spaceBetween: 24,
                     },
                 }}
-                className="
-                    german-home-swiper
-                    !overflow-hidden
-                    !pb-5
-                "
+                className="german-home-swiper !overflow-hidden !pb-5"
             >
                 {cards.map(
                     (item, index) => (
@@ -162,10 +123,7 @@ export default function GermanCoursesSlider({
                                 item?.id ??
                                 index
                             }
-                            className="
-                                !h-auto
-                                py-2
-                            "
+                            className="!h-auto py-2"
                         >
                             <GermanProgramCard
                                 item={item}

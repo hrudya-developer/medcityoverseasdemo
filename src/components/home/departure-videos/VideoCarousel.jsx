@@ -7,6 +7,8 @@ import {
 
 import VideoCard from "./VideoCard";
 
+import cn from "@/lib/cn";
+
 const VideoCarousel = ({
     videos,
     controller,
@@ -177,7 +179,7 @@ const VideoCarousel = ({
                                         index
                                     )
                                 }
-                                className={`
+                                className={cn(`
                                     shrink-0 rounded-full
                                     transition-all duration-500
                                     ${index ===
@@ -185,7 +187,7 @@ const VideoCarousel = ({
                                         ? "h-2.5 w-9 bg-gradient-to-r from-primary to-cyan-400 shadow-[0_0_14px_rgba(34,211,238,.45)]"
                                         : "h-2.5 w-2.5 bg-white/25 hover:bg-white/60"
                                     }
-                                `}
+                                `)}
                             />
                         )
                     )}

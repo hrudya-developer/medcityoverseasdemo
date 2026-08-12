@@ -1,3 +1,5 @@
+import cn from "@/lib/cn";
+
 import {
     ChevronLeft,
     ChevronRight,
@@ -35,24 +37,17 @@ export default function DestinationNavigation({
 }) {
     return (
         <div
-            className="
-                mt-7
-                flex
-                items-center
-                justify-center
-                gap-4
-                sm:mt-9
-            "
+            className="mt-7 flex items-center justify-center gap-4 sm:mt-9"
         >
             <button
                 ref={previousButtonRef}
                 type="button"
                 aria-label="Show previous destinations"
-                className={`
+                className={cn(`
                     destination-prev-button
                     ${navigationButtonClasses}
                     hover:-translate-x-0.5
-                `}
+                `)}
             >
                 <ChevronLeft
                     aria-hidden="true"
@@ -65,11 +60,11 @@ export default function DestinationNavigation({
                 ref={nextButtonRef}
                 type="button"
                 aria-label="Show next destinations"
-                className={`
+                className={cn(`
                     destination-next-button
                     ${navigationButtonClasses}
                     hover:translate-x-0.5
-                `}
+                `)}
             >
                 <ChevronRight
                     aria-hidden="true"

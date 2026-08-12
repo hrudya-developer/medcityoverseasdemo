@@ -211,12 +211,7 @@ const DepartureStoriesSection = () => {
         <section
             id="departure-stories"
             aria-labelledby="departure-stories-heading"
-            className="
-        relative isolate overflow-hidden
-        bg-[#070b1d]
-        py-12
-        lg:py-14 bg-fixed
-    "
+            className="relative isolate overflow-hidden bg-[#070b1d] py-12 lg:py-14 bg-fixed"
             style={{
                 backgroundImage: `
             linear-gradient(

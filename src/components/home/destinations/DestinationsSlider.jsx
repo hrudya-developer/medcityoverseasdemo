@@ -106,11 +106,7 @@ export default function DestinationsSlider({
                         spaceBetween: 28,
                     },
                 }}
-                className="
-                    destinationSwiper
-                    !overflow-hidden
-                    !pb-2
-                "
+                className="destinationSwiper !overflow-hidden !pb-2"
             >
                 {destinations.map(
                     (

@@ -112,12 +112,7 @@ export default function CourseResults({
     return (
         <div>
             <div
-                className="
-          mb-6 flex flex-col gap-3
-          sm:flex-row
-          sm:items-center
-          sm:justify-between
-        "
+                className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between"
             >
                 <p className="text-sm text-slate-600">
                     Showing{" "}
@@ -140,13 +135,7 @@ export default function CourseResults({
                 </p>
 
                 <span
-                    className="
-            w-fit rounded-full
-            bg-slate-100
-            px-4 py-2
-            text-xs font-bold
-            text-slate-600
-          "
+                    className="w-fit rounded-full bg-slate-100 px-4 py-2 text-xs font-bold text-slate-600"
                 >
                     Page {currentPage} of{" "}
                     {totalPages}

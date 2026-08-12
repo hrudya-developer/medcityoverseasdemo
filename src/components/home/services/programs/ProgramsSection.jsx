@@ -6,6 +6,8 @@ import {
 } from "lucide-react";
 
 import mapBg from "@/assets/mapBg.png";
+import cn from "@/lib/cn";
+
 import Tabs from "./Tabs";
 
 const programs = [
@@ -44,15 +46,7 @@ export default function ProgramsSection() {
         >
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <div
-                    className="
-            mb-14
-            w-full
-            overflow-visible
-            bg-contain
-            bg-top
-            bg-no-repeat
-            pb-4
-          "
+                    className="mb-14 w-full overflow-visible bg-contain bg-top bg-no-repeat pb-4"
                     style={{
                         backgroundImage: `url(${mapBg.src})`,
                     }}
@@ -78,21 +72,7 @@ function ProgramsHeader() {
         >
             <div className="flex justify-center pb-8 pt-16">
                 <span
-                    className="
-            inline-flex
-            items-center
-            justify-center
-            gap-2
-            rounded-full
-            bg-blue-100
-            px-4
-            py-2
-            text-xs
-            font-bold
-            uppercase
-            tracking-[0.12em]
-            text-darkPrimary
-          "
+                    className="inline-flex items-center justify-center gap-2 rounded-full bg-blue-100 px-4 py-2 text-xs font-bold uppercase tracking-[0.12em] text-darkPrimary"
                 >
                     <Send
                         aria-hidden="true"
@@ -105,27 +85,13 @@ function ProgramsHeader() {
 
             <h1
                 id="programs-heading"
-                className="
-          font-nunito
-          text-3xl
-          font-extrabold
-          leading-tight
-          text-darkPrimary
-          sm:text-4xl
-          lg:text-5xl
-        "
+                className="font-nunito text-3xl font-extrabold leading-tight text-darkPrimary sm:text-4xl lg:text-5xl"
             >
                 Unlock Global Education
                 <br />
 
                 <span
-                    className="
-            bg-gradient-to-r
-            from-primary
-            to-secondary
-            bg-clip-text
-            text-transparent
-          "
+                    className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent"
                 >
                     Study Abroad Opportunities
                 </span>
@@ -137,15 +103,7 @@ function ProgramsHeader() {
             </p>
 
             <p
-                className="
-          mx-auto
-          mt-4
-          max-w-3xl
-          text-sm
-          leading-7
-          text-slate-700
-          sm:text-base
-        "
+                className="mx-auto mt-4 max-w-3xl text-sm leading-7 text-slate-700 sm:text-base"
             >
                 Begin your international education journey with professional study
                 abroad counselling and personalised support. From choosing the right
@@ -160,18 +118,7 @@ function ProgramsHeader() {
 function ProgramsGrid() {
     return (
         <div
-            className="
-        mt-20
-        grid
-        grid-cols-1
-        gap-x-5
-        gap-y-20
-        overflow-visible
-        px-1
-        sm:grid-cols-2
-        sm:px-4
-        md:grid-cols-3
-      "
+            className="mt-20 grid grid-cols-1 gap-x-5 gap-y-20 overflow-visible px-1 sm:grid-cols-2 sm:px-4 md:grid-cols-3"
         >
             {programs.map((program, index) => (
                 <ProgramCard
@@ -203,7 +150,7 @@ function ProgramCard({
             aria-labelledby={`${id}-title`}
             data-aos="fade-up"
             data-aos-delay={index * 100}
-            className={`
+            className={cn(`
         group
         relative
         mx-auto
@@ -235,12 +182,12 @@ function ProgramCard({
                     ? "border-primary/20"
                     : "border-secondary/20"
                 }
-      `}
+      `)}
         >
             <CardBackground isPink={isPink} />
 
             <div
-                className={`
+                className={cn(`
           absolute
           left-1/2
           top-0
@@ -265,7 +212,7 @@ function ProgramCard({
                         ? "bg-gradient-to-br from-primary to-darkPrimary"
                         : "bg-gradient-to-br from-secondary to-blue-800"
                     }
-        `}
+        `)}
             >
                 <Icon
                     aria-hidden="true"
@@ -287,7 +234,7 @@ function ProgramCard({
             <div className="relative z-10">
                 <h3
                     id={`${id}-title`}
-                    className={`
+                    className={cn(`
             mb-4
             text-xl
             font-extrabold
@@ -295,14 +242,14 @@ function ProgramCard({
                             ? "text-darkPrimary"
                             : "text-secondary"
                         }
-          `}
+          `)}
                 >
                     {title}
                 </h3>
 
                 <div
                     aria-hidden="true"
-                    className={`
+                    className={cn(`
             mx-auto
             mb-6
             h-1
@@ -315,18 +262,11 @@ function ProgramCard({
                             ? "bg-primary"
                             : "bg-secondary"
                         }
-          `}
+          `)}
                 />
 
                 <p
-                    className="
-            mx-auto
-            max-w-[290px]
-            text-sm
-            leading-7
-            text-slate-700
-            sm:text-base
-          "
+                    className="mx-auto max-w-[290px] text-sm leading-7 text-slate-700 sm:text-base"
                 >
                     {description}
                 </p>
@@ -341,17 +281,10 @@ function CardBackground({
     return (
         <div
             aria-hidden="true"
-            className="
-        pointer-events-none
-        absolute
-        inset-0
-        -z-10
-        overflow-hidden
-        rounded-[28px]
-      "
+            className="pointer-events-none absolute inset-0 -z-10 overflow-hidden rounded-[28px]"
         >
             <div
-                className={`
+                className={cn(`
           absolute
           inset-0
           bg-gradient-to-br
@@ -359,11 +292,11 @@ function CardBackground({
                         ? "from-pink-50 via-white to-rose-50"
                         : "from-blue-50 via-white to-sky-50"
                     }
-        `}
+        `)}
             />
 
             <div
-                className={`
+                className={cn(`
           absolute
           -right-16
           -top-16
@@ -378,11 +311,11 @@ function CardBackground({
                         ? "bg-primary/20"
                         : "bg-secondary/20"
                     }
-        `}
+        `)}
             />
 
             <div
-                className={`
+                className={cn(`
           absolute
           -bottom-20
           -left-20
@@ -394,18 +327,11 @@ function CardBackground({
                         ? "bg-primary/12"
                         : "bg-secondary/12"
                     }
-        `}
+        `)}
             />
 
             <div
-                className="
-          absolute
-          inset-0
-          opacity-[0.14]
-          [background-image:radial-gradient(circle,rgba(15,23,42,0.22)_1px,transparent_1px)]
-          [background-size:18px_18px]
-          [mask-image:linear-gradient(to_bottom_right,black,transparent_74%)]
-        "
+                className="absolute inset-0 opacity-[0.14] [background-image:radial-gradient(circle,rgba(15,23,42,0.22)_1px,transparent_1px)] [background-size:18px_18px] [mask-image:linear-gradient(to_bottom_right,black,transparent_74%)]"
             />
         </div>
     );
@@ -418,7 +344,7 @@ function DotPattern({
     return (
         <div
             aria-hidden="true"
-            className={`
+            className={cn(`
         absolute
         z-10
         grid
@@ -433,7 +359,7 @@ function DotPattern({
                     ? "text-primary"
                     : "text-secondary"
                 }
-      `}
+      `)}
         >
             {Array.from({
                 length: 16,

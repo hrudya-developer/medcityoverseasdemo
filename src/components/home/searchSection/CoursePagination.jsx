@@ -1,3 +1,5 @@
+import cn from "@/lib/cn";
+
 import {
     ChevronLeft,
     ChevronRight,
@@ -25,10 +27,7 @@ export default function CoursePagination({
     return (
         <nav
             aria-label="Course results pagination"
-            className="
-        mt-10 flex flex-wrap
-        items-center justify-center gap-2
-      "
+            className="mt-10 flex flex-wrap items-center justify-center gap-2"
         >
             <PaginationButton
                 label="Previous page"
@@ -56,27 +55,12 @@ export default function CoursePagination({
                         onClick={() =>
                             onPageChange(page)
                         }
-                        className={`
-              grid size-11
-              place-content-center
-              rounded-xl
-              text-sm font-black
-              transition-all
-              ${active
-                                ? `
-                    bg-primary
-                    text-white
-                    shadow-[0_10px_24px_rgba(192,31,83,0.25)]
-                  `
-                                : `
-                    border border-slate-200
-                    bg-white text-slate-700
-                    shadow-sm
-                    hover:border-primary/30
-                    hover:text-primary
-                  `
-                            }
-            `}
+                        className={cn(
+                            "grid size-11 place-content-center rounded-xl text-sm font-black transition-all",
+                            active
+                                ? "bg-primary text-white shadow-[0_10px_24px_rgba(192,31,83,0.25)]"
+                                : "border border-slate-200 bg-white text-slate-700 shadow-sm hover:border-primary/30 hover:text-primary"
+                        )}
                     >
                         {page}
                     </button>
@@ -117,20 +101,7 @@ function PaginationButton({
             aria-label={label}
             disabled={disabled}
             onClick={onClick}
-            className="
-        grid size-11
-        place-content-center
-        rounded-xl
-        border border-slate-200
-        bg-white
-        text-slate-700
-        shadow-sm
-        transition
-        hover:border-primary/30
-        hover:text-primary
-        disabled:cursor-not-allowed
-        disabled:opacity-40
-      "
+            className="grid size-11 place-content-center rounded-xl border border-slate-200 bg-white text-slate-700 shadow-sm transition hover:border-primary/30 hover:text-primary disabled:cursor-not-allowed disabled:opacity-40"
         >
             {children}
         </button>

@@ -25,19 +25,7 @@ const WebsiteSwitchHorizontal = ({ onNavigate }) => {
     return (
         <nav
             aria-label="Quick website links"
-            className="
-        relative
-        flex
-        w-full
-        flex-row
-        items-center
-        justify-between
-        gap-1
-        overflow-visible
-        px-1.5
-        py-1.5
-        lg:hidden
-      "
+            className="relative flex w-full flex-row items-center justify-between gap-1 overflow-visible px-1.5 py-1.5 lg:hidden"
         >
             <HorizontalInternalLink
                 href="/"
@@ -161,24 +149,7 @@ const HorizontalLinkContent = ({
         <>
             {image ? (
                 <span
-                    className="
-            relative
-            z-10
-            flex
-            h-8
-            w-8
-            items-center
-            justify-center
-            overflow-hidden
-            rounded-full
-            border
-            border-white/40
-            bg-white
-            shadow-sm
-            transition-all
-            duration-300
-            group-hover:scale-105
-          "
+                    className="relative z-10 flex h-8 w-8 items-center justify-center overflow-hidden rounded-full border border-white/40 bg-white shadow-sm transition-all duration-300 group-hover:scale-105"
                 >
                     <Image
                         src={image}
@@ -235,18 +206,7 @@ const HorizontalLinkContent = ({
             {active ? (
                 <span
                     aria-hidden="true"
-                    className="
-            pointer-events-none
-            absolute
-            -bottom-0.5
-            left-1/2
-            h-0.5
-            w-5
-            -translate-x-1/2
-            rounded-full
-            bg-logoYellow
-            shadow-[0_0_7px_rgba(247,236,34,0.85)]
-          "
+                    className="pointer-events-none absolute -bottom-0.5 left-1/2 h-0.5 w-5 -translate-x-1/2 rounded-full bg-logoYellow shadow-[0_0_7px_rgba(247,236,34,0.85)]"
                 />
             ) : null}
         </>
@@ -257,45 +217,13 @@ const Tooltip = ({ label }) => {
     return (
         <span
             role="tooltip"
-            className="
-        pointer-events-none
-        absolute
-        left-1/2
-        top-[calc(100%+8px)]
-        z-[9999]
-        -translate-x-1/2
-        translate-y-1
-        whitespace-nowrap
-        rounded-full
-        bg-slate-950
-        px-2.5
-        py-1.5
-        text-[10px]
-        font-semibold
-        text-white
-        opacity-0
-        shadow-lg
-        transition-all
-        duration-200
-        group-hover:translate-y-0
-        group-hover:opacity-100
-        group-focus-visible:translate-y-0
-        group-focus-visible:opacity-100
-      "
+            className="pointer-events-none absolute left-1/2 top-[calc(100%+8px)] z-[9999] -translate-x-1/2 translate-y-1 whitespace-nowrap rounded-full bg-slate-950 px-2.5 py-1.5 text-[10px] font-semibold text-white opacity-0 shadow-lg transition-all duration-200 group-hover:translate-y-0 group-hover:opacity-100 group-focus-visible:translate-y-0 group-focus-visible:opacity-100"
         >
             {label}
 
             <span
                 aria-hidden="true"
-                className="
-          absolute
-          bottom-full
-          left-1/2
-          -translate-x-1/2
-          border-[5px]
-          border-transparent
-          border-b-slate-950
-        "
+                className="absolute bottom-full left-1/2 -translate-x-1/2 border-[5px] border-transparent border-b-slate-950"
             />
         </span>
     );

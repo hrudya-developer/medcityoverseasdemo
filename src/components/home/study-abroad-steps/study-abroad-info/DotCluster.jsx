@@ -1,3 +1,5 @@
+import cn from "@/lib/cn";
+
 const DotCluster = ({
     className = "",
     count = 30,
@@ -6,11 +8,11 @@ const DotCluster = ({
     return (
         <div
             aria-hidden="true"
-            className={`
+            className={cn(`
         pointer-events-none
         absolute grid gap-2.5
         ${className}
-      `}
+      `)}
             style={{
                 gridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))`,
             }}
@@ -19,10 +21,7 @@ const DotCluster = ({
                 (_, index) => (
                     <span
                         key={index}
-                        className="
-              h-1.5 w-1.5
-              rounded-full bg-white
-            "
+                        className="h-1.5 w-1.5 rounded-full bg-white"
                     />
                 )
             )}

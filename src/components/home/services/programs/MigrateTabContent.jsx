@@ -1,4 +1,6 @@
 import Image from "next/image";
+import cn from "@/lib/cn";
+
 import Link from "next/link";
 import migrateCanada from "@/assets/migrate-canada.png";
 import migrateAustralia from "@/assets/migrate-australia.png";
@@ -92,51 +94,24 @@ export default function MigrateTabContent() {
             id="skilled-immigration-programs"
             aria-labelledby="skilled-immigration-title"
             aria-describedby="skilled-immigration-description"
-            className="
-        relative isolate overflow-hidden
-        rounded-2xl
-        bg-gradient-to-b
-        from-white to-gray-100
-        py-10
-        [content-visibility:auto]
-        [contain-intrinsic-size:900px]
-        sm:py-12
-        lg:py-14
-      "
+            className="relative isolate overflow-hidden rounded-2xl bg-gradient-to-b from-white to-gray-100 py-10 [content-visibility:auto] [contain-intrinsic-size:900px] sm:py-12 lg:py-14"
         >
             {/* Dot pattern */}
             <div
                 aria-hidden="true"
-                className="
-          pointer-events-none
-          absolute inset-0 -z-30
-          opacity-35
-          [background-image:radial-gradient(circle,rgba(99,26,51,0.14)_1px,transparent_1px)]
-          [background-size:24px_24px]
-          [mask-image:linear-gradient(to_bottom,black,transparent_92%)]
-        "
+                className="pointer-events-none absolute inset-0 -z-30 opacity-35 [background-image:radial-gradient(circle,rgba(99,26,51,0.14)_1px,transparent_1px)] [background-size:24px_24px] [mask-image:linear-gradient(to_bottom,black,transparent_92%)]"
             />
 
             {/* Background glow */}
             <div
                 aria-hidden="true"
-                className="
-          pointer-events-none
-          absolute inset-0 -z-20
-          bg-[radial-gradient(circle_at_top_left,rgba(192,31,83,0.10),transparent_28%),radial-gradient(circle_at_bottom_right,rgba(4,102,175,0.10),transparent_32%)]
-        "
+                className="pointer-events-none absolute inset-0 -z-20 bg-[radial-gradient(circle_at_top_left,rgba(192,31,83,0.10),transparent_28%),radial-gradient(circle_at_bottom_right,rgba(4,102,175,0.10),transparent_32%)]"
             />
 
             {/* Left decorative rings */}
             <div
                 aria-hidden="true"
-                className="
-          pointer-events-none
-          absolute -left-24 top-20 -z-10
-          h-64 w-64
-          rounded-full
-          border border-primary/10
-        "
+                className="pointer-events-none absolute -left-24 top-20 -z-10 h-64 w-64 rounded-full border border-primary/10"
             >
                 <div className="absolute inset-8 rounded-full border border-primary/10" />
                 <div className="absolute inset-16 rounded-full bg-primary/5" />
@@ -145,30 +120,13 @@ export default function MigrateTabContent() {
             {/* Right decorative square */}
             <div
                 aria-hidden="true"
-                className="
-          pointer-events-none
-          absolute -right-20 bottom-10 -z-10
-          hidden h-64 w-64
-          rotate-12 rounded-[48px]
-          border border-secondary/10
-          lg:block
-        "
+                className="pointer-events-none absolute -right-20 bottom-10 -z-10 hidden h-64 w-64 rotate-12 rounded-[48px] border border-secondary/10 lg:block"
             />
 
             <div className="mx-auto max-w-7xl px-3 sm:px-5 md:px-8">
                 <header className="mx-auto mb-14 max-w-4xl text-center">
                     <p
-                        className="
-              inline-flex items-center justify-center gap-2
-              rounded-full
-              border border-primary/15
-              bg-primary/10
-              px-4 py-2
-              text-xs font-semibold
-              uppercase tracking-[0.12em]
-              text-primary
-              shadow-sm
-            "
+                        className="inline-flex items-center justify-center gap-2 rounded-full border border-primary/15 bg-primary/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.12em] text-primary shadow-sm"
                     >
                         <Globe
                             aria-hidden="true"
@@ -181,24 +139,11 @@ export default function MigrateTabContent() {
 
                     <h2
                         id="skilled-immigration-title"
-                        className="
-              mt-5
-              text-balance
-              text-3xl font-extrabold
-              leading-tight tracking-tight
-              text-darkPrimary
-              sm:text-4xl
-              lg:text-5xl
-            "
+                        className="mt-5 text-balance text-3xl font-extrabold leading-tight tracking-tight text-darkPrimary sm:text-4xl lg:text-5xl"
                     >
                         Skilled Immigration{" "}
                         <span
-                            className="
-                bg-gradient-to-r
-                from-primary to-secondary
-                bg-clip-text
-                text-transparent
-              "
+                            className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent"
                         >
                             Opportunities
                         </span>
@@ -206,13 +151,7 @@ export default function MigrateTabContent() {
 
                     <p
                         id="skilled-immigration-description"
-                        className="
-              mx-auto mt-5 max-w-3xl
-              text-pretty
-              text-base leading-8
-              text-gray-600
-              md:text-lg
-            "
+                        className="mx-auto mt-5 max-w-3xl text-pretty text-base leading-8 text-gray-600 md:text-lg"
                     >
                         Explore skilled immigration pathways to Canada and
                         Australia designed for qualified professionals seeking
@@ -233,10 +172,7 @@ export default function MigrateTabContent() {
                 <div
                     role="list"
                     aria-label="Skilled immigration programs"
-                    className="
-            grid grid-cols-1 gap-8
-            lg:grid-cols-2
-          "
+                    className="grid grid-cols-1 gap-8 lg:grid-cols-2"
                 >
                     {immigrationData.map((item) => (
                         <article
@@ -245,20 +181,7 @@ export default function MigrateTabContent() {
                             role="listitem"
                             aria-labelledby={`${item.id}-title`}
                             aria-describedby={`${item.id}-description`}
-                            className="
-                group relative overflow-hidden
-                rounded-3xl
-                border border-gray-100
-                bg-white
-                shadow-lg
-                transition-[transform,box-shadow,border-color]
-                duration-300 ease-out
-                hover:-translate-y-1
-                hover:border-primary/15
-                hover:shadow-2xl
-                motion-reduce:transform-none
-                motion-reduce:transition-none
-              "
+                            className="group relative overflow-hidden rounded-3xl border border-gray-100 bg-white shadow-lg transition-[transform,box-shadow,border-color] duration-300 ease-out hover:-translate-y-1 hover:border-primary/15 hover:shadow-2xl motion-reduce:transform-none motion-reduce:transition-none"
                         >
                             <div className="relative">
                                 <div className="relative h-[260px] w-full sm:h-[300px] md:h-[320px]">
@@ -270,60 +193,30 @@ export default function MigrateTabContent() {
                       (max-width: 1024px) 100vw,
                       50vw
                     "
-                                        className="
-                      object-cover
-                      transition-transform duration-500
-                      group-hover:scale-105
-                    "
+                                        className="object-cover transition-transform duration-500 group-hover:scale-105"
                                     />
                                 </div>
 
                                 <div
                                     aria-hidden="true"
-                                    className="
-                    pointer-events-none
-                    absolute inset-0
-                    bg-gradient-to-t
-                    from-black/20
-                    via-transparent
-                    to-transparent
-                  "
+                                    className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent"
                                 />
 
                                 <span
-                                    className="
-                    absolute left-5 top-5
-                    rounded-full
-                    bg-white
-                    px-5 py-2
-                    text-sm font-semibold
-                    tracking-wide
-                    text-primary
-                    shadow-md
-                  "
+                                    className="absolute left-5 top-5 rounded-full bg-white px-5 py-2 text-sm font-semibold tracking-wide text-primary shadow-md"
                                 >
                                     {item.badge}
                                 </span>
 
                                 <div
                                     aria-hidden="true"
-                                    className="
-                    absolute -bottom-8 left-1/2 z-20
-                    -translate-x-1/2
-                  "
+                                    className="absolute -bottom-8 left-1/2 z-20 -translate-x-1/2"
                                 >
                                     <div
-                                        className="
-                      flex h-16 w-16
-                      items-center justify-center
-                      rounded-full
-                      border-4 border-white
-                      bg-white
-                      shadow-xl
-                    "
+                                        className="flex h-16 w-16 items-center justify-center rounded-full border-4 border-white bg-white shadow-xl"
                                     >
                                         <div
-                                            className={`
+                                            className={cn(`
                         flex h-12 w-12
                         items-center justify-center
                         rounded-full
@@ -333,7 +226,7 @@ export default function MigrateTabContent() {
                         motion-reduce:transform-none
                         motion-reduce:transition-none
                         ${item.buttonColor}
-                      `}
+                      `)}
                                         >
                                             <Users
                                                 size={24}
@@ -347,40 +240,26 @@ export default function MigrateTabContent() {
                             <div className="relative px-5 pb-8 pt-14 text-center sm:px-7">
                                 <div
                                     aria-hidden="true"
-                                    className="
-                    pointer-events-none
-                    absolute right-5 top-8
-                    grid grid-cols-4 gap-1
-                    opacity-15
-                  "
+                                    className="pointer-events-none absolute right-5 top-8 grid grid-cols-4 gap-1 opacity-15"
                                 >
                                     {Array.from({ length: 16 }).map((_, index) => (
                                         <span
                                             key={index}
-                                            className="
-                        h-1.5 w-1.5
-                        rounded-full
-                        bg-primary
-                      "
+                                            className="h-1.5 w-1.5 rounded-full bg-primary"
                                         />
                                     ))}
                                 </div>
 
                                 <h3
                                     id={`${item.id}-title`}
-                                    className="
-                    text-balance
-                    text-xl font-bold
-                    leading-tight
-                    text-darkPrimary
-                  "
+                                    className="text-balance text-xl font-bold leading-tight text-darkPrimary"
                                 >
                                     {item.title}
                                 </h3>
 
                                 <div
                                     aria-hidden="true"
-                                    className={`
+                                    className={cn(`
                     mx-auto mt-4
                     h-1 w-20
                     rounded-full
@@ -388,27 +267,19 @@ export default function MigrateTabContent() {
                     group-hover:w-28
                     motion-reduce:transition-none
                     ${item.dividerColor}
-                  `}
+                  `)}
                                 />
 
                                 <p
                                     id={`${item.id}-description`}
-                                    className="
-                    mx-auto mt-6 max-w-2xl
-                    text-sm leading-8
-                    text-gray-600
-                    md:text-base
-                  "
+                                    className="mx-auto mt-6 max-w-2xl text-sm leading-8 text-gray-600 md:text-base"
                                 >
                                     {item.description}
                                 </p>
 
                                 <ul
                                     aria-label={`${item.country} immigration benefits`}
-                                    className="
-                    mt-8 grid grid-cols-1 gap-4
-                    sm:grid-cols-3
-                  "
+                                    className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-3"
                                 >
                                     {item.features.map((feature) => {
                                         const FeatureIcon = feature.icon;
@@ -416,7 +287,7 @@ export default function MigrateTabContent() {
                                         return (
                                             <li
                                                 key={feature.id}
-                                                className={`
+                                                className={cn(`
                           flex min-h-[112px]
                           flex-col items-center justify-center
                           gap-3 rounded-2xl
@@ -429,17 +300,17 @@ export default function MigrateTabContent() {
                           motion-reduce:transform-none
                           motion-reduce:transition-none
                           ${item.accentBorder}
-                        `}
+                        `)}
                                             >
                                                 <span
                                                     aria-hidden="true"
-                                                    className={`
+                                                    className={cn(`
                             flex h-10 w-10
                             items-center justify-center
                             rounded-full
                             ${item.accent}
                             ${item.accentBackground}
-                          `}
+                          `)}
                                                 >
                                                     <FeatureIcon
                                                         size={19}
@@ -458,7 +329,7 @@ export default function MigrateTabContent() {
                                 <Link
                                     href={item.link}
                                     aria-label={`Explore ${item.title}`}
-                                    className={`
+                                    className={cn(`
                     mt-10
                     inline-flex items-center justify-center
                     gap-3 rounded-xl
@@ -478,7 +349,7 @@ export default function MigrateTabContent() {
                     motion-reduce:transition-none
                     ${item.buttonColor}
                     ${item.buttonHover}
-                  `}
+                  `)}
                                 >
                                     Explore {item.country} Immigration
 

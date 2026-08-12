@@ -1,3 +1,5 @@
+import cn from "@/lib/cn";
+
 export default function MobileAppFeatureItem({
     icon: Icon,
     title,
@@ -6,25 +8,11 @@ export default function MobileAppFeatureItem({
 }) {
     return (
         <article
-            className="
-                group
-                flex
-                items-center
-                gap-3
-                border-b
-                border-dashed
-                border-slate-200
-                py-3.5
-                text-left
-                first:pt-0
-                last:border-b-0
-                last:pb-0
-                sm:gap-4
-            "
+            className="group flex items-center gap-3 border-b border-dashed border-slate-200 py-3.5 text-left first:pt-0 last:border-b-0 last:pb-0 sm:gap-4"
         >
             <span
                 aria-hidden="true"
-                className={`
+                className={cn(`
                     grid
                     h-11
                     w-11
@@ -39,7 +27,7 @@ export default function MobileAppFeatureItem({
                     sm:h-12
                     sm:w-12
                     ${iconClass}
-                `}
+                `)}
             >
                 <Icon
                     className="h-5 w-5"
@@ -49,25 +37,13 @@ export default function MobileAppFeatureItem({
 
             <div className="min-w-0">
                 <h3
-                    className="
-                        text-sm
-                        font-extrabold
-                        leading-5
-                        text-slate-900
-                        sm:text-[15px]
-                    "
+                    className="text-sm font-extrabold leading-5 text-slate-900 sm:text-[15px]"
                 >
                     {title}
                 </h3>
 
                 <p
-                    className="
-                        mt-1
-                        text-xs
-                        leading-5
-                        text-slate-500
-                        sm:text-[13px]
-                    "
+                    className="mt-1 text-xs leading-5 text-slate-500 sm:text-[13px]"
                 >
                     {description}
                 </p>

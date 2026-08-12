@@ -7,13 +7,7 @@ export default function ServicesGrid({
         <div
             role="list"
             aria-label="Study abroad consulting services"
-            className="
-                mt-10 grid
-                grid-cols-1 gap-6
-                sm:grid-cols-2
-                lg:mt-14
-                lg:grid-cols-4
-            "
+            className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:mt-14 lg:grid-cols-4"
         >
             {services.map(
                 (service, index) => (

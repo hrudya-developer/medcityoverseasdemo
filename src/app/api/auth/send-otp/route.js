@@ -69,10 +69,7 @@ export async function POST(request) {
       );
     }
 
-    console.log(
-      "Send OTP response:",
-      data
-    );
+ 
 
     return NextResponse.json(
       data,

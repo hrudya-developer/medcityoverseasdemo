@@ -2,6 +2,8 @@
 
 import Select from "react-select";
 
+import cn from "@/lib/cn";
+
 const SelectField = ({
     name,
     label,
@@ -42,17 +44,13 @@ const SelectField = ({
         <div>
             <label
                 htmlFor={name}
-                className="
-                    mb-2 block
-                    text-sm font-bold
-                    text-slate-800
-                "
+                className="mb-2 block text-sm font-bold text-slate-800"
             >
                 {label}
             </label>
 
             <div
-                className={`
+                className={cn(`
                     flex min-h-12
                     items-center gap-3
                     rounded-xl border
@@ -64,14 +62,11 @@ const SelectField = ({
                         ? "border-red-500"
                         : "border-slate-200 focus-within:border-primary"
                     }
-                `}
+                `)}
             >
                 <span
                     aria-hidden="true"
-                    className="
-                        shrink-0
-                        text-slate-400
-                    "
+                    className="shrink-0 text-slate-400"
                 >
                     {icon}
                 </span>
@@ -182,11 +177,7 @@ const SelectField = ({
                 <p
                     id={errorId}
                     role="alert"
-                    className="
-                        mt-1.5 text-xs
-                        font-medium
-                        text-red-600
-                    "
+                    className="mt-1.5 text-xs font-medium text-red-600"
                 >
                     {error}
                 </p>

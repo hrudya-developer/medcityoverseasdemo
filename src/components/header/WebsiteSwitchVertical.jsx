@@ -1,6 +1,8 @@
 "use client";
 
 import Image from "next/image";
+import cn from "@/lib/cn";
+
 import Link from "next/link";
 import {
     Globe2,
@@ -142,11 +144,11 @@ const VerticalLinkContent = ({
                 </span>
             ) : (
                 <span
-                    className={`relative z-10 flex h-9 w-9 items-center justify-center rounded-full transition-all duration-300 group-hover:scale-110 ${active
+                    className={cn(`relative z-10 flex h-9 w-9 items-center justify-center rounded-full transition-all duration-300 group-hover:scale-110 ${active
                         ? "bg-white/15 text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.35)]"
                         : iconClassName ||
                         "bg-primary/[0.08] text-primary group-hover:bg-primary group-hover:text-white"
-                        }`}
+                        }`)}
                 >
                     {Icon && (
                         <Icon

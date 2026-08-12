@@ -43,10 +43,7 @@ export async function GET(request) {
             }
         );
 
-        console.log(
-            "Popular courses API response:",
-            result
-        );
+       
 
         /*
          * Your Postman response returns:

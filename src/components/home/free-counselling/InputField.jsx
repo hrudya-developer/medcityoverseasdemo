@@ -1,3 +1,5 @@
+import cn from "@/lib/cn";
+
 const InputField = ({
     id,
     name,
@@ -17,17 +19,13 @@ const InputField = ({
         <div>
             <label
                 htmlFor={inputId}
-                className="
-                    mb-2 block
-                    text-sm font-bold
-                    text-slate-800
-                "
+                className="mb-2 block text-sm font-bold text-slate-800"
             >
                 {label}
             </label>
 
             <div
-                className={`
+                className={cn(`
                     flex min-h-12
                     items-center gap-3
                     rounded-xl border
@@ -39,14 +37,11 @@ const InputField = ({
                         ? "border-red-500"
                         : "border-slate-200 focus-within:border-primary"
                     }
-                `}
+                `)}
             >
                 <span
                     aria-hidden="true"
-                    className="
-                        shrink-0
-                        text-slate-400
-                    "
+                    className="shrink-0 text-slate-400"
                 >
                     {icon}
                 </span>
@@ -67,14 +62,7 @@ const InputField = ({
                             ? errorId
                             : undefined
                     }
-                    className="
-                        min-w-0 flex-1
-                        bg-transparent
-                        py-3 text-sm
-                        text-slate-800
-                        outline-none
-                        placeholder:text-slate-400
-                    "
+                    className="min-w-0 flex-1 bg-transparent py-3 text-sm text-slate-800 outline-none placeholder:text-slate-400"
                 />
             </div>
 
@@ -82,11 +70,7 @@ const InputField = ({
                 <p
                     id={errorId}
                     role="alert"
-                    className="
-                        mt-1.5 text-xs
-                        font-medium
-                        text-red-600
-                    "
+                    className="mt-1.5 text-xs font-medium text-red-600"
                 >
                     {error}
                 </p>

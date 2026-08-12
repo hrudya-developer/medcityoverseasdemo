@@ -1,4 +1,9 @@
+
+
 "use client";
+
+import cn from "@/lib/cn";
+
 
 import {
     Play,
@@ -41,7 +46,7 @@ const VideoCard = ({
 
     return (
         <article
-            className={`
+            className={cn(`
                 absolute top-1/2
                 overflow-hidden
                 rounded-[26px]
@@ -53,7 +58,7 @@ const VideoCard = ({
                     ? "z-30 border border-primary/70 opacity-100"
                     : "z-20 border border-white/15 opacity-70"
                 }
-            `}
+            `)}
             style={{
                 left,
 
@@ -144,7 +149,7 @@ const VideoCard = ({
 
                 <span
                     aria-hidden="true"
-                    className={`
+                    className={cn(`
                         absolute left-1/2 top-1/2
                         flex -translate-x-1/2
                         -translate-y-1/2
@@ -160,7 +165,7 @@ const VideoCard = ({
                             ? "h-16 w-16 sm:h-18 sm:w-18"
                             : "h-11 w-11 sm:h-12 sm:w-12"
                         }
-                    `}
+                    `)}
                 >
                     <Play
                         className="ml-1"
@@ -175,7 +180,7 @@ const VideoCard = ({
 
                 <span className="pointer-events-none absolute inset-x-0 bottom-0 z-10 p-4">
                     <span
-                        className={`
+                        className={cn(`
                             line-clamp-2
                             font-semibold
                             text-white
@@ -184,7 +189,7 @@ const VideoCard = ({
                                 ? "text-base"
                                 : "text-xs sm:text-sm"
                             }
-                        `}
+                        `)}
                     >
                         {video.title}
                     </span>

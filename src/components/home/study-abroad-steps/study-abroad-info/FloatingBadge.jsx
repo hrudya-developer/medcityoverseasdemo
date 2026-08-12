@@ -1,3 +1,5 @@
+import cn from "@/lib/cn";
+
 const FloatingBadge = ({
     icon: Icon,
     label,
@@ -6,7 +8,7 @@ const FloatingBadge = ({
 }) => {
     return (
         <div
-            className={`
+            className={cn(`
         absolute z-30
         hidden items-center gap-2
         rounded-2xl
@@ -17,15 +19,15 @@ const FloatingBadge = ({
         shadow-xl backdrop-blur-xl
         sm:flex
         ${className}
-      `}
+      `)}
         >
             <div
-                className={`
+                className={cn(`
           flex h-8 w-8
           items-center justify-center
           rounded-xl text-white
           ${iconClassName}
-        `}
+        `)}
             >
                 <Icon
                     aria-hidden="true"

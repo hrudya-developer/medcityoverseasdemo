@@ -9,6 +9,8 @@ import {
 
 import Link from "next/link";
 
+import cn from "@/lib/cn";
+
 import {
     ArrowRight,
     ChevronDown,
@@ -255,23 +257,12 @@ export default function StudyTabContent() {
     return (
         <section
             aria-labelledby="popular-courses-heading"
-            className="
-                relative
-                overflow-hidden
-                py-10
-                sm:py-12
-            "
+            className="relative overflow-hidden py-10 sm:py-12"
         >
             <SectionDecorations />
 
             <div
-                className="
-                    relative z-10
-                    mx-auto
-                    max-w-6xl
-                    px-4
-                    sm:px-6
-                "
+                className="relative z-10 mx-auto max-w-6xl px-4 sm:px-6"
             >
                 <CoursesHeader />
 
@@ -279,14 +270,7 @@ export default function StudyTabContent() {
                     0 ? (
                     <>
                         <div
-                            className="
-                                grid
-                                grid-cols-1
-                                gap-7
-                                sm:grid-cols-2
-                                lg:grid-cols-3
-                                lg:gap-8
-                            "
+                            className="grid grid-cols-1 gap-7 sm:grid-cols-2 lg:grid-cols-3 lg:gap-8"
                         >
                             {visibleCourses.map(
                                 (
@@ -371,15 +355,7 @@ export default function StudyTabContent() {
                         </div>
 
                         <div
-                            className="
-                                mt-10 flex
-                                flex-col
-                                items-center
-                                justify-center
-                                gap-4
-                                sm:flex-row
-                                sm:flex-wrap
-                            "
+                            className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row sm:flex-wrap"
                         >
                             {hasMoreCourses && (
                                 <CoursesActionButton
@@ -436,38 +412,7 @@ function CoursesActionButton({
                     ? "Hide the last row of courses"
                     : "Show the next row of courses"
             }
-            className="
-                group
-                inline-flex
-                min-h-[48px]
-                items-center
-                justify-center
-                gap-2.5
-                rounded-2xl
-                border
-                border-primary/25
-                bg-white
-                px-6
-                py-3
-                text-sm
-                font-extrabold
-                text-primary
-                shadow-[0_10px_28px_rgba(15,23,42,0.08)]
-                transition-all
-                duration-300
-                hover:-translate-y-1
-                hover:border-primary
-                hover:bg-primary
-                hover:text-white
-                hover:shadow-[0_16px_35px_rgba(192,31,83,0.20)]
-                focus-visible:outline-none
-                focus-visible:ring-2
-                focus-visible:ring-primary
-                focus-visible:ring-offset-2
-                disabled:cursor-not-allowed
-                disabled:opacity-50
-                disabled:hover:translate-y-0
-            "
+            className="group inline-flex min-h-[48px] items-center justify-center gap-2.5 rounded-2xl border border-primary/25 bg-white px-6 py-3 text-sm font-extrabold text-primary shadow-[0_10px_28px_rgba(15,23,42,0.08)] transition-all duration-300 hover:-translate-y-1 hover:border-primary hover:bg-primary hover:text-white hover:shadow-[0_16px_35px_rgba(192,31,83,0.20)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-y-0"
         >
             {isShowLess
                 ? "Show Less"
@@ -476,22 +421,12 @@ function CoursesActionButton({
             {isShowLess ? (
                 <ChevronUp
                     aria-hidden="true"
-                    className="
-                        h-4 w-4
-                        transition-transform
-                        duration-300
-                        group-hover:-translate-y-0.5
-                    "
+                    className="h-4 w-4 transition-transform duration-300 group-hover:-translate-y-0.5"
                 />
             ) : (
                 <ChevronDown
                     aria-hidden="true"
-                    className="
-                        h-4 w-4
-                        transition-transform
-                        duration-300
-                        group-hover:translate-y-0.5
-                    "
+                    className="h-4 w-4 transition-transform duration-300 group-hover:translate-y-0.5"
                 />
             )}
         </button>
@@ -503,43 +438,13 @@ function ViewAllCourses() {
         <Link
             href="/courses"
             aria-label="find a course"
-            className="
-                group
-                inline-flex
-                min-h-[48px]
-                items-center
-                justify-center
-                gap-3
-                rounded-2xl
-                bg-gradient-to-r
-                from-primary
-                to-darkPrimary
-                px-6
-                py-3.5
-                text-sm
-                font-bold
-                text-white
-                shadow-[0_14px_35px_rgba(192,31,83,0.28)]
-                transition-all
-                duration-300
-                hover:-translate-y-1
-                hover:shadow-[0_20px_45px_rgba(192,31,83,0.38)]
-                focus-visible:outline-none
-                focus-visible:ring-2
-                focus-visible:ring-primary
-                focus-visible:ring-offset-2
-            "
+            className="group inline-flex min-h-[48px] items-center justify-center gap-3 rounded-2xl bg-gradient-to-r from-primary to-darkPrimary px-6 py-3.5 text-sm font-bold text-white shadow-[0_14px_35px_rgba(192,31,83,0.28)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_20px_45px_rgba(192,31,83,0.38)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
         >
             Find a Course
 
             <ArrowRight
                 aria-hidden="true"
-                className="
-                    h-4 w-4
-                    transition-transform
-                    duration-300
-                    group-hover:translate-x-1
-                "
+                className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1"
             />
         </Link>
     );

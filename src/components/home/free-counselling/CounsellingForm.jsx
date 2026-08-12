@@ -23,6 +23,8 @@ import {
 
 import Swal from "sweetalert2";
 
+import cn from "@/lib/cn";
+
 import {
     useGetAllDestinationsQuery,
 } from "@/lib/services/searchApi";
@@ -437,27 +439,11 @@ const CounsellingForm = ({ onSuccess, }) => {
 
     return (
         <div
-            className="
-                rounded-[30px]
-                border border-slate-100
-                bg-white p-5
-                shadow-[0_24px_80px_rgba(15,23,42,0.1)]
-                sm:p-8
-                lg:p-10
-            "
+            className="rounded-[30px] border border-slate-100 bg-white p-5 shadow-[0_24px_80px_rgba(15,23,42,0.1)] sm:p-8 lg:p-10"
         >
             <header>
                 <span
-                    className="
-                        inline-flex items-center
-                        gap-2 rounded-full
-                        bg-primary/10
-                        px-3 py-1.5
-                        text-xs font-bold
-                        uppercase
-                        tracking-[0.12em]
-                        text-primary
-                    "
+                    className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-3 py-1.5 text-xs font-bold uppercase tracking-[0.12em] text-primary"
                 >
                     <Headphones className="h-4 w-4" />
 
@@ -465,12 +451,7 @@ const CounsellingForm = ({ onSuccess, }) => {
                 </span>
 
                 <h3
-                    className="
-                        mt-4 font-nunito
-                        text-2xl font-extrabold
-                        text-darkPrimary
-                        sm:text-3xl
-                    "
+                    className="mt-4 font-nunito text-2xl font-extrabold text-darkPrimary sm:text-3xl"
                 >
                     Get{" "}
                     <span className="text-primary">
@@ -480,11 +461,7 @@ const CounsellingForm = ({ onSuccess, }) => {
                 </h3>
 
                 <p
-                    className="
-                        mt-2 text-sm
-                        leading-7
-                        text-slate-600
-                    "
+                    className="mt-2 text-sm leading-7 text-slate-600"
                 >
                     Complete the form and our
                     study abroad counsellors
@@ -556,17 +533,13 @@ const CounsellingForm = ({ onSuccess, }) => {
                 <div>
                     <label
                         htmlFor="mobile"
-                        className="
-                            mb-2 block
-                            text-sm font-bold
-                            text-slate-800
-                        "
+                        className="mb-2 block text-sm font-bold text-slate-800"
                     >
                         Mobile number *
                     </label>
 
                     <div
-                        className={`
+                        className={cn(`
                             overflow-hidden
                             rounded-xl border
                             bg-white
@@ -577,7 +550,7 @@ const CounsellingForm = ({ onSuccess, }) => {
                                 ? "border-red-500"
                                 : "border-slate-200 focus-within:border-primary"
                             }
-                        `}
+                        `)}
                     >
                         <PhoneInput
                             defaultCountry="in"
@@ -618,12 +591,7 @@ const CounsellingForm = ({ onSuccess, }) => {
                     {errors.mobile && (
                         <p
                             role="alert"
-                            className="
-                                mt-1.5
-                                text-xs
-                                font-medium
-                                text-red-600
-                            "
+                            className="mt-1.5 text-xs font-medium text-red-600"
                         >
                             {errors.mobile}
                         </p>
@@ -633,13 +601,7 @@ const CounsellingForm = ({ onSuccess, }) => {
                 {destinationsError && (
                     <div
                         role="alert"
-                        className="
-                            flex items-center
-                            justify-between gap-4
-                            rounded-xl
-                            border border-red-100
-                            bg-red-50 p-3
-                        "
+                        className="flex items-center justify-between gap-4 rounded-xl border border-red-100 bg-red-50 p-3"
                     >
                         <p className="text-xs font-medium text-red-700">
                             Unable to load
@@ -651,12 +613,7 @@ const CounsellingForm = ({ onSuccess, }) => {
                             onClick={() =>
                                 refetchDestinations()
                             }
-                            className="
-                                shrink-0
-                                text-xs font-bold
-                                text-primary
-                                underline
-                            "
+                            className="shrink-0 text-xs font-bold text-primary underline"
                         >
                             Retry
                         </button>
@@ -796,26 +753,7 @@ const CounsellingForm = ({ onSuccess, }) => {
                 <button
                     type="submit"
                     disabled={submitting}
-                    className="
-                        group inline-flex
-                        min-h-12 w-full
-                        items-center
-                        justify-center gap-2
-                        rounded-xl
-                        bg-gradient-to-r
-                        from-primary
-                        to-darkPrimary
-                        px-6 py-3
-                        text-sm font-bold
-                        text-white
-                        shadow-[0_14px_30px_rgba(192,31,83,0.25)]
-                        transition-all
-                        duration-300
-                        hover:-translate-y-0.5
-                        hover:shadow-[0_18px_38px_rgba(192,31,83,0.35)]
-                        disabled:cursor-not-allowed
-                        disabled:opacity-60
-                    "
+                    className="group inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-primary to-darkPrimary px-6 py-3 text-sm font-bold text-white shadow-[0_14px_30px_rgba(192,31,83,0.25)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_18px_38px_rgba(192,31,83,0.35)] disabled:cursor-not-allowed disabled:opacity-60"
                 >
                     {submitting
                         ? "Submitting..."
@@ -824,11 +762,7 @@ const CounsellingForm = ({ onSuccess, }) => {
                     {!submitting && (
                         <Send
                             aria-hidden="true"
-                            className="
-                                h-4 w-4
-                                transition-transform
-                                group-hover:translate-x-1
-                            "
+                            className="h-4 w-4 transition-transform group-hover:translate-x-1"
                         />
                     )}
                 </button>

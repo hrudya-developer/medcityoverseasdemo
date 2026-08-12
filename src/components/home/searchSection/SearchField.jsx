@@ -1,3 +1,5 @@
+import cn from "@/lib/cn";
+
 export default function SearchField({
     icon: Icon,
     children,
@@ -8,18 +10,18 @@ export default function SearchField({
 }) {
     return (
         <div
-            className={`relative flex min-h-[88px] w-full items-center gap-3 rounded-[22px] border p-3 transition-all duration-300 ${
+            className={cn(`relative flex min-h-[88px] w-full items-center gap-3 rounded-[22px] border p-3 transition-all duration-300 ${
                 active
                     ? "border-primary/50 bg-primary/10 shadow-[0_14px_30px_rgba(192,31,83,0.13)]"
                     : "border-white/10 bg-black/20 hover:border-white/20 hover:bg-white/[0.06]"
-            } ${disabled ? "opacity-50" : ""}`}
+            } ${disabled ? "opacity-50" : ""}`)}
         >
             <div
-                className={`grid size-12 shrink-0 place-content-center rounded-2xl transition-all duration-300 ${
+                className={cn(`grid size-12 shrink-0 place-content-center rounded-2xl transition-all duration-300 ${
                     active
                         ? "bg-primary text-white shadow-[0_10px_24px_rgba(192,31,83,0.32)]"
                         : "border border-white/10 bg-white/10 text-white/80"
-                }`}
+                }`)}
             >
                 <Icon
                     aria-hidden="true"

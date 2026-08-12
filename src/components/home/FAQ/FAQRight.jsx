@@ -29,12 +29,7 @@ const FAQRight = ({ items = [] }) => {
 
   return (
     <div
-      className="
-        grid w-full grid-cols-1
-        items-start gap-4
-        md:grid-cols-2 md:gap-5
-        xl:gap-6
-      "
+      className="grid w-full grid-cols-1 items-start gap-4 md:grid-cols-2 md:gap-5 xl:gap-6"
       data-aos="fade-up"
     >
       {items.map((item, index) => {

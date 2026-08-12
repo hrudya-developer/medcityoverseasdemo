@@ -37,30 +37,10 @@ const BottomBar = () => {
             data-aos="fade-up"
         >
             <div
-                className="
-          relative
-          mx-auto
-          max-w-[1600px]
-          border-t
-          border-dotted
-          border-primary/20
-          px-4
-          py-3
-          text-[13px]
-          text-white
-          sm:px-6
-          lg:px-8
-        "
+                className="relative mx-auto max-w-[1600px] border-t border-dotted border-primary/20 px-4 py-3 text-[13px] text-white sm:px-6 lg:px-8"
             >
                 <div
-                    className="
-            flex
-            flex-col
-            items-center
-            justify-center
-            gap-3
-            sm:flex-row
-          "
+                    className="flex flex-col items-center justify-center gap-3 sm:flex-row"
                 >
 
 
@@ -77,26 +57,7 @@ const BottomBar = () => {
                                             rel="noopener noreferrer"
                                             aria-label={`Follow Medcity Study Abroad on ${social.name}`}
                                             title={`Medcity Study Abroad on ${social.name}`}
-                                            className="
-                        flex
-                        h-8
-                        w-8
-                        items-center
-                        justify-center
-                        rounded-full
-                        bg-darkPrimary
-                        text-lg
-                        text-white
-                        transition-all
-                        duration-300
-                        hover:-translate-y-0.5
-                        hover:bg-primary
-                        focus-visible:outline-none
-                        focus-visible:ring-2
-                        focus-visible:ring-primary
-                        focus-visible:ring-offset-2
-                        focus-visible:ring-offset-[#070707]
-                      "
+                                            className="flex h-8 w-8 items-center justify-center rounded-full bg-darkPrimary text-lg text-white transition-all duration-300 hover:-translate-y-0.5 hover:bg-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-[#070707]"
                                         >
                                             <Icon aria-hidden="true" />
                                         </a>

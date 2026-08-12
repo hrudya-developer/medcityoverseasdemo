@@ -1,4 +1,6 @@
 import Image from "next/image";
+import cn from "@/lib/cn";
+
 import Link from "next/link";
 
 import {
@@ -103,51 +105,23 @@ const ActionCard = ({
                 <>
                     <span
                         aria-hidden="true"
-                        className="
-              pointer-events-none
-              absolute
-              inset-0
-              bg-[radial-gradient(circle_at_85%_15%,rgba(255,255,255,0.17),transparent_38%)]
-            "
+                        className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_85%_15%,rgba(255,255,255,0.17),transparent_38%)]"
                     />
 
                     <span
                         aria-hidden="true"
-                        className="
-              pointer-events-none
-              absolute
-              -bottom-10
-              right-0
-              h-24
-              w-24
-              rounded-full
-              bg-primary/30
-              blur-2xl
-            "
+                        className="pointer-events-none absolute -bottom-10 right-0 h-24 w-24 rounded-full bg-primary/30 blur-2xl"
                     />
 
                     <span
                         aria-hidden="true"
-                        className="
-              pointer-events-none
-              absolute
-              bottom-0
-              left-1/2
-              h-[3px]
-              w-10
-              -translate-x-1/2
-              rounded-t-full
-              bg-primary
-              transition-all
-              duration-300
-              group-hover:w-16
-            "
+                        className="pointer-events-none absolute bottom-0 left-1/2 h-[3px] w-10 -translate-x-1/2 rounded-t-full bg-primary transition-all duration-300 group-hover:w-16"
                     />
                 </>
             ) : (
                 <span
                     aria-hidden="true"
-                    className={`
+                    className={cn(`
             pointer-events-none
             absolute
             bottom-0
@@ -162,31 +136,13 @@ const ActionCard = ({
             group-hover:w-12
             min-[1100px]:block
             ${underlineClassName}
-          `}
+          `)}
                 />
             )}
 
             {image ? (
                 <span
-                    className="
-            relative
-            z-10
-            flex
-            h-8
-            w-8
-            shrink-0
-            items-center
-            justify-center
-            overflow-hidden
-            rounded-full
-            border-2
-            border-white
-            bg-white
-            shadow-[0_4px_10px_rgba(15,23,42,0.2)]
-            transition-transform
-            duration-300
-            group-hover:scale-105
-          "
+                    className="relative z-10 flex h-8 w-8 shrink-0 items-center justify-center overflow-hidden rounded-full border-2 border-white bg-white shadow-[0_4px_10px_rgba(15,23,42,0.2)] transition-transform duration-300 group-hover:scale-105"
                 >
                     <Image
                         src={image}
@@ -227,33 +183,24 @@ const ActionCard = ({
             )}
 
             <span
-                className="
-          relative
-          z-10
-          hidden
-          min-w-0
-          flex-col
-          items-start
-          overflow-hidden
-          min-[1220px]:flex
-        "
+                className="relative z-10 hidden min-w-0 flex-col items-start overflow-hidden min-[1220px]:flex"
             >
                 <span
-                    className={`
+                    className={cn(`
             max-w-[150px]
             truncate
             text-[13px]
             font-semibold
             leading-none
             ${featured ? "text-white" : "text-slate-800"}
-          `}
+          `)}
                 >
                     {title}
                 </span>
 
                 {subtitle ? (
                     <span
-                        className={`
+                        className={cn(`
               mt-1
               max-w-[155px]
               truncate
@@ -264,7 +211,7 @@ const ActionCard = ({
                                 ? "text-white/70"
                                 : "text-slate-500"
                             }
-            `}
+            `)}
                     >
                         {subtitle}
                     </span>
@@ -302,80 +249,25 @@ const Topbar = () => {
     return (
         <header
             id="website-topbar"
-            className="
-        relative
-        hidden
-        h-16
-        w-full
-        overflow-hidden
-        border-b
-        border-slate-200/80
-        bg-gradient-to-r
-        from-slate-100
-        via-white
-        to-rose-50/50
-        shadow-[0_4px_18px_rgba(15,23,42,0.06)]
-        lg:block
-      "
+            className="relative hidden h-16 w-full overflow-hidden border-b border-slate-200/80 bg-gradient-to-r from-slate-100 via-white to-rose-50/50 shadow-[0_4px_18px_rgba(15,23,42,0.06)] lg:block"
         >
             <div
                 aria-hidden="true"
-                className="
-          pointer-events-none
-          absolute
-          inset-0
-          opacity-[0.025]
-          [background-image:radial-gradient(#334155_1px,transparent_1px)]
-          [background-size:18px_18px]
-        "
+                className="pointer-events-none absolute inset-0 opacity-[0.025] [background-image:radial-gradient(#334155_1px,transparent_1px)] [background-size:18px_18px]"
             />
 
             <nav
                 aria-label="Quick links"
-                className="
-          relative
-          z-10
-          mx-auto
-          flex
-          h-full
-          w-full
-          max-w-[1600px]
-          items-center
-          justify-between
-          gap-4
-          px-3
-          xl:px-6
-          2xl:px-8
-        "
+                className="relative z-10 mx-auto flex h-full w-full max-w-[1600px] items-center justify-between gap-4 px-3 xl:px-6 2xl:px-8"
             >
                 <div
-                    className="
-            min-w-0
-            shrink-0
-            overflow-hidden
-            rounded-2xl
-            border
-            border-white/80
-            bg-white/90
-            shadow-[0_6px_20px_rgba(15,23,42,0.10)]
-            backdrop-blur-md
-          "
+                    className="min-w-0 shrink-0 overflow-hidden rounded-2xl border border-white/80 bg-white/90 shadow-[0_6px_20px_rgba(15,23,42,0.10)] backdrop-blur-md"
                 >
                     <WebsiteSwitch />
                 </div>
 
                 <div
-                    className="
-            ml-auto
-            flex
-            min-w-0
-            items-center
-            justify-end
-            gap-1.5
-            overflow-hidden
-            min-[1220px]:gap-2
-            xl:gap-2.5
-          "
+                    className="ml-auto flex min-w-0 items-center justify-end gap-1.5 overflow-hidden min-[1220px]:gap-2 xl:gap-2.5"
                 >
                     <ActionCard
                         href="/branches"

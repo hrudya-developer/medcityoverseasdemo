@@ -1,4 +1,6 @@
 import Image from "next/image";
+import cn from "@/lib/cn";
+
 import Link from "next/link";
 
 import {
@@ -66,13 +68,7 @@ const Footer = () => {
 
     return (
         <footer
-            className="
-        relative
-        w-full
-        overflow-hidden
-        bg-[#070707]
-        text-white
-      "
+            className="relative w-full overflow-hidden bg-[#070707] text-white"
             aria-labelledby="footer-heading"
             data-aos="fade-up"
         >
@@ -83,86 +79,35 @@ const Footer = () => {
             {/* Background gradients */}
             <div
                 aria-hidden="true"
-                className="
-          pointer-events-none
-          absolute
-          inset-0
-          bg-[radial-gradient(circle_at_bottom_left,rgba(168,13,65,0.45),transparent_35%),radial-gradient(circle_at_bottom_right,rgba(211,39,159,0.4),transparent_30%),linear-gradient(135deg,rgba(255,0,0,0.08),transparent_40%)]
-        "
+                className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,rgba(168,13,65,0.45),transparent_35%),radial-gradient(circle_at_bottom_right,rgba(211,39,159,0.4),transparent_30%),linear-gradient(135deg,rgba(255,0,0,0.08),transparent_40%)]"
             />
 
             <DotPattern
-                className="
-          left-0
-          top-0
-          grid
-          opacity-20
-        "
+                className="left-0 top-0 grid opacity-20"
             />
 
             <DotPattern
-                className="
-          bottom-0
-          right-0
-          hidden
-          opacity-20
-          lg:grid
-        "
+                className="bottom-0 right-0 hidden opacity-20 lg:grid"
             />
 
             <WorldPattern />
 
             <div
-                className="
-          relative
-          z-10
-          mx-auto
-          grid
-          w-full
-          max-w-[1600px]
-          gap-12
-          px-6
-          py-14
-          sm:px-8
-          lg:grid-cols-[1.05fr_0.95fr_1fr_1fr]
-          lg:gap-8
-          lg:px-10
-          lg:py-16
-        "
+                className="relative z-10 mx-auto grid w-full max-w-[1600px] gap-12 px-6 py-14 sm:px-8 lg:grid-cols-[1.05fr_0.95fr_1fr_1fr] lg:gap-8 lg:px-10 lg:py-16"
             >
                 {/* Brand */}
                 <div
-                    className="
-            flex
-            flex-col
-            items-center
-            text-center
-            sm:items-start
-            sm:text-left
-          "
+                    className="flex flex-col items-center text-center sm:items-start sm:text-left"
                 >
                     <Link
                         href="/"
                         aria-label="Medcity Study Abroad home"
-                        className="
-              inline-flex
-              rounded-md
-              focus-visible:outline-none
-              focus-visible:ring-2
-              focus-visible:ring-primary
-              focus-visible:ring-offset-4
-              focus-visible:ring-offset-[#070707]
-            "
+                        className="inline-flex rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-4 focus-visible:ring-offset-[#070707]"
                     >
                         <Image
                             src={logo}
                             alt="Medcity International Overseas Corporation"
-                            className="
-                h-auto
-                w-48
-                sm:w-56
-                lg:w-64
-              "
+                            className="h-auto w-48 sm:w-56 lg:w-64"
                             sizes="
                 (max-width: 640px) 192px,
                 (max-width: 1024px) 224px,
@@ -172,27 +117,14 @@ const Footer = () => {
                     </Link>
 
                     <p
-                        className="
-              mt-5
-              max-w-sm
-              text-sm
-              leading-7
-              text-white/75
-            "
+                        className="mt-5 max-w-sm text-sm leading-7 text-white/75"
                     >
                         Supporting students and professionals with overseas education,
                         career and migration opportunities.
                     </p>
 
                     <div
-                        className="
-              mt-7
-              flex
-              items-center
-              justify-center
-              gap-3
-              sm:justify-start
-            "
+                        className="mt-7 flex items-center justify-center gap-3 sm:justify-start"
                         aria-label="Our services"
                     >
                         {footerIcons.map((item, index) => {
@@ -219,23 +151,12 @@ const Footer = () => {
 
                 {/* About */}
                 <div
-                    className="
-            border-white/15
-            lg:border-l
-            lg:px-8
-          "
+                    className="border-white/15 lg:border-l lg:px-8"
                 >
                     <FooterHeading>About Us</FooterHeading>
 
                     <p
-                        className="
-              mt-6
-              text-center
-              text-sm
-              leading-7
-              text-white/75
-              sm:text-left
-            "
+                        className="mt-6 text-center text-sm leading-7 text-white/75 sm:text-left"
                     >
                         Since 2012, Medcity International Overseas Corporation has
                         supported students who aspire to study overseas and professionals
@@ -244,31 +165,7 @@ const Footer = () => {
 
                     <Link
                         href="/loginViaOtp"
-                        className="
-              mx-auto
-              mt-7
-              inline-flex
-              items-center
-              justify-center
-              gap-2
-              rounded-xl
-              bg-primary
-              px-6
-              py-3
-              text-sm
-              font-semibold
-              text-white
-              transition
-              duration-300
-              hover:-translate-y-0.5
-              hover:bg-darkPrimary
-              focus-visible:outline-none
-              focus-visible:ring-2
-              focus-visible:ring-white
-              focus-visible:ring-offset-2
-              focus-visible:ring-offset-[#070707]
-              sm:mx-0
-            "
+                        className="mx-auto mt-7 inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-6 py-3 text-sm font-semibold text-white transition duration-300 hover:-translate-y-0.5 hover:bg-darkPrimary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#070707] sm:mx-0"
                     >
                         Student Login
 
@@ -282,54 +179,22 @@ const Footer = () => {
                 {/* Quick links */}
                 <nav
                     aria-label="Footer navigation"
-                    className="
-            border-white/15
-            lg:border-l
-            lg:px-8
-          "
+                    className="border-white/15 lg:border-l lg:px-8"
                 >
                     <FooterHeading>Quick Links</FooterHeading>
 
                     <ul
-                        className="
-              mt-6
-              flex
-              flex-col
-              items-center
-              gap-4
-              sm:items-start
-            "
+                        className="mt-6 flex flex-col items-center gap-4 sm:items-start"
                     >
                         {footerLinks.map((item) => (
                             <li key={item.href}>
                                 <Link
                                     href={item.href}
-                                    className="
-                    group
-                    inline-flex
-                    items-center
-                    gap-2
-                    text-sm
-                    text-white/75
-                    transition-colors
-                    duration-300
-                    hover:text-white
-                    focus-visible:rounded
-                    focus-visible:outline-none
-                    focus-visible:ring-2
-                    focus-visible:ring-primary
-                  "
+                                    className="group inline-flex items-center gap-2 text-sm text-white/75 transition-colors duration-300 hover:text-white focus-visible:rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
                                 >
                                     <ArrowRight
                                         aria-hidden="true"
-                                        className="
-                      h-3.5
-                      w-3.5
-                      text-primary
-                      transition-transform
-                      duration-300
-                      group-hover:translate-x-1
-                    "
+                                        className="h-3.5 w-3.5 text-primary transition-transform duration-300 group-hover:translate-x-1"
                                     />
 
                                     {item.label}
@@ -341,24 +206,12 @@ const Footer = () => {
 
                 {/* Contact */}
                 <div
-                    className="
-            border-white/15
-            lg:border-l
-            lg:px-8
-          "
+                    className="border-white/15 lg:border-l lg:px-8"
                 >
                     <FooterHeading>Contact Us</FooterHeading>
 
                     <address
-                        className="
-              mt-6
-              flex
-              flex-col
-              items-center
-              gap-6
-              not-italic
-              sm:items-start
-            "
+                        className="mt-6 flex flex-col items-center gap-6 not-italic sm:items-start"
                     >
                         <ContactItem
                             icon={MapPin}
@@ -379,16 +232,7 @@ const Footer = () => {
                                     <a
                                         key={phone.href}
                                         href={phone.href}
-                                        className="
-                      transition-colors
-                      duration-300
-                      hover:text-white
-                      hover:underline
-                      focus-visible:rounded
-                      focus-visible:outline-none
-                      focus-visible:ring-2
-                      focus-visible:ring-primary
-                    "
+                                        className="transition-colors duration-300 hover:text-white hover:underline focus-visible:rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
                                     >
                                         {phone.label}
                                     </a>
@@ -402,16 +246,7 @@ const Footer = () => {
                         >
                             <a
                                 href="mailto:info@mioc.in"
-                                className="
-                  transition-colors
-                  duration-300
-                  hover:text-white
-                  hover:underline
-                  focus-visible:rounded
-                  focus-visible:outline-none
-                  focus-visible:ring-2
-                  focus-visible:ring-primary
-                "
+                                className="transition-colors duration-300 hover:text-white hover:underline focus-visible:rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
                             >
                                 info@mioc.in
                             </a>
@@ -422,32 +257,10 @@ const Footer = () => {
 
             {/* Bottom bar */}
             <div
-                className="
-          relative
-          z-10
-          border-t
-          border-white/10
-        "
+                className="relative z-10 border-t border-white/10"
             >
                 <div
-                    className="
-            mx-auto
-            flex
-            max-w-[1600px]
-            flex-col
-            items-center
-            justify-between
-            gap-3
-            px-6
-            py-5
-            text-center
-            text-xs
-            text-white/60
-            sm:px-8
-            md:flex-row
-            md:text-left
-            lg:px-10
-          "
+                    className="mx-auto flex max-w-[1600px] flex-col items-center justify-between gap-3 px-6 py-5 text-center text-xs text-white/60 sm:px-8 md:flex-row md:text-left lg:px-10"
                 >
                     <p>
                         © {currentYear} Medcity International Overseas Corporation. All
@@ -457,30 +270,14 @@ const Footer = () => {
                     <div className="flex items-center gap-5">
                         <Link
                             href="/privacy-policy"
-                            className="
-                transition-colors
-                hover:text-white
-                hover:underline
-                focus-visible:rounded
-                focus-visible:outline-none
-                focus-visible:ring-2
-                focus-visible:ring-primary
-              "
+                            className="transition-colors hover:text-white hover:underline focus-visible:rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
                         >
                             Privacy Policy
                         </Link>
 
                         <Link
                             href="/terms-and-conditions"
-                            className="
-                transition-colors
-                hover:text-white
-                hover:underline
-                focus-visible:rounded
-                focus-visible:outline-none
-                focus-visible:ring-2
-                focus-visible:ring-primary
-              "
+                            className="transition-colors hover:text-white hover:underline focus-visible:rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
                         >
                             Terms and Conditions
                         </Link>
@@ -502,15 +299,7 @@ function FooterHeading({ children }) {
 
             <div
                 aria-hidden="true"
-                className="
-          mx-auto
-          mt-4
-          h-1
-          w-10
-          rounded-full
-          bg-primary
-          sm:mx-0
-        "
+                className="mx-auto mt-4 h-1 w-10 rounded-full bg-primary sm:mx-0"
             />
         </div>
     );
@@ -521,24 +310,7 @@ function CircleIcon({ children, label }) {
         <div
             role="img"
             aria-label={label}
-            className="
-        flex
-        h-11
-        w-11
-        items-center
-        justify-center
-        rounded-full
-        border
-        border-white/20
-        bg-white
-        text-darkPrimary
-        shadow-lg
-        shadow-black/20
-        sm:h-12
-        sm:w-12
-        lg:h-14
-        lg:w-14
-      "
+            className="flex h-11 w-11 items-center justify-center rounded-full border border-white/20 bg-white text-darkPrimary shadow-lg shadow-black/20 sm:h-12 sm:w-12 lg:h-14 lg:w-14"
         >
             {children}
         </div>
@@ -561,33 +333,11 @@ function ContactItem({
 }) {
     return (
         <div
-            className="
-        flex
-        w-full
-        max-w-sm
-        flex-col
-        items-center
-        gap-3
-        text-center
-        sm:flex-row
-        sm:items-start
-        sm:text-left
-      "
+            className="flex w-full max-w-sm flex-col items-center gap-3 text-center sm:flex-row sm:items-start sm:text-left"
         >
             <div
                 aria-hidden="true"
-                className="
-          flex
-          h-10
-          w-10
-          shrink-0
-          items-center
-          justify-center
-          rounded-full
-          border
-          border-white/20
-          text-primary
-        "
+                className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-white/20 text-primary"
             >
                 <Icon className="h-5 w-5" />
             </div>
@@ -607,13 +357,13 @@ function DotPattern({ className = "" }) {
     return (
         <div
             aria-hidden="true"
-            className={`
+            className={cn(`
         pointer-events-none
         absolute
         grid-cols-10
         gap-3
         ${className}
-      `}
+      `)}
         >
             {Array.from({ length: 100 }).map((_, index) => (
                 <span
@@ -629,15 +379,7 @@ function WorldPattern() {
     return (
         <div
             aria-hidden="true"
-            className="
-        pointer-events-none
-        absolute
-        right-10
-        top-8
-        hidden
-        opacity-20
-        lg:block
-      "
+            className="pointer-events-none absolute right-10 top-8 hidden opacity-20 lg:block"
         >
             <svg
                 width="340"
