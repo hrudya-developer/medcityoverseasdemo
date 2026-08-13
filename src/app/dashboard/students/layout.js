@@ -1,5 +1,15 @@
 import StudentShell from "./StudentShell";
 
-export default function StudentLayout({ children }) {
-  return <StudentShell>{children}</StudentShell>;
+import AuthBootstrap from "./AuthBootstrap";
+
+export default function StudentLayout({
+    children,
+}) {
+    return (
+        <AuthBootstrap>
+            <StudentShell>
+                {children}
+            </StudentShell>
+        </AuthBootstrap>
+    );
 }

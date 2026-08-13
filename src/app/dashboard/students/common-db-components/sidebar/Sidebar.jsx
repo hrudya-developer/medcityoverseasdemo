@@ -13,6 +13,7 @@ import {
     isSidebarItemActive,
     sidebarItems,
 } from "./sidebarData";
+import LogoutButton from "./Logout";
 
 export default function Sidebar({
     open,
@@ -114,7 +115,7 @@ export default function Sidebar({
                     </div>
                 </nav>
 
-                <SidebarLogout />
+                <LogoutButton />
             </div>
         </aside>
     );
@@ -392,102 +393,3 @@ function WorkspaceLabel() {
     );
 }
 
-/* =========================================================
-   LOGOUT
-   ========================================================= */
-
-function SidebarLogout() {
-    return (
-        <div
-            className="
-        shrink-0
-
-        border-t
-        border-white/[0.07]
-
-        bg-white/[0.015]
-
-        p-3
-
-        backdrop-blur-xl
-
-        md:p-2.5
-
-        xl:p-4
-      "
-        >
-            <button
-                type="button"
-                aria-label="Logout"
-                title="Logout"
-                className="
-          group
-
-          flex
-          w-full
-          items-center
-
-          rounded-[16px]
-
-          border
-          border-white/[0.08]
-
-          bg-white/[0.045]
-
-          text-white/62
-
-          backdrop-blur-xl
-
-          transition-all
-          duration-200
-
-          hover:border-red-300/15
-          hover:bg-red-400/[0.08]
-          hover:text-red-100
-
-          md:justify-center
-          md:p-2
-
-          xl:justify-start
-          xl:gap-3
-          xl:px-3
-          xl:py-2.5
-        "
-            >
-                <span
-                    className="
-            grid
-            h-10
-            w-10
-            shrink-0
-            place-items-center
-
-            rounded-[13px]
-
-            border
-            border-white/[0.05]
-
-            bg-black/[0.08]
-
-            group-hover:bg-red-400/10
-          "
-                >
-                    <LogOut size={18} />
-                </span>
-
-                <span
-                    className="
-            text-[13px]
-            font-semibold
-
-            md:hidden
-
-            xl:block
-          "
-                >
-                    Logout
-                </span>
-            </button>
-        </div>
-    );
-}

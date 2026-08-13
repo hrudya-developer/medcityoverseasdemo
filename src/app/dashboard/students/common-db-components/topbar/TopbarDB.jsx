@@ -5,9 +5,15 @@ import {
     Search,
 } from "lucide-react";
 
-function getPageTitle(pathname) {
+import {
+    useSelector,
+} from "react-redux";
+
+function getPageTitle(
+    pathname
+) {
     if (
-        pathname.startsWith(
+        pathname?.startsWith(
             "/dashboard/students/profile"
         )
     ) {
@@ -15,7 +21,7 @@ function getPageTitle(pathname) {
     }
 
     if (
-        pathname.startsWith(
+        pathname?.startsWith(
             "/dashboard/students/courses"
         )
     ) {
@@ -25,59 +31,69 @@ function getPageTitle(pathname) {
     return "Dashboard";
 }
 
-export default function TopbarDB({ pathname }) {
-    const pageTitle = getPageTitle(pathname);
+export default function TopbarDB({
+    pathname,
+}) {
+    const pageTitle =
+        getPageTitle(
+            pathname
+        );
 
     return (
         <header
             className="
-        fixed
-        left-0
-        right-0
-        top-0
-        z-30
+                fixed
+                left-0
+                right-0
+                top-0
+                z-30
 
-        h-20
+                h-20
 
-        border-b
-        border-slate-200/65
+                border-b
+                border-slate-200/65
 
-        bg-white/75
+                bg-white/75
 
-        shadow-[0_8px_32px_rgba(15,23,42,0.055)]
+                shadow-[0_8px_32px_rgba(15,23,42,0.055)]
 
-        backdrop-blur-2xl
+                backdrop-blur-2xl
 
-        transition-[left]
-        duration-300
+                transition-[left]
+                duration-300
 
-        md:left-[88px]
+                md:left-[88px]
 
-        xl:left-[280px]
-      "
+                xl:left-[280px]
+            "
         >
             <div
                 className="
-          flex
-          h-full
-          items-center
-          justify-between
+                    flex
+                    h-full
 
-          gap-3
+                    items-center
+                    justify-between
 
-          px-4
-          pl-20
+                    gap-3
 
-          sm:px-6
-          sm:pl-20
+                    px-4
+                    pl-20
 
-          md:px-5
-          md:pl-5
+                    sm:px-6
+                    sm:pl-20
 
-          xl:px-8
-        "
+                    md:px-5
+                    md:pl-5
+
+                    xl:px-8
+                "
             >
-                <TopbarTitle title={pageTitle} />
+                <TopbarTitle
+                    title={
+                        pageTitle
+                    }
+                />
 
                 <div className="flex shrink-0 items-center gap-2 sm:gap-3">
                     <TopbarSearch />
@@ -91,36 +107,47 @@ export default function TopbarDB({ pathname }) {
     );
 }
 
-function TopbarTitle({ title }) {
+function TopbarTitle({
+    title,
+}) {
     return (
         <div className="min-w-0">
             <p
                 className="
-          truncate
-          text-[9px]
-          font-bold
-          uppercase
-          tracking-[0.18em]
-          text-slate-400
+                    truncate
 
-          sm:text-[11px]
-        "
+                    text-[9px]
+
+                    font-bold
+
+                    uppercase
+
+                    tracking-[0.18em]
+
+                    text-slate-400
+
+                    sm:text-[11px]
+                "
             >
                 Student Portal
             </p>
 
             <h1
                 className="
-          mt-0.5
-          truncate
+                    mt-0.5
 
-          text-base
-          font-black
-          tracking-[-0.02em]
-          text-slate-950
+                    truncate
 
-          sm:text-xl
-        "
+                    text-base
+
+                    font-black
+
+                    tracking-[-0.02em]
+
+                    text-slate-950
+
+                    sm:text-xl
+                "
             >
                 {title}
             </h1>
@@ -132,31 +159,37 @@ function TopbarSearch() {
     return (
         <div
             className="
-        hidden
-        h-11
-        w-[210px]
-        items-center
-        gap-2.5
+                hidden
 
-        rounded-[15px]
+                h-11
 
-        border
-        border-slate-200/80
+                w-[210px]
 
-        bg-slate-50/85
+                items-center
 
-        px-3.5
+                gap-2.5
 
-        transition-all
+                rounded-[15px]
 
-        focus-within:border-[#c01f53]/35
-        focus-within:bg-white
-        focus-within:shadow-[0_0_0_4px_rgba(192,31,83,0.07)]
+                border
+                border-slate-200/80
 
-        lg:flex
+                bg-slate-50/85
 
-        xl:w-[250px]
-      "
+                px-3.5
+
+                transition-all
+
+                focus-within:border-[#c01f53]/35
+
+                focus-within:bg-white
+
+                focus-within:shadow-[0_0_0_4px_rgba(192,31,83,0.07)]
+
+                lg:flex
+
+                xl:w-[250px]
+            "
         >
             <Search
                 size={16}
@@ -167,14 +200,20 @@ function TopbarSearch() {
                 type="text"
                 placeholder="Search anything..."
                 className="
-          min-w-0
-          flex-1
-          bg-transparent
-          text-sm
-          text-slate-700
-          outline-none
-          placeholder:text-slate-400
-        "
+                    min-w-0
+
+                    flex-1
+
+                    bg-transparent
+
+                    text-sm
+
+                    text-slate-700
+
+                    outline-none
+
+                    placeholder:text-slate-400
+                "
             />
         </div>
     );
@@ -186,132 +225,189 @@ function NotificationButton() {
             type="button"
             aria-label="Notifications"
             className="
-        relative
-        grid
-        h-10
-        w-10
-        place-items-center
+                relative
 
-        rounded-[14px]
+                grid
 
-        border
-        border-slate-200/80
+                h-10
+                w-10
 
-        bg-white/90
+                place-items-center
 
-        text-slate-600
+                rounded-[14px]
 
-        shadow-sm
+                border
+                border-slate-200/80
 
-        transition-all
+                bg-white/90
 
-        hover:-translate-y-0.5
-        hover:border-[#c01f53]/25
-        hover:text-[#c01f53]
-        hover:shadow-md
+                text-slate-600
 
-        sm:h-11
-        sm:w-11
-      "
+                shadow-sm
+
+                transition-all
+
+                hover:-translate-y-0.5
+
+                hover:border-[#c01f53]/25
+
+                hover:text-[#c01f53]
+
+                hover:shadow-md
+
+                sm:h-11
+                sm:w-11
+            "
         >
             <Bell size={17} />
 
             <span
                 className="
-          absolute
-          right-[8px]
-          top-[8px]
+                    absolute
 
-          h-2
-          w-2
+                    right-[8px]
+                    top-[8px]
 
-          rounded-full
+                    h-2
+                    w-2
 
-          border
-          border-white
+                    rounded-full
 
-          bg-[#c01f53]
-        "
+                    border
+                    border-white
+
+                    bg-[#c01f53]
+                "
             />
         </button>
     );
 }
 
 function ProfileButton() {
+    const {
+        email,
+        isLoggedIn,
+        hydrated,
+    } = useSelector(
+        (state) =>
+            state.auth
+    );
+
+    const displayEmail =
+        !hydrated
+            ? "Loading..."
+            : email || "Student";
+
+    const initial =
+        email
+            ? email
+                  .charAt(0)
+                  .toUpperCase()
+            : "S";
+
     return (
         <button
             type="button"
             className="
-        group
+                group
 
-        flex
-        items-center
-        gap-2.5
+                flex
+                items-center
+                gap-2.5
 
-        rounded-[15px]
+                rounded-[15px]
 
-        border
-        border-slate-200/80
+                border
+                border-slate-200/80
 
-        bg-white/90
+                bg-white/90
 
-        p-1
+                p-1
 
-        shadow-sm
+                shadow-sm
 
-        transition-all
+                transition-all
 
-        hover:-translate-y-0.5
-        hover:border-[#c01f53]/20
-        hover:shadow-md
+                hover:-translate-y-0.5
 
-        sm:pr-3
-      "
+                hover:border-[#c01f53]/20
+
+                hover:shadow-md
+
+                sm:pr-3
+            "
         >
             <div
                 className="
-          grid
-          h-9
-          w-9
-          place-items-center
+                    grid
 
-          rounded-[12px]
+                    h-10
+                    w-10
 
-          bg-gradient-to-br
-          from-[#dc3069]
-          via-[#a91e4c]
-          to-[#631A33]
+                    place-items-center
 
-          text-xs
-          font-black
-          text-white
+                    rounded-[12px]
 
-          shadow-[0_6px_16px_rgba(192,31,83,0.30)]
+                    bg-gradient-to-br
 
-          sm:h-10
-          sm:w-10
-        "
+                    from-[#dc3069]
+                    via-[#a91e4c]
+                    to-[#631A33]
+
+                    text-xs
+
+                    font-black
+
+                    text-white
+
+                    shadow-[0_6px_16px_rgba(192,31,83,0.30)]
+                "
             >
-                H
+                {initial}
             </div>
 
-            <div className="hidden text-left sm:block">
-                <p className="text-xs font-bold leading-tight text-slate-900">
-                    Hrudya
+            <div className="hidden min-w-0 text-left sm:block">
+                <p
+                    className="
+                        max-w-[190px]
+
+                        truncate
+
+                        text-xs
+
+                        font-bold
+
+                        text-slate-900
+                    "
+                    title={
+                        email ||
+                        "Student"
+                    }
+                >
+                    {
+                        displayEmail
+                    }
                 </p>
 
                 <div className="mt-0.5 flex items-center gap-1.5">
                     <span
-                        className="
-              h-1.5
-              w-1.5
-              rounded-full
-              bg-emerald-500
-            "
+                        className={`
+                            h-1.5
+                            w-1.5
+                            rounded-full
+
+                            ${
+                                isLoggedIn
+                                    ? "bg-emerald-500"
+                                    : "bg-slate-300"
+                            }
+                        `}
                     />
 
                     <p className="text-[9px] font-medium text-slate-400">
-                        Student
+                        {isLoggedIn
+                            ? "Student"
+                            : "Guest"}
                     </p>
                 </div>
             </div>

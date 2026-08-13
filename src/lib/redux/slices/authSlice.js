@@ -1,88 +1,154 @@
-import { createSlice } from "@reduxjs/toolkit";
+import {
+    createSlice,
+} from "@reduxjs/toolkit";
 
 const initialState = {
-  user: null,
-  token: null,
-  uid: null,
-  email: "",
-  rememberMe: false,
-  otpRequested: false,
-  isLoggedIn: false,
-  hydrated: false,
+    user: null,
+
+    token: null,
+
+    uid: null,
+
+    email: "",
+
+    rememberMe: false,
+
+    otpRequested: false,
+
+    isLoggedIn: false,
+
+    hydrated: false,
 };
 
-const authSlice = createSlice({
-  name: "auth",
-  initialState,
+const authSlice =
+    createSlice({
+        name: "auth",
 
-  reducers: {
-    setEmail: (state, action) => {
-      state.email = action.payload ?? "";
-    },
+        initialState,
 
-    setRememberMe: (state, action) => {
-      state.rememberMe = Boolean(action.payload);
-    },
+        reducers: {
+            setEmail: (
+                state,
+                action
+            ) => {
+                state.email =
+                    action.payload ??
+                    "";
+            },
 
-    setOtpSession: (state, action) => {
-      state.uid = action.payload?.uid ?? null;
-      state.email = action.payload?.email ?? state.email;
-      state.otpRequested = true;
-    },
+            setRememberMe: (
+                state,
+                action
+            ) => {
+                state.rememberMe =
+                    Boolean(
+                        action.payload
+                    );
+            },
 
-    restoreOtpSession: (state, action) => {
-      state.uid = action.payload?.uid ?? null;
-      state.email = action.payload?.email ?? "";
-      state.otpRequested = Boolean(action.payload?.email);
-      state.hydrated = true;
-    },
+            setOtpSession: (
+                state,
+                action
+            ) => {
+                state.uid =
+                    action.payload
+                        ?.uid ??
+                    null;
 
-    setCredentials: (state, action) => {
-      const payload = action.payload ?? {};
+                state.email =
+                    action.payload
+                        ?.email ??
+                    state.email;
 
-      state.user = payload.user ?? null;
-      state.token = payload.token ?? null;
+                state.otpRequested =
+                    true;
+            },
 
-      state.uid =
-        payload.user?.uid ??
-        payload.uid ??
-        state.uid;
+            restoreOtpSession: (
+                state,
+                action
+            ) => {
+                state.uid =
+                    action.payload
+                        ?.uid ??
+                    null;
 
-      state.email =
-        payload.user?.email ??
-        payload.email ??
-        state.email;
+                state.email =
+                    action.payload
+                        ?.email ??
+                    "";
 
-      state.isLoggedIn = true;
-      state.otpRequested = false;
-    },
+                state.otpRequested =
+                    Boolean(
+                        action.payload
+                            ?.email
+                    );
 
-    restoreAuth: (state, action) => {
-      Object.assign(state, action.payload ?? {}, {
-        hydrated: true,
-      });
-    },
+                state.hydrated =
+                    true;
+            },
 
-    markHydrated: (state) => {
-      state.hydrated = true;
-    },
+            setCredentials: (
+                state,
+                action
+            ) => {
+                const payload =
+                    action.payload ??
+                    {};
 
-    logout: () => ({
-      ...initialState,
-      hydrated: true,
-    }),
-  },
-});
+                state.user =
+                    payload.user ??
+                    null;
+
+                state.token =
+                    null;
+
+                state.uid =
+                    payload.user
+                        ?.uid ??
+                    payload.uid ??
+                    null;
+
+                state.email =
+                    payload.user
+                        ?.email ??
+                    payload.email ??
+                    "";
+
+                state.isLoggedIn =
+                    true;
+
+                state.otpRequested =
+                    false;
+
+                state.hydrated =
+                    true;
+            },
+
+            markHydrated: (
+                state
+            ) => {
+                state.hydrated =
+                    true;
+            },
+
+            logout: () => ({
+                ...initialState,
+
+                hydrated:
+                    true,
+            }),
+        },
+    });
 
 export const {
-  setEmail,
-  setRememberMe,
-  setOtpSession,
-  restoreOtpSession,
-  setCredentials,
-  restoreAuth,
-  markHydrated,
-  logout,
+    setEmail,
+    setRememberMe,
+    setOtpSession,
+    restoreOtpSession,
+    setCredentials,
+    markHydrated,
+    logout,
 } = authSlice.actions;
 
 export default authSlice.reducer;
