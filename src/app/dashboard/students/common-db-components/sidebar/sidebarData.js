@@ -27,22 +27,24 @@ export const sidebarItems = [
     {
         icon: FileText,
         label: "My Applications",
-        href: "#",
+        href: "/dashboard/students/my-applications",
+        countKey: "applications",
     },
     {
         icon: Heart,
         label: "My Wishlist",
-        href: "#",
+        href: "/dashboard/students/my-wishlist",
+        countKey: "wishlist",
     },
     {
         icon: MessageSquareQuote,
         label: "Feedback",
-        href: "#",
+        href: "/dashboard/students/feedback",
     },
     {
         icon: EarthLock,
         label: "Privacy Policy",
-        href: "#",
+        href: "/dashboard/students/privacy-policy",
     },
 ];
 

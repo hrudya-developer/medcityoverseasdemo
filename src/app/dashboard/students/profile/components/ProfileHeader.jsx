@@ -1,10 +1,11 @@
 "use client";
 
 import {
-    BadgeCheck,
     Pencil,
     ShieldCheck
 } from "lucide-react";
+
+import RemoveAccountButton from "./delete-profile/RemoveProfileButton";
 
 export default function ProfileHeader({
     name,
@@ -13,7 +14,7 @@ export default function ProfileHeader({
     stage,
     initial,
     onUpdate,
-})  {
+}) {
     return (
         <div
             className="
@@ -59,6 +60,7 @@ export default function ProfileHeader({
                     sm:justify-between
                 "
             >
+                {/* Profile information */}
                 <div
                     className="
                         flex
@@ -112,9 +114,7 @@ export default function ProfileHeader({
                                 text-emerald-700
                             "
                         >
-                            <ShieldCheck
-                                size={11}
-                            />
+                            <ShieldCheck size={11} />
 
                             Student Profile
                         </div>
@@ -147,6 +147,7 @@ export default function ProfileHeader({
                     </div>
                 </div>
 
+                {/* Actions */}
                 <div
                     className="
                         flex
@@ -155,8 +156,6 @@ export default function ProfileHeader({
                         gap-2
                     "
                 >
-                 
-
                     {stage ? (
                         <div
                             className="
@@ -174,34 +173,36 @@ export default function ProfileHeader({
                         >
                             {stage}
                         </div>
-                        
                     ) : null}
+
+                    <button
+                        type="button"
+                        onClick={onUpdate}
+                        className="
+                            inline-flex
+                            items-center
+                            gap-2
+                            rounded-xl
+                            bg-[#c01f53]
+                            px-4
+                            py-2.5
+                            text-xs
+                            font-bold
+                            text-white
+                            shadow-[0_8px_20px_rgba(192,31,83,0.18)]
+                            transition-all
+
+                            hover:-translate-y-0.5
+                            hover:bg-[#a91e4c]
+                        "
+                    >
+                        <Pencil size={14} />
+
+                        Update Profile
+                    </button>
+
+                    <RemoveAccountButton uid={studentId} />
                 </div>
-                <button
-    type="button"
-    onClick={onUpdate}
-    className="
-        inline-flex
-        items-center
-        gap-2
-        rounded-xl
-        bg-[#c01f53]
-        px-4
-        py-2.5
-        text-xs
-        font-bold
-        text-white
-        shadow-[0_8px_20px_rgba(192,31,83,0.18)]
-        transition-all
-
-        hover:-translate-y-0.5
-        hover:bg-[#a91e4c]
-    "
->
-    <Pencil size={14} />
-
-    Update Profile
-</button>
             </div>
         </div>
     );

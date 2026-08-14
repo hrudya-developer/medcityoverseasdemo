@@ -269,7 +269,7 @@ function DashboardHero({
                             backdrop-blur-md
                         "
                     >
-                        Welcome back,
+                        Welcome 
                         <span
                             className="
                                 ml-1
@@ -277,7 +277,7 @@ function DashboardHero({
                                 text-white
                             "
                         >
-                            {studentName}
+                           back 
                         </span>
 
                         <span className="ml-1">

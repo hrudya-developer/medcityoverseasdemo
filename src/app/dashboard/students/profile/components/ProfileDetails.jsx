@@ -6,6 +6,8 @@ import {
 
 import ProfileHeader from "./ProfileHeader";
 import ProfileGrid from "./ProfileGrid";
+import QualificationDetails from "./QualificationDetails";
+
 import ProfileUpdateModal from "./edit-profile/ProfileUpdateModal";
 
 import {
@@ -67,16 +69,25 @@ export default function ProfileDetails({
                         normalized.address
                     }
                 />
+
+<QualificationDetails
+    profile={profile}
+    onUpdated={onUpdated}
+/>
             </section>
 
             <ProfileUpdateModal
-                open={updateOpen}
+                open={
+                    updateOpen
+                }
                 onClose={() =>
                     setUpdateOpen(
                         false
                     )
                 }
-                profile={profile}
+                profile={
+                    profile
+                }
                 onUpdated={async () => {
                     setUpdateOpen(
                         false

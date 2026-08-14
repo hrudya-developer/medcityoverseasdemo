@@ -3,115 +3,149 @@
 import Image from "next/image";
 
 import {
-    LogOut,
     Sparkles,
     X,
 } from "lucide-react";
 
 import SidebarNavItem from "./SidebarNavItem";
+
 import {
     isSidebarItemActive,
     sidebarItems,
 } from "./sidebarData";
+
 import LogoutButton from "./Logout";
+
 
 export default function Sidebar({
     open,
     onClose,
     pathname,
+
+    counts = {
+        applications: 0,
+        wishlist: 0,
+    },
 }) {
     return (
         <aside
             className={`
-        fixed
-        inset-y-0
-        left-0
-        z-50
+                fixed
+                inset-y-0
+                left-0
+                z-50
 
-        flex
-        w-[292px]
-        flex-col
+                flex
+                w-[292px]
+                flex-col
 
-        overflow-hidden
-        text-white
+                overflow-hidden
+                text-white
 
-        shadow-[18px_0_65px_rgba(2,6,23,0.24)]
+                shadow-[18px_0_65px_rgba(2,6,23,0.24)]
 
-        transition-all
-        duration-300
-        ease-out
+                transition-all
+                duration-300
+                ease-out
 
-        md:w-[88px]
-        md:translate-x-0
+                md:w-[88px]
+                md:translate-x-0
 
-        xl:w-[280px]
+                xl:w-[280px]
 
-        ${open
-                    ? "translate-x-0"
-                    : "-translate-x-full"
+                ${
+                    open
+                        ? "translate-x-0"
+                        : "-translate-x-full"
                 }
-      `}
+            `}
         >
             <SidebarBackground />
 
             <div className="relative z-10 flex h-full min-h-0 flex-col">
-                <SidebarHeader onClose={onClose} />
+                <SidebarHeader
+                    onClose={
+                        onClose
+                    }
+                />
 
                 <WorkspaceLabel />
 
-                {/* Navigation */}
                 <nav
                     className="
-            custom-scrollbar
-            min-h-0
-            flex-1
-            overflow-y-auto
-            overflow-x-visible
+                        custom-scrollbar
+                        min-h-0
+                        flex-1
+                        overflow-y-auto
+                        overflow-x-visible
 
-            px-3
-            py-3
+                        px-3
+                        py-3
 
-            md:px-2.5
-            md:py-4
+                        md:px-2.5
+                        md:py-4
 
-            xl:px-4
-          "
+                        xl:px-4
+                    "
                 >
                     <div
                         className="
-              space-y-1
+                            space-y-1
 
-              rounded-[24px]
+                            rounded-[24px]
 
-              border
-              border-white/[0.10]
+                            border
+                            border-white/[0.10]
 
-              bg-white/[0.055]
+                            bg-white/[0.055]
 
-              p-2
+                            p-2
 
-              shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_24px_55px_rgba(0,0,0,0.30)]
+                            shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_24px_55px_rgba(0,0,0,0.30)]
 
-              backdrop-blur-[22px]
+                            backdrop-blur-[22px]
 
-              md:rounded-[22px]
-              md:p-1.5
+                            md:rounded-[22px]
+                            md:p-1.5
 
-              xl:rounded-[26px]
-              xl:p-2
-            "
+                            xl:rounded-[26px]
+                            xl:p-2
+                        "
                     >
-                        {sidebarItems.map((item) => (
-                            <SidebarNavItem
-                                key={item.label}
-                                {...item}
-                                active={isSidebarItemActive(
-                                    pathname,
-                                    item.href
-                                )}
-                                onNavigate={onClose}
-                            />
-                        ))}
+                        {sidebarItems.map(
+                            (item) => {
+                                const count =
+                                    item.countKey
+                                        ? counts?.[
+                                              item
+                                                  .countKey
+                                          ] ?? 0
+                                        : null;
+
+                                return (
+                                    <SidebarNavItem
+                                        key={
+                                            item.label
+                                        }
+
+                                        {...item}
+
+                                        count={
+                                            count
+                                        }
+
+                                        active={isSidebarItemActive(
+                                            pathname,
+                                            item.href
+                                        )}
+
+                                        onNavigate={
+                                            onClose
+                                        }
+                                    />
+                                );
+                            }
+                        )}
                     </div>
                 </nav>
 
@@ -120,6 +154,7 @@ export default function Sidebar({
         </aside>
     );
 }
+
 
 /* =========================================================
    BACKGROUND
@@ -131,131 +166,156 @@ function SidebarBackground() {
             {/* Dark foundation */}
             <div
                 className="
-          absolute
-          inset-0
-          bg-[linear-gradient(155deg,#000000_0%,#111322_52%,#301226_83%,#081323_100%)]
-        "
+                    absolute
+                    inset-0
+
+                    bg-[linear-gradient(155deg,#000000_0%,#111322_52%,#301226_83%,#081323_100%)]
+                "
             />
 
             {/* Diagonal glass reflection */}
             <div
                 className="
-          pointer-events-none
-          absolute
-          -left-[45%]
-          -top-[8%]
-          h-[45%]
-          w-[175%]
-          rotate-[-34deg]
-          bg-gradient-to-b
-          from-white/[0.10]
-          via-white/[0.025]
-          to-transparent
-          blur-sm
-        "
+                    pointer-events-none
+                    absolute
+
+                    -left-[45%]
+                    -top-[8%]
+
+                    h-[45%]
+                    w-[175%]
+
+                    rotate-[-34deg]
+
+                    bg-gradient-to-b
+                    from-white/[0.10]
+                    via-white/[0.025]
+                    to-transparent
+
+                    blur-sm
+                "
             />
 
-            {/* Grid pattern */}
+            {/* Grid */}
             <div
                 className="
-          pointer-events-none
-          absolute
-          inset-0
+                    pointer-events-none
+                    absolute
+                    inset-0
 
-          bg-[linear-gradient(rgba(255,255,255,0.022)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.022)_1px,transparent_1px)]
-          bg-[size:28px_28px]
+                    bg-[linear-gradient(rgba(255,255,255,0.022)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.022)_1px,transparent_1px)]
+                    bg-[size:28px_28px]
 
-          opacity-80
-        "
+                    opacity-80
+                "
             />
 
-            {/* Texture/glow */}
+            {/* Texture */}
             <div
                 className="
-          pointer-events-none
-          absolute
-          inset-0
+                    pointer-events-none
+                    absolute
+                    inset-0
 
-          bg-[radial-gradient(circle_at_20%_15%,rgba(255,255,255,0.06),transparent_25%),radial-gradient(circle_at_80%_80%,rgba(18,98,181,0.12),transparent_32%)]
-        "
+                    bg-[radial-gradient(circle_at_20%_15%,rgba(255,255,255,0.06),transparent_25%),radial-gradient(circle_at_80%_80%,rgba(18,98,181,0.12),transparent_32%)]
+                "
             />
 
+            {/* Pink glow */}
             <div
                 className="
-          pointer-events-none
-          absolute
-          -left-24
-          top-20
-          h-72
-          w-72
-          rounded-full
-          bg-[#c01f53]/20
-          blur-[95px]
-        "
+                    pointer-events-none
+                    absolute
+
+                    -left-24
+                    top-20
+
+                    h-72
+                    w-72
+
+                    rounded-full
+
+                    bg-[#c01f53]/20
+
+                    blur-[95px]
+                "
             />
 
+            {/* Blue glow */}
             <div
                 className="
-          pointer-events-none
-          absolute
-          -right-28
-          bottom-12
-          h-80
-          w-80
-          rounded-full
-          bg-[#1565c0]/14
-          blur-[110px]
-        "
+                    pointer-events-none
+                    absolute
+
+                    -right-28
+                    bottom-12
+
+                    h-80
+                    w-80
+
+                    rounded-full
+
+                    bg-[#1565c0]/14
+
+                    blur-[110px]
+                "
             />
 
+            {/* Right border glow */}
             <div
                 className="
-          pointer-events-none
-          absolute
-          inset-y-0
-          right-0
-          w-px
+                    pointer-events-none
+                    absolute
 
-          bg-gradient-to-b
-          from-transparent
-          via-white/[0.16]
-          to-transparent
-        "
+                    inset-y-0
+                    right-0
+
+                    w-px
+
+                    bg-gradient-to-b
+                    from-transparent
+                    via-white/[0.16]
+                    to-transparent
+                "
             />
         </>
     );
 }
 
+
 /* =========================================================
    HEADER
    ========================================================= */
 
-function SidebarHeader({ onClose }) {
+function SidebarHeader({
+    onClose,
+}) {
     return (
         <div
             className="
-        relative
-        flex
-        h-[88px]
-        shrink-0
-        items-center
-        justify-between
+                relative
 
-        border-b
-        border-white/[0.07]
+                flex
+                h-[88px]
+                shrink-0
+                items-center
+                justify-between
 
-        bg-white/[0.025]
+                border-b
+                border-white/[0.07]
 
-        px-5
+                bg-white/[0.025]
 
-        backdrop-blur-xl
+                px-5
 
-        md:justify-center
-        md:px-3
+                backdrop-blur-xl
 
-        xl:justify-between
-        xl:px-5
-      "
+                md:justify-center
+                md:px-3
+
+                xl:justify-between
+                xl:px-5
+            "
         >
             {/* Full logo */}
             <div className="md:hidden xl:block">
@@ -269,79 +329,89 @@ function SidebarHeader({ onClose }) {
                 />
             </div>
 
+
             {/* Compact logo */}
             <div
                 className="
-          hidden
+                    hidden
 
-          md:grid
-          md:h-12
-          md:w-12
-          md:place-items-center
+                    md:grid
+                    md:h-12
+                    md:w-12
+                    md:place-items-center
 
-          md:rounded-[17px]
+                    md:rounded-[17px]
 
-          md:border
-          md:border-white/[0.12]
+                    md:border
+                    md:border-white/[0.12]
 
-          md:bg-white/[0.07]
+                    md:bg-white/[0.07]
 
-          md:text-lg
-          md:font-black
-          md:text-white
+                    md:text-lg
+                    md:font-black
+                    md:text-white
 
-          md:shadow-[inset_0_1px_0_rgba(255,255,255,0.12),0_12px_30px_rgba(0,0,0,0.28)]
+                    md:shadow-[inset_0_1px_0_rgba(255,255,255,0.12),0_12px_30px_rgba(0,0,0,0.28)]
 
-          md:backdrop-blur-xl
+                    md:backdrop-blur-xl
 
-          xl:hidden
-        "
+                    xl:hidden
+                "
             >
                 M
             </div>
 
+
             {/* Mobile close */}
             <button
                 type="button"
-                onClick={onClose}
+
+                onClick={
+                    onClose
+                }
+
                 aria-label="Close navigation"
+
                 className="
-          grid
-          h-10
-          w-10
-          shrink-0
-          place-items-center
+                    grid
+                    h-10
+                    w-10
+                    shrink-0
+                    place-items-center
 
-          rounded-[14px]
+                    rounded-[14px]
 
-          border
-          border-white/[0.12]
+                    border
+                    border-white/[0.12]
 
-          bg-white/[0.075]
+                    bg-white/[0.075]
 
-          text-white/80
+                    text-white/80
 
-          shadow-[inset_0_1px_0_rgba(255,255,255,0.1),0_8px_22px_rgba(0,0,0,0.20)]
+                    shadow-[inset_0_1px_0_rgba(255,255,255,0.1),0_8px_22px_rgba(0,0,0,0.20)]
 
-          backdrop-blur-xl
+                    backdrop-blur-xl
 
-          transition-all
-          duration-200
+                    transition-all
+                    duration-200
 
-          hover:rotate-90
-          hover:bg-white/[0.14]
-          hover:text-white
+                    hover:rotate-90
+                    hover:bg-white/[0.14]
+                    hover:text-white
 
-          active:scale-95
+                    active:scale-95
 
-          md:hidden
-        "
+                    md:hidden
+                "
             >
-                <X size={18} />
+                <X
+                    size={18}
+                />
             </button>
         </div>
     );
 }
+
 
 /* =========================================================
    WORKSPACE
@@ -351,25 +421,25 @@ function WorkspaceLabel() {
     return (
         <div
             className="
-        px-5
-        pb-2
-        pt-5
+                px-5
+                pb-2
+                pt-5
 
-        md:hidden
+                md:hidden
 
-        xl:block
-      "
+                xl:block
+            "
         >
             <div className="flex items-center gap-2">
                 <span
                     className="
-            grid
-            h-5
-            w-5
-            place-items-center
-            rounded-md
-            bg-[#c01f53]/15
-          "
+                        grid
+                        h-5
+                        w-5
+                        place-items-center
+                        rounded-md
+                        bg-[#c01f53]/15
+                    "
                 >
                     <Sparkles
                         size={10}
@@ -379,12 +449,12 @@ function WorkspaceLabel() {
 
                 <p
                     className="
-            text-[9px]
-            font-black
-            uppercase
-            tracking-[0.2em]
-            text-white/42
-          "
+                        text-[9px]
+                        font-black
+                        uppercase
+                        tracking-[0.2em]
+                        text-white/42
+                    "
                 >
                     Student workspace
                 </p>
@@ -392,4 +462,3 @@ function WorkspaceLabel() {
         </div>
     );
 }
-
