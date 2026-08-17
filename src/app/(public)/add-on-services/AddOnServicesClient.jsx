@@ -267,7 +267,7 @@ export default function AddOnServicesClient() {
                 <BackgroundDecorations />
 
                 <div
-                    className="container relative mx-auto max-w-7xl"
+                    className="container relative mx-auto max-w-9xl"
                 >
                     <header
                         className="mx-auto mb-12 max-w-3xl text-center"

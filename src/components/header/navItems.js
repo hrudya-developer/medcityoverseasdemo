@@ -1,24 +1,28 @@
 const navItems = [
     {
-        name: "About Us",
-        path: "/about-us",
+      name: "Home",
+      path: "/",
     },
     {
-        name: "Destinations",
-        path: "/destinations",
+      name: "About Us",
+      path: "/about-us",
     },
     {
-        name: "Universities",
-        path: "/all-universities",
+      name: "Destinations",
+      path: "/destinations",
     },
     {
-        name: "Courses",
-        path: "/courses",
+      name: "Universities",
+      path: "/all-universities",
     },
     {
-        name: "Blogs",
-        path: "/blogs",
+      name: "Courses",
+      path: "/courses",
     },
-];
-
-export default navItems;
+    {
+      name: "Blogs",
+      path: "/blogs",
+    },
+  ];
+  
+  export default navItems;

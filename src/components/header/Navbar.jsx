@@ -43,7 +43,8 @@ export default function Navbar() {
 
     return (
         <>
-            <header className="sticky top-0 z-50 bg-primary shadow-[0_5px_20px_rgba(99,26,51,0.16)]">
+        
+            <header className="sticky top-0 z-[60] bg-primary shadow-[0_5px_20px_rgba(99,26,51,0.16)]">
                 <div className="relative mx-auto flex h-16 w-full max-w-[1600px] items-center px-4 sm:px-6 lg:h-[76px] lg:px-8">
                     <Link
                         href="/"

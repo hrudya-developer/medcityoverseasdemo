@@ -174,7 +174,7 @@ const FAQ = ({
       <section
         id="faq"
         aria-labelledby="faq-heading"
-        className="relative isolate overflow-hidden bg-gradient-to-br from-[#fff9fc] via-white to-[#f5f8ff] px-4 py-12 sm:px-6 sm:py-14 lg:px-8 lg:py-16"
+        className="relative isolate overflow-hidden bg-gradient-to-br from-[#fff9fc] via-white to-[#f5f8ff] px-4 py-12 sm:px-6 sm:py-14 lg:px-8 lg:py-16 w-full"
         data-aos="fade-up"
       >
         {/* Background decorations */}
@@ -203,7 +203,7 @@ const FAQ = ({
           />
         </div>
 
-        <div className="mx-auto max-w-[1380px]">
+        <div className="mx-auto w-full">
           {/* Heading */}
           <div className="mx-auto max-w-3xl text-center">
             <div

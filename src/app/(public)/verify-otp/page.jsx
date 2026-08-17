@@ -2,67 +2,76 @@
 
 import OtpCard from "./components/OtpCard";
 import LoadingScreen from "./components/LoadingScreen";
-
 import useOtpVerification from "./hooks/useOtpVerification";
 
 export default function VerifyOtpPage() {
-    const otp =
-        useOtpVerification();
+  const {
+    email,
+    otp,
+    error,
+    isLoading,
+    sessionChecked,
+    redirecting,
+    redirectMessage,
+    setInputRef,
+    handleChange,
+    handleKeyDown,
+    handlePaste,
+    handleSubmit,
+    handleDifferentEmail,
+  } = useOtpVerification();
 
-    if (!otp.sessionChecked) {
-        return (
-            <LoadingScreen
-                text="Preparing verification..."
-            />
-        );
-    }
-
-    if (otp.redirecting) {
-        return (
-            <LoadingScreen
-                text={
-                    otp.redirectMessage ||
-                    "Preparing your account..."
-                }
-            />
-        );
-    }
-
-    if (!otp.email) {
-        return (
-            <LoadingScreen
-                text="Returning to login..."
-            />
-        );
-    }
-
+  /*
+   * Wait while the hook restores
+   * the email from sessionStorage.
+   */
+  if (!sessionChecked) {
     return (
-        <OtpCard
-            email={otp.email}
-            otp={otp.otp}
-            error={otp.error}
-            loading={otp.isLoading}
-            redirecting={
-                otp.redirecting
-            }
-            setInputRef={
-                otp.setInputRef
-            }
-            onChange={
-                otp.handleChange
-            }
-            onKeyDown={
-                otp.handleKeyDown
-            }
-            onPaste={
-                otp.handlePaste
-            }
-            onSubmit={
-                otp.handleSubmit
-            }
-            onDifferentEmail={
-                otp.handleDifferentEmail
-            }
-        />
+      <LoadingScreen text="Preparing verification..." />
     );
+  }
+
+  /*
+   * OTP was verified and the hook
+   * is checking the profile before
+   * redirecting.
+   */
+  if (redirecting) {
+    return (
+      <LoadingScreen
+        text={
+          redirectMessage ||
+          "Preparing your account..."
+        }
+      />
+    );
+  }
+
+  /*
+   * No email means that the user
+   * did not arrive from login.
+   */
+  if (!email) {
+    return (
+      <LoadingScreen text="Returning to login..." />
+    );
+  }
+
+  return (
+    <OtpCard
+      email={email}
+      otp={otp}
+      error={error}
+      loading={isLoading}
+      redirecting={redirecting}
+      setInputRef={setInputRef}
+      onChange={handleChange}
+      onKeyDown={handleKeyDown}
+      onPaste={handlePaste}
+      onSubmit={handleSubmit}
+      onDifferentEmail={
+        handleDifferentEmail
+      }
+    />
+  );
 }

@@ -96,9 +96,9 @@ export default function TopbarDB({
                 />
 
                 <div className="flex shrink-0 items-center gap-2 sm:gap-3">
-                    <TopbarSearch />
+                    {/* <TopbarSearch /> */}
 
-                    <NotificationButton />
+                    {/* <NotificationButton /> */}
 
                     <ProfileButton />
                 </div>
@@ -155,133 +155,133 @@ function TopbarTitle({
     );
 }
 
-function TopbarSearch() {
-    return (
-        <div
-            className="
-                hidden
+// function TopbarSearch() {
+//     return (
+//         <div
+//             className="
+//                 hidden
 
-                h-11
+//                 h-11
 
-                w-[210px]
+//                 w-[210px]
 
-                items-center
+//                 items-center
 
-                gap-2.5
+//                 gap-2.5
 
-                rounded-[15px]
+//                 rounded-[15px]
 
-                border
-                border-slate-200/80
+//                 border
+//                 border-slate-200/80
 
-                bg-slate-50/85
+//                 bg-slate-50/85
 
-                px-3.5
+//                 px-3.5
 
-                transition-all
+//                 transition-all
 
-                focus-within:border-[#c01f53]/35
+//                 focus-within:border-[#c01f53]/35
 
-                focus-within:bg-white
+//                 focus-within:bg-white
 
-                focus-within:shadow-[0_0_0_4px_rgba(192,31,83,0.07)]
+//                 focus-within:shadow-[0_0_0_4px_rgba(192,31,83,0.07)]
 
-                lg:flex
+//                 lg:flex
 
-                xl:w-[250px]
-            "
-        >
-            <Search
-                size={16}
-                className="shrink-0 text-slate-400"
-            />
+//                 xl:w-[250px]
+//             "
+//         >
+//             <Search
+//                 size={16}
+//                 className="shrink-0 text-slate-400"
+//             />
 
-            <input
-                type="text"
-                placeholder="Search anything..."
-                className="
-                    min-w-0
+//             <input
+//                 type="text"
+//                 placeholder="Search anything..."
+//                 className="
+//                     min-w-0
 
-                    flex-1
+//                     flex-1
 
-                    bg-transparent
+//                     bg-transparent
 
-                    text-sm
+//                     text-sm
 
-                    text-slate-700
+//                     text-slate-700
 
-                    outline-none
+//                     outline-none
 
-                    placeholder:text-slate-400
-                "
-            />
-        </div>
-    );
-}
+//                     placeholder:text-slate-400
+//                 "
+//             />
+//         </div>
+//     );
+// }
 
-function NotificationButton() {
-    return (
-        <button
-            type="button"
-            aria-label="Notifications"
-            className="
-                relative
+// function NotificationButton() {
+//     return (
+//         <button
+//             type="button"
+//             aria-label="Notifications"
+//             className="
+//                 relative
 
-                grid
+//                 grid
 
-                h-10
-                w-10
+//                 h-10
+//                 w-10
 
-                place-items-center
+//                 place-items-center
 
-                rounded-[14px]
+//                 rounded-[14px]
 
-                border
-                border-slate-200/80
+//                 border
+//                 border-slate-200/80
 
-                bg-white/90
+//                 bg-white/90
 
-                text-slate-600
+//                 text-slate-600
 
-                shadow-sm
+//                 shadow-sm
 
-                transition-all
+//                 transition-all
 
-                hover:-translate-y-0.5
+//                 hover:-translate-y-0.5
 
-                hover:border-[#c01f53]/25
+//                 hover:border-[#c01f53]/25
 
-                hover:text-[#c01f53]
+//                 hover:text-[#c01f53]
 
-                hover:shadow-md
+//                 hover:shadow-md
 
-                sm:h-11
-                sm:w-11
-            "
-        >
-            <Bell size={17} />
+//                 sm:h-11
+//                 sm:w-11
+//             "
+//         >
+//             <Bell size={17} />
 
-            <span
-                className="
-                    absolute
+//             <span
+//                 className="
+//                     absolute
 
-                    right-[8px]
-                    top-[8px]
+//                     right-[8px]
+//                     top-[8px]
 
-                    h-2
-                    w-2
+//                     h-2
+//                     w-2
 
-                    rounded-full
+//                     rounded-full
 
-                    border
-                    border-white
+//                     border
+//                     border-white
 
-                    bg-[#c01f53]
-                "
-            />
-        </button>
-    );
-}
+//                     bg-[#c01f53]
+//                 "
+//             />
+//         </button>
+//     );
+// }
 
 function ProfileButton() {
     const {

@@ -63,34 +63,38 @@ export default function CourseDetailsClient({
     const details =
         formatCourseDetails(selectedCourse);
 
-    const handleApply = () => {
-        const pendingData = {
-            course: selectedCourse,
-            courseId: id,
-
-            universityId:
-                selectedCourse?.u_id ||
-                selectedCourse?.university_id ||
+        const handleApply = () => {
+            const pendingData = {
+              course: selectedCourse,
+              courseId: String(id),
+          
+              universityId:
+                selectedCourse?.u_id ??
+                selectedCourse?.university_id ??
                 "",
-
-            countryId:
-                selectedCourse?.d_id ||
-                selectedCourse?.country_id ||
+          
+              countryId:
+                selectedCourse?.d_id ??
+                selectedCourse?.country_id ??
                 "",
-        };
-
-        sessionStorage.setItem(
-            "pendingApplyCourse",
-            JSON.stringify(pendingData)
-        );
-
-        sessionStorage.setItem(
-            "loginRedirectType",
-            "applyCourse"
-        );
-
-        router.push("/loginViaOtp");
-    };
+          
+              createdAt: Date.now(),
+            };
+          
+            sessionStorage.setItem(
+              "pendingApplyCourse",
+              JSON.stringify(pendingData)
+            );
+          
+            sessionStorage.setItem(
+              "loginRedirectType",
+              "applyCourse"
+            );
+          
+            router.push(
+              "/login?intent=applyCourse"
+            );
+          };
 
     return (
         <main className="min-h-screen bg-white text-slate-900">

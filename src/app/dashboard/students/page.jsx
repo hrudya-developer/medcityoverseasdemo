@@ -16,29 +16,11 @@ import {
     useState,
 } from "react";
 
-const QUICK_ACTIONS = [
-    {
-        icon: FileText,
-        title: "My Applications",
-        value: "0",
-        description:
-            "Track submitted applications",
-        href:
-            "/dashboard/students/applications",
-        gradient:
-            "from-rose-50 via-white to-white",
-    },
-    {
-        icon: Heart,
-        title: "My Wishlist",
-        value: "0",
-        description:
-            "Saved courses for later",
-        href:
-            "/dashboard/students/wishlist",
-        gradient:
-            "from-purple-50 via-white to-white",
-    },
+import {
+    getWishlistedCourses,
+} from "./courses/services/wishlistActions";
+
+const STATIC_ACTIONS = [
     {
         icon: BookOpen,
         title: "Find Courses",
@@ -50,17 +32,17 @@ const QUICK_ACTIONS = [
         gradient:
             "from-sky-50 via-white to-white",
     },
-    {
-        icon: GraduationCap,
-        title: "Counselling",
-        value: "Book Now",
-        description:
-            "Get expert guidance from our counsellors",
-        href:
-            "/dashboard/students/counselling",
-        gradient:
-            "from-emerald-50 via-white to-white",
-    },
+    // {
+    //     icon: GraduationCap,
+    //     title: "Counselling",
+    //     value: "Book Now",
+    //     description:
+    //         "Get expert guidance from our counsellors",
+    //     href:
+    //         "/dashboard/students/counselling",
+    //     gradient:
+    //         "from-emerald-50 via-white to-white",
+    // },
 ];
 
 export default function StudentDashboardPage() {
@@ -69,59 +51,108 @@ export default function StudentDashboardPage() {
         setStudentName,
     ] = useState("Student");
 
+    const [applications, setApplications] =
+        useState([]);
+
+    const [wishlist, setWishlist] =
+        useState([]);
+
+    const [isLoadingCourses, setIsLoadingCourses] =
+        useState(true);
+
     useEffect(() => {
         let active =
             true;
 
-        async function loadSession() {
+        async function loadDashboard() {
+            setIsLoadingCourses(true);
+
             try {
-                const response =
-                    await fetch(
+                const results =
+                    await Promise.allSettled([
+                        fetch(
                         "/api/auth/session",
                         {
-                            method:
-                                "GET",
-
-                            credentials:
-                                "include",
-
-                            cache:
-                                "no-store",
+                            method: "GET",
+                            credentials: "include",
+                            cache: "no-store",
                         }
-                    );
+                        ),
+                        fetch(
+                            "/api/dashboard/student/my-applications",
+                            {
+                                method: "POST",
+                                credentials: "include",
+                                cache: "no-store",
+                            }
+                        ),
+                        getWishlistedCourses(),
+                    ]);
 
-                const data =
-                    await response
-                        .json()
-                        .catch(
-                            () => null
-                        );
-
-                if (
-                    !active ||
-                    !response.ok
-                ) {
+                if (!active) {
                     return;
                 }
 
-                const name =
-                    data?.user?.name
-                        ?.trim();
+                const [
+                    sessionResult,
+                    applicationsResult,
+                    wishlistResult,
+                ] = results;
 
-                if (name) {
-                    setStudentName(
-                        name
+                if (
+                    sessionResult.status === "fulfilled" &&
+                    sessionResult.value.ok
+                ) {
+                    const data = await sessionResult.value
+                        .json()
+                        .catch(() => null);
+
+                    const name = data?.user?.name?.trim();
+
+                    if (name) {
+                        setStudentName(name);
+                    }
+                }
+
+                if (
+                    applicationsResult.status ===
+                        "fulfilled" &&
+                    applicationsResult.value.ok
+                ) {
+                    const data = await applicationsResult.value
+                        .json()
+                        .catch(() => null);
+
+                    setApplications(
+                        data?.status === true &&
+                        Array.isArray(data?.data)
+                            ? data.data
+                            : []
+                    );
+                }
+
+                if (
+                    wishlistResult.status === "fulfilled"
+                ) {
+                    setWishlist(
+                        Array.isArray(wishlistResult.value)
+                            ? wishlistResult.value
+                            : []
                     );
                 }
             } catch (error) {
                 console.error(
-                    "Unable to load dashboard session:",
+                    "Unable to load dashboard:",
                     error
                 );
+            } finally {
+                if (active) {
+                    setIsLoadingCourses(false);
+                }
             }
         }
 
-        loadSession();
+        loadDashboard();
 
         return () => {
             active =
@@ -147,7 +178,11 @@ export default function StudentDashboardPage() {
                 }
             />
 
-            <QuickActions />
+            <QuickActions
+                applications={applications}
+                wishlist={wishlist}
+                loading={isLoadingCourses}
+            />
 
             <MissionBanner />
         </div>
@@ -378,7 +413,33 @@ function DashboardHero({
     );
 }
 
-function QuickActions() {
+function QuickActions({
+    applications,
+    wishlist,
+    loading,
+}) {
+    const actions = [
+        {
+            icon: FileText,
+            title: "My Applications",
+            value: applications.length,
+            description: "Track submitted applications",
+            href: "/dashboard/students/applications",
+            gradient: "from-rose-50 via-white to-white",
+            loading,
+        },
+        {
+            icon: Heart,
+            title: "My Wishlist",
+            value: wishlist.length,
+            description: "Saved courses for later",
+            href: "/dashboard/students/wishlist",
+            gradient: "from-purple-50 via-white to-white",
+            loading,
+        },
+        ...STATIC_ACTIONS,
+    ];
+
     return (
         <section
             className="
@@ -388,12 +449,12 @@ function QuickActions() {
 
                 gap-4
 
-                sm:grid-cols-2
-
-                xl:grid-cols-4
+                sm:grid-cols-3
+               
+                xl:grid-cols-3
             "
         >
-            {QUICK_ACTIONS.map(
+            {actions.map(
                 (item) => (
                     <QuickActionCard
                         key={
@@ -414,6 +475,7 @@ function QuickActionCard({
     description,
     href,
     gradient,
+    loading = false,
 }) {
     return (
         <Link
@@ -433,6 +495,10 @@ function QuickActionCard({
                 bg-gradient-to-br
 
                 ${gradient}
+
+                flex
+                min-h-[220px]
+                flex-col
 
                 p-5
 
@@ -519,35 +585,13 @@ function QuickActionCard({
                 />
             </div>
 
-            <div className="relative">
-                <p
-                    className="
-                        mt-5
-
-                        text-sm
-
-                        font-black
-
-                        text-[#111943]
-                    "
-                >
+            <div className="relative mt-5">
+                <p className="text-sm font-bold text-[#111943]">
                     {title}
                 </p>
 
-                <p
-                    className="
-                        mt-2
-
-                        text-2xl
-
-                        font-black
-
-                        tracking-[-0.03em]
-
-                        text-indigo-600
-                    "
-                >
-                    {value}
+                <p className="mt-2 text-2xl font-bold tracking-[-0.03em] text-secondary">
+                    {loading ? "…" : value}
                 </p>
 
                 <p
