@@ -5,10 +5,12 @@ import {
   useRef,
   useState,
 } from "react";
+
 import {
   useDispatch,
   useSelector,
 } from "react-redux";
+
 import { useRouter } from "next/navigation";
 
 import {
@@ -27,9 +29,6 @@ const OTP_SESSION_KEY =
 
 const PENDING_COURSE_KEY =
   "pendingApplyCourse";
-
-const REDIRECT_TYPE_KEY =
-  "loginRedirectType";
 
 function getErrorMessage(error) {
   return (
@@ -56,14 +55,10 @@ async function readJsonResponse(
   fallbackMessage
 ) {
   const contentType =
-    response.headers.get(
-      "content-type"
-    ) || "";
+    response.headers.get("content-type") || "";
 
   if (
-    !contentType.includes(
-      "application/json"
-    )
+    !contentType.includes("application/json")
   ) {
     throw new Error(fallbackMessage);
   }
@@ -74,11 +69,12 @@ async function readJsonResponse(
 export default function useOtpVerification() {
   const router = useRouter();
   const dispatch = useDispatch();
+
   const inputs = useRef([]);
 
   const {
     uid,
-    email,
+    email: reduxEmail,
     otpRequested,
     isLoggedIn,
   } = useSelector(
@@ -92,6 +88,14 @@ export default function useOtpVerification() {
       reset: resetVerification,
     },
   ] = useVerifyLoginOtpMutation();
+
+  /*
+   * IMPORTANT:
+   * Keep email locally so the OTP screen
+   * does not depend on Redux updating first.
+   */
+  const [email, setEmail] =
+    useState("");
 
   const [otp, setOtp] =
     useState([...EMPTY_OTP]);
@@ -115,102 +119,154 @@ export default function useOtpVerification() {
   ] = useState("");
 
   /*
-   * Restore OTP email after a page refresh.
+   * =====================================================
+   * RESTORE OTP SESSION
+   * =====================================================
    */
   useEffect(() => {
-    if (email) {
-      setSessionChecked(true);
-      return;
-    }
+    let mounted = true;
 
-    const storedValue =
-      window.sessionStorage.getItem(
-        OTP_SESSION_KEY
-      );
+    function restoreSession() {
+      /*
+       * First prefer Redux email.
+       */
+      if (reduxEmail) {
+        const normalizedEmail =
+          String(reduxEmail)
+            .trim()
+            .toLowerCase();
 
-    if (!storedValue) {
-      setSessionChecked(true);
-      return;
-    }
+        if (mounted) {
+          setEmail(normalizedEmail);
+          setSessionChecked(true);
+        }
 
-    try {
-      const storedSession =
-        JSON.parse(storedValue);
+        return;
+      }
 
-      const storedEmail = String(
-        storedSession?.email || ""
-      )
-        .trim()
-        .toLowerCase();
+      /*
+       * Otherwise restore directly from
+       * sessionStorage.
+       */
+      const storedValue =
+        window.sessionStorage.getItem(
+          OTP_SESSION_KEY
+        );
 
-      const storedUid =
-        storedSession?.uid ?? null;
+      if (!storedValue) {
+        if (mounted) {
+          setSessionChecked(true);
+        }
 
-      if (storedEmail) {
-        dispatch(
-          restoreOtpSession({
-            email: storedEmail,
-            uid: storedUid,
-          })
+        return;
+      }
+
+      try {
+        const storedSession =
+          JSON.parse(storedValue);
+
+        const storedEmail =
+          String(
+            storedSession?.email || ""
+          )
+            .trim()
+            .toLowerCase();
+
+        const storedUid =
+          storedSession?.uid ?? null;
+
+        if (storedEmail) {
+          /*
+           * Set LOCAL email immediately.
+           */
+          if (mounted) {
+            setEmail(storedEmail);
+          }
+
+          /*
+           * Also restore Redux.
+           */
+          dispatch(
+            restoreOtpSession({
+              email: storedEmail,
+              uid: storedUid,
+            })
+          );
+        }
+      } catch (storageError) {
+        console.error(
+          "OTP session restore failed:",
+          storageError
+        );
+
+        window.sessionStorage.removeItem(
+          OTP_SESSION_KEY
         );
       }
-    } catch (storageError) {
-      console.error(
-        "OTP session restore failed:",
-        storageError
-      );
 
-      window.sessionStorage.removeItem(
-        OTP_SESSION_KEY
-      );
-    } finally {
-      setSessionChecked(true);
+      if (mounted) {
+        setSessionChecked(true);
+      }
     }
-  }, [dispatch, email]);
+
+    restoreSession();
+
+    return () => {
+      mounted = false;
+    };
+  }, [dispatch, reduxEmail]);
 
   /*
-   * Prevent direct access to the OTP page.
+   * =====================================================
+   * FOCUS FIRST OTP INPUT
+   * =====================================================
    */
   useEffect(() => {
-    if (
-      !sessionChecked ||
-      redirecting
-    ) {
+    if (!sessionChecked) {
       return;
     }
 
-    if (email) {
-      requestAnimationFrame(() => {
-        inputs.current[0]?.focus();
-      });
-
+    if (!email) {
+      router.replace("/login");
       return;
     }
 
-    router.replace("/login");
+    const timer = setTimeout(() => {
+      inputs.current[0]?.focus();
+    }, 100);
+
+    return () => clearTimeout(timer);
   }, [
     email,
-    redirecting,
-    router,
     sessionChecked,
+    router,
   ]);
 
-  function setInputRef(
-    index,
-    element
-  ) {
+  /*
+   * =====================================================
+   * INPUT REF
+   * =====================================================
+   */
+  function setInputRef(index, element) {
     inputs.current[index] = element;
   }
 
+  /*
+   * =====================================================
+   * CLEAR ERROR
+   * =====================================================
+   */
   function clearError() {
     setError("");
     resetVerification?.();
   }
 
-  function handleChange(
-    value,
-    index
-  ) {
+  /*
+   * =====================================================
+   * OTP CHANGE
+   * =====================================================
+   */
+  function handleChange(value, index) {
     const digit = String(value)
       .replace(/\D/g, "")
       .slice(-1);
@@ -219,7 +275,9 @@ export default function useOtpVerification() {
 
     setOtp((current) => {
       const next = [...current];
+
       next[index] = digit;
+
       return next;
     });
 
@@ -233,10 +291,12 @@ export default function useOtpVerification() {
     }
   }
 
-  function handleKeyDown(
-    event,
-    index
-  ) {
+  /*
+   * =====================================================
+   * KEYBOARD
+   * =====================================================
+   */
+  function handleKeyDown(event, index) {
     if (
       event.key === "Backspace" &&
       otp[index]
@@ -245,7 +305,9 @@ export default function useOtpVerification() {
 
       setOtp((current) => {
         const next = [...current];
+
         next[index] = "";
+
         return next;
       });
 
@@ -261,7 +323,9 @@ export default function useOtpVerification() {
 
       setOtp((current) => {
         const next = [...current];
+
         next[index - 1] = "";
+
         return next;
       });
 
@@ -287,7 +351,8 @@ export default function useOtpVerification() {
 
     if (
       event.key === "ArrowRight" &&
-      index < EMPTY_OTP.length - 1
+      index <
+        EMPTY_OTP.length - 1
     ) {
       event.preventDefault();
 
@@ -297,6 +362,11 @@ export default function useOtpVerification() {
     }
   }
 
+  /*
+   * =====================================================
+   * PASTE OTP
+   * =====================================================
+   */
   function handlePaste(event) {
     event.preventDefault();
 
@@ -304,9 +374,14 @@ export default function useOtpVerification() {
       event.clipboardData
         .getData("text")
         .replace(/\D/g, "")
-        .slice(0, EMPTY_OTP.length);
+        .slice(
+          0,
+          EMPTY_OTP.length
+        );
 
-    if (!pasted) return;
+    if (!pasted) {
+      return;
+    }
 
     const next = [...EMPTY_OTP];
 
@@ -333,18 +408,20 @@ export default function useOtpVerification() {
   }
 
   /*
-   * Uses the profile-status route that
-   * already exists in your project.
+   * =====================================================
+   * PROFILE STATUS
+   * =====================================================
    */
   async function getProfileStatus() {
-    const response = await fetch(
-      "/api/dashboard/student/profile/profile-status",
-      {
-        method: "GET",
-        credentials: "include",
-        cache: "no-store",
-      }
-    );
+    const response =
+      await fetch(
+        "/api/dashboard/student/profile/profile-status",
+        {
+          method: "GET",
+          credentials: "include",
+          cache: "no-store",
+        }
+      );
 
     const data =
       await readJsonResponse(
@@ -363,21 +440,25 @@ export default function useOtpVerification() {
     return data;
   }
 
+  /*
+   * =====================================================
+   * REDIRECT AFTER OTP
+   * =====================================================
+   */
   async function redirectAfterOtpVerification() {
     const profileResult =
       await getProfileStatus();
-  
+
     const pendingCourse =
       window.sessionStorage.getItem(
-        "pendingApplyCourse"
+        PENDING_COURSE_KEY
       );
-  
+
     const hasPendingCourse =
       Boolean(pendingCourse);
-  
+
     /*
-     * New user or incomplete profile:
-     * complete profile first.
+     * New / incomplete profile
      */
     if (!profileResult?.completed) {
       router.replace(
@@ -385,31 +466,34 @@ export default function useOtpVerification() {
           ? "/register-user-profile?next=course"
           : "/register-user-profile"
       );
-  
+
       return;
     }
-  
+
     /*
-     * Existing user who clicked Apply Now:
-     * open dashboard course tab.
+     * Apply Now flow
      */
     if (hasPendingCourse) {
       router.replace(
         "/dashboard/students/courses?selected=pending"
       );
-  
+
       return;
     }
-  
+
     /*
-     * Normal login:
-     * open normal dashboard.
+     * Normal login
      */
     router.replace(
       "/dashboard/students"
     );
   }
 
+  /*
+   * =====================================================
+   * VERIFY OTP
+   * =====================================================
+   */
   async function handleSubmit(event) {
     event.preventDefault();
 
@@ -446,11 +530,19 @@ export default function useOtpVerification() {
     setError("");
 
     try {
+      /*
+       * Verify OTP.
+       */
       const response =
         await verifyLoginOtp({
           email,
           otp: enteredOtp,
         }).unwrap();
+
+      console.log(
+        "VERIFY OTP RESPONSE:",
+        response
+      );
 
       if (
         !isSuccess(
@@ -465,8 +557,7 @@ export default function useOtpVerification() {
       }
 
       /*
-       * Confirm that the verification
-       * route created the session cookie.
+       * Check authentication session.
        */
       const sessionResponse =
         await fetch(
@@ -486,8 +577,7 @@ export default function useOtpVerification() {
 
       if (
         !sessionResponse.ok ||
-        sessionData
-          ?.authenticated !== true
+        sessionData?.authenticated !== true
       ) {
         throw new Error(
           "OTP was verified, but the login session could not be created."
@@ -513,15 +603,16 @@ export default function useOtpVerification() {
         uid ??
         null;
 
-      const verifiedEmail = String(
-        sessionUser?.email ??
-          responseUser?.email ??
-          response?.email ??
-          responseData?.email ??
-          email
-      )
-        .trim()
-        .toLowerCase();
+      const verifiedEmail =
+        String(
+          sessionUser?.email ??
+            responseUser?.email ??
+            response?.email ??
+            responseData?.email ??
+            email
+        )
+          .trim()
+          .toLowerCase();
 
       const verifiedName =
         sessionUser?.name ??
@@ -530,6 +621,9 @@ export default function useOtpVerification() {
         responseData?.name ??
         "";
 
+      /*
+       * Update Redux.
+       */
       dispatch(
         setCredentials({
           user: {
@@ -543,14 +637,15 @@ export default function useOtpVerification() {
       );
 
       /*
-       * Remove only temporary OTP data.
-       * Do not remove the application
-       * redirect information here.
+       * Remove ONLY OTP session.
        */
       window.sessionStorage.removeItem(
         OTP_SESSION_KEY
       );
 
+      /*
+       * Keep pendingApplyCourse.
+       */
       setRedirecting(true);
 
       setRedirectMessage(
@@ -558,6 +653,7 @@ export default function useOtpVerification() {
       );
 
       await redirectAfterOtpVerification();
+
     } catch (requestError) {
       console.error(
         "OTP verification failed:",
@@ -581,6 +677,11 @@ export default function useOtpVerification() {
     }
   }
 
+  /*
+   * =====================================================
+   * DIFFERENT EMAIL
+   * =====================================================
+   */
   function handleDifferentEmail() {
     if (
       isLoading ||
@@ -593,11 +694,6 @@ export default function useOtpVerification() {
       OTP_SESSION_KEY
     );
 
-    /*
-     * Keep pendingApplyCourse and
-     * loginRedirectType so the selected
-     * course survives another login.
-     */
     setOtp([...EMPTY_OTP]);
     setError("");
     setRedirectMessage("");

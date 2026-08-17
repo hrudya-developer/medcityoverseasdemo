@@ -4,6 +4,7 @@ import {
     useEffect,
     useMemo,
     useState,
+    useRef,
 } from "react";
 
 import { useRouter } from "next/navigation";
@@ -54,6 +55,8 @@ const UniversitiesByCountry = ({
         setSearchTerm,
     ] = useState("");
 
+    const previousInitialCountryIdRef = useRef(initialCountryId);
+
     const {
         data: destinationsData,
         isLoading: countriesLoading,
@@ -92,15 +95,16 @@ const UniversitiesByCountry = ({
      * Next.js route parameters change.
      */
     useEffect(() => {
-        setSelectedCountryId(
-            Number(initialCountryId) || 0
-        );
-
-        setSelectedCountryName(
-            initialCountryName || ""
-        );
-
-        setSearchTerm("");
+        if (previousInitialCountryIdRef.current !== initialCountryId) {
+            previousInitialCountryIdRef.current = initialCountryId;
+            setSelectedCountryId(
+                Number(initialCountryId) || 0
+            );
+            setSelectedCountryName(
+                initialCountryName || ""
+            );
+            setSearchTerm("");
+        }
     }, [
         initialCountryId,
         initialCountryName,

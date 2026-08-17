@@ -4,6 +4,7 @@ import {
     useCallback,
     useEffect,
     useState,
+    useRef,
 } from "react";
 
 const useUniversitiesByCountry = ({
@@ -56,6 +57,8 @@ const useUniversitiesByCountry = ({
         ? String(countryId)
         : "";
 
+    const previousCountryIdRef = useRef(normalizedCountryId);
+
     const loading =
         Boolean(normalizedCountryId) &&
         (
@@ -65,15 +68,19 @@ const useUniversitiesByCountry = ({
 
     useEffect(() => {
         if (!normalizedCountryId) {
-            setUniversities([]);
-            setUniversityImagePath("");
-            setNextOffset(null);
-            setIsFetching(false);
-            setError("");
-            setResolvedCountryId(null);
-
+            if (previousCountryIdRef.current !== normalizedCountryId) {
+                previousCountryIdRef.current = normalizedCountryId;
+                setUniversities([]);
+                setUniversityImagePath("");
+                setNextOffset(null);
+                setIsFetching(false);
+                setError("");
+                setResolvedCountryId(null);
+            }
             return undefined;
         }
+
+        previousCountryIdRef.current = normalizedCountryId;
 
         const controller = new AbortController();
 

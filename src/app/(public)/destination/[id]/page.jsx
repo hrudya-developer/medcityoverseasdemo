@@ -17,13 +17,10 @@ const DEFAULT_UNIVERSITY_IMAGE_PATH =
   "https://overseas.technocitysolutions.com/public/images/university";
 
 async function getDestinationDetails(id) {
-  const siteUrl =
-    process.env.SITE_URL ||
-    process.env.NEXT_PUBLIC_SITE_URL ||
-    LOCAL_SITE_URL;
+  const apiKey = process.env.OVERSEAS_API_KEY || "";
 
   const response = await fetch(
-    `${siteUrl}/api/destination-details`,
+    "https://overseas.technocitysolutions.com/public/api/getDestinationDetails",
     {
       method: "POST",
       headers: {
@@ -31,8 +28,9 @@ async function getDestinationDetails(id) {
         Accept: "application/json",
       },
       body: JSON.stringify({
-        id: String(id),
+        api: apiKey,
         uid: 0,
+        id: String(id),
       }),
       next: {
         revalidate: 3600,

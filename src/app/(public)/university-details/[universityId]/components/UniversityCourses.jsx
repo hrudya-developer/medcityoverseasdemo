@@ -4,6 +4,7 @@ import {
     useEffect,
     useMemo,
     useState,
+    useRef,
 } from "react";
 
 import { BookOpen } from "lucide-react";
@@ -113,11 +114,19 @@ export default function UniversityCourses({
         setSelectedMainCourseId,
     ] = useState("");
 
+    const previousMainCoursesLengthRef =
+        useRef(mainCourses.length);
+
     useEffect(() => {
         if (mainCourses.length === 0) {
-            setSelectedMainCourseId("");
+            if (previousMainCoursesLengthRef.current !== 0) {
+                previousMainCoursesLengthRef.current = 0;
+                setSelectedMainCourseId("");
+            }
             return;
         }
+
+        previousMainCoursesLengthRef.current = mainCourses.length;
 
         const selectedStillExists =
             mainCourses.some(

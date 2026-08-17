@@ -104,16 +104,16 @@ function normalizeResponse(responseData) {
 }
 
 async function requestGermanProgram(programId, uid) {
-    const apiKey = process.env.GERMAN_PROGRAMS_API_KEY;
+    const apiKey = process.env.GERMAN_PROGRAMS_API_KEY || process.env.OVERSEAS_API_KEY;
   
     if (!apiKey) {
-          // TEMP FALLBACK: GERMAN_PROGRAMS_API_KEY is not configured on this
+          // TEMP FALLBACK: API key is not configured on this
           // environment yet. Return null instead of throwing so this page can't
           // fail a build or crash at request time; the page already renders a
           // graceful "not found" state for null. Remove this early return once
           // the env var is set on the host.
           console.warn(
-                  "GERMAN_PROGRAMS_API_KEY is not configured - returning null for program",
+                  "GERMAN_PROGRAMS_API_KEY or OVERSEAS_API_KEY is not configured - returning null for program",
                   programId
                 );
           return null;
@@ -175,17 +175,17 @@ export async function getGermanProgramDetails(
 }
 
 async function requestGermanProgramsList(uid) {
-    const apiKey = process.env.GERMAN_PROGRAMS_API_KEY;
+    const apiKey = process.env.GERMAN_PROGRAMS_API_KEY || process.env.OVERSEAS_API_KEY;
   
     if (!apiKey) {
-          // TEMP FALLBACK: GERMAN_PROGRAMS_API_KEY is not configured on this
+          // TEMP FALLBACK: API key is not configured on this
           // environment yet. Return an empty list instead of throwing so
           // /german-programs can't fail a production build during static
           // prerendering; the page already renders "No German programs are
           // currently available" when the list is empty. Remove this early
           // return once the env var is set on the host.
           console.warn(
-                  "GERMAN_PROGRAMS_API_KEY is not configured - returning empty German programs list"
+                  "GERMAN_PROGRAMS_API_KEY or OVERSEAS_API_KEY is not configured - returning empty German programs list"
                 );
           return { programs: [], imagePath: DEFAULT_IMAGE_PATH };
     }
