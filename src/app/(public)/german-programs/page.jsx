@@ -1,156 +1,51 @@
-import GermanProgramsClient from "./GermanProgramsClient";
-
-const SITE_URL = "https://medcityoverseas.com";
-const PAGE_PATH = "/german-programs";
-const PAGE_URL = `${SITE_URL}${PAGE_PATH}`;
-
-const OG_IMAGE_PATH = "/og-images/german-programs-og.webp";
-const OG_IMAGE_URL = `${SITE_URL}${OG_IMAGE_PATH}`;
-
-const PAGE_TITLE = "German Study, Ausbildung and Career Programs";
-
-const PAGE_DESCRIPTION =
-  "Explore German university study programs, Ausbildung vocational training and career pathways for international students with guidance from Medcity Overseas.";
+import GermanProgramCard from "./components/GermanProgramCard";
+import { getGermanProgramsList } from "@/lib/germanPrograms";
 
 export const metadata = {
-  /*
-   * RootLayout adds:
-   * | Medcity Overseas
-   */
-  title: PAGE_TITLE,
-
-  description: PAGE_DESCRIPTION,
-
-  alternates: {
-    canonical: PAGE_PATH,
-  },
-
-  openGraph: {
-    type: "website",
-    locale: "en_IN",
-    url: PAGE_PATH,
-    siteName: "Medcity Overseas",
-    title: `${PAGE_TITLE} | Medcity Overseas`,
-    description:
-      "Discover university study options, Ausbildung vocational training and career pathways in Germany for international students.",
-    images: [
-      {
-        url: OG_IMAGE_PATH,
-        width: 1200,
-        height: 630,
-        alt: "German study, Ausbildung and career programs for international students",
-        type: "image/webp",
-      },
-    ],
-  },
-
-  twitter: {
-    card: "summary_large_image",
-    title: `${PAGE_TITLE} | Medcity Overseas`,
-    description:
-      "Explore German university programs, Ausbildung training and international career pathways.",
-    images: [OG_IMAGE_PATH],
-  },
-
-  robots: {
-    index: true,
-    follow: true,
-
-    googleBot: {
-      index: true,
-      follow: true,
-      "max-image-preview": "large",
-      "max-snippet": -1,
-      "max-video-preview": -1,
-    },
-  },
+  title: "German Programs",
+  description: "Explore study, training, and career programs in Germany.",
 };
 
-const structuredData = {
-  "@context": "https://schema.org",
+export const revalidate = 3600;
 
-  "@graph": [
-    {
-      "@type": "CollectionPage",
-      "@id": `${PAGE_URL}/#webpage`,
-      url: PAGE_URL,
-      name: PAGE_TITLE,
-      description: PAGE_DESCRIPTION,
+export default async function GermanProgramsPage() {
+  const { programs, imagePath } = await getGermanProgramsList(6);
 
-      image: {
-        "@type": "ImageObject",
-        url: OG_IMAGE_URL,
-        width: 1200,
-        height: 630,
-      },
-
-      inLanguage: "en-IN",
-
-      isPartOf: {
-        "@id": `${SITE_URL}/#website`,
-      },
-
-      about: [
-        {
-          "@type": "Thing",
-          name: "Study in Germany",
-        },
-        {
-          "@type": "Thing",
-          name: "Ausbildung vocational training",
-        },
-        {
-          "@type": "Thing",
-          name: "Career pathways in Germany",
-        },
-      ],
-
-      publisher: {
-        "@id": `${SITE_URL}/#organization`,
-      },
-
-      breadcrumb: {
-        "@id": `${PAGE_URL}/#breadcrumb`,
-      },
-    },
-
-    {
-      "@type": "BreadcrumbList",
-      "@id": `${PAGE_URL}/#breadcrumb`,
-
-      itemListElement: [
-        {
-          "@type": "ListItem",
-          position: 1,
-          name: "Home",
-          item: SITE_URL,
-        },
-        {
-          "@type": "ListItem",
-          position: 2,
-          name: "German Programs",
-          item: PAGE_URL,
-        },
-      ],
-    },
-  ],
-};
-
-function serializeJsonLd(data) {
-  return JSON.stringify(data).replace(/</g, "\\u003c");
-}
-
-export default function GermanProgramsPage() {
   return (
-    <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: serializeJsonLd(structuredData),
-        }}
-      />
+    <main className="min-h-screen bg-slate-50">
+      <section className="bg-gradient-to-br from-[#111943] via-[#251849] to-[#8d1749] px-4 py-16 text-white sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-7xl text-center">
+          <p className="text-sm font-bold uppercase tracking-[0.2em] text-pink-300">
+            Study in Germany
+          </p>
+          <h1 className="mt-4 text-4xl font-black tracking-tight sm:text-5xl lg:text-6xl">
+            Explore German Programs
+          </h1>
+          <p className="mx-auto mt-5 max-w-2xl text-white/75 sm:text-lg">
+            Select a program to view its benefits, eligibility, roadmap,
+            stipend, and related opportunities.
+          </p>
+        </div>
+      </section>
 
-      <GermanProgramsClient />
-    </>
+      <section className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8 lg:py-16">
+        {programs.length ? (
+          <div className="grid items-stretch gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {programs.map((program, index) => (
+              <GermanProgramCard
+                key={program.id}
+                item={program}
+                imagePath={imagePath}
+                priority={index < 3}
+              />
+            ))}
+          </div>
+        ) : (
+          <div className="rounded-3xl border border-slate-200 bg-white p-10 text-center text-slate-600 shadow-sm">
+            No German programs are currently available.
+          </div>
+        )}
+      </section>
+    </main>
   );
 }

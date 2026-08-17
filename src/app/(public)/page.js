@@ -221,7 +221,7 @@ export default function Home() {
       <DestinationsSection />
       <DepartureStoriesSection />
       <MobileApp />
-      <GermanCoursesLayout />
+      {/* <GermanCoursesLayout /> */}
       <EssentialServices />
       <SASteps />
       <TestimonialSection />

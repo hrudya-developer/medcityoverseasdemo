@@ -1,84 +1,28 @@
 import { NextResponse } from "next/server";
 
-const GERMAN_PROGRAM_URL =
-    "https://overseas.technocitysolutions.com/public/api/getHomeTileDetails";
+import { getGermanProgramsList } from "@/lib/germanPrograms";
 
-export async function POST(request) {
-    try {
-        const body = await request
-            .json()
-            .catch(() => ({}));
+export const runtime = "nodejs";
 
-        const uid = body?.uid ?? 0;
-        const id = body?.id;
+export async function GET(request) {
+  const uid = new URL(request.url).searchParams.get("uid") || 6;
 
-        if (!id) {
-            return NextResponse.json(
-                {
-                    message:
-                        "Program id is required.",
-                },
-                {
-                    status: 400,
-                }
-            );
-        }
+  try {
+    const data = await getGermanProgramsList(uid);
 
-        const url = new URL(
-            GERMAN_PROGRAM_URL
-        );
+    return NextResponse.json(data, {
+      headers: {
+        "Cache-Control":
+          "public, s-maxage=3600, stale-while-revalidate=86400",
+      },
+    });
+  } catch (error) {
+    console.error("German programs list API error:", error);
 
-        url.searchParams.set(
-            "api",
-            process.env.OVERSEAS_API_KEY ||
-            "overseas@Miak2023"
-        );
-
-        url.searchParams.set(
-            "uid",
-            String(uid)
-        );
-
-        url.searchParams.set(
-            "id",
-            String(id)
-        );
-
-        const response = await fetch(url, {
-            method: "POST",
-            cache: "no-store",
-        });
-
-        const result = await response.json();
-
-        if (!response.ok) {
-            return NextResponse.json(
-                {
-                    message:
-                        result?.message ||
-                        "Unable to load German program.",
-                },
-                {
-                    status: response.status,
-                }
-            );
-        }
-
-        return NextResponse.json(result);
-    } catch (error) {
-        console.error(
-            "German program route error:",
-            error
-        );
-
-        return NextResponse.json(
-            {
-                message:
-                    "Unable to load German program.",
-            },
-            {
-                status: 500,
-            }
-        );
-    }
+    return NextResponse.json(
+      { message: "Unable to load German programs." },
+      { status: 502 }
+    );
+  }
 }
+
