@@ -269,12 +269,8 @@ export const germanProgramsApi =
                         uid = 0,
                         id,
                     }) => ({
-                        url: "/german-programs",
-                        method: "POST",
-                        body: {
-                            uid,
-                            id,
-                        },
+                        url: `/german-programs/${id}?uid=${uid}`,
+                        method: "GET",
                     }),
 
                     transformResponse:
