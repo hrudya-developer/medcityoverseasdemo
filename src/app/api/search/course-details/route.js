@@ -12,9 +12,6 @@ const API_KEY =
 const COURSE_SEARCH_API =
     "https://overseas.technocitysolutions.com/public/api/searchResults";
 
-const COURSE_LIST_API =
-    "https://overseas.technocitysolutions.com/public/api/getAllUniversityCoursesLatest";
-
 const getCourseName = (course) =>
     course?.course_name ||
     course?.course ||
@@ -28,6 +25,12 @@ const getCourseId = (course) =>
     course?.c_id ||
     course?.uc_id ||
     "";
+
+const comparableSlug = (value) =>
+    createSlug(value)
+        .replace(/(^|-)(and|of|in|the)(?=-|$)/g, "$1")
+        .replace(/-+/g, "-")
+        .replace(/^-|-$/g, "");
 
 async function searchResults(keyword, keytype) {
     const formData = new FormData();
@@ -59,72 +62,66 @@ async function resolveCourseId(courseSlug, uid) {
         return courseSlug;
     }
 
-    const courses = await searchResults(
+    const searchTerms = courseSlug
+        .replace(/-/g, " ")
+        .split(" ")
+        .filter((term) => term.length > 2);
+    const queries = [
         courseSlug.replace(/-/g, " "),
-        "course"
+        searchTerms.slice(-3).join(" "),
+        searchTerms[searchTerms.length - 1],
+    ].filter(Boolean);
+    const courseGroups = await Promise.all(
+        [...new Set(queries)].map((query) =>
+            searchResults(query, "course")
+        )
     );
+    const courses = [
+        ...new Map(
+            courseGroups
+                .flat()
+                .map((item) => [getCourseId(item), item])
+                .filter(([id]) => id)
+        ).values(),
+    ];
 
-    const course = courses.find((item) => {
-        return createSlug(getCourseName(item)) === courseSlug;
-    });
+    const normalizedSlug = comparableSlug(courseSlug);
+    const course = courses
+        .map((item) => {
+            const nameSlug = comparableSlug(
+                getCourseName(item)
+            );
+            const isExact = nameSlug === normalizedSlug;
+            const isSuffix = nameSlug.endsWith(
+                `-${normalizedSlug}`
+            );
+            const isPrefix = normalizedSlug.endsWith(
+                `-${nameSlug}`
+            );
+
+            return {
+                item,
+                score: isExact
+                    ? 0
+                    : isSuffix || isPrefix
+                        ? 1
+                        : nameSlug.includes(normalizedSlug)
+                            ? 2
+                            : 99,
+                nameLength: nameSlug.length,
+            };
+        })
+        .filter((candidate) => candidate.score < 99)
+        .sort(
+            (first, second) =>
+                first.score - second.score ||
+                first.nameLength - second.nameLength
+        )
+        .at(0)?.item;
 
     if (!course) return null;
 
-    const universityName =
-        course?.university ||
-        course?.university_name ||
-        "";
-
-    const universities = universityName
-        ? await searchResults(universityName, "university")
-        : [];
-
-    const university = universities.find((item) =>
-        String(
-            item?.university ||
-            item?.name ||
-            item?.u_name ||
-            ""
-        ).trim().toLowerCase() ===
-        universityName.trim().toLowerCase()
-    );
-
-    const universityId =
-        university?.id ||
-        university?.u_id ||
-        university?.university_id ||
-        "";
-
-    if (!universityId) {
-        return String(getCourseId(course) || "");
-    }
-
-    const formData = new FormData();
-    formData.append("api", API_KEY);
-    formData.append("uid", String(uid));
-    formData.append("u_id", String(universityId));
-    formData.append("c_id", String(getCourseId(course)));
-    formData.append("offset", "0");
-
-    const response = await fetch(COURSE_LIST_API, {
-        method: "POST",
-        body: formData,
-        cache: "no-store",
-    });
-
-    if (!response.ok) return String(getCourseId(course));
-
-    const result = await response.json();
-    const universityCourses = Array.isArray(result?.course)
-        ? result.course
-        : [];
-
-    const universityCourse = universityCourses.find(
-        (item) => createSlug(getCourseName(item)) === courseSlug
-    );
-
     return String(
-        getCourseId(universityCourse) ||
         getCourseId(course) ||
         ""
     );
