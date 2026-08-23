@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 
 import CourseDetailItem from "./CourseDetailItem";
+import { createSlug } from "@/lib/slug";
 
 import {
     getCountryName,
@@ -126,7 +127,7 @@ export default function CourseCard({
             >
                 {courseId ? (
                     <Link
-                        href={`/course-details/${courseId}`}
+                        href={`/courses/${createSlug(courseName)}`}
                         className="group/button flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-darkPrimary to-primary px-5 text-sm font-bold text-white shadow-[0_12px_25px_rgba(192,31,83,0.2)] transition-all hover:-translate-y-0.5 hover:shadow-[0_17px_32px_rgba(99,26,51,0.27)]"
                     >
                         View Course

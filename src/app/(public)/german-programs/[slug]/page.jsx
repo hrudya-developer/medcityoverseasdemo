@@ -6,6 +6,8 @@ import {
   ArrowRight,
 } from "lucide-react";
 import { notFound } from "next/navigation";
+import { createSlug } from "@/lib/slug";
+import { getGermanProgramsList } from "@/lib/germanPrograms";
 
 export const dynamic = "force-dynamic";
 
@@ -14,6 +16,29 @@ const API_URL =
 
 const API_KEY =
   process.env.OVERSEAS_API_KEY;
+
+async function resolveProgramId(slug) {
+  if (/^\d+$/.test(slug)) {
+    return slug;
+  }
+
+  const result = await getGermanProgramsList(6);
+  const program = result?.programs?.find((item) =>
+    createSlug(
+      item?.name ||
+      item?.program_name ||
+      item?.title ||
+      ""
+    ) === slug
+  );
+
+  return String(
+    program?.id ||
+    program?.program_id ||
+    program?.programId ||
+    ""
+  );
+}
 
 /* =========================================================
    FETCH GERMAN PROGRAM DETAILS
@@ -787,7 +812,7 @@ function RelatedPrograms({ apiData }) {
               return (
                 <Link
                   key={program.id}
-                  href={`/german-programs/${program.id}`}
+                  href={`/german-programs/${createSlug(program.name)}`}
                   className="group overflow-hidden rounded-3xl bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
                 >
 
@@ -834,7 +859,10 @@ function RelatedPrograms({ apiData }) {
 export default async function GermanProgramPage({
   params,
 }) {
-  const { programId } = await params;
+  const { slug: programSlug } = await params;
+  const programId = await resolveProgramId(
+    programSlug
+  );
 
   const apiData =
     await getGermanCourseDetails(

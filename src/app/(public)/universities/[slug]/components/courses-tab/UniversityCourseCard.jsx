@@ -3,6 +3,7 @@
 import Link from "next/link";
 
 import cn from "@/lib/cn";
+import { createSlug } from "@/lib/slug";
 
 import {
     ArrowRight,
@@ -129,7 +130,7 @@ export default function UniversityCourseCard({
                 <div className="mt-auto pt-6">
                     {courseId ? (
                         <Link
-                            href={`/course-details/${courseId}`}
+                            href={`/courses/${createSlug(courseName)}`}
                             className="group/link inline-flex w-full items-center justify-center gap-3 rounded-2xl bg-gradient-to-r from-darkPrimary to-primary px-5 py-4 text-sm font-black text-white shadow-lg shadow-primary/20 transition duration-300 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-primary/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
                         >
                             View Course

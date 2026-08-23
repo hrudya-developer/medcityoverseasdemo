@@ -12,6 +12,7 @@ import ServicesSection from "@/components/home/services/ServicesSection";
 import EssentialServices from "@/components/home/students-essential-services/EssentialServices";
 import SASteps from "@/components/home/study-abroad-steps/SASteps";
 import TestimonialSection from "@/components/home/testimonials/TestimonialSection";
+import UniversityPartners from "@/components/home/university-partners/UniversityPartners";
 
 const SITE_URL = "https://medcityoverseas.com";
 const HOME_OG_IMAGE = `${SITE_URL}/images/og/home.jpg`;
@@ -220,6 +221,7 @@ export default function Home() {
       <ProgramsSection />
       <DestinationsSection />
       <DepartureStoriesSection />
+      <UniversityPartners />
       <MobileApp />
       <GermanCoursesLayout />
       <EssentialServices />

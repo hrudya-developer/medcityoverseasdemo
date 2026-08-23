@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { createSlug } from "@/lib/slug";
 import {
   Building2,
   GraduationCap,
@@ -136,7 +137,7 @@ export default function PendingCourseCard() {
           type="button"
           onClick={() =>
             router.push(
-              `/course-details/${pending.courseId}`
+              `/courses/${createSlug(courseTitle)}`
             )
           }
           className="mt-6 rounded-xl bg-primary px-5 py-3 text-sm font-bold text-white transition hover:bg-darkPrimary"

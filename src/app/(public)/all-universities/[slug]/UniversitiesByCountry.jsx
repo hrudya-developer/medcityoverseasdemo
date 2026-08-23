@@ -8,6 +8,7 @@ import {
 } from "react";
 
 import { useRouter } from "next/navigation";
+import { createSlug } from "@/lib/slug";
 
 import {
     useGetAllDestinationsQuery,
@@ -190,9 +191,7 @@ const UniversitiesByCountry = ({
         );
 
         router.replace(
-            `/all-universities/${firstCountryId}?country=${encodeURIComponent(
-                firstCountryName
-            )}`,
+            `/all-universities/${createSlug(firstCountryName)}`,
             {
                 scroll: false,
             }
@@ -271,9 +270,7 @@ const UniversitiesByCountry = ({
         setSearchTerm("");
 
         router.push(
-            `/all-universities/${countryId}?country=${encodeURIComponent(
-                countryName
-            )}`,
+            `/all-universities/${createSlug(countryName)}`,
             {
                 scroll: false,
             }

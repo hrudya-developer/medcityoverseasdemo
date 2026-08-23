@@ -170,9 +170,8 @@ export default function DestinationHero({
                             />
                         </Link>
 
-                        <button
+                        <Link href="/contact-us"
                             type="button"
-                            onClick={onOpenCounselling}
                             className="group inline-flex min-h-14 items-center justify-center gap-2 rounded-xl px-5 py-3 text-base font-bold text-slate-950 transition duration-300 hover:bg-white/70 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
                         >
                             <span className="border-b-2 border-secondary pb-1">
@@ -184,7 +183,7 @@ export default function DestinationHero({
                                 aria-hidden="true"
                                 className="-rotate-45 text-secondary transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1"
                             />
-                        </button>
+                        </Link>
                     </div>
                 </div>
 

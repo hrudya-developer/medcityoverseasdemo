@@ -15,7 +15,7 @@ import germanFlag from "@/assets/germanFlag.png";
 
 const ACADEMY_URL = "https://medcityacademy.com/";
 const BRANCHES_URL =
-    "https://medcityacademy.com/centers/";
+    "https://medcityacademy.com/branches/";
 const LANGUAGE_PROGRAM_URL =
     "https://medcityacademy.com/courses/";
 const MOBILE_APP_URL =

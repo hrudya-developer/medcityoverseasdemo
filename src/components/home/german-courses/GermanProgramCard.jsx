@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import { createSlug } from "@/lib/slug";
 
 import {
   buildImageUrl,
@@ -30,9 +31,11 @@ export default function GermanProgramCard({
     return null;
   }
 
+  const programSlug = createSlug(programName);
+
   return (
     <Link
-      href={`/german-programs/${programId}`}
+      href={`/german-programs/${programSlug}`}
       aria-label={`View details for ${programName}`}
       className="group block h-full rounded-[30px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-4"
     >
@@ -44,7 +47,7 @@ export default function GermanProgramCard({
       >
         <meta
           itemProp="url"
-          content={`/german-programs/${programId}`}
+          content={`/german-programs/${programSlug}`}
         />
 
         <div className="relative h-56 overflow-hidden bg-slate-100 sm:h-64">

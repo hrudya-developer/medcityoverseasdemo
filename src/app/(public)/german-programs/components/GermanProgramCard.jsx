@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import { createSlug } from "@/lib/slug";
 
 function buildImageUrl(basePath, file) {
   if (!file) return "";
@@ -28,9 +29,7 @@ export default function GermanProgramCard({
 
   if (!programId) return null;
 
-  const detailsHref = `/german-programs/${encodeURIComponent(
-    String(programId)
-  )}`;
+  const detailsHref = `/german-programs/${createSlug(programName)}`;
 
   return (
     <Link

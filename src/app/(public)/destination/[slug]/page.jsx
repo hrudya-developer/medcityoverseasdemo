@@ -1,6 +1,8 @@
 import { notFound } from "next/navigation";
 
 import DestinationDetailsClient from "./DestinationDetailsClient";
+import { createSlug } from "@/lib/slug";
+import { postOverseasForm } from "@/lib/overseasApi";
 
 const SITE_URL = "https://medcityoverseas.com";
 
@@ -15,6 +17,42 @@ const DEFAULT_DESTINATION_IMAGE_PATH =
 
 const DEFAULT_UNIVERSITY_IMAGE_PATH =
   "https://overseas.technocitysolutions.com/public/images/university";
+
+async function resolveDestinationId(slug) {
+  if (/^\d+$/.test(slug)) {
+    return slug;
+  }
+
+  const result = await postOverseasForm(
+    "getDestinations",
+    { uid: 0 },
+    { next: { revalidate: 3600 } }
+  );
+
+  const destinations = Array.isArray(
+    result?.destinations
+  )
+    ? result.destinations
+    : Array.isArray(result?.data)
+      ? result.data
+      : [];
+
+  const destination = destinations.find((item) =>
+    createSlug(
+      item?.country ||
+      item?.name ||
+      item?.destination ||
+      ""
+    ) === slug
+  );
+
+  return String(
+    destination?.id ||
+    destination?.d_id ||
+    destination?.destination_id ||
+    ""
+  );
+}
 
 async function getDestinationDetails(id) {
   const apiKey = process.env.OVERSEAS_API_KEY || "";
@@ -612,9 +650,12 @@ export async function generateMetadata({
   const resolvedParams =
     await params;
 
-  const destinationId = String(
-    resolvedParams?.id ?? ""
+  const destinationSlug = String(
+    resolvedParams?.slug ?? ""
   ).trim();
+  const destinationId = await resolveDestinationId(
+    destinationSlug
+  );
 
   if (
     !destinationId ||
@@ -664,7 +705,7 @@ export async function generateMetadata({
       );
 
     const pagePath =
-      `/destination-details/${destinationId}`;
+      `/destination/${destinationSlug}`;
 
     const image =
       toAbsoluteImage(
@@ -743,9 +784,12 @@ export default async function DestinationDetailsPage({
   const resolvedParams =
     await params;
 
-  const destinationId = String(
-    resolvedParams?.id ?? ""
+  const destinationSlug = String(
+    resolvedParams?.slug ?? ""
   ).trim();
+  const destinationId = await resolveDestinationId(
+    destinationSlug
+  );
 
   if (
     !destinationId ||

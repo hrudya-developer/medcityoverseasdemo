@@ -8,6 +8,7 @@ import {
     getDestinationId,
     getDestinationName,
 } from "./destinationHelpers";
+import { createSlug } from "@/lib/slug";
 
 const FALLBACK_IMAGE =
     "/assets/destination-fallback.webp";
@@ -43,7 +44,7 @@ export default function DestinationCard({
 
     return (
         <Link
-            href={`/destination/${destinationId}`}
+            href={`/destination/${createSlug(country)}`}
             aria-label={`Explore study opportunities in ${country}`}
             className="block h-full py-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-4"
         >

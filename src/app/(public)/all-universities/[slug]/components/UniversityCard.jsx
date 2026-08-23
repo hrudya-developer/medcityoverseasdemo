@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import cn from "@/lib/cn";
+import { createSlug } from "@/lib/slug";
 
 import {
     ArrowUpRight,
@@ -40,7 +41,7 @@ const UniversityCard = ({
 
     const universityHref =
         universityId
-            ? `/university-details/${universityId}`
+            ? `/universities/${createSlug(universityName)}`
             : "#";
 
     return (
@@ -55,7 +56,7 @@ const UniversityCard = ({
 
 
             <Link
-                href={`/university-details/${university.id}`}
+                href={universityHref}
                 aria-label={`View details for ${universityName}`}
                 className="flex h-full w-full flex-col"
             >

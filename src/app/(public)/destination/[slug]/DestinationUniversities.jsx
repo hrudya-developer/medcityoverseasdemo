@@ -8,6 +8,7 @@ import {
     Building2,
     MapPin,
 } from "lucide-react";
+import { createSlug } from "@/lib/slug";
 
 const FALLBACK_LOGO =
     "/images/university-fallback.webp";
@@ -128,11 +129,7 @@ export default function DestinationUniversities({
                     </div>
 
                     <Link
-                        href={`/all-universities/${encodeURIComponent(
-                            countryId
-                        )}?country=${encodeURIComponent(
-                            countryName
-                        )}`}
+                        href={`/all-universities/${createSlug(countryName)}`}
                         className="group mx-auto inline-flex min-h-12 items-center justify-center gap-2 rounded-xl border border-primary/15 bg-white px-5 text-sm font-bold text-primary shadow-sm transition duration-300 hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-md lg:mx-0"
                     >
                         View All Universities
@@ -260,9 +257,7 @@ export default function DestinationUniversities({
 
                                             {universityId ? (
                                                 <Link
-                                                    href={`/university-details/${encodeURIComponent(
-                                                        universityId
-                                                    )}`}
+                                                    href={`/universities/${createSlug(universityName)}`}
                                                     className="group/link mt-6 inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-gray-50 px-5 text-sm font-bold text-primary border border-primary shadow-[0_10px_24px_rgba(192,31,83,0.2)] transition-all duration-300 hover:bg-darkPrimary hover:shadow-[0_16px_30px_rgba(99,26,51,0.25)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
                                                 >
                                                     View University

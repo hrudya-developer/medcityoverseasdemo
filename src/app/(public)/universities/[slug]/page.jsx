@@ -1,4 +1,7 @@
 import UniversityDetailsClient from "./components/UniversityDetailsClient";
+import { notFound } from "next/navigation";
+import { createSlug } from "@/lib/slug";
+import { postOverseasForm } from "@/lib/overseasApi";
 
 const SITE_URL = "https://medcityoverseas.com";
 
@@ -7,6 +10,46 @@ const API_BASE_URL =
 
 const API_KEY =
     process.env.OVERSEAS_API_KEY;
+
+async function resolveUniversityId(slug) {
+    if (/^\d+$/.test(slug)) {
+        return slug;
+    }
+
+    const result = await postOverseasForm(
+        "searchResults",
+        {
+            keytype: "university",
+            keyword: slug.replace(/-/g, " "),
+        },
+        { cache: "no-store" }
+    );
+
+    const universities = Array.isArray(
+        result?.university
+    )
+        ? result.university
+        : Array.isArray(result?.suggestion)
+            ? result.suggestion
+            : [];
+
+    const university = universities.find((item) => {
+        const name =
+            item?.name ||
+            item?.university ||
+            item?.u_name ||
+            "";
+
+        return createSlug(name) === slug;
+    });
+
+    return String(
+        university?.id ||
+        university?.u_id ||
+        university?.university_id ||
+        ""
+    );
+}
 
 async function getUniversityDetails(
     universityId
@@ -98,7 +141,10 @@ const getUniversityFromResponse = (
 export async function generateMetadata({
     params,
 }) {
-    const { universityId } = await params;
+    const { slug: universitySlug } = await params;
+    const universityId = await resolveUniversityId(
+        universitySlug
+    );
 
     try {
         const result =
@@ -123,7 +169,7 @@ export async function generateMetadata({
         );
 
         const canonicalUrl =
-            `${SITE_URL}/university-details/${universityId}`;
+            `${SITE_URL}/universities/${universitySlug}`;
 
         const ogImage =
             university?.image ||
@@ -204,7 +250,14 @@ export async function generateMetadata({
 export default async function UniversityDetailsPage({
     params,
 }) {
-    const { universityId } = await params;
+    const { slug: universitySlug } = await params;
+    const universityId = await resolveUniversityId(
+        universitySlug
+    );
+
+    if (!universityId) {
+        return notFound();
+    }
 
     const initialData =
         await getUniversityDetails(
