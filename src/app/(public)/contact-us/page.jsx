@@ -4,6 +4,7 @@ import CounsellingSection from "@/components/home/free-counselling/CounsellingSe
 
 import ContactHero from "./ContactHero";
 import ContactInfo from "./ContactInfo";
+import ContactFAQ from "./ContactFAQ";
 
 const SITE_URL = "https://medcityoverseas.com";
 const PAGE_PATH = "/contact-us";
@@ -255,7 +256,7 @@ export default function ContactUsPage() {
                         Contact and counselling frequently asked questions
                     </h2>
 
-                    <FAQ />
+                    <ContactFAQ />
                 </section>
             </div>
         </>

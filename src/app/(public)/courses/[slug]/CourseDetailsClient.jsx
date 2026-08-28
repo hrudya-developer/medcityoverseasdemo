@@ -14,10 +14,9 @@ import {
   useGetPublicCourseDetailsQuery,
 } from "@/lib/services/searchApi";
 
-import FAQ from "@/components/home/FAQ/FAQ";
-
 import CourseBenefits from "./components/CourseBenefits";
 import CourseDetailsError from "./components/CourseDetailsError";
+import CourseDetailsFAQ from "./components/CourseDetailsFAQ";
 import CourseDetailsGrid from "./components/CourseDetailsGrid";
 import CourseDetailsHero from "./components/CourseDetailsHero";
 import CourseDetailsSkeleton from "./components/CourseDetailsSkeleton";
@@ -27,7 +26,10 @@ import EnglishRequirements from "./components/EnglishRequirements";
 import {
   formatCourseDetails,
 } from "./utils/courseDetailsHelpers";
-import CourseDetailsFAQ from "./components/CourseDetailsFAQ";
+
+/* =========================================================
+   COURSE ID
+   ========================================================= */
 
 function getCourseId(course) {
   const value =
@@ -44,6 +46,10 @@ function getCourseId(course) {
   return String(value).trim();
 }
 
+/* =========================================================
+   COMPONENT
+   ========================================================= */
+
 export default function CourseDetailsClient({
   slug,
 }) {
@@ -59,12 +65,10 @@ export default function CourseDetailsClient({
     setStorageChecked,
   ] = useState(false);
 
-  /**
-   * Read hidden slug -> ID mapping.
-   *
-   * ID stays internal.
-   * It never appears in browser URL.
-   */
+  /* =======================================================
+     READ INTERNAL SLUG -> ID MAPPING
+     ======================================================= */
+
   useEffect(() => {
     if (!slug) {
       setStorageChecked(true);
@@ -88,8 +92,8 @@ export default function CourseDetailsClient({
       const id =
         parsed?.id
           ? String(
-            parsed.id
-          ).trim()
+              parsed.id
+            ).trim()
           : "";
 
       if (id) {
@@ -103,15 +107,12 @@ export default function CourseDetailsClient({
         error
       );
 
-      /**
-       * Remove corrupt data.
-       */
       try {
         sessionStorage.removeItem(
           `public-course:${slug}`
         );
       } catch {
-        // ignore
+        // ignore storage cleanup error
       }
     } finally {
       setStorageChecked(
@@ -120,20 +121,16 @@ export default function CourseDetailsClient({
     }
   }, [slug]);
 
-  /**
-   * METHOD 1
-   *
-   * Exact ID lookup.
-   *
-   * This is normally used when the
-   * visitor clicked the course card.
-   */
+  /* =======================================================
+     METHOD 1
+     EXACT NUMERIC COURSE ID
+     ======================================================= */
+
   const {
     data: courseFromId,
 
     isLoading: idLoading,
     isFetching: idFetching,
-
     isError: idIsError,
 
     error: idError,
@@ -144,9 +141,6 @@ export default function CourseDetailsClient({
       courseId:
         storedCourseId,
 
-      /**
-       * PUBLIC PAGE
-       */
       uid: 0,
     },
     {
@@ -156,20 +150,11 @@ export default function CourseDetailsClient({
     }
   );
 
-  /**
-   * METHOD 2
-   *
-   * Slug resolver.
-   *
-   * Used when:
-   *
-   * - direct URL is opened
-   * - Google opens page
-   * - user shares URL
-   * - new browser
-   * - no sessionStorage
-   * - stored ID request failed
-   */
+  /* =======================================================
+     METHOD 2
+     PUBLIC SLUG FALLBACK
+     ======================================================= */
+
   const shouldUseSlug =
     storageChecked &&
     Boolean(slug) &&
@@ -187,7 +172,6 @@ export default function CourseDetailsClient({
 
     isLoading: slugLoading,
     isFetching: slugFetching,
-
     isError: slugIsError,
 
     error: slugError,
@@ -204,18 +188,30 @@ export default function CourseDetailsClient({
       }
     );
 
-  /**
-   * Prefer exact-ID result.
-   */
+  /* =======================================================
+     SELECT COURSE
+     ======================================================= */
+
   const selectedCourse =
     courseFromId ??
     courseFromSlug ??
     null;
 
+  /* =======================================================
+     LOADING
+     ======================================================= */
+
   const loading =
     !storageChecked ||
-    idLoading ||
-    idFetching ||
+    (
+      Boolean(
+        storedCourseId
+      ) &&
+      (
+        idLoading ||
+        idFetching
+      )
+    ) ||
     (
       shouldUseSlug &&
       (
@@ -229,6 +225,10 @@ export default function CourseDetailsClient({
       <CourseDetailsSkeleton />
     );
   }
+
+  /* =======================================================
+     ERROR
+     ======================================================= */
 
   if (!selectedCourse) {
     const currentError =
@@ -245,7 +245,9 @@ export default function CourseDetailsClient({
         return;
       }
 
-      if (shouldUseSlug) {
+      if (
+        shouldUseSlug
+      ) {
         refetchBySlug();
         return;
       }
@@ -260,7 +262,8 @@ export default function CourseDetailsClient({
             ?.message ||
           currentError?.data
             ?.error ||
-          currentError?.message ||
+          currentError
+            ?.message ||
           "Course details could not be loaded."
         }
         onRetry={
@@ -275,6 +278,10 @@ export default function CourseDetailsClient({
     );
   }
 
+  /* =======================================================
+     FORMAT DETAILS
+     ======================================================= */
+
   const details =
     formatCourseDetails(
       selectedCourse
@@ -286,6 +293,10 @@ export default function CourseDetailsClient({
     ) ||
     storedCourseId;
 
+  /* =======================================================
+     APPLY
+     ======================================================= */
+
   const handleApply = () => {
     const pendingData = {
       course:
@@ -294,20 +305,19 @@ export default function CourseDetailsClient({
       courseId:
         actualCourseId,
 
-      /**
-       * Public SEO URL
-       */
       courseSlug:
         slug,
 
       universityId:
         selectedCourse?.u_id ??
-        selectedCourse?.university_id ??
+        selectedCourse
+          ?.university_id ??
         "",
 
       countryId:
         selectedCourse?.d_id ??
-        selectedCourse?.country_id ??
+        selectedCourse
+          ?.country_id ??
         "",
 
       createdAt:
@@ -331,10 +341,20 @@ export default function CourseDetailsClient({
     );
   };
 
+  /* =======================================================
+     UI
+
+     IMPORTANT:
+     Public layout already provides <main>.
+     Do not create another <main>.
+     ======================================================= */
+
   return (
-    <main className="min-h-screen bg-white text-slate-900">
+    <div className="min-h-screen bg-white text-slate-900">
       <CourseDetailsHero
-        details={details}
+        details={
+          details
+        }
         onApply={
           handleApply
         }
@@ -380,9 +400,13 @@ export default function CourseDetailsClient({
       />
 
       <CourseDetailsFAQ
-        course={selectedCourse}
-        courseSlug={slug}
+        course={
+          selectedCourse
+        }
+        courseSlug={
+          slug
+        }
       />
-    </main>
+    </div>
   );
 }

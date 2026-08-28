@@ -1,5 +1,6 @@
 import FAQ from "@/components/home/FAQ/FAQ";
 import StudyTabContent from "@/components/home/services/programs/StudyTabContent";
+import PopularCoursesFAQ from "./PopularCoursesFAQ";
 
 const SITE_URL = "https://medcityoverseas.com";
 const PAGE_PATH = "/popular-courses";
@@ -246,7 +247,7 @@ export default function PopularCoursesPage() {
                         Popular study abroad courses frequently asked questions
                     </h2>
 
-                    <FAQ />
+                    <PopularCoursesFAQ />
                 </section>
             </div>
         </>

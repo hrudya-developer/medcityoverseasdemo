@@ -15,6 +15,7 @@ import {
 
 import AddOnServiceCard from "./components/AddOnServiceCard";
 import FAQ from "@/components/home/FAQ/FAQ";
+import AddOnServicesFAQ from "./components/AddOnServicesFAQ";
 
 const INITIAL_VISIBLE_COUNT = 3;
 const LOAD_COUNT = 3;
@@ -432,7 +433,7 @@ export default function AddOnServicesClient() {
             <div
                 className="mx-auto max-w-7xl px-4 pb-16 lg:px-8 lg:pb-20"
             >
-                <FAQ />
+                <AddOnServicesFAQ />
             </div>
         </main>
     );

@@ -6,6 +6,7 @@ import BlogControls from "./components/BlogControls";
 import BlogGrid from "./components/BlogGrid";
 import useBlogs from "./hooks/useBlogs";
 import BlogHeader from "./components/BlogHeader";
+import BlogFAQ from "./components/BlogFAQ";
 export default function StudyAbroadBlogClient() {
     const {
         blogs,
@@ -82,7 +83,7 @@ export default function StudyAbroadBlogClient() {
                 </div>
             </section>
 
-            <FAQ />
+            <BlogFAQ />
         </main>
     );
 }

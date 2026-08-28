@@ -21,6 +21,7 @@ import {
 import FAQ from "@/components/home/FAQ/FAQ";
 
 import CommunityHero from "./components/CommunityHero";
+import CommunityPostsFAQ from "./components/CommunityPostsFAQ";
 
 function getPostId(post, index) {
   return (
@@ -634,7 +635,7 @@ export default function CommunityPostsClient() {
         </div>
       </section>
 
-      <FAQ />
+      <CommunityPostsFAQ />
     </main>
   );
 }

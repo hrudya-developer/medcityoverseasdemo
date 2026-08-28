@@ -1,12 +1,9 @@
 "use client";
 
-import {
-  useEffect,
-  useState,
-  useRef,
-} from "react";
+import Image from "next/image";
+import { useState } from "react";
 
-import heroBg from "@/assets/university-course-details.png";
+import heroBg from "@/assets/university-course-details.webp";
 
 import {
   GraduationCap,
@@ -18,10 +15,6 @@ export default function CourseDetailsHero({
   details,
   onApply,
 }) {
-  /*
-   * Always destructure details BEFORE using
-   * any of these values.
-   */
   const {
     courseTitle = "Course Details",
     universityName = "University",
@@ -32,29 +25,6 @@ export default function CourseDetailsHero({
 
   const [logoError, setLogoError] =
     useState(false);
-
-  /*
-   * Now universityLogoUrl has already
-   * been initialized.
-   */
-  const previousLogoUrlRef =
-    useRef(universityLogoUrl);
-
-  /*
-   * Reset logo error when the university
-   * changes.
-   */
-  useEffect(() => {
-    if (
-      previousLogoUrlRef.current !==
-      universityLogoUrl
-    ) {
-      previousLogoUrlRef.current =
-        universityLogoUrl;
-
-      setLogoError(false);
-    }
-  }, [universityLogoUrl]);
 
   const handleApply = () => {
     if (typeof onApply === "function") {
@@ -69,18 +39,33 @@ export default function CourseDetailsHero({
         min-h-[400px]
         w-full
         overflow-hidden
-        bg-cover
-        bg-center
-        bg-no-repeat
       "
-      style={{
-        backgroundImage: `url(${heroBg.src})`,
-      }}
     >
-      {/* =========================
-          DECORATIVE BACKGROUND
-      ========================== */}
+      {/* HERO IMAGE */}
+      <Image
+        src={heroBg}
+        alt=""
+        fill
+        priority
+        fetchPriority="high"
+        sizes="100vw"
+        className="
+          object-cover
+          object-center
+        "
+      />
 
+      {/* LIGHT OVERLAY */}
+      <div
+        aria-hidden="true"
+        className="
+          absolute
+          inset-0
+          bg-white/15
+        "
+      />
+
+      {/* DECORATIVE BACKGROUND */}
       <div
         aria-hidden="true"
         className="
@@ -109,13 +94,11 @@ export default function CourseDetailsHero({
         "
       />
 
-      {/* =========================
-          CONTENT
-      ========================== */}
-
+      {/* CONTENT */}
       <div
         className="
           relative
+          z-10
           mx-auto
           flex
           min-h-[420px]
@@ -129,14 +112,7 @@ export default function CourseDetailsHero({
         "
       >
         <div className="w-full max-w-3xl">
-
-          {/* =========================
-              TOP BADGES
-          ========================== */}
-
           <div className="flex flex-wrap items-center gap-3">
-
-            {/* LEVEL */}
             <div
               className="
                 inline-flex
@@ -161,7 +137,6 @@ export default function CourseDetailsHero({
               <span>{level}</span>
             </div>
 
-            {/* APPLY */}
             <button
               type="button"
               onClick={handleApply}
@@ -197,10 +172,6 @@ export default function CourseDetailsHero({
             </button>
           </div>
 
-          {/* =========================
-              COURSE TITLE
-          ========================== */}
-
           <h1
             className="
               mt-8
@@ -227,10 +198,6 @@ export default function CourseDetailsHero({
             "
           />
 
-          {/* =========================
-              UNIVERSITY
-          ========================== */}
-
           <div
             className="
               mb-8
@@ -248,13 +215,15 @@ export default function CourseDetailsHero({
               backdrop-blur-sm
             "
           >
-            {/* UNIVERSITY LOGO */}
-
             {universityLogoUrl &&
             !logoError ? (
               <img
                 src={universityLogoUrl}
                 alt={`${universityName} logo`}
+                width="64"
+                height="64"
+                loading="lazy"
+                decoding="async"
                 className="
                   size-16
                   shrink-0
@@ -290,10 +259,7 @@ export default function CourseDetailsHero({
               </div>
             )}
 
-            {/* UNIVERSITY DETAILS */}
-
             <div className="min-w-0">
-
               <p
                 className="
                   text-xs
@@ -342,7 +308,6 @@ export default function CourseDetailsHero({
                   </span>
                 </p>
               )}
-
             </div>
           </div>
         </div>

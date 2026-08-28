@@ -5,6 +5,7 @@ import AboutStats from "./components/AboutStats";
 import ChairmanSection from "./components/ChairmanSection";
 import CoreValues from "./components/CoreValues";
 import StorySection from "./components/StorySection";
+import AboutFAQ from "./components/AboutFAQ";
 
 const SITE_URL = "https://medcityoverseas.com";
 
@@ -123,7 +124,7 @@ export default function AboutUsPage() {
         <StorySection />
         <ChairmanSection />
         <CoreValues />
-        <FAQ />
+        <AboutFAQ />
       </div>
     </>
   );
