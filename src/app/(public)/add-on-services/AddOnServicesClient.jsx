@@ -123,7 +123,7 @@ export default function AddOnServicesClient() {
         setVisibleCount(
             INITIAL_VISIBLE_COUNT
         );
-    }, [services.length]);
+    }, []);
 
     const featuredServices =
         useMemo(

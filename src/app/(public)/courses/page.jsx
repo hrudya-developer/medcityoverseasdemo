@@ -1,6 +1,7 @@
 import SearchSection from "@/components/home/searchSection/SearchSection";
 import CoursesHero from "./components/CoursesHero";
-import PopularCoursesPage from "../popular-courses/page";
+import CourseFinder from "./components/CourseFinder";
+// import PopularCoursesPage from "../popular-courses/page";
 
 export const metadata = {
   title: "Explore Courses | Medcity Study Abroad",
@@ -14,7 +15,8 @@ export default function CoursesPage() {
       <CoursesHero />
 
       <SearchSection />
-      <PopularCoursesPage />
+      <CourseFinder />
+      {/* <PopularCoursesPage /> */}
 
     
     </main>

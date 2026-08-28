@@ -3,8 +3,16 @@ import {
   fetchBaseQuery,
 } from "@reduxjs/toolkit/query/react";
 
-const normalizeSearchResponse = (response) => ({
-  courses: Array.isArray(response?.courses)
+/* =========================================================
+   NORMALIZE SEARCH RESPONSE
+   ========================================================= */
+
+const normalizeSearchResponse = (
+  response
+) => ({
+  courses: Array.isArray(
+    response?.courses
+  )
     ? response.courses
     : [],
 
@@ -26,223 +34,382 @@ const normalizeSearchResponse = (response) => ({
     "",
 });
 
-export const searchApi = createApi({
-  reducerPath: "searchApi",
+/* =========================================================
+   SEARCH API
+   ========================================================= */
 
-  baseQuery: fetchBaseQuery({
-    baseUrl: "/api/",
+export const searchApi =
+  createApi({
+    reducerPath: "searchApi",
 
-    prepareHeaders: (headers) => {
-      headers.set("Accept", "application/json");
-      return headers;
-    },
-  }),
+    baseQuery:
+      fetchBaseQuery({
+        baseUrl: "/api/",
 
-  keepUnusedDataFor: 300,
+        prepareHeaders: (
+          headers
+        ) => {
+          headers.set(
+            "Accept",
+            "application/json"
+          );
 
-  endpoints: (builder) => ({
-    // ==========================================
-    // DESTINATIONS
-    // ==========================================
-
-    getDestinations: builder.query({
-      query: (uid = 0) => ({
-        url: "search/destinations",
-        params: { uid },
-      }),
-
-      transformResponse: (response) =>
-        Array.isArray(response?.destinations)
-          ? response.destinations
-          : [],
-    }),
-
-    getAllDestinations: builder.query({
-      query: (uid = 0) => ({
-        url: "all-destinations",
-        method: "POST",
-        body: { uid },
-      }),
-    }),
-
-    // ==========================================
-    // UNIVERSITIES
-    // ==========================================
-
-    getUniversities: builder.query({
-      query: ({
-        countryId,
-        uid = 0,
-      }) => ({
-        url: "search/universities",
-
-        params: {
-          countryId,
-          uid,
+          return headers;
         },
       }),
 
-      transformResponse: (response) =>
-        Array.isArray(response?.universities)
-          ? response.universities
-          : [],
-    }),
+    keepUnusedDataFor: 300,
 
-    // ==========================================
-    // MAIN COURSES
-    // ==========================================
+    endpoints: (
+      builder
+    ) => ({
+      /* =====================================================
+         DESTINATIONS
+         ===================================================== */
 
-    getMainCourses: builder.query({
-      query: ({
-        universityId,
-        uid = 0,
-      }) => ({
-        url: "search/main-courses",
+      getDestinations:
+        builder.query({
+          query: (
+            uid = 0
+          ) => ({
+            url:
+              "search/destinations",
 
-        params: {
-          universityId,
-          uid,
-        },
-      }),
-
-      transformResponse: (response) =>
-        Array.isArray(response?.courses)
-          ? response.courses
-          : [],
-    }),
-
-    getPopularCourses: builder.query({
-      query: (uid = 0) => ({
-        url: "popular-courses",
-        params: { uid },
-      }),
-    }),
-
-    // ==========================================
-    // SEARCH SUGGESTIONS
-    // ==========================================
-
-    searchSuggestions: builder.query({
-      query: (keyword) => ({
-        url: "search/suggestions",
-
-        params: {
-          keyword: keyword?.trim() || "",
-        },
-      }),
-
-      transformResponse: (response) =>
-        Array.isArray(response?.suggestions)
-          ? response.suggestions
-          : [],
-    }),
-
-    // ==========================================
-    // COURSE SEARCH
-    // ==========================================
-
-    searchCourses: builder.query({
-      query: ({
-        uid = 0,
-
-        keyword = "",
-
-        countryId = "",
-        universityId = "",
-        courseId = "",
-
-        selectedType = "",
-        selectedId = "",
-
-        intake = "",
-        levels = [],
-
-        offset = 0,
-      }) => ({
-        url: "search/keyword-search",
-
-        params: {
-          uid,
-          offset,
-
-          ...(keyword.trim() && {
-            keyword: keyword.trim(),
+            params: {
+              uid,
+            },
           }),
 
-          ...(countryId && {
+          transformResponse: (
+            response
+          ) =>
+            Array.isArray(
+              response?.destinations
+            )
+              ? response.destinations
+              : [],
+        }),
+
+      getAllDestinations:
+        builder.query({
+          query: (
+            uid = 0
+          ) => ({
+            url:
+              "all-destinations",
+
+            method:
+              "POST",
+
+            body: {
+              uid,
+            },
+          }),
+        }),
+
+      /* =====================================================
+         UNIVERSITIES
+         ===================================================== */
+
+      getUniversities:
+        builder.query({
+          query: ({
             countryId,
+            uid = 0,
+          }) => ({
+            url:
+              "search/universities",
+
+            params: {
+              countryId,
+              uid,
+            },
           }),
 
-          ...(universityId && {
+          transformResponse: (
+            response
+          ) =>
+            Array.isArray(
+              response?.universities
+            )
+              ? response.universities
+              : [],
+        }),
+
+      /* =====================================================
+         MAIN COURSES
+         ===================================================== */
+
+      getMainCourses:
+        builder.query({
+          query: ({
             universityId,
+            uid = 0,
+          }) => ({
+            url:
+              "search/main-courses",
+
+            params: {
+              universityId,
+              uid,
+            },
           }),
 
-          ...(courseId && {
+          transformResponse: (
+            response
+          ) =>
+            Array.isArray(
+              response?.courses
+            )
+              ? response.courses
+              : [],
+        }),
+
+      /* =====================================================
+         POPULAR COURSES
+         ===================================================== */
+
+      getPopularCourses:
+        builder.query({
+          query: (
+            uid = 0
+          ) => ({
+            url:
+              "popular-courses",
+
+            params: {
+              uid,
+            },
+          }),
+        }),
+
+      /* =====================================================
+         SEARCH SUGGESTIONS
+         ===================================================== */
+
+      searchSuggestions:
+        builder.query({
+          query: (
+            keyword
+          ) => ({
+            url:
+              "search/suggestions",
+
+            params: {
+              keyword:
+                keyword?.trim() ||
+                "",
+            },
+          }),
+
+          transformResponse: (
+            response
+          ) =>
+            Array.isArray(
+              response?.suggestions
+            )
+              ? response.suggestions
+              : [],
+        }),
+
+      /* =====================================================
+         COURSE SEARCH
+         ===================================================== */
+
+      searchCourses:
+        builder.query({
+          query: ({
+            uid = 0,
+            keyword = "",
+            countryId = "",
+            universityId = "",
+            courseId = "",
+            selectedType = "",
+            selectedId = "",
+            intake = "",
+            levels = [],
+            offset = 0,
+          }) => ({
+            url:
+              "search/keyword-search",
+
+            params: {
+              uid,
+              offset,
+
+              ...(keyword.trim() && {
+                keyword:
+                  keyword.trim(),
+              }),
+
+              ...(countryId && {
+                countryId,
+              }),
+
+              ...(universityId && {
+                universityId,
+              }),
+
+              ...(courseId && {
+                courseId,
+              }),
+
+              ...(selectedType && {
+                selectedType,
+              }),
+
+              ...(selectedId && {
+                selectedId,
+              }),
+
+              ...(intake && {
+                intake,
+              }),
+
+              ...(Array.isArray(
+                levels
+              ) &&
+                levels.length >
+                  0 && {
+                  levels:
+                    levels.join(
+                      ","
+                    ),
+                }),
+            },
+          }),
+
+          transformResponse:
+            normalizeSearchResponse,
+
+          transformErrorResponse: (
+            response
+          ) => ({
+            status:
+              response?.status,
+
+            message:
+              response?.data
+                ?.message ||
+              "Unable to search courses.",
+          }),
+        }),
+
+      /* =====================================================
+         EXISTING COURSE DETAILS
+         
+         IMPORTANT:
+         Keep this unchanged.
+         Other pages may already depend on it.
+         ===================================================== */
+
+      getCourseDetails:
+        builder.query({
+          query: ({
             courseId,
+            uid = 0,
+          }) => ({
+            url:
+              "search/course-details",
+
+            params: {
+              courseId,
+              uid,
+            },
           }),
 
-          ...(selectedType && {
-            selectedType,
-          }),
+          transformResponse: (
+            response
+          ) =>
+            response?.course ||
+            null,
+        }),
 
-          ...(selectedId && {
-            selectedId,
-          }),
+      /* =====================================================
+         PUBLIC COURSE DETAILS BY SLUG
 
-          ...(intake && {
-            intake,
-          }),
+         Used only for:
 
-          ...(Array.isArray(levels) &&
-            levels.length > 0 && {
-              levels: levels.join(","),
-            }),
-        },
-      }),
+         /courses/[slug]
 
-      transformResponse: normalizeSearchResponse,
+         Example:
+         /courses/ba-in-international-relations
 
-      transformErrorResponse: (response) => ({
-        status: response?.status,
+         Browser sees only slug.
 
-        message:
-          response?.data?.message ||
-          "Unable to search courses.",
-      }),
+         Public API route internally:
+         slug -> real course ID -> getCoursedetails
+
+         uid is always 0 because this is public.
+         ===================================================== */
+
+         getPublicCourseDetails:
+         builder.query({
+           query: ({
+             slug,
+           }) => ({
+             url:
+               "search/course-details-public",
+       
+             params: {
+               courseId:
+                 slug,
+       
+               uid: 0,
+             },
+           }),
+       
+           transformResponse: (
+             response
+           ) =>
+             response ||
+             null,
+       
+           transformErrorResponse: (
+             response
+           ) => ({
+             status:
+               response?.status,
+       
+             message:
+               response?.data
+                 ?.message ||
+               response?.data
+                 ?.error ||
+               "Unable to load course details.",
+           }),
+         }),
     }),
+  });
 
-    // ==========================================
-    // COURSE DETAILS
-    // ==========================================
-
-    getCourseDetails: builder.query({
-      query: ({
-        courseId,
-        uid = 0,
-      }) => ({
-        url: "search/course-details",
-
-        params: {
-          courseId,
-          uid,
-        },
-      }),
-
-      transformResponse: (response) =>
-        response?.course || null,
-    }),
-  }),
-});
+/* =========================================================
+   HOOKS
+   ========================================================= */
 
 export const {
   useGetDestinationsQuery,
+
   useGetAllDestinationsQuery,
+
   useGetUniversitiesQuery,
+
   useGetMainCoursesQuery,
+
   useGetPopularCoursesQuery,
 
   useLazySearchSuggestionsQuery,
+
   useLazySearchCoursesQuery,
 
+  /*
+   * EXISTING.
+   * Keep for dashboard / older pages.
+   */
   useGetCourseDetailsQuery,
+
+  /*
+   * NEW.
+   * Use only for public /courses/[slug].
+   */
+  useGetPublicCourseDetailsQuery,
 } = searchApi;

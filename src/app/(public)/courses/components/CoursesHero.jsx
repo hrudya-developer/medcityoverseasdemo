@@ -143,7 +143,7 @@ function HeroImage() {
       {/* Main image */}
       <div className="relative h-full w-full overflow-hidden rounded-full border-[4px] border-white bg-white shadow-[0_24px_65px_rgba(75,85,150,0.2)] sm:border-[6px]">
         <Image
-          src="/assets/study-abroad-courses-hero.png"
+          src="/assets/student-study-abroad.webp"
           alt="Student exploring international study opportunities"
           fill
           priority

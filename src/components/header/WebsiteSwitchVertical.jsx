@@ -60,7 +60,7 @@ const WebsiteSwitchVertical = () => {
                 />
 
                 <VerticalInternalLink
-                    href="/german-programs"
+                    href="/study-in-germany"
                     label="German Programs"
                     image={germanFlag}
                 />

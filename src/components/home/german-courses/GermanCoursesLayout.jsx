@@ -119,7 +119,7 @@ export default function GermanCoursesLayout() {
                         </p>
 
                         <Link
-                            href="/german-programs"
+                            href="/study-in-germany"
                             className="mt-7 inline-flex items-center justify-center gap-2 rounded-2xl bg-primary px-5 py-3 text-sm font-bold text-white shadow-lg shadow-pink-200 transition hover:-translate-y-1 hover:bg-darkPrimary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 sm:text-base"
                         >
                             View All Programs

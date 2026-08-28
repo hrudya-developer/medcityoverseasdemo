@@ -4,6 +4,7 @@ import {
     useCallback,
     useEffect,
     useState,
+    useRef,
 } from "react";
 
 import {
@@ -157,9 +158,13 @@ export default function StudentShell({
             []
         );
 
+    const hasLoadedCountsRef = useRef(false);
 
     useEffect(() => {
-        loadSidebarCounts();
+        if (!hasLoadedCountsRef.current) {
+            hasLoadedCountsRef.current = true;
+            loadSidebarCounts();
+        }
     }, [loadSidebarCounts]);
 
 

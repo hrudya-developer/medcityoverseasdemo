@@ -1,12 +1,17 @@
 import Image from "next/image";
 
 import {
+    useState,
+} from "react";
+
+import {
     ArrowRight,
     Play,
 } from "lucide-react";
 
 import {
     getYouTubeThumbnail,
+    FALLBACK_IMAGE,
 } from "./germanProgramsHelpers";
 
 export default function AusbildungVideoCard({
@@ -17,8 +22,11 @@ export default function AusbildungVideoCard({
         video?.title ||
         `Ausbildung Video ${index + 1}`;
 
-    const thumbnail =
+    const thumbnailUrl =
         getYouTubeThumbnail(video);
+
+    const [thumbnail, setThumbnail] =
+        useState(thumbnailUrl);
 
     return (
         <a
@@ -41,6 +49,11 @@ export default function AusbildungVideoCard({
                         33vw
                     "
                     className="object-cover transition-transform duration-500 group-hover/video:scale-105"
+                    onError={() => {
+                        if (thumbnail !== FALLBACK_IMAGE) {
+                            setThumbnail(FALLBACK_IMAGE);
+                        }
+                    }}
                 />
 
                 <div

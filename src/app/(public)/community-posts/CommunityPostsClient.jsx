@@ -213,6 +213,9 @@ export default function CommunityPostsClient() {
   const postsSectionRef =
     useRef(null);
 
+  const previousOffsetRef =
+    useRef(offsets[currentPage - 1]);
+
   const pageNumbers =
     useMemo(
       () =>
@@ -242,14 +245,19 @@ export default function CommunityPostsClient() {
       offset === null ||
       offset === undefined
     ) {
-      setPosts([]);
-      setLoading(false);
-      setError(
-        "This community posts page is not available."
-      );
+      if (previousOffsetRef.current !== offset) {
+        previousOffsetRef.current = offset;
+        setPosts([]);
+        setLoading(false);
+        setError(
+          "This community posts page is not available."
+        );
+      }
 
       return undefined;
     }
+
+    previousOffsetRef.current = offset;
 
     const controller =
       new AbortController();

@@ -24,6 +24,8 @@ import {
     toOptions,
 } from "../utils/searchHelpers";
 
+import { createSlug } from "@/lib/slug";
+
 export default function useCourseSearch({
     uid = 0,
 }) {
@@ -284,17 +286,38 @@ export default function useCourseSearch({
             return;
         }
 
+        const selectedCountryObj = destinations.find(
+            (item) => String(item?.id ?? item?.d_id ?? "") === String(countryId)
+        );
+        const countrySlug = selectedCountryObj
+            ? createSlug(selectedCountryObj.name ?? selectedCountryObj.country ?? selectedCountryObj.destination)
+            : countryId;
+
+        const selectedUniObj = universities.find(
+            (item) => String(item?.id ?? item?.u_id ?? "") === String(universityId)
+        );
+        const uniSlug = selectedUniObj
+            ? createSlug(selectedUniObj.name ?? selectedUniObj.university)
+            : universityId;
+
+        const selectedCourseObj = mainCourses.find(
+            (item) => String(item?.id ?? item?.c_id ?? "") === String(courseId)
+        );
+        const courseSlug = selectedCourseObj
+            ? createSlug(selectedCourseObj.name ?? selectedCourseObj.course ?? selectedCourseObj.course_name)
+            : courseId;
+
         const params =
             new URLSearchParams({
-                countryId,
-                universityId,
-                courseId,
+                country: countrySlug,
+                university: uniSlug,
+                course: courseSlug,
             });
 
         setModalOpen(false);
 
         router.push(
-            `/course-search?${params.toString()}`
+            `/courses?${params.toString()}`
         );
     };
 

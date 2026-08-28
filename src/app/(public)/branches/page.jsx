@@ -6,365 +6,532 @@ const PAGE_PATH = "/branches";
 const PAGE_URL = `${SITE_URL}${PAGE_PATH}`;
 
 const OG_IMAGE_PATH =
-    "/og-images/medcity-branches-kerala.webp";
+  "/og-images/medcity-branches-kerala.webp";
 
 const OG_IMAGE_URL =
-    `${SITE_URL}${OG_IMAGE_PATH}`;
+  `${SITE_URL}${OG_IMAGE_PATH}`;
 
 const PAGE_TITLE =
-    "Study Abroad Branches Across Kerala";
+  "Study Abroad Consultants in Kerala | Medcity Overseas Branches";
 
 const PAGE_DESCRIPTION =
-    "Find Medcity Overseas branches across Kerala for study abroad counselling, overseas university admissions, student visa guidance, German language training and international education support.";
+  "Find Medcity Overseas study abroad consultants across Kerala. Visit your nearest branch for overseas education counselling, university and course selection, application support and student visa guidance.";
 
 export const metadata = {
-    /*
-     * Your root layout adds:
-     * | Medcity Overseas
-     *
-     * Final title:
-     * Study Abroad Branches Across Kerala | Medcity Overseas
-     */
-    title: PAGE_TITLE,
+  title: {
+    absolute: PAGE_TITLE,
+  },
 
-    description: PAGE_DESCRIPTION,
+  description: PAGE_DESCRIPTION,
 
-    alternates: {
-        canonical: PAGE_PATH,
+  keywords: [
+    "study abroad consultants in Kerala",
+    "study abroad consultants Kerala",
+    "overseas education consultants in Kerala",
+    "overseas education consultants Kerala",
+    "study abroad agency Kerala",
+    "overseas education agency Kerala",
+    "study abroad counselling Kerala",
+    "overseas education counselling Kerala",
+    "study abroad branches Kerala",
+    "study abroad offices Kerala",
+    "study abroad consultancy Kerala",
+    "university admission consultants Kerala",
+    "overseas university admission Kerala",
+    "student visa guidance Kerala",
+    "international education consultants Kerala",
+    "Medcity Overseas branches",
+    "Medcity Overseas Kerala",
+  ],
+
+  alternates: {
+    canonical: PAGE_URL,
+  },
+
+  openGraph: {
+    type: "website",
+    locale: "en_IN",
+    url: PAGE_URL,
+    siteName: "Medcity Overseas",
+
+    title:
+      "Study Abroad Consultants in Kerala | Medcity Overseas Branches",
+
+    description:
+      "Find your nearest Medcity Overseas branch in Kerala for study abroad counselling, university applications, course selection and student visa guidance.",
+
+    images: [
+      {
+        url: OG_IMAGE_URL,
+        width: 1200,
+        height: 630,
+        alt:
+          "Medcity Overseas study abroad consultants and branches across Kerala",
+      },
+    ],
+  },
+
+  twitter: {
+    card: "summary_large_image",
+
+    title:
+      "Study Abroad Consultants in Kerala | Medcity Overseas",
+
+    description:
+      "Find Medcity Overseas branches across Kerala for overseas education counselling, university applications and study abroad guidance.",
+
+    images: [OG_IMAGE_URL],
+  },
+
+  robots: {
+    index: true,
+    follow: true,
+
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
     },
-
-    openGraph: {
-        type: "website",
-        locale: "en_IN",
-        url: PAGE_PATH,
-        siteName: "Medcity Overseas",
-
-        title:
-            "Medcity Overseas Branches Across Kerala",
-
-        description:
-            "Find your nearest Medcity Overseas branch for overseas education counselling, university applications, visa assistance and language training.",
-
-        images: [
-            {
-                url: OG_IMAGE_PATH,
-                width: 1200,
-                height: 630,
-                alt:
-                    "Medcity Overseas study abroad branches across Kerala",
-            },
-        ],
-    },
-
-    twitter: {
-        card: "summary_large_image",
-
-        title:
-            "Medcity Overseas Branches Across Kerala",
-
-        description:
-            "Find a nearby study abroad counselling center for admissions, student visas and overseas education support.",
-
-        images: [OG_IMAGE_PATH],
-    },
-
-    robots: {
-        index: true,
-        follow: true,
-
-        googleBot: {
-            index: true,
-            follow: true,
-            "max-image-preview": "large",
-            "max-snippet": -1,
-            "max-video-preview": -1,
-        },
-    },
+  },
 };
 
+/* =========================================================
+   HELPERS
+========================================================= */
+
 function slugify(value = "") {
-    return String(value)
-        .toLowerCase()
-        .trim()
-        .replace(/&/g, "and")
-        .replace(/[^a-z0-9]+/g, "-")
-        .replace(/^-+|-+$/g, "");
+  return String(value)
+    .toLowerCase()
+    .trim()
+    .replace(/&/g, "and")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
 }
 
 function getBranchName(center, index) {
-    return (
-        center?.name ||
-        center?.title ||
-        center?.branch ||
-        `Medcity Overseas Branch ${index + 1}`
-    );
+  return (
+    center?.name ||
+    center?.title ||
+    center?.branch ||
+    `Medcity Overseas Branch ${index + 1}`
+  );
+}
+
+function getBranchCity(center, index) {
+  return (
+    center?.city ||
+    center?.district ||
+    getBranchName(center, index)
+  );
 }
 
 function getBranchSlug(center, index) {
-    return (
-        center?.slug ||
-        slugify(getBranchName(center, index)) ||
-        `branch-${index + 1}`
-    );
+  return slugify(
+    center?.city ||
+      center?.district ||
+      center?.slug ||
+      getBranchName(center, index)
+  );
 }
 
-function getBranchUrl(center, index) {
-    /*
-     * Best option:
-     * Create individual URLs such as:
-     * /branches/kochi
-     * /branches/kannur
-     *
-     * Until those pages exist, link to the branch anchor.
-     */
-    if (center?.slug) {
-        return `${PAGE_URL}/${center.slug}`;
-    }
+/*
+  SEO landing page format:
 
-    return `${PAGE_URL}#${getBranchSlug(center, index)}`;
+  /study-abroad-consultants-kannur
+  /study-abroad-consultants-kozhikode
+  /study-abroad-consultants-kochi
+*/
+function getBranchUrl(center, index) {
+  const slug = getBranchSlug(
+    center,
+    index
+  );
+
+  return `${SITE_URL}/study-abroad-consultants-${slug}`;
+}
+
+function getBranchRelativeUrl(
+  center,
+  index
+) {
+  const slug = getBranchSlug(
+    center,
+    index
+  );
+
+  return `/study-abroad-consultants-${slug}`;
 }
 
 function getTelephoneNumbers(center) {
-    if (Array.isArray(center?.phones)) {
-        return center.phones.filter(Boolean);
-    }
+  if (Array.isArray(center?.phones)) {
+    return center.phones.filter(Boolean);
+  }
 
-    if (center?.phone) {
-        return [center.phone];
-    }
+  if (center?.phone) {
+    return [center.phone];
+  }
 
-    return [];
+  return [];
 }
 
 function createPostalAddress(center) {
-    if (!center?.address) {
-        return undefined;
-    }
+  if (!center?.address) {
+    return undefined;
+  }
 
-    return {
-        "@type": "PostalAddress",
-        streetAddress: center.address,
+  return {
+    "@type": "PostalAddress",
 
-        ...(center?.city && {
-            addressLocality: center.city,
-        }),
+    streetAddress:
+      center.address,
 
-        addressRegion:
-            center?.state || "Kerala",
+    ...(center?.city && {
+      addressLocality:
+        center.city,
+    }),
 
-        ...(center?.postalCode && {
-            postalCode: String(
-                center.postalCode
-            ),
-        }),
+    addressRegion:
+      center?.state || "Kerala",
 
-        addressCountry: "IN",
-    };
+    ...(center?.postalCode && {
+      postalCode:
+        String(
+          center.postalCode
+        ),
+    }),
+
+    addressCountry: "IN",
+  };
 }
 
+/* =========================================================
+   BRANCH SCHEMA ITEMS
+========================================================= */
+
 const branchItems = centers.map(
-    (center, index) => {
-        const name =
-            getBranchName(center, index);
+  (center, index) => {
+    const branchName =
+      getBranchName(
+        center,
+        index
+      );
 
-        const slug =
-            getBranchSlug(center, index);
+    const city =
+      getBranchCity(
+        center,
+        index
+      );
 
-        const branchUrl =
-            getBranchUrl(center, index);
+    const branchUrl =
+      getBranchUrl(
+        center,
+        index
+      );
 
-        const telephoneNumbers =
-            getTelephoneNumbers(center);
+    const telephoneNumbers =
+      getTelephoneNumbers(
+        center
+      );
 
-        const address =
-            createPostalAddress(center);
+    const address =
+      createPostalAddress(
+        center
+      );
 
-        return {
-            "@type": "ListItem",
-            position: index + 1,
+    return {
+      "@type": "ListItem",
 
-            item: {
-                /*
-                 * EducationalOrganization describes the
-                 * service category.
-                 *
-                 * LocalBusiness indicates a specific
-                 * physical business location.
-                 */
-                "@type": [
-                    "EducationalOrganization",
-                    "LocalBusiness",
-                ],
+      position:
+        index + 1,
 
-                "@id": `${PAGE_URL}#${slug}`,
+      item: {
+        "@type": [
+          "EducationalOrganization",
+          "LocalBusiness",
+        ],
 
-                name,
+        "@id":
+          `${branchUrl}#organization`,
 
-                url: branchUrl,
+        name:
+          branchName,
 
-                parentOrganization: {
-                    "@id":
-                        `${SITE_URL}/#organization`,
-                },
+        url:
+          branchUrl,
 
-                ...(address && {
-                    address,
-                }),
+        description:
+          `Medcity Overseas ${city} provides study abroad counselling, overseas university application guidance, course selection support and student visa assistance.`,
 
-                ...(telephoneNumbers.length > 0 && {
-                    telephone:
-                        telephoneNumbers,
-                }),
+        parentOrganization: {
+          "@id":
+            `${SITE_URL}/#organization`,
+        },
 
-                ...(center?.email && {
-                    email: center.email,
-                }),
+        ...(address && {
+          address,
+        }),
 
-                ...(center?.mapLink && {
-                    hasMap: center.mapLink,
-                }),
+        ...(telephoneNumbers.length >
+          0 && {
+          telephone:
+            telephoneNumbers,
+        }),
 
-                ...(center?.latitude &&
-                    center?.longitude && {
-                    geo: {
-                        "@type": "GeoCoordinates",
-                        latitude:
-                            center.latitude,
-                        longitude:
-                            center.longitude,
-                    },
-                }),
+        ...(center?.email && {
+          email:
+            center.email,
+        }),
 
-                ...(center?.openingHours?.length && {
-                    openingHours:
-                        center.openingHours,
-                }),
+        ...(center?.mapLink && {
+          hasMap:
+            center.mapLink,
+        }),
 
-                ...(center?.image && {
-                    image: center.image,
-                }),
+        ...(center?.latitude &&
+          center?.longitude && {
+            geo: {
+              "@type":
+                "GeoCoordinates",
 
-                areaServed: {
-                    "@type":
-                        "AdministrativeArea",
-                    name:
-                        center?.city ||
-                        center?.district ||
-                        "Kerala",
-                },
+              latitude:
+                Number(
+                  center.latitude
+                ),
+
+              longitude:
+                Number(
+                  center.longitude
+                ),
             },
-        };
-    }
+          }),
+
+        ...(Array.isArray(
+          center?.openingHours
+        ) &&
+          center.openingHours
+            .length > 0 && {
+            openingHours:
+              center.openingHours,
+          }),
+
+        ...(center?.image && {
+          image:
+            center.image,
+        }),
+
+        areaServed: {
+          "@type": "City",
+          name: city,
+        },
+
+        knowsAbout: [
+          "Study Abroad Counselling",
+          "Overseas Education",
+          "University Admissions",
+          "Course Selection",
+          "Student Visa Guidance",
+          "International Education",
+        ],
+      },
+    };
+  }
 );
 
+/* =========================================================
+   STRUCTURED DATA
+========================================================= */
+
 const branchesStructuredData = {
-    "@context": "https://schema.org",
+  "@context":
+    "https://schema.org",
 
-    "@graph": [
+  "@graph": [
+    {
+      "@type":
+        "CollectionPage",
+
+      "@id":
+        `${PAGE_URL}#webpage`,
+
+      url:
+        PAGE_URL,
+
+      name:
+        "Study Abroad Consultants in Kerala | Medcity Overseas Branches",
+
+      description:
+        PAGE_DESCRIPTION,
+
+      inLanguage:
+        "en-IN",
+
+      primaryImageOfPage: {
+        "@id":
+          `${PAGE_URL}#primaryimage`,
+      },
+
+      isPartOf: {
+        "@id":
+          `${SITE_URL}/#website`,
+      },
+
+      about: {
+        "@id":
+          `${SITE_URL}/#organization`,
+      },
+
+      publisher: {
+        "@id":
+          `${SITE_URL}/#organization`,
+      },
+
+      breadcrumb: {
+        "@id":
+          `${PAGE_URL}#breadcrumb`,
+      },
+
+      mainEntity: {
+        "@id":
+          `${PAGE_URL}#branches-list`,
+      },
+    },
+
+    {
+      "@type":
+        "ImageObject",
+
+      "@id":
+        `${PAGE_URL}#primaryimage`,
+
+      url:
+        OG_IMAGE_URL,
+
+      contentUrl:
+        OG_IMAGE_URL,
+
+      width: 1200,
+
+      height: 630,
+
+      caption:
+        "Medcity Overseas study abroad branches across Kerala",
+    },
+
+    {
+      "@type":
+        "BreadcrumbList",
+
+      "@id":
+        `${PAGE_URL}#breadcrumb`,
+
+      itemListElement: [
         {
-            "@type": "CollectionPage",
-            "@id": `${PAGE_URL}#webpage`,
+          "@type":
+            "ListItem",
 
-            url: PAGE_URL,
-            name:
-                "Medcity Overseas Branches Across Kerala",
-            description: PAGE_DESCRIPTION,
-            image: OG_IMAGE_URL,
-            inLanguage: "en-IN",
+          position: 1,
 
-            isPartOf: {
-                "@id":
-                    `${SITE_URL}/#website`,
-            },
+          name: "Home",
 
-            about: {
-                "@id":
-                    `${SITE_URL}/#organization`,
-            },
-
-            publisher: {
-                "@id":
-                    `${SITE_URL}/#organization`,
-            },
-
-            breadcrumb: {
-                "@id":
-                    `${PAGE_URL}#breadcrumb`,
-            },
-
-            mainEntity: {
-                "@id":
-                    `${PAGE_URL}#branches-list`,
-            },
+          item:
+            SITE_URL,
         },
 
         {
-            "@type": "BreadcrumbList",
-            "@id":
-                `${PAGE_URL}#breadcrumb`,
+          "@type":
+            "ListItem",
 
-            itemListElement: [
-                {
-                    "@type": "ListItem",
-                    position: 1,
-                    name: "Home",
-                    item: SITE_URL,
-                },
-                {
-                    "@type": "ListItem",
-                    position: 2,
-                    name: "Branches",
-                    item: PAGE_URL,
-                },
-            ],
+          position: 2,
+
+          name:
+            "Study Abroad Consultants in Kerala",
+
+          item:
+            PAGE_URL,
         },
+      ],
+    },
 
-        {
-            "@type": "ItemList",
-            "@id":
-                `${PAGE_URL}#branches-list`,
+    {
+      "@type":
+        "ItemList",
 
-            name:
-                "Medcity Overseas Branches Across Kerala",
+      "@id":
+        `${PAGE_URL}#branches-list`,
 
-            description:
-                "Directory of Medcity Overseas study abroad counselling branches across Kerala.",
+      name:
+        "Medcity Overseas Study Abroad Branches Across Kerala",
 
-            numberOfItems:
-                branchItems.length,
+      description:
+        "Directory of Medcity Overseas study abroad counselling and overseas education branches across Kerala.",
 
-            itemListOrder:
-                "https://schema.org/ItemListOrderUnordered",
+      numberOfItems:
+        branchItems.length,
 
-            itemListElement:
-                branchItems,
-        },
-    ],
+      itemListOrder:
+        "https://schema.org/ItemListOrderUnordered",
+
+      itemListElement:
+        branchItems,
+    },
+  ],
 };
 
 function serializeJsonLd(data) {
-    return JSON.stringify(data).replace(
-        /</g,
-        "\\u003c"
-    );
+  return JSON.stringify(data).replace(
+    /</g,
+    "\\u003c"
+  );
 }
 
-export default function BranchesPage() {
-    return (
-        <>
-            <script
-                type="application/ld+json"
-                dangerouslySetInnerHTML={{
-                    __html:
-                        serializeJsonLd(
-                            branchesStructuredData
-                        ),
-                }}
-            />
+/* =========================================================
+   PAGE
+========================================================= */
 
-            <AcademyCentersClient
-                centers={centers}
-            />
-        </>
+export default function BranchesPage() {
+  /*
+    Add SEO URLs to the data passed to the client
+    without modifying centersData.js.
+  */
+
+  const centersWithSeoUrls =
+    centers.map(
+      (center, index) => ({
+        ...center,
+
+        seoUrl:
+          getBranchRelativeUrl(
+            center,
+            index
+          ),
+
+        seoTitle:
+          `Study Abroad Consultants in ${getBranchCity(
+            center,
+            index
+          )}`,
+      })
     );
+
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html:
+            serializeJsonLd(
+              branchesStructuredData
+            ),
+        }}
+      />
+
+      <AcademyCentersClient
+        centers={
+          centersWithSeoUrls
+        }
+      />
+    </>
+  );
 }

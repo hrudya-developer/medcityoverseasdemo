@@ -21,21 +21,12 @@ export default function VerifyOtpPage() {
     handleDifferentEmail,
   } = useOtpVerification();
 
-  /*
-   * Wait while the hook restores
-   * the email from sessionStorage.
-   */
   if (!sessionChecked) {
     return (
       <LoadingScreen text="Preparing verification..." />
     );
   }
 
-  /*
-   * OTP was verified and the hook
-   * is checking the profile before
-   * redirecting.
-   */
   if (redirecting) {
     return (
       <LoadingScreen
@@ -47,10 +38,6 @@ export default function VerifyOtpPage() {
     );
   }
 
-  /*
-   * No email means that the user
-   * did not arrive from login.
-   */
   if (!email) {
     return (
       <LoadingScreen text="Returning to login..." />

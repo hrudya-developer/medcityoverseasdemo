@@ -21,7 +21,7 @@ const immigrationData = [
         country: "Canada",
         badge: "CANADA",
         title: "Canadian Skilled Immigration",
-        link: "/canada-migration",
+        link: "/migrate-to-canada",
         image: migrateCanada,
         imageAlt:
             "Canadian skilled immigration pathway for qualified professionals",
@@ -56,7 +56,7 @@ const immigrationData = [
         country: "Australia",
         badge: "AUSTRALIA",
         title: "Australian Skilled Immigration",
-        link: "/australia-migration",
+        link: "/migrate-to-australia",
         image: migrateAustralia,
         imageAlt:
             "Australian skilled immigration pathway for professionals and tradespeople",

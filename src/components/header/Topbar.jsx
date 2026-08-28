@@ -349,7 +349,7 @@ const Topbar = () => {
                     />
 
                     <ActionCard
-                        href="/german-programs"
+                        href="/study-in-germany"
                         image={germanFlag}
                         imageAlt=""
                         title="German Programs"
