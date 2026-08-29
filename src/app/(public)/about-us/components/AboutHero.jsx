@@ -91,17 +91,14 @@ const HeroContent = () => {
             <AboutBreadcrumb />
 
             <h1
-                id="about-page-heading"
-                className="mt-4 max-w-3xl font-nunito text-3xl font-extrabold leading-[1.08] tracking-[-0.04em] text-darkPrimary sm:text-4xl lg:text-5xl"
-            >
-                About Medcity Study Abroad:{" "}
-
-                <span
-                    className="bg-gradient-to-r from-primary via-[#d72d62] to-secondary bg-clip-text text-transparent"
-                >
-                    Opening Doors to Global Education
-                </span>
-            </h1>
+  id="about-page-heading"
+  className="mt-4 max-w-3xl font-nunito text-3xl font-extrabold leading-[1.08] tracking-[-0.04em] text-darkPrimary sm:text-4xl lg:text-5xl"
+>
+  About Medcity Overseas –{" "} <br />
+  <span className="bg-gradient-to-r from-primary via-[#d72d62] to-secondary bg-clip-text text-transparent">
+    Study Abroad Consultants in Kerala
+  </span>
+</h1>
 
             <div
                 aria-hidden="true"
@@ -112,18 +109,13 @@ const HeroContent = () => {
                 <span className="h-1.5 w-2 rounded-full bg-primary/30" />
             </div>
 
-            <p
-                className="mt-4 max-w-2xl text-sm leading-6 text-slate-600 sm:text-[15px] sm:leading-7 lg:text-base"
-            >
-                Medcity Study Abroad is an overseas
-                education consultancy helping students
-                pursue higher education and international
-                career opportunities. Our counsellors
-                provide personalised support for course
-                and university selection, applications,
-                language preparation, student visas and
-                pre-departure planning.
-            </p>
+            <p className="mt-4 max-w-2xl text-sm leading-6 text-slate-600 sm:text-[15px] sm:leading-7 lg:text-base">
+  Medcity Overseas is a study abroad consultancy in Kerala helping
+  students pursue higher education at universities worldwide. Our
+  experienced counsellors provide personalised guidance for course and
+  university selection, admissions, scholarships, language preparation,
+  student visas and pre-departure planning.
+</p>
 
             <div
                 className="mt-5 grid w-full max-w-2xl grid-cols-2 gap-2.5 sm:grid-cols-4"
@@ -144,7 +136,7 @@ const HeroContent = () => {
                     href="/destinations"
                     className="group inline-flex min-h-[46px] w-full items-center justify-center gap-2 rounded-xl bg-primary px-5 py-2.5 text-sm font-extrabold text-white shadow-[0_12px_26px_rgba(192,31,83,0.22)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-darkPrimary hover:shadow-[0_16px_30px_rgba(99,26,51,0.25)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 sm:w-auto"
                 >
-                    Explore Destinations
+                    Explore Study Destinations
 
                     <ArrowRight
                         aria-hidden="true"
@@ -199,7 +191,7 @@ const HeroVisual = () => {
                 >
                     <Image
                         src={`/assets/about-medcity-study-abroad-student.webp`}
-                        alt="Student representing Medcity Study Abroad and international education"
+                        alt="Student exploring international education opportunities with Medcity Overseas"
                         fill
                         priority
                         sizes="
@@ -229,12 +221,12 @@ const HeroVisual = () => {
                             Your global journey starts here
                         </div>
 
-                        <h2
+                        <p
                             className="mt-3 max-w-sm font-nunito text-xl font-extrabold leading-tight text-white sm:text-2xl"
                         >
                             Discover education opportunities
                             beyond borders
-                        </h2>
+                        </p>
                     </div>
                 </div>
             </div>

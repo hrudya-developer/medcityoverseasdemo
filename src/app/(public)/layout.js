@@ -61,6 +61,8 @@ export const metadata = {
     siteName:
       "Medcity Overseas",
 
+      url: SITE_URL,
+
     title:
       "Study Abroad Consultants in Kerala | Medcity Overseas",
 
