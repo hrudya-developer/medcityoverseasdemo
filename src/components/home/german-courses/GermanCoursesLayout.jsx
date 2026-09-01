@@ -92,7 +92,7 @@ export default function GermanCoursesLayout() {
                             in Germany
                         </span>
 
-                        <h1
+                        <h2
                             id="german-courses-heading"
                             className="mt-5 font-nunito text-3xl font-extrabold leading-tight text-darkPrimary sm:text-4xl lg:text-5xl"
                         >
@@ -105,7 +105,7 @@ export default function GermanCoursesLayout() {
                                     Courses
                                 </span>
                             </span>
-                        </h1>
+                        </h2>
 
                         <p
                             className="mx-auto mt-5 max-w-md text-sm leading-7 text-slate-600 sm:text-base lg:mx-0"

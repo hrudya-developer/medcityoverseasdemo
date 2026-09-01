@@ -1,175 +1,265 @@
 "use client";
 
 import {
-    useCallback,
-    useRef,
+  useCallback,
+  useRef,
 } from "react";
 
 import {
-    usePathname,
-    useRouter,
-    useSearchParams,
+  usePathname,
+  useRouter,
+  useSearchParams,
 } from "next/navigation";
 
 import UniversityAbout from "./UniversityAbout";
 import UniversityCourses from "./UniversityCourses";
 import UniversityHero from "./UniversityHero";
 import UniversityTabs from "./UniversityTabs";
+
 import {
-    normalizeUniversityData,
+  normalizeUniversityData,
 } from "./universityDetailsUtils";
 
-
-
 const VALID_TABS = [
-    "about",
-    "courses",
+  "about",
+  "courses",
 ];
 
 export default function UniversityDetailsClient({
-    id,
-    initialData,
+  id,
+  initialData,
 }) {
-    const router = useRouter();
-    const pathname = usePathname();
-    const searchParams = useSearchParams();
-    const tabsRef = useRef(null);
+  const router =
+    useRouter();
 
-    const requestedTab =
-        searchParams.get("tab");
+  const pathname =
+    usePathname();
 
-    const activeTab = VALID_TABS.includes(
-        requestedTab
-    )
-        ? requestedTab
-        : "about";
+  const searchParams =
+    useSearchParams();
 
-    const data = normalizeUniversityData(
-        initialData
+  const tabsRef =
+    useRef(null);
+
+  const requestedTab =
+    searchParams.get(
+      "tab"
     );
 
-    const handleBack = useCallback(() => {
-        if (window.history.length > 1) {
-            router.back();
-            return;
-        }
+  const activeTab =
+    VALID_TABS.includes(
+      requestedTab
+    )
+      ? requestedTab
+      : "about";
 
-        router.push("/universities");
+  const data =
+    normalizeUniversityData(
+      initialData
+    );
+
+  /* =====================================================
+     BACK
+  ===================================================== */
+
+  const handleBack =
+    useCallback(() => {
+      if (
+        typeof window !==
+          "undefined" &&
+        window.history.length >
+          1
+      ) {
+        router.back();
+        return;
+      }
+
+      router.push(
+        "/universities"
+      );
     }, [router]);
 
-    const handleTabChange = useCallback(
-        (tab) => {
-            if (!VALID_TABS.includes(tab)) {
-                return;
-            }
+  /* =====================================================
+     TAB CHANGE
+  ===================================================== */
 
-            const params =
-                new URLSearchParams(
-                    searchParams.toString()
-                );
+  const handleTabChange =
+    useCallback(
+      (tab) => {
+        if (
+          !VALID_TABS.includes(
+            tab
+          )
+        ) {
+          return;
+        }
 
-            if (tab === "about") {
-                params.delete("tab");
-            } else {
-                params.set("tab", tab);
-            }
+        const params =
+          new URLSearchParams(
+            searchParams.toString()
+          );
 
-            const query = params.toString();
+        if (
+          tab === "about"
+        ) {
+          params.delete(
+            "tab"
+          );
+        } else {
+          params.set(
+            "tab",
+            tab
+          );
+        }
 
-            router.replace(
-                query
-                    ? `${pathname}?${query}`
-                    : pathname,
-                {
-                    scroll: false,
-                }
-            );
+        const query =
+          params.toString();
 
-            window.requestAnimationFrame(
-                () => {
-                    tabsRef.current?.scrollIntoView(
-                        {
-                            behavior: "smooth",
-                            block: "start",
-                        }
-                    );
-                }
-            );
-        },
-        [
-            pathname,
-            router,
-            searchParams,
-        ]
-    );
-
-    if (!data?.university) {
-        return (
-            <section className="grid min-h-[500px] place-items-center px-4 text-center">
-                <div>
-                    <h1 className="text-2xl font-black text-darkPrimary">
-                        University not found
-                    </h1>
-
-                    <button
-                        type="button"
-                        onClick={handleBack}
-                        className="mt-5 rounded-xl bg-primary px-5 py-3 font-bold text-white"
-                    >
-                        Go Back
-                    </button>
-                </div>
-            </section>
+        router.replace(
+          query
+            ? `${pathname}?${query}`
+            : pathname,
+          {
+            scroll:
+              false,
+          }
         );
-    }
 
-    return (
-        <main className="min-h-screen bg-[#f7f9fd] text-[#081c47]">
-            <UniversityHero
-                data={data}
-                onBack={handleBack}
-                onCourses={() =>
-                    handleTabChange("courses")
+        if (
+          typeof window !==
+          "undefined"
+        ) {
+          window.requestAnimationFrame(
+            () => {
+              tabsRef.current?.scrollIntoView(
+                {
+                  behavior:
+                    "smooth",
+                  block:
+                    "start",
                 }
-            />
-
-            <div
-                ref={tabsRef}
-                className="scroll-mt-20"
-            >
-                <UniversityTabs
-                    activeTab={activeTab}
-                    universityName={
-                        data.universityName
-                    }
-                    onChange={
-                        handleTabChange
-                    }
-                />
-            </div>
-
-            {activeTab === "about" && (
-                <UniversityAbout
-                    data={data}
-                    onCourses={() =>
-                        handleTabChange(
-                            "courses"
-                        )
-                    }
-                />
-            )}
-
-            {activeTab === "courses" && (
-                <UniversityCourses
-                    universityId={id}
-                    universityName={data.universityName}
-                    countryId={data.university?.d_id}
-                    courses={data.selectedCourses}
-                    initialMainCourseId={
-                        data.selectedCourses?.[0]?.c_id
-                    }
-                />
-            )}
-        </main>
+              );
+            }
+          );
+        }
+      },
+      [
+        pathname,
+        router,
+        searchParams,
+      ]
     );
+
+  /* =====================================================
+     INVALID UNIVERSITY
+  ===================================================== */
+
+  if (
+    !data?.university
+  ) {
+    return (
+      <section className="grid min-h-[500px] place-items-center bg-[#f7f9fd] px-5 text-center">
+        <div className="max-w-md">
+          <h2 className="text-2xl font-black text-darkPrimary">
+            University not found
+          </h2>
+
+          <p className="mt-3 leading-7 text-slate-500">
+            The requested university
+            information could not be
+            loaded.
+          </p>
+
+          <button
+            type="button"
+            onClick={
+              handleBack
+            }
+            className="mt-6 rounded-xl bg-primary px-6 py-3 font-bold text-white transition hover:bg-darkPrimary"
+          >
+            Back to Universities
+          </button>
+        </div>
+      </section>
+    );
+  }
+
+  /* =====================================================
+     PAGE
+  ===================================================== */
+
+  return (
+    <main className="min-h-screen bg-[#f7f9fd] text-[#081c47]">
+      <UniversityHero
+        data={
+          data
+        }
+        onBack={
+          handleBack
+        }
+        onCourses={() =>
+          handleTabChange(
+            "courses"
+          )
+        }
+      />
+
+      <div
+        ref={
+          tabsRef
+        }
+        className="scroll-mt-24"
+      >
+        <UniversityTabs
+          activeTab={
+            activeTab
+          }
+          universityName={
+            data.universityName
+          }
+          onChange={
+            handleTabChange
+          }
+        />
+      </div>
+
+      {activeTab ===
+        "about" && (
+        <UniversityAbout
+          data={
+            data
+          }
+          onCourses={() =>
+            handleTabChange(
+              "courses"
+            )
+          }
+        />
+      )}
+
+      {activeTab ===
+        "courses" && (
+        <UniversityCourses
+          universityId={
+            id
+          }
+          universityName={
+            data.universityName
+          }
+          countryId={
+            data.university
+              ?.d_id
+          }
+          courses={
+            data.selectedCourses
+          }
+          initialMainCourseId={
+            data
+              .selectedCourses?.[0]
+              ?.c_id
+          }
+        />
+      )}
+    </main>
+  );
 }

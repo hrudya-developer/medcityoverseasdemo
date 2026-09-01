@@ -1,11 +1,14 @@
 import AboutHero from "./components/AboutHero";
 import AboutStats from "./components/AboutStats";
-import ChairmanSection from "./components/ChairmanSection";
-import CoreValues from "./components/CoreValues";
 import StorySection from "./components/StorySection";
+import ChairmanSection from "./components/ChairmanSection";
+import AboutTeamMembers from "./components/AboutTeamMembers";
+import CoreValues from "./components/CoreValues";
 import AboutFAQ from "./components/AboutFAQ";
 
 const SITE_URL = "https://medcityoverseas.com";
+const ABOUT_URL = `${SITE_URL}/about-us`;
+const ABOUT_OG_IMAGE = `${SITE_URL}/og-images/about-us.webp`;
 
 export const metadata = {
   title: {
@@ -28,10 +31,10 @@ export const metadata = {
     title:
       "About Medcity Overseas | Study Abroad Consultants in Kerala",
     description:
-      "Discover Medcity Overseas, our journey, leadership, values and commitment to helping students pursue international education opportunities.",
+      "Discover Medcity Overseas, our journey, leadership, values and commitment to helping students pursue international education opportunities with personalised study abroad guidance.",
     images: [
       {
-        url: "/og-images/about-us.webp",
+        url: ABOUT_OG_IMAGE,
         width: 1200,
         height: 630,
         alt:
@@ -45,8 +48,8 @@ export const metadata = {
     title:
       "About Medcity Overseas | Study Abroad Consultants in Kerala",
     description:
-      "Learn about Medcity Overseas, our journey, leadership, values and student-focused approach to international education.",
-    images: ["/og-images/about-us.webp"],
+      "Learn about Medcity Overseas, our leadership, values and student-focused approach to international education and study abroad guidance.",
+    images: [ABOUT_OG_IMAGE],
   },
 
   robots: {
@@ -65,8 +68,10 @@ export const metadata = {
 const aboutPageJsonLd = {
   "@context": "https://schema.org",
   "@type": "AboutPage",
-  "@id": `${SITE_URL}/about-us/#webpage`,
-  url: `${SITE_URL}/about-us`,
+  "@id": `${ABOUT_URL}/#webpage`,
+
+  url: ABOUT_URL,
+
   name:
     "About Medcity Overseas | Study Abroad Consultants in Kerala",
 
@@ -81,8 +86,23 @@ const aboutPageJsonLd = {
     "@id": `${SITE_URL}/#organization`,
   },
 
+  mainEntity: {
+    "@id": `${SITE_URL}/#organization`,
+  },
+
   breadcrumb: {
-    "@id": `${SITE_URL}/about-us/#breadcrumb`,
+    "@id": `${ABOUT_URL}/#breadcrumb`,
+  },
+
+  primaryImageOfPage: {
+    "@type": "ImageObject",
+    "@id": `${ABOUT_URL}/#primaryimage`,
+    url: ABOUT_OG_IMAGE,
+    contentUrl: ABOUT_OG_IMAGE,
+    width: 1200,
+    height: 630,
+    caption:
+      "Medcity Overseas study abroad consultants in Kerala",
   },
 
   inLanguage: "en-IN",
@@ -91,7 +111,7 @@ const aboutPageJsonLd = {
 const breadcrumbJsonLd = {
   "@context": "https://schema.org",
   "@type": "BreadcrumbList",
-  "@id": `${SITE_URL}/about-us/#breadcrumb`,
+  "@id": `${ABOUT_URL}/#breadcrumb`,
 
   itemListElement: [
     {
@@ -104,7 +124,7 @@ const breadcrumbJsonLd = {
       "@type": "ListItem",
       position: 2,
       name: "About Medcity Overseas",
-      item: `${SITE_URL}/about-us`,
+      item: ABOUT_URL,
     },
   ],
 };
@@ -132,10 +152,17 @@ export default function AboutUsPage() {
 
       <div className="overflow-hidden bg-white">
         <AboutHero />
+
         <AboutStats />
+
         <StorySection />
+
         <ChairmanSection />
+
+        <AboutTeamMembers />
+
         <CoreValues />
+
         <AboutFAQ />
       </div>
     </>

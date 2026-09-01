@@ -129,7 +129,7 @@ export default function DestinationUniversities({
                     </div>
 
                     <Link
-                        href={`/all-universities/${createSlug(countryName)}`}
+                        href={`/universities/${createSlug(countryName)}`}
                         className="group mx-auto inline-flex min-h-12 items-center justify-center gap-2 rounded-xl border border-primary/15 bg-white px-5 text-sm font-bold text-primary shadow-sm transition duration-300 hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-md lg:mx-0"
                     >
                         View All Universities

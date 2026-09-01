@@ -106,7 +106,7 @@ const HeroVideo = () => {
 
                 <img
                     src={DESKTOP_POSTER}
-                    alt=""
+                    alt="Medcity Study Abroad"
                     width={1920}
                     height={1080}
                     fetchPriority="high"

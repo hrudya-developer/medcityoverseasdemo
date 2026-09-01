@@ -13,7 +13,7 @@ const navItems = [
     },
     {
       name: "Universities",
-      path: "/all-universities",
+      path: "/universities",
     },
     {
       name: "Courses",

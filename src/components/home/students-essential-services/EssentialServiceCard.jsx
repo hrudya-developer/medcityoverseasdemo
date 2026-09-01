@@ -82,11 +82,11 @@ const ContactCard = ({
                 </div>
 
                 <div className="mt-7">
-                    <span
-                        className="text-sm font-bold tracking-wider text-black/55"
+                    {/* <span
+                        className="text-sm font-bold tracking-wider text-primary/55"
                     >
                         {id}
-                    </span>
+                    </span> */}
 
                     <h3
                         className="mt-2 text-2xl font-extrabold leading-tight text-black"
@@ -184,11 +184,11 @@ const StandardServiceCard = ({
                     </div>
 
                     <div>
-                        <span
+                        {/* <span
                             className="text-sm font-bold tracking-wider text-primary"
                         >
                             {id}
-                        </span>
+                        </span> */}
 
                         <h3
                             className="mt-1 text-xl font-bold leading-snug text-white"

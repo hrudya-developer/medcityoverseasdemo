@@ -103,7 +103,7 @@ export function getDestinationSeo({
 
     description,
 
-    h1: title,
+    h2: title,
 
     eyebrow:
       `Study in ${safeCountry}`,

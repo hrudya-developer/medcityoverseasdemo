@@ -1,10 +1,10 @@
 export const studyAbroadStats = [
     {
         value: "12+",
-        label: "Years of Experience",
+        label: "Years of Excellence",
     },
     {
-        value: "1000+",
+        value: "10K+",
         label: "Students Guided",
     },
     {

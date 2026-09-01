@@ -11,7 +11,7 @@ function ArrowIcon() {
       aria-hidden="true"
       className="h-full w-full fill-none stroke-current stroke-[1.8] [stroke-linecap:round] [stroke-linejoin:round]"
     >
-      <path d="M5 12h14" />
+      <path d="M5 12h24" />
       <path d="m14 7 5 5-5 5" />
     </svg>
   );

@@ -78,7 +78,7 @@ export default function GermanProgramCard({
             <div className="absolute bottom-4 right-4 h-20 w-20 overflow-hidden rounded-2xl border-4 border-white bg-white shadow-xl">
               <Image
                 src={secondaryImage}
-                alt=""
+                alt="German Program"
                 fill
                 sizes="80px"
                 className="object-contain"

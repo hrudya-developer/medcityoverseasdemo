@@ -263,15 +263,17 @@ const DepartureStoriesSection = () => {
                     </div>
 
                     <h2
-                        id="departure-stories-heading"
-                        className="mt-5 text-3xl font-extrabold leading-[1.08] tracking-tight text-white sm:text-4xl md:text-5xl lg:text-5xl"
-                    >
-                        Departures Today,
+  id="departure-stories-heading"
+  className="mt-5 text-3xl font-extrabold leading-[1.08] tracking-tight text-white sm:text-4xl md:text-5xl lg:text-5xl"
+>
+  <span className="block">
+    Departures Today,<span className="sr-only"> </span>
+  </span>
 
-                        <span className="mt-2 block bg-gradient-to-r from-primary via-purple-500 to-secondary bg-clip-text text-transparent">
-                            Dreams Taking Off
-                        </span>
-                    </h2>
+  <span className="mt-2 block bg-gradient-to-r from-primary via-purple-500 to-secondary bg-clip-text text-transparent">
+    Dreams Taking Off
+  </span>
+</h2>
 
                     <p className="mx-auto mt-5 max-w-lg text-sm leading-7 text-slate-600 sm:text-base lg:mx-0 lg:text-lg lg:leading-8">
                         Watch our students take

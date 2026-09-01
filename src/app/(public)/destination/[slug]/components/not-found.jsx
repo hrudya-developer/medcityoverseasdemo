@@ -10,10 +10,10 @@ export default function DestinationNotFound() {
                     Destination not found
                 </p>
 
-                <h1 className="mt-4 text-4xl font-black leading-tight text-slate-950 sm:text-5xl">
+                <h2 className="mt-4 text-4xl font-black leading-tight text-slate-950 sm:text-5xl">
                     We couldn’t find this study
                     destination.
-                </h1>
+                </h2>
 
                 <p className="mt-5 text-slate-600">
                     The destination may have been removed,

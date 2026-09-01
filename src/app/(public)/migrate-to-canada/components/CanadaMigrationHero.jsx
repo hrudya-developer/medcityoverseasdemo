@@ -75,7 +75,7 @@ function HeroContent() {
         Migrate. Work. Build Your Future.
       </div>
 
-      {/* Main H1 */}
+      {/* Main h2 */}
       <h1
         id="canada-migration-heading"
         className="mt-5 text-3xl font-black leading-[1.07] tracking-[-0.045em] text-[#0c1b35] sm:text-4xl lg:text-[48px] xl:text-[54px]"

@@ -14,10 +14,13 @@ export default function BranchCard({
   center,
   index,
 }) {
-  const branchNumber = String(index + 1).padStart(
-    2,
-    "0"
-  );
+  if (!center) {
+    return null;
+  }
+
+  const branchNumber = String(
+    index + 1
+  ).padStart(2, "0");
 
   const city =
     center?.city ||
@@ -29,18 +32,20 @@ export default function BranchCard({
     center?.seoTitle ||
     `Study Abroad Consultants in ${city}`;
 
-  const branchUrl =
-    center?.seoUrl || "/branches";
-
   const branchDescription =
     center?.seoDescription ||
     `Visit Medcity Overseas ${city} for study abroad counselling, university applications, course selection and student visa guidance.`;
 
   const imageAlt =
     center?.imageAlt ||
-    `${center?.name || "Medcity Overseas"} study abroad counselling center in ${city}`;
+    `${
+      center?.name ||
+      "Medcity Overseas"
+    } study abroad counselling center in ${city}`;
 
-  const phones = Array.isArray(center?.phones)
+  const phones = Array.isArray(
+    center?.phones
+  )
     ? center.phones
     : [];
 
@@ -59,7 +64,7 @@ export default function BranchCard({
         hover:shadow-[0_28px_65px_rgba(99,26,51,0.14)]
       "
     >
-      {/* top accent */}
+      {/* Top accent */}
       <div
         aria-hidden="true"
         className="
@@ -75,7 +80,7 @@ export default function BranchCard({
         "
       />
 
-      {/* soft glow */}
+      {/* Background glow */}
       <div
         aria-hidden="true"
         className="
@@ -103,15 +108,7 @@ export default function BranchCard({
             lg:h-[220px]
           "
         >
-          {/*
-            IMPORTANT:
-            This Link must be relative because Image uses fill.
-          */}
-          <Link
-            href={branchUrl}
-            aria-label={`View ${branchTitle}`}
-            className="relative block h-full w-full overflow-hidden"
-          >
+          {center?.image && (
             <Image
               src={center.image}
               alt={imageAlt}
@@ -129,35 +126,35 @@ export default function BranchCard({
                 group-hover:scale-[1.06]
               "
             />
+          )}
 
-            {/* image overlays */}
-            <div
-              aria-hidden="true"
-              className="
-                absolute inset-0
-                bg-gradient-to-t
-                from-[#101828]/75
-                via-[#101828]/5
-                to-transparent
-              "
-            />
+          {/* Image overlays */}
+          <div
+            aria-hidden="true"
+            className="
+              absolute inset-0
+              bg-gradient-to-t
+              from-[#101828]/75
+              via-[#101828]/5
+              to-transparent
+            "
+          />
 
-            <div
-              aria-hidden="true"
-              className="
-                absolute inset-0
-                bg-gradient-to-br
-                from-primary/[0.08]
-                via-transparent
-                to-secondary/[0.08]
-                opacity-0
-                transition-opacity duration-500
-                group-hover:opacity-100
-              "
-            />
-          </Link>
+          <div
+            aria-hidden="true"
+            className="
+              absolute inset-0
+              bg-gradient-to-br
+              from-primary/[0.08]
+              via-transparent
+              to-secondary/[0.08]
+              opacity-0
+              transition-opacity duration-500
+              group-hover:opacity-100
+            "
+          />
 
-          {/* branch number */}
+          {/* Branch number */}
           <div
             className="
               absolute left-4 top-4
@@ -189,7 +186,7 @@ export default function BranchCard({
             </span>
           </div>
 
-          {/* city */}
+          {/* City */}
           <div
             className="
               absolute bottom-4 left-4
@@ -211,14 +208,18 @@ export default function BranchCard({
             {city}
           </div>
 
-          {/* map */}
+          {/* Google Maps */}
           {center?.mapLink && (
             <a
               href={center.mapLink}
               target="_blank"
               rel="noopener noreferrer"
-              aria-label={`View ${center.name} on Google Maps`}
-              title={`View ${center.name} on Google Maps`}
+              aria-label={`View ${
+                center?.name || city
+              } on Google Maps`}
+              title={`View ${
+                center?.name || city
+              } on Google Maps`}
               className="
                 absolute bottom-4 right-4
                 flex h-10 w-10
@@ -249,7 +250,7 @@ export default function BranchCard({
 
       {/* ================= CONTENT ================= */}
       <div className="relative flex flex-1 flex-col px-5 pb-5 pt-5 sm:px-6">
-        {/* category */}
+        {/* Category */}
         <div className="mb-2 flex items-center gap-2">
           <span
             className="
@@ -278,7 +279,7 @@ export default function BranchCard({
           </p>
         </div>
 
-        {/* SEO heading */}
+        {/* Branch heading - NOT A LINK */}
         <h2
           className="
             text-[20px] font-black
@@ -290,21 +291,10 @@ export default function BranchCard({
             sm:text-[21px]
           "
         >
-          <Link
-            href={branchUrl}
-            className="
-              rounded-sm
-              focus-visible:outline-none
-              focus-visible:ring-2
-              focus-visible:ring-primary
-              focus-visible:ring-offset-2
-            "
-          >
-            {branchTitle}
-          </Link>
+          {branchTitle}
         </h2>
 
-        {/* decorative line */}
+        {/* Decorative line */}
         <div
           aria-hidden="true"
           className="mt-3 flex items-center gap-1.5"
@@ -314,7 +304,7 @@ export default function BranchCard({
           <span className="h-1 w-1 rounded-full bg-logoYellow" />
         </div>
 
-        {/* description */}
+        {/* Description */}
         <p
           className="
             mt-3
@@ -335,7 +325,7 @@ export default function BranchCard({
             bg-slate-50/70
           "
         >
-          {/* address */}
+          {/* Address */}
           {center?.address && (
             <div
               className="
@@ -365,7 +355,7 @@ export default function BranchCard({
             </div>
           )}
 
-          {/* phones */}
+          {/* Phones */}
           {phones.length > 0 && (
             <div
               className="
@@ -390,14 +380,20 @@ export default function BranchCard({
 
                 <div className="mt-1 flex flex-wrap gap-x-2 gap-y-1">
                   {phones.map(
-                    (phone, phoneIndex) => (
+                    (
+                      phone,
+                      phoneIndex
+                    ) => (
                       <a
                         key={`${phone}-${phoneIndex}`}
                         href={`tel:${phone.replace(
                           /[^\d+]/g,
                           ""
                         )}`}
-                        aria-label={`Call ${center.name} at ${phone}`}
+                        aria-label={`Call ${
+                          center?.name ||
+                          city
+                        } at ${phone}`}
                         className="
                           text-[13px]
                           font-bold
@@ -416,7 +412,7 @@ export default function BranchCard({
             </div>
           )}
 
-          {/* email */}
+          {/* Email */}
           {center?.email && (
             <div
               className="
@@ -440,7 +436,10 @@ export default function BranchCard({
 
                 <a
                   href={`mailto:${center.email}`}
-                  aria-label={`Email ${center.name}`}
+                  aria-label={`Email ${
+                    center?.name ||
+                    city
+                  }`}
                   className="
                     mt-1 block
                     break-all
@@ -463,7 +462,7 @@ export default function BranchCard({
         <div className="mt-auto pt-5">
           <Link
             href="/contact-us"
-            aria-label={`View details for ${branchTitle}`}
+            aria-label={`Contact Medcity Overseas ${city}`}
             className="
               group/cta
               flex w-full
@@ -515,7 +514,9 @@ export default function BranchCard({
   );
 }
 
-function ContactIcon({ children }) {
+function ContactIcon({
+  children,
+}) {
   return (
     <span
       className="

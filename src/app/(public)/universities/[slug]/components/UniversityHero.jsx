@@ -77,11 +77,11 @@ export default function UniversityHero({
                                     University Profile
                                 </p>
 
-                                <h1 className="text-3xl font-extrabold leading-tight text-white sm:text-4xl xl:text-5xl">
+                                <h2 className="text-3xl font-extrabold leading-tight text-white sm:text-4xl xl:text-5xl">
                                     {universityName}
 
                                     <CheckCircle className="ml-3 inline size-7 fill-primary text-white" />
-                                </h1>
+                                </h2>
                             </div>
                         </div>
 

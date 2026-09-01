@@ -342,42 +342,43 @@ export const searchApi =
 
          uid is always 0 because this is public.
          ===================================================== */
-
          getPublicCourseDetails:
          builder.query({
            query: ({
              slug,
+             courseId = "",
            }) => ({
              url:
-               "search/course-details-public",
+               "courses-details-public",
        
              params: {
-               courseId:
-                 slug,
-       
+               slug,
                uid: 0,
+       
+               ...(courseId && {
+                 courseId,
+               }),
              },
            }),
        
-           transformResponse: (
-             response
-           ) =>
-             response ||
-             null,
+           transformResponse:
+             (response) =>
+               response?.course ??
+               response ??
+               null,
        
-           transformErrorResponse: (
-             response
-           ) => ({
-             status:
-               response?.status,
+           transformErrorResponse:
+             (response) => ({
+               status:
+                 response?.status,
        
-             message:
-               response?.data
-                 ?.message ||
-               response?.data
-                 ?.error ||
-               "Unable to load course details.",
-           }),
+               message:
+                 response?.data
+                   ?.message ||
+                 response?.data
+                   ?.error ||
+                 "Unable to load course details.",
+             }),
          }),
     }),
   });

@@ -320,7 +320,7 @@ function DashboardHero({
                         </span>
                     </div>
 
-                    <h1
+                    <h2
                         className="
                             mt-5
 
@@ -348,7 +348,7 @@ function DashboardHero({
                         >
                             Our Guidance
                         </span>
-                    </h1>
+                    </h2>
 
                     <p
                         className="

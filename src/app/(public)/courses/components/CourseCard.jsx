@@ -1,324 +1,123 @@
 "use client";
 
+import Link from "next/link";
+
 import {
   ArrowRight,
-  Clock,
+  BookOpen,
   GraduationCap,
   MapPin,
-  Wallet,
+  School,
+  Sparkles,
 } from "lucide-react";
 
-import { useRouter } from "next/navigation";
-import { createSlug } from "@/lib/slug";
+import {
+  getCountryName,
+  getCourseId,
+  getCourseName,
+  getStudyLevel,
+  getUniversityName,
+} from "../utils/courseHelpers";
+
+import {
+  createPublicCourseHref,
+  createPublicCourseSlug,
+} from "@/lib/courseSlug";
+
+import CourseDetailItem from "@/components/home/searchSection/CourseDetailItem";
 
 /* =========================================================
-   INFO
-   ========================================================= */
-
-function Info({
-  icon: Icon,
-  label,
-  value,
-}) {
-  return (
-    <div className="rounded-xl bg-slate-50 p-3">
-      <div className="mb-2 flex items-center gap-2">
-        <div className="grid h-7 w-7 place-items-center rounded-lg bg-white text-[#c01f53]">
-          <Icon size={13} />
-        </div>
-
-        <span className="text-[9px] font-black uppercase tracking-[0.06em] text-slate-400">
-          {label}
-        </span>
-      </div>
-
-      <p
-        className="truncate text-xs font-bold text-slate-800"
-        title={String(value || "N/A")}
-      >
-        {value || "N/A"}
-      </p>
-    </div>
-  );
-}
-
-/* =========================================================
-   CLEAN COURSE TITLE
-
-   ONLY removes duration when it appears at the END.
-
-   Examples:
-
-   M.Sc Robotics Engineering 18 Months
-   -> M.Sc Robotics Engineering
-
-   MBA International Business - 2 Years
-   -> MBA International Business
-
-   Bachelor of Commerce/Bachelor of Laws
-   -> unchanged
-   ========================================================= */
-
-function cleanCourseName(value = "") {
-  let name = String(value)
-    .replace(/\s+/g, " ")
-    .trim();
-
-  if (!name) {
-    return "";
-  }
-
-  name = name
-    // 18 months / 24 Months / 1 year / 2 Years
-    .replace(
-      /\s*[-–—,|]?\s*\d+(?:\.\d+)?\s*(?:months?|years?)\s*$/i,
-      ""
-    )
-
-    // 1.5 years
-    .replace(
-      /\s*[-–—,|]?\s*\d+(?:\.\d+)?\s*(?:yrs?|mos?)\s*$/i,
-      ""
-    )
-
-    // 4 semesters
-    .replace(
-      /\s*[-–—,|]?\s*\d+\s*semesters?\s*$/i,
-      ""
-    )
-
-    // Full Time / Part Time at end
-    .replace(
-      /\s*[-–—,|]?\s*(?:full[\s-]?time|part[\s-]?time)\s*$/i,
-      ""
-    )
-    .trim();
-
-  return name;
-}
-
-/* =========================================================
-   GET COURSE NAME
-
-   IMPORTANT:
-   course comes FIRST.
-
-   Your API course-result objects mainly use
-   `course` for the actual course/program title.
-   ========================================================= */
-
-function getCourseName(course) {
-  const rawName =
-    course?.course ??
-    course?.course_name ??
-    course?.program_name ??
-    course?.program ??
-    course?.title ??
-    course?.name ??
-    course?.label ??
-    "";
-
-  const cleaned =
-    cleanCourseName(
-      rawName
-    );
-
-  return (
-    cleaned ||
-    "Course"
-  );
-}
-
-/* =========================================================
-   COURSE ID
-
-   Prefer university-course-specific IDs first.
-   ========================================================= */
-
-function getCourseId(course) {
-  const value =
-    course?.uc_id ??
-    course?.university_course_id ??
-    course?.universityCourseId ??
-    course?.course_id ??
-    course?.courseId ??
-    course?.c_id ??
-    course?.selectedId ??
-    course?.selected_id ??
-    course?.id ??
-    "";
-
-  return String(value).trim();
-}
-
-/* =========================================================
-   COMPONENT
-   ========================================================= */
+   COURSE CARD
+========================================================= */
 
 export default function CourseCard({
   course,
+  position,
 }) {
-  const router =
-    useRouter();
-
   /* =======================================================
-     COURSE NAME
-     ======================================================= */
-
-  const name =
-    getCourseName(
-      course
-    );
-
-  /* =======================================================
-     UNIVERSITY
-     ======================================================= */
-
-  const university =
-    course?.university ??
-    course?.university_name ??
-    course?.u_name ??
-    course?.universityName ??
-    "University";
-
-  /* =======================================================
-     COUNTRY
-     ======================================================= */
-
-  const country =
-    course?.country ??
-    course?.country_name ??
-    course?.destination ??
-    course?.destination_name ??
-    "";
-
-  /* =======================================================
-     LEVEL
-     ======================================================= */
-
-  const level =
-    course?.level ??
-    course?.course_level ??
-    course?.study_level ??
-    course?.qualification ??
-    "N/A";
-
-  /* =======================================================
-     DURATION
-
-     Duration remains visible on the card.
-     It is removed only from the URL/title if the API
-     accidentally included it inside `course`.
-     ======================================================= */
-
-  const duration =
-    course?.duration ??
-    course?.course_duration ??
-    "N/A";
-
-  /* =======================================================
-     FEES
-     ======================================================= */
-
-  const feesValue =
-    course?.fees ??
-    course?.tuition_fee ??
-    course?.tuitionFee ??
-    "";
-
-  const currency =
-    course?.currency ??
-    course?.currency_symbol ??
-    course?.currencySymbol ??
-    "";
-
-  const fees =
-    feesValue !== "" &&
-      feesValue !== null &&
-      feesValue !== undefined
-      ? `${currency} ${feesValue}`.trim()
-      : "N/A";
-
-  /* =======================================================
-     ID + SLUG
-     ======================================================= */
+     COURSE DATA
+  ======================================================= */
 
   const courseId =
-    getCourseId(
-      course
+    getCourseId(course);
+
+  const courseName =
+    getCourseName(course);
+
+  const universityName =
+    getUniversityName(course);
+
+  const countryName =
+    getCountryName(course);
+
+  const studyLevel =
+    getStudyLevel(course);
+
+  /* =======================================================
+     SEO PUBLIC URL
+  ======================================================= */
+
+  const courseSlug =
+    createPublicCourseSlug(
+      course,
+      universityName
     );
 
-  /*
-   * URL comes ONLY from the cleaned actual course name.
-   */
-  const courseSlug =
-    createSlug(
-      name
+  const courseHref =
+    createPublicCourseHref(
+      course,
+      universityName
     );
 
   /* =======================================================
-     VIEW DETAILS
-     ======================================================= */
+     IMPORTANT
 
-  const handleViewCourse = () => {
-    if (
-      !courseSlug
-    ) {
-      console.error(
-        "COURSE SLUG MISSING:",
-        course
-      );
+     Don't require courseId here.
 
+     The browser can still navigate using the slug.
+  ======================================================= */
+
+  const canViewCourse =
+    Boolean(
+      courseName &&
+      universityName &&
+      courseSlug &&
+      courseHref
+    );
+
+  /* =======================================================
+     STORE COURSE -> ID MAPPING
+
+     Browser URL stays:
+
+     /courses/course-name-university-name
+
+     The real database ID stays internal.
+  ======================================================= */
+
+  const handleCourseClick = () => {
+    if (!courseSlug) {
       return;
     }
 
-    /*
-     * Useful while verifying API fields.
-     */
-    console.log(
-      "PUBLIC COURSE CLICK:",
-      {
-        displayedName:
-          name,
-
-        rawCourse:
-          course?.course,
-
-        courseName:
-          course?.course_name,
-
-        programName:
-          course?.program_name,
-
-        courseId,
-
-        courseSlug,
-
-        fullCourse:
-          course,
-      }
-    );
-
-    /*
-     * Save ID internally.
-     *
-     * ID will NOT be visible in URL.
-     */
     try {
       sessionStorage.setItem(
         `public-course:${courseSlug}`,
         JSON.stringify({
           id:
-            courseId,
+            courseId || "",
 
           slug:
             courseSlug,
 
-          name,
+          name:
+            courseName,
 
-          university,
+          university:
+            universityName,
 
-          country,
+          country:
+            countryName,
 
           course,
 
@@ -327,167 +126,362 @@ export default function CourseCard({
         })
       );
     } catch (error) {
-      console.error(
+      console.warn(
         "Unable to save course mapping:",
         error
       );
     }
-
-    router.push(
-      `/courses/${courseSlug}`
-    );
   };
 
   /* =======================================================
+     DEBUG
+  ======================================================= */
+
+  if (
+    process.env.NODE_ENV ===
+    "development"
+  ) {
+    console.log(
+      "PUBLIC COURSE:",
+      {
+        id:
+          course?.id,
+
+        resolvedCourseId:
+          courseId,
+
+        courseName,
+
+        universityName,
+
+        courseSlug,
+
+        courseHref,
+
+        rawCourse:
+          course,
+      }
+    );
+  }
+
+  /* =======================================================
+     DISPLAY POSITION
+  ======================================================= */
+
+  const displayPosition =
+    String(
+      position || 1
+    ).padStart(
+      2,
+      "0"
+    );
+
+  /* =======================================================
      UI
-     ======================================================= */
+  ======================================================= */
 
   return (
     <article
       className="
         group
+        relative
         flex
-        h-full
+        min-h-[400px]
         flex-col
-        rounded-[24px]
+        overflow-hidden
+        rounded-[26px]
         border
-        border-slate-200
+        border-slate-200/80
         bg-white
         p-5
-        shadow-sm
+        shadow-[0_14px_40px_rgba(15,23,42,0.07)]
         transition-all
         duration-300
-        hover:-translate-y-1
-        hover:border-[#c01f53]/20
-        hover:shadow-[0_18px_45px_rgba(15,23,42,0.10)]
+        hover:-translate-y-1.5
+        hover:border-primary/30
+        hover:shadow-[0_24px_55px_rgba(99,26,51,0.14)]
+        sm:p-6
       "
     >
-      {/* TOP */}
+      {/* TOP ACCENT */}
 
-      <div className="flex gap-4">
-        <div
+      <div
+        aria-hidden="true"
+        className="
+          absolute
+          inset-x-0
+          top-0
+          h-1.5
+          bg-gradient-to-r
+          from-primary
+          via-[#e1477c]
+          to-secondary
+        "
+      />
+
+      {/* DECORATION */}
+
+      <div
+        aria-hidden="true"
+        className="
+          absolute
+          -right-16
+          -top-16
+          size-40
+          rounded-full
+          bg-primary/[0.055]
+          transition-transform
+          duration-500
+          group-hover:scale-125
+        "
+      />
+
+      {/* CARD TOP */}
+
+      <div
+        className="
+          relative
+          flex
+          items-center
+          justify-between
+          gap-4
+        "
+      >
+        <span
+          className="
+            inline-flex
+            items-center
+            gap-2
+            rounded-full
+            bg-primary/10
+            px-3
+            py-1.5
+            text-[10px]
+            font-black
+            uppercase
+            tracking-[0.13em]
+            text-primary
+          "
+        >
+          <Sparkles
+            aria-hidden="true"
+            size={13}
+          />
+
+          Study Program
+        </span>
+
+        <span
+          aria-hidden="true"
           className="
             grid
-            h-12
-            w-12
+            size-10
             shrink-0
-            place-items-center
+            place-content-center
+            rounded-xl
+            border
+            border-slate-200
+            bg-white
+            text-xs
+            font-black
+            text-slate-500
+            shadow-sm
+          "
+        >
+          {displayPosition}
+        </span>
+      </div>
+
+      {/* COURSE TITLE */}
+
+      <div
+        className="
+          relative
+          mt-5
+          flex
+          items-start
+          gap-3
+        "
+      >
+        <span
+          className="
+            grid
+            size-12
+            shrink-0
+            place-content-center
             rounded-2xl
             bg-gradient-to-br
-            from-[#c01f53]
-            to-[#631A33]
+            from-primary
+            to-darkPrimary
             text-white
-            shadow-[0_8px_20px_rgba(192,31,83,0.22)]
+            shadow-[0_10px_24px_rgba(192,31,83,0.22)]
           "
         >
           <GraduationCap
-            size={21}
+            aria-hidden="true"
+            size={23}
           />
-        </div>
+        </span>
 
-        <div className="min-w-0 flex-1">
-          <p className="text-[10px] font-black uppercase tracking-[0.08em] text-[#c01f53]">
-            {level}
-          </p>
-
-          <h3
-            className="mt-1 text-base font-black leading-6 text-slate-900"
-            title={name}
-          >
-            {name}
-          </h3>
-
-          <p
-            className="mt-1 text-sm font-medium text-slate-500"
-            title={university}
-          >
-            {university}
-          </p>
-
-          {country && (
-            <p className="mt-1 flex items-center gap-1 text-xs text-slate-400">
-              <MapPin
-                size={12}
-                className="shrink-0"
-              />
-
-              <span>
-                {country}
-              </span>
-            </p>
-          )}
-        </div>
-      </div>
-
-      {/* COURSE INFORMATION */}
-
-      <div className="mt-5 grid grid-cols-3 gap-2">
-        <Info
-          icon={
-            GraduationCap
-          }
-          label="Level"
-          value={level}
-        />
-
-        <Info
-          icon={Clock}
-          label="Duration"
-          value={
-            duration
-          }
-        />
-
-        <Info
-          icon={Wallet}
-          label="Fees"
-          value={fees}
-        />
-      </div>
-
-      {/* BUTTON */}
-
-      <div className="mt-auto pt-5">
-        <button
-          type="button"
-          onClick={
-            handleViewCourse
-          }
-          disabled={
-            !courseSlug
-          }
+        <h3
           className="
-            flex
-            w-full
-            items-center
-            justify-center
-            gap-2
-            rounded-xl
-            bg-[#c01f53]
-            px-4
-            py-3
-            text-sm
-            font-extrabold
-            text-white
-            shadow-[0_8px_20px_rgba(192,31,83,0.18)]
-            transition-all
-            duration-300
-
-            hover:-translate-y-0.5
-            hover:bg-[#a71947]
-            hover:shadow-[0_12px_24px_rgba(192,31,83,0.24)]
-
-            disabled:cursor-not-allowed
-            disabled:opacity-50
+            line-clamp-3
+            min-h-[72px]
+            pt-1
+            text-lg
+            font-black
+            leading-6
+            text-darkPrimary
+            transition-colors
+            group-hover:text-primary
           "
         >
-          View Course Details
+          {courseName}
+        </h3>
+      </div>
 
-          <ArrowRight
-            size={17}
-            className="transition-transform duration-300 group-hover:translate-x-1"
+      {/* STUDY LEVEL */}
+
+      {studyLevel && (
+        <div
+          className="
+            relative
+            mt-4
+            inline-flex
+            w-fit
+            items-center
+            gap-2
+            rounded-xl
+            bg-logoYellow/20
+            px-3
+            py-2
+            text-xs
+            font-extrabold
+            text-darkPrimary
+          "
+        >
+          <BookOpen
+            aria-hidden="true"
+            size={14}
           />
-        </button>
+
+          {studyLevel}
+        </div>
+      )}
+
+      {/* UNIVERSITY + DESTINATION */}
+
+      <div
+        className="
+          relative
+          mt-5
+          space-y-3
+        "
+      >
+        <CourseDetailItem
+          icon={School}
+          label="University"
+          value={
+            universityName ||
+            "University unavailable"
+          }
+          iconClassName="
+            bg-secondary/10
+            text-secondary
+          "
+        />
+
+        <CourseDetailItem
+          icon={MapPin}
+          label="Destination"
+          value={
+            countryName ||
+            "Destination unavailable"
+          }
+          iconClassName="
+            bg-primary/10
+            text-primary
+          "
+        />
+      </div>
+
+      {/* VIEW COURSE */}
+
+      <div
+        className="
+          relative
+          mt-auto
+          border-t
+          border-slate-100
+          pt-5
+        "
+      >
+        {canViewCourse ? (
+          <Link
+            href={courseHref}
+            onClick={
+              handleCourseClick
+            }
+            aria-label={`View details for ${courseName} at ${universityName}`}
+            title={`${courseName} at ${universityName}`}
+            className="
+              group/button
+              flex
+              min-h-12
+              w-full
+              items-center
+              justify-center
+              gap-2
+              rounded-xl
+              bg-gradient-to-r
+              from-darkPrimary
+              to-primary
+              px-5
+              text-sm
+              font-bold
+              text-white
+              shadow-[0_12px_25px_rgba(192,31,83,0.2)]
+              transition-all
+              hover:-translate-y-0.5
+              hover:shadow-[0_17px_32px_rgba(99,26,51,0.27)]
+              focus-visible:outline-none
+              focus-visible:ring-2
+              focus-visible:ring-primary
+              focus-visible:ring-offset-2
+            "
+          >
+            View Details
+
+            <ArrowRight
+              aria-hidden="true"
+              size={17}
+              className="
+                transition-transform
+                group-hover/button:translate-x-1
+              "
+            />
+          </Link>
+        ) : (
+          <button
+            type="button"
+            disabled
+            className="
+              flex
+              min-h-12
+              w-full
+              cursor-not-allowed
+              items-center
+              justify-center
+              rounded-xl
+              bg-slate-200
+              text-sm
+              font-bold
+              text-slate-500
+            "
+          >
+            Details unavailable
+          </button>
+        )}
       </div>
     </article>
   );

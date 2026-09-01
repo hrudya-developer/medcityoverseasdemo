@@ -40,6 +40,100 @@ async function resolveProgramId(slug) {
   );
 }
 
+export async function generateMetadata({
+  params,
+}) {
+  const { slug } = await params;
+
+  const programId =
+      await resolveProgramId(slug);
+
+  if (!programId) {
+      return {
+          title: {
+              absolute:
+                  "German Programs | Medcity Overseas",
+          },
+          robots: {
+              index: false,
+              follow: false,
+          },
+      };
+  }
+
+  const apiData =
+      await getGermanCourseDetails(
+          programId
+      );
+
+  const course =
+      Array.isArray(apiData?.data)
+          ? apiData.data[0]
+          : null;
+
+  if (!course) {
+      return {
+          title: {
+              absolute:
+                  "German Programs | Medcity Overseas",
+          },
+          robots: {
+              index: false,
+              follow: false,
+          },
+      };
+  }
+
+  const programName =
+      course?.name ||
+      course?.program_name ||
+      course?.title ||
+      "German Program";
+
+  const description =
+      course?.why ||
+      course?.description ||
+      `Explore ${programName} in Germany, including eligibility, benefits, career opportunities and application guidance with Medcity Overseas.`;
+
+  const canonical =
+      `https://medcityoverseas.com/study-in-germany/${slug}`;
+
+  return {
+      title: {
+          absolute:
+              `${programName} in Germany | Medcity Overseas`,
+      },
+
+      description:
+          String(description)
+              .replace(/\s+/g, " ")
+              .trim()
+              .slice(0, 160),
+
+      alternates: {
+          canonical,
+      },
+
+      openGraph: {
+          type: "website",
+          locale: "en_IN",
+          url: canonical,
+          siteName: "Medcity Overseas",
+          title:
+              `${programName} in Germany | Medcity Overseas`,
+          description:
+              String(description)
+                  .replace(/\s+/g, " ")
+                  .trim()
+                  .slice(0, 160),
+      },
+
+      robots: {
+          index: true,
+          follow: true,
+      },
+  };
+}
 /* =========================================================
    FETCH GERMAN PROGRAM DETAILS
 ========================================================= */
@@ -182,9 +276,9 @@ function Hero({ course, apiData }) {
         </div>
 
         {/* Title */}
-        <h1 className="max-w-4xl text-5xl font-black leading-[1.05] tracking-tight text-white sm:text-6xl lg:text-7xl">
+        <h2 className="max-w-4xl text-5xl font-black leading-[1.05] tracking-tight text-white sm:text-6xl lg:text-7xl">
           {course.name}
-        </h1>
+        </h2>
 
         {/* Subtitle */}
         {course.titleWhy && (
@@ -466,7 +560,7 @@ function Roadmap({ roadmap, apiData }) {
                     {countImage ? (
                       <img
                         src={countImage}
-                        alt=""
+                        alt="count image"
                         className="h-10 w-10 object-contain"
                       />
                     ) : (

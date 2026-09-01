@@ -46,14 +46,14 @@ export default function CourseResultsHeader({
                             Explore your options
                         </div>
 
-                        <h1
+                        <h2
                             className="mt-4 text-3xl font-black tracking-[-0.03em] text-darkPrimary sm:text-4xl lg:text-5xl"
                         >
                             Course Search{" "}
                             <span className="text-primary">
                                 Results
                             </span>
-                        </h1>
+                        </h2>
 
                         <p
                             className="mt-4 max-w-2xl text-sm leading-7 text-slate-600 sm:text-base"

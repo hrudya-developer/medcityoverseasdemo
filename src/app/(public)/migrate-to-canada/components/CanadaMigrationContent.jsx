@@ -7,7 +7,7 @@ import StudyInCanadaFAQ from "./CanadaMigrationFAQ";
 export default function CanadaMigrationContent() {
   return (
     <main className="overflow-hidden bg-white">
-      {/* H1 should be inside CanadaMigrationHero */}
+      {/* h2 should be inside CanadaMigrationHero */}
       <CanadaMigrationHero />
 
       {/* Supporting sections should use H2 headings internally */}

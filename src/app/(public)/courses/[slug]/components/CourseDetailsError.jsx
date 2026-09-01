@@ -10,9 +10,9 @@ export default function CourseDetailsError({
             <div
                 className="max-w-md rounded-3xl bg-white p-8 shadow-xl"
             >
-                <h1 className="text-2xl font-black text-primary">
+                <h2 className="text-2xl font-black text-primary">
                     Course unavailable
-                </h1>
+                </h2>
 
                 <p className="mt-3 text-sm leading-6 text-slate-600">
                     {message}

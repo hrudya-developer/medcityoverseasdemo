@@ -34,7 +34,7 @@ export const highlights = [
 export const heroStats = [
     {
         icon: GraduationCap,
-        value: "185,000+",
+        value: "10K+",
         label: "Students Guided",
         color: "text-primary",
         background: "bg-primary/10",
@@ -66,14 +66,14 @@ export const statistics = [
     },
     {
         icon: Globe2,
-        value: "50+",
+        value: "25+",
         label: "Countries Served",
         gradient:
             "from-primary to-[#e43c70]",
     },
     {
         icon: Building2,
-        value: "1500+",
+        value: "100+",
         label:
             "Partner Universities",
         gradient:
@@ -81,7 +81,7 @@ export const statistics = [
     },
     {
         icon: Users,
-        value: "185,000+",
+        value: "10K+",
         label:
             "Students Guided Successfully",
         gradient:

@@ -4,6 +4,7 @@ import {
 
 import CourseImage from "./CourseImage";
 import DotPattern from "./DotPattern";
+import Image from "next/image";
 
 import {
     createCourseImageUrl,

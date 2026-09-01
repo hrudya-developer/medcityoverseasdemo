@@ -65,9 +65,9 @@ export default function PrivacyPolicyPage() {
     <>
       <main className="flex min-h-[70vh] items-center justify-center bg-slate-50 p-6">
         <div className="w-full max-w-xl rounded-2xl bg-white p-8 text-center shadow-lg">
-          <h1 className="text-2xl font-bold text-darkPrimary">
+          <h2 className="text-2xl font-bold text-darkPrimary">
             Privacy Policy
-          </h1>
+          </h2>
 
           <p className="mt-4 text-slate-600">
             Read our privacy policy to understand how we collect, use, and

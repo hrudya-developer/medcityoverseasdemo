@@ -23,10 +23,10 @@ export function createDestinationSchema({
           seo.pageUrl,
 
         name:
-          seo.h1,
+          seo.h2,
 
         headline:
-          seo.h1,
+          seo.h2,
 
         description:
           seo.description,

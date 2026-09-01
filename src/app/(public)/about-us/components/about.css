@@ -1,0 +1,23 @@
+.team-card {
+    opacity: 0;
+    animation: teamFadeUp 0.75s ease-out forwards;
+  }
+
+  @keyframes teamFadeUp {
+    from {
+      opacity: 0;
+      transform: translateY(35px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .team-card {
+      opacity: 1;
+      animation: none;
+    }
+  }

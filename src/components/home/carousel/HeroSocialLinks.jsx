@@ -9,7 +9,7 @@ import {
 const socialLinks = [
     {
         name: "WhatsApp",
-        href: "https://wa.me/919876543210",
+        href: "https://wa.me/919072982555",
         icon: FaWhatsapp,
         buttonClass: "bg-[#25D366]",
         delay: "0ms",

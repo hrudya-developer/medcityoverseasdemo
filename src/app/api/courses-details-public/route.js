@@ -1,550 +1,809 @@
 import {
-    NextResponse,
-  } from "next/server";
-  
-  import {
-    createSlug,
-  } from "@/lib/slug";
-  
-  import {
-    postOverseasForm,
-  } from "@/lib/overseasApi";
-  
-  /* =========================================================
-     HELPERS
-     ========================================================= */
-  
-  function getCourseName(course) {
-    return (
-      course?.course_name ??
+  NextResponse,
+} from "next/server";
+
+import {
+  createSlug,
+} from "@/lib/slug";
+
+import {
+  postOverseasForm,
+} from "@/lib/overseasApi";
+
+/* =========================================================
+   HELPERS
+========================================================= */
+
+function clean(value) {
+  return String(
+    value ?? ""
+  )
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function getCourseName(course) {
+  return clean(
+    course?.course_name ??
       course?.course ??
+      course?.program_name ??
+      course?.program ??
       course?.name ??
       course?.title ??
       course?.label ??
       ""
-    );
-  }
-  
-  function getCourseSlug(course) {
-    return (
-      course?.slug ??
+  );
+}
+
+function getUniversityName(course) {
+  return clean(
+    course?.university_name ??
+      course?.university ??
+      course?.u_name ??
+      course?.universityName ??
+      course?.college_name ??
+      course?.institution_name ??
+      ""
+  );
+}
+
+function getCourseSlug(course) {
+  return clean(
+    course?.slug ??
       course?.course_slug ??
       course?.seo_slug ??
       ""
-    );
-  }
-  
-  function getCourseId(course) {
-    return (
+  );
+}
+
+function getCourseId(course) {
+  const value =
       course?.id ??
-      course?.course_id ??
       course?.uc_id ??
-      course?.c_id ??
-      course?.selectedId ??
-      null
+      course?.university_course_id ??
+      course?.universityCourseId ??
+      course?.selected_course_id ??
+      course?.selectedCourseId ??
+      course?.details_id ??
+      course?.course_details_id ??
+      "";
+
+  return clean(value);
+}
+
+/* =========================================================
+   CREATE PUBLIC SEO SLUG
+
+   IMPORTANT:
+   Must use the SAME format as CourseCard.
+
+   course + university
+
+   Example:
+   bachelor-of-medicine-bachelor-of-surgery-mbbs-
+   azerbaijan-medical-university
+========================================================= */
+
+function createPublicCourseSlug(
+  course
+) {
+  const courseName =
+    getCourseName(course);
+
+  const universityName =
+    getUniversityName(course);
+
+  if (!courseName) {
+    return "";
+  }
+
+  if (!universityName) {
+    return createSlug(
+      courseName
     );
   }
-  
-  function normalizeSlug(value = "") {
+
+  return createSlug(
+    `${courseName}-${universityName}`
+  );
+}
+
+/* =========================================================
+   NORMALIZE SLUG
+========================================================= */
+
+function normalizeSlug(
+  value = ""
+) {
+  try {
     return createSlug(
       decodeURIComponent(
         String(value)
       )
     );
-  }
-  
-  function comparableSlug(value = "") {
-    return normalizeSlug(value)
-      .replace(
-        /(^|-)(and|of|in|the)(?=-|$)/g,
-        "$1"
-      )
-      .replace(/-+/g, "-")
-      .replace(/^-|-$/g, "");
-  }
-  
-  function unwrapCourses(result) {
-    const possibleArrays = [
-      result?.suggestion,
-      result?.course,
-      result?.courses,
-      result?.data,
-      result?.results,
-    ];
-  
-    for (const value of possibleArrays) {
-      if (Array.isArray(value)) {
-        return value;
-      }
-    }
-  
-    return [];
-  }
-  
-  /* =========================================================
-     SEARCH COURSE
-     ========================================================= */
-  
-  async function searchCourses(keyword) {
-    if (!keyword) {
-      return [];
-    }
-  
-    try {
-      const result =
-        await postOverseasForm(
-          "searchResults",
-          {
-            keytype: "course",
-            keyword,
-          }
-        );
-  
-      return unwrapCourses(result);
-    } catch (error) {
-      console.error(
-        "searchResults failed:",
-        keyword,
-        error
-      );
-  
-      return [];
-    }
-  }
-  
-  /* =========================================================
-     SCORE RESULT
-     ========================================================= */
-  
-  function scoreCourse(
-    course,
-    requestedSlug
-  ) {
-    const target =
-      comparableSlug(
-        requestedSlug
-      );
-  
-    const backendSlug =
-      comparableSlug(
-        getCourseSlug(course)
-      );
-  
-    const nameSlug =
-      comparableSlug(
-        getCourseName(course)
-      );
-  
-    /*
-     * Best possible match:
-     * backend slug exactly matches URL.
-     */
-    if (
-      backendSlug &&
-      backendSlug === target
-    ) {
-      return 0;
-    }
-  
-    /*
-     * Exact course-name slug.
-     */
-    if (
-      nameSlug &&
-      nameSlug === target
-    ) {
-      return 1;
-    }
-  
-    /*
-     * One contains the other.
-     */
-    if (
-      nameSlug &&
-      (
-        nameSlug.includes(target) ||
-        target.includes(nameSlug)
-      )
-    ) {
-      return 2;
-    }
-  
-    if (
-      backendSlug &&
-      (
-        backendSlug.includes(target) ||
-        target.includes(
-          backendSlug
-        )
-      )
-    ) {
-      return 3;
-    }
-  
-    return 999;
-  }
-  
-  /* =========================================================
-     SLUG -> COURSE ID
-     ========================================================= */
-  
-  async function resolveCourseId(
-    requestedCourse
-  ) {
-    if (!requestedCourse) {
-      return null;
-    }
-  
-    /*
-     * Existing numeric ID can go
-     * straight through.
-     */
-    if (
-      /^\d+$/.test(
-        String(requestedCourse)
-      )
-    ) {
-      return String(
-        requestedCourse
-      );
-    }
-  
-    const decoded =
-      decodeURIComponent(
-        String(
-          requestedCourse
-        )
-      );
-  
-    const fullKeyword =
-      decoded
-        .replace(/-/g, " ")
-        .replace(/\s+/g, " ")
-        .trim();
-  
-    const words =
-      fullKeyword
-        .split(" ")
-        .filter(Boolean);
-  
-    const queriesSet = new Set();
-    queriesSet.add(fullKeyword);
-
-    const N = words.length;
-    const targetLengths = [N - 1, N - 2, N - 3, 5, 4, 3, 2];
-
-    for (const len of targetLengths) {
-      if (len > 0 && len < N) {
-        queriesSet.add(words.slice(0, len).join(" "));
-        queriesSet.add(words.slice(-len).join(" "));
-      }
-    }
-
-    const queries = Array.from(queriesSet)
-      .map((value) => value.trim())
-      .filter(Boolean);
-
-    const groups =
-      await Promise.all(
-        queries.map(
-          (query) =>
-            searchCourses(
-              query
-            )
-        )
-      );
-  
-    const allCourses =
-      groups.flat();
-  
-    /*
-     * Remove duplicates.
-     */
-    const uniqueCourses =
-      Array.from(
-        new Map(
-          allCourses.map(
-            (course, index) => {
-              const id =
-                getCourseId(
-                  course
-                );
-  
-              const key =
-                id
-                  ? `id:${id}`
-                  : `name:${getCourseName(
-                      course
-                    )}:${index}`;
-  
-              return [
-                key,
-                course,
-              ];
-            }
-          )
-        ).values()
-      );
-  
-    if (
-      uniqueCourses.length ===
-      0
-    ) {
-      console.error(
-        "No course search results for:",
-        requestedCourse
-      );
-  
-      return null;
-    }
-  
-    const candidates =
-      uniqueCourses
-        .map((course) => ({
-          course,
-  
-          score:
-            scoreCourse(
-              course,
-              requestedCourse
-            ),
-        }))
-        .filter(
-          (item) =>
-            item.score < 999
-        )
-        .sort(
-          (a, b) =>
-            a.score -
-            b.score
-        );
-  
-    const matchedCourse =
-      candidates?.[0]
-        ?.course;
-  
-    if (!matchedCourse) {
-      console.error(
-        "No exact course match:",
-        {
-          requestedCourse,
-  
-          returnedCourses:
-            uniqueCourses.map(
-              (course) => ({
-                id:
-                  getCourseId(
-                    course
-                  ),
-  
-                name:
-                  getCourseName(
-                    course
-                  ),
-  
-                slug:
-                  getCourseSlug(
-                    course
-                  ),
-              })
-            ),
-        }
-      );
-  
-      return null;
-    }
-  
-    const resolvedId =
-      getCourseId(
-        matchedCourse
-      );
-  
-    if (!resolvedId) {
-      console.error(
-        "Matched course has no ID:",
-        matchedCourse
-      );
-  
-      return null;
-    }
-  
-    return String(
-      resolvedId
+  } catch {
+    return createSlug(
+      String(value)
     );
   }
-  
-  /* =========================================================
-     GET COURSE DETAILS
-     ========================================================= */
-  
-  async function fetchCourseDetails({
-    courseId,
-    uid,
-  }) {
+}
+
+/* =========================================================
+   UNWRAP SEARCH RESULTS
+========================================================= */
+
+function unwrapCourses(result) {
+  const possibleArrays = [
+    result?.suggestion,
+    result?.courses,
+    result?.course,
+    result?.data,
+    result?.results,
+  ];
+
+  for (
+    const value of
+    possibleArrays
+  ) {
+    if (
+      Array.isArray(value)
+    ) {
+      return value;
+    }
+  }
+
+  return [];
+}
+
+/* =========================================================
+   SEARCH COURSES
+========================================================= */
+
+async function searchCourses(
+  keyword
+) {
+  const cleanedKeyword =
+    clean(keyword);
+
+  if (!cleanedKeyword) {
+    return [];
+  }
+
+  try {
     const result =
       await postOverseasForm(
-        "getCoursedetails",
+        "searchResults",
         {
-          uid:
-            String(uid),
-  
-          /*
-           * Send both because your
-           * existing backend has used
-           * both field names.
-           */
-          id:
-            String(
-              courseId
-            ),
-  
-          c_id:
-            String(
-              courseId
-            ),
+          keytype:
+            "course",
+
+          keyword:
+            cleanedKeyword,
         }
       );
-  
-    const course =
-      result?.course?.[0] ??
-      result?.data?.[0] ??
-      result?.details?.[0] ??
-      result?.course ??
-      result?.data ??
-      result?.details ??
-      null;
-  
-    return {
-      course,
-      raw: result,
-    };
+
+    return unwrapCourses(
+      result
+    );
+  } catch (error) {
+    console.error(
+      "searchResults failed:",
+      cleanedKeyword,
+      error
+    );
+
+    return [];
   }
-  
-  /* =========================================================
-     ROUTE
-     ========================================================= */
-  
-  export async function GET(
-    request
+}
+
+/* =========================================================
+   REMOVE DUPLICATES
+========================================================= */
+
+function removeDuplicates(
+  courses
+) {
+  const map =
+    new Map();
+
+  for (
+    const course of courses
   ) {
-    try {
-      const {
-        searchParams,
-      } = new URL(
-        request.url
-      );
-  
-      /*
-       * courseId may contain:
-       *
-       * 88291
-       *
-       * OR
-       *
-       * bachelor-of-fine-art-honours
-       *
-       * The ID never needs to be visible
-       * in the public browser URL.
-       */
-      const requestedCourse =
-        searchParams.get(
-          "courseId"
-        );
-  
-      /*
-       * Public page.
-       */
-      const uid =
-        searchParams.get(
-          "uid"
-        ) || "0";
-  
-      if (!requestedCourse) {
-        return NextResponse.json(
-          {
-            message:
-              "Course is required.",
-          },
-          {
-            status: 400,
-          }
-        );
-      }
-  
-      const courseId =
-        await resolveCourseId(
-          requestedCourse
-        );
-  
-      if (!courseId) {
-        return NextResponse.json(
-          {
-            message:
-              "Course not found for this URL.",
-          },
-          {
-            status: 404,
-          }
-        );
-      }
-  
-      const {
-        course,
-        raw,
-      } =
-        await fetchCourseDetails(
-          {
-            courseId,
-            uid,
-          }
-        );
-  
-      if (!course) {
-        console.error(
-          "Course details empty:",
-          {
-            requestedCourse,
-            courseId,
-            raw,
-          }
-        );
-  
-        return NextResponse.json(
-          {
-            message:
-              "Course details are unavailable.",
-          },
-          {
-            status: 404,
-          }
-        );
-      }
-  
-      /*
-       * Important:
-       * return course directly because
-       * your RTK Query currently expects
-       * selectedCourse to be the course
-       * object.
-       */
-      return NextResponse.json(
+    const id =
+      getCourseId(
         course
       );
-    } catch (error) {
-      console.error(
-        "Course details API error:",
-        error
+
+    /*
+     * Prefer the actual ID.
+     *
+     * If an ID is unavailable,
+     * fall back to course + university.
+     */
+
+    const fallbackKey =
+      createPublicCourseSlug(
+        course
       );
-  
+
+    const key =
+      id
+        ? `id:${id}`
+        : `slug:${fallbackKey}`;
+
+    if (
+      key &&
+      !map.has(key)
+    ) {
+      map.set(
+        key,
+        course
+      );
+    }
+  }
+
+  return Array.from(
+    map.values()
+  );
+}
+
+/* =========================================================
+   EXACT MATCH
+========================================================= */
+
+function findExactCourse(
+  courses,
+  requestedSlug
+) {
+  const target =
+    normalizeSlug(
+      requestedSlug
+    );
+
+  if (!target) {
+    return null;
+  }
+
+  /*
+   * PRIORITY 1
+   *
+   * Exact:
+   *
+   * course-name + university-name
+   *
+   * This prevents:
+   *
+   * Azerbaijan MBBS
+   *         ↓
+   * Malaysia MBBS
+   */
+
+  const exactPublicMatch =
+    courses.find(
+      (course) =>
+        normalizeSlug(
+          createPublicCourseSlug(
+            course
+          )
+        ) === target
+    );
+
+  if (
+    exactPublicMatch
+  ) {
+    return exactPublicMatch;
+  }
+
+  /*
+   * PRIORITY 2
+   *
+   * Exact backend-provided
+   * SEO slug.
+   */
+
+  const backendMatch =
+    courses.find(
+      (course) => {
+        const backendSlug =
+          normalizeSlug(
+            getCourseSlug(
+              course
+            )
+          );
+
+        return (
+          backendSlug &&
+          backendSlug ===
+            target
+        );
+      }
+    );
+
+  if (backendMatch) {
+    return backendMatch;
+  }
+
+  /*
+   * PRIORITY 3
+   *
+   * Legacy course-name-only URL.
+   *
+   * ONLY accept it if exactly
+   * one result matches.
+   *
+   * Never arbitrarily select
+   * the first duplicate.
+   */
+
+  const legacyMatches =
+    courses.filter(
+      (course) =>
+        normalizeSlug(
+          getCourseName(
+            course
+          )
+        ) === target
+    );
+
+  if (
+    legacyMatches.length ===
+    1
+  ) {
+    return legacyMatches[0];
+  }
+
+  return null;
+}
+
+/* =========================================================
+   BUILD SEARCH QUERIES
+========================================================= */
+
+function buildSearchQueries(
+  requestedSlug
+) {
+  let decoded = "";
+
+  try {
+    decoded =
+      decodeURIComponent(
+        String(
+          requestedSlug
+        )
+      );
+  } catch {
+    decoded =
+      String(
+        requestedSlug
+      );
+  }
+
+  const fullKeyword =
+    decoded
+      .replace(/-/g, " ")
+      .replace(/\s+/g, " ")
+      .trim();
+
+  if (!fullKeyword) {
+    return [];
+  }
+
+  const words =
+    fullKeyword
+      .split(" ")
+      .filter(Boolean);
+
+  const queries =
+    new Set();
+
+  /*
+   * Try complete slug first.
+   */
+
+  queries.add(
+    fullKeyword
+  );
+
+  /*
+   * Then progressively remove
+   * words from the END.
+   *
+   * This is important because
+   * our URL is:
+   *
+   * course-name + university-name
+   *
+   * Eventually this reaches
+   * the actual course title.
+   */
+
+  for (
+    let length =
+      words.length - 1;
+    length >= 2;
+    length -= 1
+  ) {
+    queries.add(
+      words
+        .slice(
+          0,
+          length
+        )
+        .join(" ")
+    );
+  }
+
+  /*
+   * Keep the number of backend
+   * searches reasonable.
+   */
+
+  return Array.from(
+    queries
+  ).slice(
+    0,
+    12
+  );
+}
+
+/* =========================================================
+   SLUG -> COURSE ID
+========================================================= */
+
+async function resolveCourseId(
+  requestedSlug
+) {
+  if (!requestedSlug) {
+    return null;
+  }
+
+  /*
+   * Optional backwards
+   * compatibility.
+   *
+   * Public URLs won't normally
+   * expose this.
+   */
+
+  if (
+    /^\d+$/.test(
+      String(
+        requestedSlug
+      )
+    )
+  ) {
+    return String(
+      requestedSlug
+    );
+  }
+
+  const queries =
+    buildSearchQueries(
+      requestedSlug
+    );
+
+  if (
+    queries.length === 0
+  ) {
+    return null;
+  }
+
+  /*
+   * Search sequentially.
+   *
+   * Stop as soon as we can
+   * resolve an exact unique
+   * course.
+   *
+   * This avoids firing many
+   * API requests simultaneously.
+   */
+
+  let collectedCourses =
+    [];
+
+  for (
+    const query of queries
+  ) {
+    const results =
+      await searchCourses(
+        query
+      );
+
+    if (
+      results.length === 0
+    ) {
+      continue;
+    }
+
+    collectedCourses =
+      removeDuplicates([
+        ...collectedCourses,
+        ...results,
+      ]);
+
+    const match =
+      findExactCourse(
+        collectedCourses,
+        requestedSlug
+      );
+
+    if (match) {
+      const id =
+        getCourseId(
+          match
+        );
+
+      if (id) {
+        return id;
+      }
+    }
+  }
+
+  /*
+   * Final attempt after all
+   * search results are collected.
+   */
+
+  const finalMatch =
+    findExactCourse(
+      collectedCourses,
+      requestedSlug
+    );
+
+  if (!finalMatch) {
+    console.error(
+      "Unable to resolve public course slug:",
+      {
+        requestedSlug,
+
+        candidates:
+          collectedCourses.map(
+            (course) => ({
+              id:
+                getCourseId(
+                  course
+                ),
+
+              course:
+                getCourseName(
+                  course
+                ),
+
+              university:
+                getUniversityName(
+                  course
+                ),
+
+              publicSlug:
+                createPublicCourseSlug(
+                  course
+                ),
+
+              backendSlug:
+                getCourseSlug(
+                  course
+                ),
+            })
+          ),
+      }
+    );
+
+    return null;
+  }
+
+  const courseId =
+    getCourseId(
+      finalMatch
+    );
+
+  return (
+    courseId || null
+  );
+}
+
+/* =========================================================
+   FETCH EXACT COURSE DETAILS
+========================================================= */
+
+async function fetchCourseDetails({
+  courseId,
+  uid = "0",
+}) {
+  const result =
+    await postOverseasForm(
+      "getCoursedetails",
+      {
+        uid: String(uid),
+        id: String(courseId),
+      }
+    );
+
+  const course =
+    result?.course?.[0] ??
+    result?.data?.[0] ??
+    result?.details?.[0] ??
+    result?.course ??
+    result?.data ??
+    result?.details ??
+    null;
+
+  return {
+    course,
+    raw: result,
+  };
+}
+/* =========================================================
+   GET
+========================================================= */
+
+export async function GET(request) {
+  try {
+    const { searchParams } =
+      new URL(request.url);
+
+    const requestedSlug =
+      searchParams
+        .get("slug")
+        ?.trim() || "";
+
+    const directCourseId =
+      searchParams
+        .get("courseId")
+        ?.trim() || "";
+
+    const uid =
+      searchParams
+        .get("uid")
+        ?.trim() || "0";
+
+    /* =====================================================
+       VALIDATION
+    ===================================================== */
+
+    if (
+      !requestedSlug &&
+      !directCourseId
+    ) {
       return NextResponse.json(
         {
           message:
-            error?.message ||
-            "Something went wrong while fetching course details.",
+            "Course slug or course ID is required.",
         },
         {
-          status: 500,
+          status: 400,
         }
       );
     }
+
+    /* =====================================================
+       RESOLVE COURSE ID
+
+       Priority:
+       1. Exact internal ID supplied by client
+       2. Slug resolver for direct/SEO visits
+    ===================================================== */
+
+    let courseId =
+      directCourseId;
+
+    if (!courseId) {
+      courseId =
+        await resolveCourseId(
+          requestedSlug
+        );
+    }
+
+    if (!courseId) {
+      return NextResponse.json(
+        {
+          message:
+            "Course not found for this URL.",
+        },
+        {
+          status: 404,
+        }
+      );
+    }
+
+    /* =====================================================
+       FETCH EXACT COURSE
+    ===================================================== */
+
+    const {
+      course,
+      raw,
+    } =
+      await fetchCourseDetails({
+        courseId,
+        uid,
+      });
+
+    if (!course) {
+      console.error(
+        "Course details empty:",
+        {
+          requestedSlug,
+          courseId,
+          raw,
+        }
+      );
+
+      return NextResponse.json(
+        {
+          message:
+            "Course details are unavailable.",
+        },
+        {
+          status: 404,
+        }
+      );
+    }
+
+    /* =====================================================
+       OPTIONAL SLUG VALIDATION
+
+       Useful when ID was supplied from sessionStorage.
+    ===================================================== */
+
+    const resolvedSlug =
+      createPublicCourseSlug(
+        course
+      );
+
+    /*
+     * Don't reject if backend details
+     * don't contain enough fields to
+     * reconstruct the slug.
+     */
+    if (
+      requestedSlug &&
+      resolvedSlug &&
+      normalizeSlug(
+        resolvedSlug
+      ) !==
+        normalizeSlug(
+          requestedSlug
+        )
+    ) {
+      console.warn(
+        "Course slug differs from resolved course:",
+        {
+          requestedSlug,
+          resolvedSlug,
+          courseId,
+        }
+      );
+    }
+
+    return NextResponse.json(
+      {
+        course,
+      },
+      {
+        status: 200,
+
+        headers: {
+          "Cache-Control":
+            "public, s-maxage=3600, stale-while-revalidate=86400",
+        },
+      }
+    );
+  } catch (error) {
+    console.error(
+      "Public course details API error:",
+      error
+    );
+
+    return NextResponse.json(
+      {
+        message:
+          error?.message ||
+          "Something went wrong while fetching course details.",
+      },
+      {
+        status: 500,
+      }
+    );
   }
+}

@@ -18,7 +18,7 @@ export default function DestinationHeader() {
                 Explore. Learn. Grow
             </p>
 
-            <h1
+            <h2
                 id="destinations-heading"
                 className="mt-4 font-nunito text-3xl font-extrabold leading-tight text-darkPrimary sm:text-4xl lg:text-5xl"
             >
@@ -28,7 +28,7 @@ export default function DestinationHeader() {
                 >
                     Destinations
                 </span>
-            </h1>
+            </h2>
 
             <p
                 className="mx-auto mt-4 max-w-2xl text-sm leading-7 text-slate-600 sm:text-base lg:text-lg"

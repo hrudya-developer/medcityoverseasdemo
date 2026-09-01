@@ -83,19 +83,18 @@ function ProgramsHeader() {
                 </span>
             </div>
 
-            <h1
-                id="programs-heading"
-                className="font-nunito text-3xl font-extrabold leading-tight text-darkPrimary sm:text-4xl lg:text-5xl"
-            >
-                Unlock Global Education
-                <br />
+            <h2
+  id="programs-heading"
+  className="font-nunito text-3xl font-extrabold leading-tight text-darkPrimary sm:text-4xl lg:text-5xl"
+>
+  <span className="block">
+    Unlock Global Education<span className="sr-only"> </span>
+  </span>
 
-                <span
-                    className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent"
-                >
-                    Study Abroad Opportunities
-                </span>
-            </h1>
+  <span className="block bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+    Study Abroad Opportunities
+  </span>
+</h2>
 
             <p className="mx-auto mt-4 max-w-3xl text-base font-bold text-gray-900">
                 Your trusted gateway to international education, university admissions,

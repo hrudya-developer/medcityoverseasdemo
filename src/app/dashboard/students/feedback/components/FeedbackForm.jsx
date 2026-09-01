@@ -257,9 +257,9 @@ export default function FeedbackForm({
 
 
                         <div>
-                            <h1 className="text-xl font-black text-slate-900 sm:text-2xl">
+                            <h2 className="text-xl font-black text-slate-900 sm:text-2xl">
                                 Share Your Feedback
-                            </h1>
+                            </h2>
 
                             <p className="mt-1 text-sm text-slate-500">
                                 Your suggestions

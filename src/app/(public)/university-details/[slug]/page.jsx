@@ -1,9 +1,20 @@
-import { redirect } from "next/navigation";
+import {
+  permanentRedirect,
+} from "next/navigation";
 
 export default async function LegacyUniversityDetailsPage({
-    params,
+  params,
 }) {
-    const { slug } = await params;
+  const { slug } =
+    await params;
 
-    redirect(`/universities/${slug}`);
+  if (!slug) {
+    permanentRedirect(
+      "/universities"
+    );
+  }
+
+  permanentRedirect(
+    `/universities/${slug}`
+  );
 }

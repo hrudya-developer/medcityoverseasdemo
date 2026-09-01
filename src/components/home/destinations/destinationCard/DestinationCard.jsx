@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 
 import DestinationContent from "./DestinationContent";
 import DestinationImage from "./DestinationImage";

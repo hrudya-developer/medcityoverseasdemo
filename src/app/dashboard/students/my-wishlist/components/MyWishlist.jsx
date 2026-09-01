@@ -479,9 +479,9 @@ export default function MyWishlist() {
 
 
                     <div>
-                        <h1 className="text-2xl font-black text-slate-900">
+                        <h2 className="text-2xl font-black text-slate-900">
                             My Wishlist
-                        </h1>
+                        </h2>
 
                         <p className="text-sm text-slate-500">
                             {

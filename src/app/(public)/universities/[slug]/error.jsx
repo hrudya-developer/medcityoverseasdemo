@@ -16,9 +16,9 @@ export default function UniversityDetailsError({
                     />
                 </div>
 
-                <h1 className="mt-5 text-2xl font-black text-darkPrimary">
+                <h2 className="mt-5 text-2xl font-black text-darkPrimary">
                     Unable to load university
-                </h1>
+                </h2>
 
                 <p className="mt-3 leading-7 text-slate-600">
                     {error?.message ||

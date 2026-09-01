@@ -59,7 +59,7 @@ export default function CommunityHero() {
                         Stay Updated
                     </div>
 
-                    <h1
+                    <h2
                         id="community-posts-heading"
                         className="text-3xl font-extrabold leading-tight text-[#6b123b] md:text-5xl"
                     >
@@ -67,7 +67,7 @@ export default function CommunityHero() {
                         <span className="text-primary">
                             Community Posts
                         </span>
-                    </h1>
+                    </h2>
 
                     <p
                         className="mt-4 max-w-2xl text-base leading-7 text-slate-600 md:text-lg"

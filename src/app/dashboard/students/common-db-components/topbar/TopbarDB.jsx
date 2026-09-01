@@ -132,7 +132,7 @@ function TopbarTitle({
                 Student Portal
             </p>
 
-            <h1
+            <h2
                 className="
                     mt-0.5
 
@@ -150,7 +150,7 @@ function TopbarTitle({
                 "
             >
                 {title}
-            </h1>
+            </h2>
         </div>
     );
 }

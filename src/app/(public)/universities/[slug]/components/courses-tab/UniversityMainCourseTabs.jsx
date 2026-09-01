@@ -21,20 +21,7 @@ export default function UniversityMainCourseTabs({
             aria-label="Main course categories"
             className="mb-8"
         >
-            <div className="mb-4">
-                <p className="text-xs font-black uppercase tracking-[0.18em] text-secondary">
-                    Course Categories
-                </p>
-
-                <h3 className="mt-1 text-xl font-black text-darkPrimary sm:text-2xl">
-                    Select a main course
-                </h3>
-
-                <p className="mt-2 text-sm leading-6 text-slate-500">
-                    Scroll horizontally to explore all
-                    available course categories.
-                </p>
-            </div>
+           
 
             <div className="relative overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-lg shadow-slate-900/5">
                 <div

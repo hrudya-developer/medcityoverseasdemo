@@ -119,7 +119,7 @@ export default function ProfileHeader({
                             Student Profile
                         </div>
 
-                        <h1
+                        <h2
                             className="
                                 truncate
                                 text-xl
@@ -131,7 +131,7 @@ export default function ProfileHeader({
                             "
                         >
                             {name}
-                        </h1>
+                        </h2>
 
                         <p
                             className="

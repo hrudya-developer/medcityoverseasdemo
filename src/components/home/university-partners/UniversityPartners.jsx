@@ -115,7 +115,7 @@ export default function UniversityPartners() {
         )}
       </div>
 
-      <div><Link href="/all-universities" className="text-center text-sm font-semibold leading-6 text-primary hover:text-darkPrimary mt-8 block underline">View All University Partners →</Link></div>
+      <div><Link href="/universities" className="text-center text-sm font-semibold leading-6 text-primary hover:text-darkPrimary mt-8 block underline">View All University Partners →</Link></div>
     </section>
 
   );

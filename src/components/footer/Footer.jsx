@@ -33,16 +33,7 @@ const footerIcons = [
     },
 ];
 
-const phoneNumbers = [
-    {
-        label: "+91 89432 80333",
-        href: "tel:+918943280333",
-    },
-    {
-        label: "+91 96450 20503",
-        href: "tel:+919645020503",
-    },
-];
+
 
 const footerLinks = [
     {
@@ -54,12 +45,16 @@ const footerLinks = [
         href: "/universities",
     },
     {
-        label: "Course Search",
-        href: "/course-search",
+        label: "Find a Course",
+        href: "/courses",
     },
     {
         label: "Our Branches",
         href: "/branches",
+    },
+    {
+        label: "Contact",
+        href: "/contact-us",
     },
 ];
 
@@ -164,7 +159,7 @@ const Footer = () => {
                     </p>
 
                     <Link
-                        href="/loginViaOtp"
+                        href="/login"
                         className="mx-auto mt-7 inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-6 py-3 text-sm font-semibold text-white transition duration-300 hover:-translate-y-0.5 hover:bg-darkPrimary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#070707] sm:mx-0"
                     >
                         Student Login
@@ -224,21 +219,16 @@ const Footer = () => {
                         </ContactItem>
 
                         <ContactItem
-                            icon={Phone}
-                            label="Phone numbers"
-                        >
-                            <span className="flex flex-col">
-                                {phoneNumbers.map((phone) => (
-                                    <a
-                                        key={phone.href}
-                                        href={phone.href}
-                                        className="transition-colors duration-300 hover:text-white hover:underline focus-visible:rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-                                    >
-                                        {phone.label}
-                                    </a>
-                                ))}
-                            </span>
-                        </ContactItem>
+  icon={Phone}
+  label="Phone number"
+>
+  <a
+    href="tel:+919072982555"
+    className="transition-colors duration-300 hover:text-white hover:underline focus-visible:rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+  >
+    +91 90729 82555
+  </a>
+</ContactItem>
 
                         <ContactItem
                             icon={Mail}

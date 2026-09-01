@@ -1,317 +1,520 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 import heroBg from "@/assets/university-course-details.webp";
 
 import {
-  GraduationCap,
-  MapPin,
-  MoveRight,
+    GraduationCap,
+    MapPin,
+    MoveRight,
 } from "lucide-react";
 
-export default function CourseDetailsHero({
-  details,
-  onApply,
-}) {
-  const {
-    courseTitle = "Course Details",
-    universityName = "University",
-    universityLogoUrl = "",
-    locationName = "",
-    level = "Course",
-  } = details ?? {};
+/* =========================================================
+   VALIDATE REMOTE LOGO
+========================================================= */
 
-  const [logoError, setLogoError] =
-    useState(false);
-
-  const handleApply = () => {
-    if (typeof onApply === "function") {
-      onApply();
+function getSafeLogoUrl(value) {
+    if (!value) {
+        return "";
     }
-  };
 
-  return (
-    <section
-      className="
-        relative
-        min-h-[400px]
-        w-full
-        overflow-hidden
-      "
-    >
-      {/* HERO IMAGE */}
-      <Image
-        src={heroBg}
-        alt=""
-        fill
-        priority
-        fetchPriority="high"
-        sizes="100vw"
-        className="
-          object-cover
-          object-center
-        "
-      />
+    const logo = String(value).trim();
 
-      {/* LIGHT OVERLAY */}
-      <div
-        aria-hidden="true"
-        className="
-          absolute
-          inset-0
-          bg-white/15
-        "
-      />
+    if (!logo) {
+        return "";
+    }
 
-      {/* DECORATIVE BACKGROUND */}
-      <div
-        aria-hidden="true"
-        className="
-          pointer-events-none
-          absolute
-          -left-24
-          -top-24
-          size-80
-          rounded-full
-          bg-primary/10
-          blur-3xl
-        "
-      />
+    /*
+     * Allow full HTTP/HTTPS URLs.
+     */
+    if (
+        /^https?:\/\//i.test(
+            logo
+        )
+    ) {
+        return logo;
+    }
 
-      <div
-        aria-hidden="true"
-        className="
-          pointer-events-none
-          absolute
-          -bottom-32
-          right-0
-          size-96
-          rounded-full
-          bg-secondary/10
-          blur-3xl
-        "
-      />
+    /*
+     * Allow local public URLs.
+     */
+    if (
+        logo.startsWith("/")
+    ) {
+        return logo;
+    }
 
-      {/* CONTENT */}
-      <div
-        className="
-          relative
-          z-10
-          mx-auto
-          flex
-          min-h-[420px]
-          w-full
-          max-w-[1600px]
-          items-center
-          px-5
-          py-10
-          sm:px-8
-          lg:px-12
-        "
-      >
-        <div className="w-full max-w-3xl">
-          <div className="flex flex-wrap items-center gap-3">
+    /*
+     * Anything else could cause:
+     * Failed to construct 'URL'
+     */
+    return "";
+}
+
+export default function CourseDetailsHero({
+    details,
+    onApply,
+}) {
+    const {
+        courseTitle =
+            "Course Details",
+
+        universityName =
+            "University",
+
+        universityLogoUrl =
+            "",
+
+        locationName =
+            "",
+
+        level =
+            "Course",
+    } = details ?? {};
+
+    const [
+        logoError,
+        setLogoError,
+    ] = useState(false);
+
+    const safeLogoUrl =
+        useMemo(
+            () =>
+                getSafeLogoUrl(
+                    universityLogoUrl
+                ),
+            [
+                universityLogoUrl,
+            ]
+        );
+
+    const showLogo =
+        Boolean(
+            safeLogoUrl
+        ) &&
+        !logoError;
+
+    const handleApply = () => {
+        if (
+            typeof onApply ===
+            "function"
+        ) {
+            onApply();
+        }
+    };
+
+    return (
+        <section
+            className="
+                relative
+                w-full
+                overflow-hidden
+                bg-slate-50
+            "
+        >
+            {/* =========================================
+                BACKGROUND IMAGE
+            ========================================== */}
+
+            <Image
+                src={heroBg}
+                alt="study abroad courses"
+                fill
+                priority
+                sizes="100vw"
+                className="
+                    object-cover
+                    object-center
+                "
+            />
+
+            {/* =========================================
+                OVERLAY
+            ========================================== */}
+
             <div
-              className="
-                inline-flex
-                items-center
-                gap-3
-                rounded-full
-                bg-logoYellow
-                px-4
-                py-2
-                text-xs
-                font-bold
-                text-black
-                shadow-lg
-                sm:text-sm
-              "
-            >
-              <GraduationCap
-                size={20}
                 aria-hidden="true"
-              />
+                className="
+                    absolute
+                    inset-0
+                    bg-gradient-to-r
+                    from-white/95
+                    via-white/80
+                    to-white/20
+                    lg:from-white/95
+                    lg:via-white/65
+                    lg:to-transparent
+                "
+            />
 
-              <span>{level}</span>
-            </div>
+            {/* =========================================
+                DECORATIVE BACKGROUND
+            ========================================== */}
 
-            <button
-              type="button"
-              onClick={handleApply}
-              className="
-                inline-flex
-                items-center
-                gap-2
-                rounded-full
-                bg-darkPrimary
-                px-5
-                py-2
-                text-xs
-                font-bold
-                text-white
-                shadow-lg
-                transition
-                duration-300
-                hover:-translate-y-0.5
-                hover:bg-primary
-                focus-visible:outline-none
-                focus-visible:ring-2
-                focus-visible:ring-primary
-                focus-visible:ring-offset-2
-                sm:text-sm
-              "
-            >
-              Apply Now
-
-              <MoveRight
-                size={18}
+            <div
                 aria-hidden="true"
-              />
-            </button>
-          </div>
-
-          <h1
-            className="
-              mt-8
-              max-w-3xl
-              text-2xl
-              font-extrabold
-              leading-tight
-              text-slate-950
-              sm:text-3xl
-              lg:text-5xl
-            "
-          >
-            {courseTitle}
-          </h1>
-
-          <div
-            aria-hidden="true"
-            className="
-              mt-5
-              h-1
-              w-20
-              rounded-full
-              bg-primary
-            "
-          />
-
-          <div
-            className="
-              mb-8
-              mt-6
-              flex
-              max-w-2xl
-              items-center
-              gap-4
-              rounded-2xl
-              border
-              border-white/70
-              bg-white/80
-              p-4
-              shadow-sm
-              backdrop-blur-sm
-            "
-          >
-            {universityLogoUrl &&
-            !logoError ? (
-              <img
-                src={universityLogoUrl}
-                alt={`${universityName} logo`}
-                width="64"
-                height="64"
-                loading="lazy"
-                decoding="async"
                 className="
-                  size-16
-                  shrink-0
-                  rounded-xl
-                  border
-                  border-slate-100
-                  bg-white
-                  object-contain
-                  p-2
-                  shadow-md
+                    pointer-events-none
+                    absolute
+                    -left-24
+                    -top-24
+                    size-80
+                    rounded-full
+                    bg-primary/10
+                    blur-3xl
                 "
-                onError={() =>
-                  setLogoError(true)
-                }
-              />
-            ) : (
-              <div
-                className="
-                  grid
-                  size-16
-                  shrink-0
-                  place-content-center
-                  rounded-xl
-                  bg-darkPrimary
-                  text-white
-                  shadow-lg
-                "
-              >
-                <GraduationCap
-                  size={30}
-                  aria-hidden="true"
-                />
-              </div>
-            )}
+            />
 
-            <div className="min-w-0">
-              <p
+            <div
+                aria-hidden="true"
                 className="
-                  text-xs
-                  font-extrabold
-                  uppercase
-                  tracking-wider
-                  text-primary
+                    pointer-events-none
+                    absolute
+                    -bottom-32
+                    right-0
+                    size-96
+                    rounded-full
+                    bg-secondary/10
+                    blur-3xl
                 "
-              >
-                University
-              </p>
+            />
 
-              <h2
+            {/* =========================================
+                CONTENT
+            ========================================== */}
+
+            <div
                 className="
-                  mt-1
-                  break-words
-                  text-base
-                  font-extrabold
-                  text-darkPrimary
-                  sm:text-lg
-                "
-              >
-                {universityName}
-              </h2>
-
-              {locationName && (
-                <p
-                  className="
-                    mt-1
+                    relative
+                    z-10
+                    mx-auto
                     flex
+                    min-h-[410px]
+                    w-full
+                    max-w-[1600px]
                     items-center
-                    gap-2
-                    text-sm
-                    font-medium
-                    text-secondary
-                  "
+                    px-5
+                    py-10
+                    sm:px-8
+                    lg:min-h-[430px]
+                    lg:px-12
+                    lg:py-12
+                "
+            >
+                <div
+                    className="
+                        w-full
+                        max-w-[720px]
+                    "
                 >
-                  <MapPin
-                    size={15}
-                    className="shrink-0"
-                    aria-hidden="true"
-                  />
+                    {/* LEVEL + APPLY */}
 
-                  <span>
-                    {locationName}
-                  </span>
-                </p>
-              )}
+                    <div
+                        className="
+                            flex
+                            flex-wrap
+                            items-center
+                            gap-3
+                        "
+                    >
+                        <div
+                            className="
+                                inline-flex
+                                items-center
+                                gap-2
+                                rounded-full
+                                bg-logoYellow
+                                px-4
+                                py-2
+                                text-xs
+                                font-bold
+                                text-black
+                                shadow-lg
+                                sm:text-sm
+                            "
+                        >
+                            <GraduationCap
+                                size={19}
+                                aria-hidden="true"
+                            />
+
+                            <span>
+                                {level}
+                            </span>
+                        </div>
+
+                        <button
+                            type="button"
+                            onClick={
+                                handleApply
+                            }
+                            className="
+                                group
+                                inline-flex
+                                items-center
+                                gap-2
+                                rounded-full
+                                bg-darkPrimary
+                                px-5
+                                py-2
+                                text-xs
+                                font-bold
+                                text-white
+                                shadow-lg
+                                transition-all
+                                duration-300
+
+                                hover:-translate-y-0.5
+                                hover:bg-primary
+
+                                focus-visible:outline-none
+                                focus-visible:ring-2
+                                focus-visible:ring-primary
+                                focus-visible:ring-offset-2
+
+                                sm:text-sm
+                            "
+                        >
+                            Apply Now
+
+                            <MoveRight
+                                size={18}
+                                aria-hidden="true"
+                                className="
+                                    transition-transform
+                                    duration-300
+                                    group-hover:translate-x-1
+                                "
+                            />
+                        </button>
+                    </div>
+
+                    {/* =====================================
+                        COURSE TITLE
+                    ====================================== */}
+
+                    <h2
+                        className="
+                            mt-7
+                            max-w-[700px]
+                            text-2xl
+                            font-black
+                            leading-tight
+                            tracking-[-0.03em]
+                            text-slate-950
+
+                            sm:text-3xl
+
+                            lg:text-[2.75rem]
+                            lg:leading-[1.1]
+                        "
+                    >
+                        {courseTitle}
+                    </h2>
+
+                    {/* TITLE ACCENT */}
+
+                    <div
+                        aria-hidden="true"
+                        className="
+                            mt-5
+                            flex
+                            items-center
+                            gap-2
+                        "
+                    >
+                        <span
+                            className="
+                                h-1
+                                w-14
+                                rounded-full
+                                bg-primary
+                            "
+                        />
+
+                        <span
+                            className="
+                                h-1
+                                w-5
+                                rounded-full
+                                bg-secondary
+                            "
+                        />
+
+                        <span
+                            className="
+                                h-1
+                                w-2
+                                rounded-full
+                                bg-logoYellow
+                            "
+                        />
+                    </div>
+
+                    {/* =====================================
+                        UNIVERSITY
+                    ====================================== */}
+
+                    <div
+                        className="
+                            mt-6
+                            flex
+                            w-full
+                            max-w-[600px]
+                            items-center
+                            gap-4
+                            rounded-2xl
+                            border
+                            border-white/80
+                            bg-white/85
+                            p-4
+                            shadow-[0_12px_35px_rgba(15,23,42,0.08)]
+                            backdrop-blur-md
+                        "
+                    >
+                        {/* LOGO */}
+
+                        {showLogo ? (
+                            <div
+                                className="
+                                    flex
+                                    h-16
+                                    w-24
+                                    shrink-0
+                                    items-center
+                                    justify-center
+                                    overflow-hidden
+                                    rounded-xl
+                                    border
+                                    border-slate-100
+                                    bg-white
+                                    p-2
+                                    shadow-sm
+                                "
+                            >
+                                <img
+                                    src={
+                                        safeLogoUrl
+                                    }
+                                    alt={`${universityName} logo`}
+                                    loading="lazy"
+                                    decoding="async"
+                                    onError={() =>
+                                        setLogoError(
+                                            true
+                                        )
+                                    }
+                                    className="
+                                        block
+                                        max-h-full
+                                        max-w-full
+                                        object-contain
+                                    "
+                                />
+                            </div>
+                        ) : (
+                            <div
+                                className="
+                                    grid
+                                    h-16
+                                    w-20
+                                    shrink-0
+                                    place-items-center
+                                    rounded-xl
+                                    bg-gradient-to-br
+                                    from-darkPrimary
+                                    to-primary
+                                    text-white
+                                    shadow-lg
+                                "
+                            >
+                                <GraduationCap
+                                    size={
+                                        29
+                                    }
+                                    aria-hidden="true"
+                                />
+                            </div>
+                        )}
+
+                        {/* UNIVERSITY INFO */}
+
+                        <div
+                            className="
+                                min-w-0
+                                flex-1
+                            "
+                        >
+                            <p
+                                className="
+                                    text-[10px]
+                                    font-black
+                                    uppercase
+                                    tracking-[0.15em]
+                                    text-primary
+                                    sm:text-xs
+                                "
+                            >
+                                University
+                            </p>
+
+                            <h2
+                                className="
+                                    mt-1
+                                    line-clamp-2
+                                    text-sm
+                                    font-black
+                                    leading-5
+                                    text-darkPrimary
+                                    sm:text-base
+                                    sm:leading-6
+                                "
+                            >
+                                {
+                                    universityName
+                                }
+                            </h2>
+
+                            {locationName && (
+                                <p
+                                    className="
+                                        mt-1.5
+                                        flex
+                                        items-center
+                                        gap-1.5
+                                        text-xs
+                                        font-semibold
+                                        text-secondary
+                                        sm:text-sm
+                                    "
+                                >
+                                    <MapPin
+                                        size={
+                                            14
+                                        }
+                                        aria-hidden="true"
+                                        className="
+                                            shrink-0
+                                        "
+                                    />
+
+                                    <span
+                                        className="
+                                            truncate
+                                        "
+                                    >
+                                        {
+                                            locationName
+                                        }
+                                    </span>
+                                </p>
+                            )}
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
+        </section>
+    );
 }

@@ -1,138 +1,140 @@
 /** @type {import("next").NextConfig} */
+
 const nextConfig = {
-  reactCompiler: true,
+    reactCompiler: true,
 
-  /* =====================================================
-     IMAGE OPTIMIZATION
-  ===================================================== */
-  images: {
-    remotePatterns: [
-      {
-        protocol: "https",
-        hostname:
-          "overseas.technocitysolutions.com",
-        pathname:
-          "/public/uploads/destination/**",
-      },
+    /* =====================================================
+       IMAGE OPTIMIZATION
+    ===================================================== */
 
-      {
-        protocol: "https",
-        hostname:
-          "overseas.technocitysolutions.com",
-        pathname:
-          "/public/images/**",
-      },
+    images: {
+        remotePatterns: [
+            {
+                protocol: "https",
+                hostname:
+                    "overseas.technocitysolutions.com",
+            },
+            {
+                protocol: "https",
+                hostname:
+                    "img.youtube.com",
+            },
+            {
+                protocol: "https",
+                hostname:
+                    "placehold.co",
+            },
+        ],
 
-      {
-        protocol: "https",
-        hostname:
-          "img.youtube.com",
-        pathname: "/vi/**",
-      },
+        qualities: [
+            75,
+            80,
+            85,
+            90,
+            95,
+            100,
+        ],
 
-      {
-        protocol: "https",
-        hostname:
-          "placehold.co",
-        pathname: "/**",
-      },
-    ],
+        formats: [
+            "image/avif",
+            "image/webp",
+        ],
 
-    /*
-     * Your current components use quality={100}.
-     * Next.js requires custom qualities to be
-     * explicitly allowed.
-     */
-    qualities: [
-      75,
-      80,
-      85,
-      90,
-      95,
-      100,
-    ],
+        minimumCacheTTL: 86400,
+    },
 
-    /*
-     * Prefer modern optimized formats.
-     */
-    formats: [
-      "image/avif",
-      "image/webp",
-    ],
+    /* =====================================================
+       SEO REWRITES
+    ===================================================== */
 
-    /*
-     * Cache optimized images for 1 day.
-     */
-    minimumCacheTTL: 86400,
-  },
+    async rewrites() {
+        return [
+            {
+                source:
+                    "/study-in-:slug",
 
-  /* =====================================================
-     SEO-FRIENDLY PUBLIC URLS
-  ===================================================== */
-  async rewrites() {
-    return [
-      /*
-       * Browser / Google sees:
-       *
-       * /study-in-uk
-       * /study-in-france
-       * /study-in-ireland
-       *
-       * Internally Next.js renders:
-       *
-       * /destination/uk
-       * /destination/france
-       * /destination/ireland
-       */
-      {
-        source:
-          "/study-in-:slug",
+                destination:
+                    "/destination/:slug",
+            },
 
-        destination:
-          "/destination/:slug",
-      },
-    ];
-  },
+            {
+                source:
+                    "/universities-in-:country",
 
-  /* =====================================================
-     OLD URL REDIRECTS
-  ===================================================== */
-  async redirects() {
-    return [
-      /*
-       * If old URLs have already been indexed,
-       * linked or shared, permanently redirect
-       * them to the new SEO URLs.
-       */
-      {
-        source:
-          "/destination/:slug",
+                destination:
+                    "/all-universities/:country",
+            },
+        ];
+    },
 
-        destination:
-          "/study-in-:slug",
+    /* =====================================================
+       PERMANENT REDIRECTS
+    ===================================================== */
 
-        permanent: true,
-      },
+    async redirects() {
+        return [
+            {
+                source:
+                    "/destination/:slug",
 
-      /*
-       * Optional:
-       * redirect your old ID-based destination
-       * route only if it is still publicly used.
-       *
-       * Do NOT uncomment this unless you can map
-       * IDs to slugs. An ID cannot automatically
-       * become a country slug.
-       */
+                destination:
+                    "/study-in-:slug",
 
-      // {
-      //   source:
-      //     "/destination-details/:id",
-      //   destination:
-      //     "/destinations",
-      //   permanent: true,
-      // },
-    ];
-  },
+                permanent: true,
+            },
+
+            {
+                source:
+                    "/all-universities/:country",
+
+                destination:
+                    "/universities-in-:country",
+
+                permanent: true,
+            },
+
+            {
+                source:
+                    "/course-search",
+
+                destination:
+                    "/courses",
+
+                permanent: true,
+            },
+
+            {
+                source:
+                    "/university-details/:slug",
+
+                destination:
+                    "/universities/:slug",
+
+                permanent: true,
+            },
+
+            {
+                source:
+                    "/study-at-:slug",
+
+                destination:
+                    "/universities/:slug",
+
+                permanent: true,
+            },
+
+            {
+                source: "/german-programs",
+                destination: "/study-in-germany",
+                permanent: true,
+            },
+            {
+                source: "/course-search",
+                destination: "/courses",
+                permanent: true,
+            },
+        ];
+    },
 };
 
 export default nextConfig;

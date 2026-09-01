@@ -35,7 +35,7 @@ const supportItems = [
 const ContactHero = () => {
     return (
         <section
-            className="relative isolate mx-auto w-full max-w-[1600px] overflow-hidden bg-gradient-to-br from-white via-[#fffafd] to-[#f3f8ff] px-4 py-7 sm:px-6 sm:py-9 lg:px-8 lg:py-10 xl:py-11"
+            className="relative isolate mx-auto w-full overflow-hidden bg-gradient-to-br from-white via-[#fffafd] to-[#f3f8ff] px-4 py-7 sm:px-6 sm:py-9 lg:px-8 lg:py-10 xl:py-11"
         >
             <BackgroundDecorations />
 
@@ -53,31 +53,30 @@ const ContactHero = () => {
                     <ContactBreadcrumb />
 
                     <h1
-                        className="mt-4 max-w-3xl font-nunito text-[31px] font-black leading-[1.08] tracking-[-0.035em] text-darkPrimary sm:text-[38px] lg:text-[44px] xl:text-[50px] 2xl:text-[54px]"
-                    >
-                        We’re Here to{" "}
-                        <span className="relative inline-block">
-                            <span
-                                className="bg-gradient-to-r from-primary to-[#e73b70] bg-clip-text text-transparent"
-                            >
-                                Help You
-                            </span>
+  className="mt-4 max-w-3xl font-nunito text-3xl font-extrabold leading-[1.08] tracking-[-0.035em] text-darkPrimary sm:text-4xl lg:text-5xl"
+>
+  We’re Here to{" "}
+  
+  <span className="relative inline-block">
+    <span className="bg-gradient-to-r from-primary to-[#e73b70] bg-clip-text text-transparent">
+      Help You
+    </span>
 
-                            <span
-                                aria-hidden="true"
-                                className="absolute -bottom-1 left-0 h-1 w-full rounded-full bg-logoYellow/70"
-                            />
-                        </span>
+    <span
+      aria-hidden="true"
+      className="absolute -bottom-1 left-0 h-1 w-full rounded-full bg-logoYellow/70"
+    />
+  </span>
 
-                        <span className="block">
-                            Start Your{" "}
-                            <span
-                                className="bg-gradient-to-r from-secondary to-[#3694d7] bg-clip-text text-transparent"
-                            >
-                                Journey
-                            </span>
-                        </span>
-                    </h1>
+  <span className="sr-only"> </span>
+
+  <span className="block">
+    Start Your{" "}
+    <span className="bg-gradient-to-r from-secondary to-[#3694d7] bg-clip-text text-transparent">
+      Journey
+    </span>
+  </span>
+</h1>
 
                     <div
                         aria-hidden="true"
@@ -268,7 +267,7 @@ const HeroVisual = () => {
 
                 <div className="whitespace-nowrap">
                     <p className="text-[11px] font-black text-[#132342] sm:text-xs">
-                        185,000+
+                        10K+
                     </p>
 
                     <p className="text-[8px] text-slate-500 sm:text-[9px]">
@@ -277,7 +276,7 @@ const HeroVisual = () => {
                 </div>
             </div>
 
-            <div
+            {/* <div
                 className="absolute bottom-[70px] right-[-10px] z-30 flex max-w-[145px] items-center gap-2 rounded-2xl border border-white/80 bg-white/95 px-2.5 py-2 shadow-[0_12px_28px_rgba(15,23,42,0.14)] backdrop-blur-xl sm:bottom-[78px] sm:right-[-20px] sm:max-w-[158px] sm:px-3 sm:py-2.5 lg:bottom-[62px]"
             >
                 <span
@@ -295,7 +294,7 @@ const HeroVisual = () => {
                 >
                     Trusted by Thousands of Students
                 </p>
-            </div>
+            </div> */}
 
             <div
                 className="absolute bottom-0 left-1/2 z-30 flex -translate-x-1/2 items-center gap-2.5 whitespace-nowrap rounded-2xl border border-white/80 bg-white/95 px-3 py-2.5 shadow-[0_16px_34px_rgba(15,23,42,0.15)] backdrop-blur-xl sm:left-[-18px] sm:translate-x-0 lg:left-[-28px]"

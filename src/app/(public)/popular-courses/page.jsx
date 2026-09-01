@@ -225,12 +225,12 @@ export default function PopularCoursesPage() {
                     aria-labelledby="popular-course-list-heading"
                     className="mt-10"
                 >
-                    <h2
+                    <h1
                         id="popular-course-list-heading"
                         className="sr-only"
                     >
                         Browse popular international course categories
-                    </h2>
+                    </h1>
 
                     <StudyTabContent />
                 </section>

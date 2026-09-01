@@ -64,7 +64,7 @@ export default function MobileAppRightSection({
             </div>
 
             {/* Heading */}
-            <h1
+            <h2
                 id="mobile-app-heading"
                 className="mt-5 font-nunito text-3xl font-extrabold leading-[1.04] tracking-[-0.045em] text-darkPrimary sm:text-4xl lg:text-5xl xl:text-5xl"
             >
@@ -74,7 +74,7 @@ export default function MobileAppRightSection({
                 >
                     Mobile App
                 </span>
-            </h1>
+            </h2>
 
             {/* Description */}
             <p

@@ -2,9 +2,6 @@
 
 import Link from "next/link";
 
-import cn from "@/lib/cn";
-import { createSlug } from "@/lib/slug";
-
 import {
     ArrowRight,
     BookOpen,
@@ -15,18 +12,32 @@ import {
     Wallet,
 } from "lucide-react";
 
+import cn from "@/lib/cn";
+
+import {
+    createPublicCourseHref,
+    createPublicCourseSlug,
+} from "@/lib/courseSlug";
+
 export default function UniversityCourseCard({
     course,
     universityName,
 }) {
-    if (!course) return null;
+    if (!course) {
+        return null;
+    }
 
-    const courseId =
-        course?.id ||
-        course?.course_id ||
-        course?.cid ||
-        course?.uc_id ||
-        "";
+    /* =====================================================
+       COURSE DATA
+    ===================================================== */
+
+    const courseId = String(
+        course?.id ??
+        course?.uc_id ??
+        course?.university_course_id ??
+        course?.universityCourseId ??
+        ""
+    ).trim();
 
     const courseName =
         course?.course ||
@@ -38,8 +49,15 @@ export default function UniversityCourseCard({
     const displayUniversity =
         course?.university ||
         course?.university_name ||
+        course?.u_name ||
         universityName ||
         "University";
+
+    const countryName =
+        course?.country ||
+        course?.country_name ||
+        course?.destination ||
+        "";
 
     const level =
         course?.level ||
@@ -60,28 +78,193 @@ export default function UniversityCourseCard({
         course?.course_fee ||
         "Not available";
 
+    /* =====================================================
+       ONE STANDARD PUBLIC SLUG
+    ===================================================== */
+
+    const courseSlug =
+        createPublicCourseSlug(
+            course,
+            displayUniversity
+        );
+
+    const courseHref =
+        createPublicCourseHref(
+            course,
+            displayUniversity
+        );
+
+    /* =====================================================
+       SAVE EXACT COURSE MAPPING
+
+       IMPORTANT:
+       getCoursedetails requires course.id.
+
+       This storage is NOT pendingApplyCourse.
+       It is only slug -> exact ID mapping.
+    ===================================================== */
+
+    const handleCourseClick = () => {
+        if (
+            !courseSlug ||
+            !courseId
+        ) {
+            return;
+        }
+
+        try {
+            sessionStorage.setItem(
+                `public-course:${courseSlug}`,
+                JSON.stringify({
+                    id:
+                        courseId,
+
+                    slug:
+                        courseSlug,
+
+                    name:
+                        courseName,
+
+                    university:
+                        displayUniversity,
+
+                    country:
+                        countryName,
+
+                    course,
+
+                    createdAt:
+                        Date.now(),
+                })
+            );
+        } catch (error) {
+            console.warn(
+                "Unable to store public course mapping:",
+                error
+            );
+        }
+    };
+
     return (
-        <article className="group relative flex h-full flex-col overflow-hidden rounded-[28px] border border-slate-200/80 bg-white shadow-[0_18px_55px_rgba(15,23,42,0.08)] transition-all duration-300 hover:-translate-y-2 hover:border-primary/30 hover:shadow-[0_26px_70px_rgba(192,31,83,0.16)]">
+        <article
+            className="
+                group
+                relative
+                flex
+                h-full
+                flex-col
+                overflow-hidden
+                rounded-[28px]
+                border
+                border-slate-200/80
+                bg-white
+                shadow-[0_18px_55px_rgba(15,23,42,0.08)]
+                transition-all
+                duration-300
+
+                hover:-translate-y-2
+                hover:border-primary/30
+                hover:shadow-[0_26px_70px_rgba(192,31,83,0.16)]
+            "
+        >
+            {/* DECORATION */}
+
             <div
                 aria-hidden="true"
-                className="pointer-events-none absolute -right-16 -top-16 size-40 rounded-full bg-primary/10 blur-3xl transition duration-500 group-hover:bg-primary/20"
+                className="
+                    pointer-events-none
+                    absolute
+                    -right-16
+                    -top-16
+                    size-40
+                    rounded-full
+                    bg-primary/10
+                    blur-3xl
+                    transition
+                    duration-500
+                    group-hover:bg-primary/20
+                "
             />
 
             <div
                 aria-hidden="true"
-                className="pointer-events-none absolute -bottom-20 -left-16 size-44 rounded-full bg-secondary/10 blur-3xl"
+                className="
+                    pointer-events-none
+                    absolute
+                    -bottom-20
+                    -left-16
+                    size-44
+                    rounded-full
+                    bg-secondary/10
+                    blur-3xl
+                "
             />
 
-            <div className="relative flex h-full flex-col p-6 sm:p-7">
-                <div className="mb-6 flex items-start justify-between gap-4">
-                    <div className="grid size-14 shrink-0 place-items-center rounded-2xl bg-gradient-to-br from-primary to-darkPrimary text-white shadow-lg shadow-primary/20 transition duration-300 group-hover:rotate-3 group-hover:scale-105">
+            <div
+                className="
+                    relative
+                    flex
+                    h-full
+                    flex-col
+                    p-6
+                    sm:p-7
+                "
+            >
+                {/* TOP */}
+
+                <div
+                    className="
+                        mb-6
+                        flex
+                        items-start
+                        justify-between
+                        gap-4
+                    "
+                >
+                    <div
+                        className="
+                            grid
+                            size-14
+                            shrink-0
+                            place-items-center
+                            rounded-2xl
+                            bg-gradient-to-br
+                            from-primary
+                            to-darkPrimary
+                            text-white
+                            shadow-lg
+                            shadow-primary/20
+                            transition
+                            duration-300
+
+                            group-hover:rotate-3
+                            group-hover:scale-105
+                        "
+                    >
                         <BookOpen
                             className="size-7"
                             aria-hidden="true"
                         />
                     </div>
 
-                    <span className="inline-flex items-center gap-1.5 rounded-full border border-primary/10 bg-primary/5 px-3 py-1.5 text-xs font-black uppercase tracking-wide text-primary">
+                    <span
+                        className="
+                            inline-flex
+                            items-center
+                            gap-1.5
+                            rounded-full
+                            border
+                            border-primary/10
+                            bg-primary/5
+                            px-3
+                            py-1.5
+                            text-xs
+                            font-black
+                            uppercase
+                            tracking-wide
+                            text-primary
+                        "
+                    >
                         <Sparkles
                             className="size-3.5"
                             aria-hidden="true"
@@ -91,26 +274,60 @@ export default function UniversityCourseCard({
                     </span>
                 </div>
 
+                {/* COURSE NAME */}
+
                 <div className="mb-5">
-                    <p className="mb-2 text-xs font-black uppercase tracking-[0.18em] text-secondary">
+                    <p
+                        className="
+                            mb-2
+                            text-xs
+                            font-black
+                            uppercase
+                            tracking-[0.18em]
+                            text-secondary
+                        "
+                    >
                         Study Program
                     </p>
 
-                    <h3 className="line-clamp-3 text-xl font-black leading-snug text-darkPrimary transition-colors duration-300 group-hover:text-primary">
+                    <h3
+                        className="
+                            line-clamp-3
+                            text-xl
+                            font-black
+                            leading-snug
+                            text-darkPrimary
+                            transition-colors
+                            duration-300
+                            group-hover:text-primary
+                        "
+                    >
                         {courseName}
                     </h3>
                 </div>
+
+                {/* DETAILS */}
 
                 <div className="grid gap-3">
                     <InfoLine
                         icon={Globe2}
                         label="University"
-                        value={displayUniversity}
+                        value={
+                            displayUniversity
+                        }
                     />
 
-                    <div className="grid gap-3 sm:grid-cols-2">
+                    <div
+                        className="
+                            grid
+                            gap-3
+                            sm:grid-cols-2
+                        "
+                    >
                         <InfoLine
-                            icon={GraduationCap}
+                            icon={
+                                GraduationCap
+                            }
                             label="Level"
                             value={level}
                             compact
@@ -119,23 +336,78 @@ export default function UniversityCourseCard({
                         <InfoLine
                             icon={Clock}
                             label="Duration"
-                            value={duration}
+                            value={
+                                duration
+                            }
                             compact
                         />
                     </div>
 
-                    <FeeLine value={fees} />
+                    <FeeLine
+                        value={fees}
+                    />
                 </div>
 
+                {/* CTA */}
+
                 <div className="mt-auto pt-6">
-                    {courseId ? (
+                    {courseId &&
+                    courseHref ? (
                         <Link
-                            href={`/courses/${createSlug(courseName)}`}
-                            className="group/link inline-flex w-full items-center justify-center gap-3 rounded-2xl bg-gradient-to-r from-darkPrimary to-primary px-5 py-4 text-sm font-black text-white shadow-lg shadow-primary/20 transition duration-300 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-primary/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+                            href={
+                                courseHref
+                            }
+                            onClick={
+                                handleCourseClick
+                            }
+                            className="
+                                group/link
+                                inline-flex
+                                w-full
+                                items-center
+                                justify-center
+                                gap-3
+                                rounded-2xl
+                                bg-gradient-to-r
+                                from-darkPrimary
+                                to-primary
+                                px-5
+                                py-4
+                                text-sm
+                                font-black
+                                text-white
+                                shadow-lg
+                                shadow-primary/20
+                                transition
+                                duration-300
+
+                                hover:-translate-y-0.5
+                                hover:shadow-xl
+                                hover:shadow-primary/30
+
+                                focus-visible:outline-none
+                                focus-visible:ring-2
+                                focus-visible:ring-primary
+                                focus-visible:ring-offset-2
+                            "
                         >
                             View Course
 
-                            <span className="grid size-8 place-items-center rounded-full bg-white/15 transition duration-300 group-hover/link:translate-x-1 group-hover/link:bg-white group-hover/link:text-primary">
+                            <span
+                                className="
+                                    grid
+                                    size-8
+                                    place-items-center
+                                    rounded-full
+                                    bg-white/15
+                                    transition
+                                    duration-300
+
+                                    group-hover/link:translate-x-1
+                                    group-hover/link:bg-white
+                                    group-hover/link:text-primary
+                                "
+                            >
                                 <ArrowRight
                                     className="size-4"
                                     aria-hidden="true"
@@ -146,7 +418,22 @@ export default function UniversityCourseCard({
                         <button
                             type="button"
                             disabled
-                            className="inline-flex w-full cursor-not-allowed items-center justify-center rounded-2xl border border-slate-200 bg-slate-100 px-5 py-4 text-sm font-black text-slate-400"
+                            className="
+                                inline-flex
+                                w-full
+                                cursor-not-allowed
+                                items-center
+                                justify-center
+                                rounded-2xl
+                                border
+                                border-slate-200
+                                bg-slate-100
+                                px-5
+                                py-4
+                                text-sm
+                                font-black
+                                text-slate-400
+                            "
                         >
                             Details unavailable
                         </button>
@@ -165,10 +452,47 @@ function InfoLine({
 }) {
     return (
         <div
-            className={cn(`group/info flex items-start gap-3 rounded-2xl border border-slate-100 bg-[#f8f9fc] transition duration-300 hover:border-primary/15 hover:bg-primary/[0.035] ${compact ? "p-3.5" : "p-4"
-                }`)}
+            className={cn(`
+                group/info
+                flex
+                items-start
+                gap-3
+                rounded-2xl
+                border
+                border-slate-100
+                bg-[#f8f9fc]
+                transition
+                duration-300
+
+                hover:border-primary/15
+                hover:bg-primary/[0.035]
+
+                ${
+                    compact
+                        ? "p-3.5"
+                        : "p-4"
+                }
+            `)}
         >
-            <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-white text-primary shadow-sm ring-1 ring-slate-100 transition duration-300 group-hover/info:bg-primary group-hover/info:text-white">
+            <span
+                className="
+                    grid
+                    size-10
+                    shrink-0
+                    place-items-center
+                    rounded-xl
+                    bg-white
+                    text-primary
+                    shadow-sm
+                    ring-1
+                    ring-slate-100
+                    transition
+                    duration-300
+
+                    group-hover/info:bg-primary
+                    group-hover/info:text-white
+                "
+            >
                 <Icon
                     className="size-4.5"
                     aria-hidden="true"
@@ -176,11 +500,29 @@ function InfoLine({
             </span>
 
             <div className="min-w-0">
-                <p className="text-[10px] font-black uppercase tracking-[0.14em] text-slate-400">
+                <p
+                    className="
+                        text-[10px]
+                        font-black
+                        uppercase
+                        tracking-[0.14em]
+                        text-slate-400
+                    "
+                >
                     {label}
                 </p>
 
-                <p className="mt-1 line-clamp-2 break-words text-sm font-bold leading-6 text-[#081c47]">
+                <p
+                    className="
+                        mt-1
+                        line-clamp-2
+                        break-words
+                        text-sm
+                        font-bold
+                        leading-6
+                        text-[#081c47]
+                    "
+                >
                     {value}
                 </p>
             </div>
@@ -188,16 +530,59 @@ function InfoLine({
     );
 }
 
-function FeeLine({ value }) {
+function FeeLine({
+    value,
+}) {
     return (
-        <div className="relative overflow-hidden rounded-2xl border border-primary/15 bg-gradient-to-r from-primary/[0.07] via-white to-secondary/[0.07] p-4">
+        <div
+            className="
+                relative
+                overflow-hidden
+                rounded-2xl
+                border
+                border-primary/15
+                bg-gradient-to-r
+                from-primary/[0.07]
+                via-white
+                to-secondary/[0.07]
+                p-4
+            "
+        >
             <div
                 aria-hidden="true"
-                className="pointer-events-none absolute right-0 top-0 size-20 rounded-full bg-primary/10 blur-2xl"
+                className="
+                    pointer-events-none
+                    absolute
+                    right-0
+                    top-0
+                    size-20
+                    rounded-full
+                    bg-primary/10
+                    blur-2xl
+                "
             />
 
-            <div className="relative flex items-center gap-3">
-                <span className="grid size-11 shrink-0 place-items-center rounded-xl bg-primary text-white shadow-lg shadow-primary/20">
+            <div
+                className="
+                    relative
+                    flex
+                    items-center
+                    gap-3
+                "
+            >
+                <span
+                    className="
+                        grid
+                        size-11
+                        shrink-0
+                        place-items-center
+                        rounded-xl
+                        bg-primary
+                        text-white
+                        shadow-lg
+                        shadow-primary/20
+                    "
+                >
                     <Wallet
                         className="size-5"
                         aria-hidden="true"
@@ -205,11 +590,27 @@ function FeeLine({ value }) {
                 </span>
 
                 <div className="min-w-0">
-                    <p className="text-[10px] font-black uppercase tracking-[0.16em] text-slate-400">
+                    <p
+                        className="
+                            text-[10px]
+                            font-black
+                            uppercase
+                            tracking-[0.16em]
+                            text-slate-400
+                        "
+                    >
                         Tuition Fees
                     </p>
 
-                    <p className="mt-1 break-words text-base font-black text-darkPrimary">
+                    <p
+                        className="
+                            mt-1
+                            break-words
+                            text-base
+                            font-black
+                            text-darkPrimary
+                        "
+                    >
                         {value}
                     </p>
                 </div>

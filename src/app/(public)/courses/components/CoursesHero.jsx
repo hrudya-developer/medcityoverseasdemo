@@ -78,13 +78,13 @@ export default function CoursesHero() {
             Discover your future
           </p>
 
-          <h1 className="text-[2.25rem] font-black leading-[1.08] tracking-tight text-slate-950 min-[400px]:text-[2.5rem] sm:text-5xl md:text-[3.25rem] lg:text-[3.5rem] xl:text-6xl">
+          <h2 className="text-[2.25rem] font-black leading-[1.08] tracking-tight text-slate-950 min-[400px]:text-[2.5rem] sm:text-5xl md:text-[3.25rem] lg:text-[3.5rem] xl:text-6xl">
             Find the Right Course.
 
             <span className="mt-1.5 block text-primary sm:mt-2">
               Build Your Future.
             </span>
-          </h1>
+          </h2>
 
           <p className="mx-auto mt-5 max-w-xl text-sm font-medium leading-6 text-slate-600 sm:mt-6 sm:text-base sm:leading-7 md:text-lg lg:mx-0">
             Search from top universities and courses across the world and

@@ -14,9 +14,9 @@ export default function OtpHeader({
                 Secure verification
             </p>
 
-            <h1 className="mt-2 text-2xl font-black sm:text-3xl">
+            <h2 className="mt-2 text-2xl font-black sm:text-3xl">
                 OTP Verification
-            </h1>
+            </h2>
 
             <p className="mt-3 text-sm text-white/70">
                 Enter the four-digit code sent to

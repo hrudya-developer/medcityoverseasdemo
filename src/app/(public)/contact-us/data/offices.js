@@ -8,9 +8,9 @@ export const offices = [
         locality: "Kannur",
         region: "Kerala",
         postalCode: "670004",
-        phone: "+91 8086776222",
-        phoneLink: "+918086776222",
-        email: "info@miak.in",
+        phone: "+91 90729 82555",
+        phoneLink: "+919072982555",
+        email: "info@mioc.in",
     },
     {
         id: 2,

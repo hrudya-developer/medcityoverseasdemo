@@ -148,9 +148,9 @@ export default function CourseHero({
             Explore Programs
           </p>
   
-          <h1 className="mt-2 text-3xl font-black text-slate-950">
+          <h2 className="mt-2 text-3xl font-black text-slate-950">
             Find a Course
-          </h1>
+          </h2>
   
           <p className="mt-2 max-w-lg text-sm leading-6 text-slate-500">
             Search by course or university, or use the filters to narrow your
