@@ -276,7 +276,7 @@ export default function AcademyCentersHeader({
               />
 
               <Stat
-                value="14+"
+                value="18+"
                 label="Cities"
               />
 
