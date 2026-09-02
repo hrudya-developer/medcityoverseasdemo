@@ -628,7 +628,7 @@ function ServicesCTA() {
                 </p>
 
                 <a
-                    href="tel:+918943280333"
+                    href="tel:+919072 82555"
                     className="mt-7 inline-flex items-center gap-3 rounded-full bg-white px-8 py-4 font-bold text-primary shadow-xl transition-all duration-300 hover:-translate-y-1 hover:bg-slate-50"
                 >
                     <Phone
@@ -637,7 +637,7 @@ function ServicesCTA() {
                     />
 
                     <span>
-                        Call: +91 89432 80333
+                        Call: +91 90729 82555
                     </span>
                 </a>
             </div>
