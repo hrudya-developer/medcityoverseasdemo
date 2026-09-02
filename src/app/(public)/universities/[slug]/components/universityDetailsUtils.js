@@ -1,5 +1,9 @@
-export const normalizeValue = (value) =>
-    String(value ?? "")
+export const normalizeValue = (
+    value
+) =>
+    String(
+        value ?? ""
+    )
         .trim()
         .toLowerCase();
 
@@ -7,19 +11,45 @@ export const joinImageUrl = (
     basePath,
     imageName
 ) => {
-    if (!imageName) return "";
+    if (!imageName) {
+        return "";
+    }
 
-    const image = String(imageName).trim();
+    const image =
+        String(
+            imageName
+        ).trim();
 
-    if (/^https?:\/\//i.test(image)) {
+    if (
+        /^https?:\/\//i.test(
+            image
+        )
+    ) {
         return image;
     }
 
-    const base = String(
-        basePath ?? ""
-    ).replace(/\/+$/, "");
+    if (
+        image.startsWith(
+            "//"
+        )
+    ) {
+        return `https:${image}`;
+    }
 
-    const file = image.replace(/^\/+/, "");
+    const base =
+        String(
+            basePath ??
+            ""
+        ).replace(
+            /\/+$/,
+            ""
+        );
+
+    const file =
+        image.replace(
+            /^\/+/,
+            ""
+        );
 
     return base
         ? `${base}/${file}`
@@ -32,71 +62,179 @@ export const getYesNoValue = (
     negativeLabel
 ) => {
     const normalized =
-        normalizeValue(value);
+        normalizeValue(
+            value
+        );
 
     return [
         "yes",
         "1",
         "true",
-    ].includes(normalized)
+    ].includes(
+        normalized
+    )
         ? positiveLabel
         : negativeLabel;
 };
 
-const getAboutText = ({
+function getUniversity(
+    response
+) {
+    if (
+        Array.isArray(
+            response?.data
+        )
+    ) {
+        return (
+            response.data[0] ??
+            null
+        );
+    }
+
+    if (
+        response?.data &&
+        typeof response.data ===
+            "object"
+    ) {
+        return (
+            response.data
+                ?.university ??
+            response.data
+                ?.selectedUniversity ??
+            response.data
+                ?.universityDetails ??
+            response.data
+                ?.details ??
+            response.data
+        );
+    }
+
+    return (
+        response?.university ??
+        response
+            ?.selectedUniversity ??
+        null
+    );
+}
+
+function getCourses(
+    response,
+    university
+) {
+    const candidates = [
+        response?.course,
+        response?.courses,
+
+        response?.course_data,
+        response?.courseData,
+
+        response
+            ?.university_courses,
+        response
+            ?.universityCourses,
+
+        response?.data?.course,
+        response?.data?.courses,
+
+        response?.data
+            ?.course_data,
+        response?.data
+            ?.courseData,
+
+        response?.result?.course,
+        response?.result?.courses,
+
+        university?.course,
+        university?.courses,
+    ];
+
+    for (
+        const candidate of
+        candidates
+    ) {
+        if (
+            Array.isArray(
+                candidate
+            ) &&
+            candidate.length >
+                0
+        ) {
+            return candidate.filter(
+                Boolean
+            );
+        }
+    }
+
+    return [];
+}
+
+function getAboutText({
     selectedInfo,
     university,
     universityName,
     locationText,
-}) => {
-    const aboutItem = selectedInfo.find(
-        (item) =>
-            [
-                "about",
-                "about university",
-                "description",
-            ].includes(
-                normalizeValue(item?.type)
-            )
-    );
+}) {
+    const aboutItem =
+        selectedInfo.find(
+            (
+                item
+            ) =>
+                [
+                    "about",
+                    "about university",
+                    "description",
+                ].includes(
+                    normalizeValue(
+                        item?.type
+                    )
+                )
+        );
 
     return (
         aboutItem?.text ||
-        aboutItem?.description ||
+        aboutItem
+            ?.description ||
         university?.about ||
-        university?.description ||
-        `${universityName} is located in ${locationText}. Explore its courses, ranking, scholarships and admission requirements.`
+        university
+            ?.description ||
+        `${universityName} is located in ${locationText}. Explore its courses, rankings, scholarships and admission requirements.`
     );
-};
+}
 
-const getInfoItems = (
+function getInfoItems(
     selectedInfo
-) =>
-    selectedInfo.filter((item) =>
-        [
-            "info",
-            "information",
-            "quick info",
-        ].includes(
-            normalizeValue(item?.type)
-        )
+) {
+    return selectedInfo.filter(
+        (
+            item
+        ) =>
+            [
+                "info",
+                "information",
+                "quick info",
+            ].includes(
+                normalizeValue(
+                    item?.type
+                )
+            )
     );
+}
 
-export const normalizeUniversityData = (
+export function normalizeUniversityData(
     response
-) => {
+) {
     if (!response) {
         return null;
     }
 
     const university =
-        Array.isArray(response.data)
-            ? response.data[0]
-            : null;
+        getUniversity(
+            response
+        );
 
     if (!university) {
         console.error(
-            "University data array is empty:",
+            "University object missing:",
             response
         );
 
@@ -104,158 +242,237 @@ export const normalizeUniversityData = (
     }
 
     const selectedInfo =
-        Array.isArray(response.info)
+        Array.isArray(
+            response?.info
+        )
             ? response.info
-            : [];
+            : Array.isArray(
+                  response?.data?.info
+              )
+              ? response.data.info
+              : [];
 
     const selectedCourses =
-        Array.isArray(response.course)
-            ? response.course
-            : Array.isArray(response.courses)
-                ? response.courses
-                : Array.isArray(university?.courses)
-                    ? university.courses
-                    : [];
+        getCourses(
+            response,
+            university
+        );
 
     const selectedSliders =
-        Array.isArray(response.sliders)
+        Array.isArray(
+            response?.sliders
+        )
             ? response.sliders
-            : [];
+            : Array.isArray(
+                  response?.data
+                      ?.sliders
+              )
+              ? response.data
+                    .sliders
+              : [];
 
     const universityImagePath =
-        response.universities_image_path ||
-        response.university_image_path ||
+        response
+            ?.universities_image_path ||
+        response
+            ?.university_image_path ||
+        response?.data
+            ?.universities_image_path ||
+        response?.data
+            ?.university_image_path ||
         "";
 
     const sliderImagePath =
-        response.slider_image_path || "";
+        response
+            ?.slider_image_path ||
+        response?.data
+            ?.slider_image_path ||
+        "";
 
     const universityName =
-        university.name ||
-        university.university_name ||
-        university.university ||
+        university?.name ||
+        university
+            ?.university_name ||
+        university
+            ?.university ||
+        university?.u_name ||
         "University";
 
     const countryName =
-        university.country ||
-        university.country_name ||
+        university?.country ||
+        university
+            ?.country_name ||
         "Country not available";
 
     const locationText =
-        university.location ||
-        university.city ||
-        university.place ||
+        university?.location ||
+        university?.city ||
+        university?.place ||
+        university?.address ||
         countryName;
 
     const ranking =
-        university.rank ||
-        university.ranking ||
+        university?.rank ||
+        university?.ranking ||
         "N/A";
 
     const universityType =
-        university.type ||
-        university.university_type ||
+        university?.type ||
+        university
+            ?.university_type ||
         "University";
 
     const scholarship =
         getYesNoValue(
-            university.scholarship,
+            university
+                ?.scholarship,
             "Available",
             "Not Available"
         );
 
     const withoutIelts =
         getYesNoValue(
-            university.without_ielts,
+            university
+                ?.without_ielts,
             "Not Required",
             "Required"
         );
 
     const withoutGre =
         getYesNoValue(
-            university.without_gre,
+            university
+                ?.without_gre,
             "Not Required",
             "Required"
         );
 
     const withoutGmat =
         getYesNoValue(
-            university.without_gmat,
+            university
+                ?.without_gmat,
             "Not Required",
             "Required"
         );
 
     const applicationFeeWaiver =
         getYesNoValue(
-            university.applicationfeewaiver ||
-            university.application_fee_waiver,
+            university
+                ?.applicationfeewaiver ??
+            university
+                ?.application_fee_waiver,
+
             "Available",
             "Not Available"
         );
 
-    const logo = joinImageUrl(
-        universityImagePath,
-        university.logo
-    );
+    const logo =
+        joinImageUrl(
+            universityImagePath,
+            university?.logo ||
+                university
+                    ?.university_logo
+        );
 
     const sliderImages =
         selectedSliders
-            .map((item) =>
-                joinImageUrl(
-                    sliderImagePath,
-                    item?.image ||
-                    item?.slider_image ||
-                    item?.image_name
-                )
+            .map(
+                (
+                    item
+                ) =>
+                    joinImageUrl(
+                        sliderImagePath,
+
+                        item?.image ||
+                            item
+                                ?.slider_image ||
+                            item
+                                ?.image_name
+                    )
             )
-            .filter(Boolean);
+            .filter(
+                Boolean
+            );
 
     const finalSliderImages =
-        sliderImages.length > 0
+        sliderImages.length >
+        0
             ? sliderImages
             : logo
-                ? [logo]
-                : [];
+              ? [
+                    logo,
+                ]
+              : [];
 
-    const aboutText = getAboutText({
-        selectedInfo,
-        university,
-        universityName,
-        locationText,
-    });
+    const aboutText =
+        getAboutText({
+            selectedInfo,
+
+            university,
+
+            universityName,
+
+            locationText,
+        });
 
     const infoItems =
-        getInfoItems(selectedInfo);
+        getInfoItems(
+            selectedInfo
+        );
 
     const mapQuery =
         encodeURIComponent(
             `${universityName}, ${locationText}`
         );
 
+    const googleMapUrl =
+        `https://www.google.com/maps?q=${mapQuery}&output=embed`;
+
+    const googleMapOpenUrl =
+        `https://www.google.com/maps/search/?api=1&query=${mapQuery}`;
+
     return {
         university,
+
         universityName,
+
         countryName,
+
         locationText,
+
         ranking,
+
         universityType,
+
         scholarship,
+
         withoutIelts,
+
         withoutGre,
+
         withoutGmat,
+
         applicationFeeWaiver,
+
         logo,
+
         sliderImages:
             finalSliderImages,
+
         aboutText,
+
         infoItems,
+
         selectedCourses,
+
+        courseCount:
+            selectedCourses.length,
+
         universityImagePath,
 
-        googleMapUrl:
-            `https://www.google.com/maps?q=${mapQuery}&output=embed`,
+        sliderImagePath,
 
-        googleMapOpenUrl:
-            `https://www.google.com/maps/search/?api=1&query=${mapQuery}`,
+        googleMapUrl,
+
+        googleMapOpenUrl,
     };
-};
+}

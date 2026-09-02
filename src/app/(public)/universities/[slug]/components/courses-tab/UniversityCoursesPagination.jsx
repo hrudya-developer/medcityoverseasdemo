@@ -5,284 +5,236 @@ import {
     ChevronRight,
 } from "lucide-react";
 
-import cn from "@/lib/cn";
-
-export default function UniversityCoursesPagination({
-    currentPage = 1,
-    totalPages = 1,
-    onPageChange,
-}) {
-    if (totalPages <= 1) {
-        return null;
+function createPages(
+    currentPage,
+    totalPages
+) {
+    if (
+        totalPages <= 5
+    ) {
+        return Array.from(
+            {
+                length:
+                    totalPages,
+            },
+            (
+                _,
+                index
+            ) =>
+                index + 1
+        );
     }
 
-    const getVisiblePages = () => {
-        const pages = [];
+    /*
+     * Beginning.
+     */
 
-        if (totalPages <= 7) {
-            for (
-                let page = 1;
-                page <= totalPages;
-                page++
-            ) {
-                pages.push(page);
-            }
-
-            return pages;
-        }
-
-        if (currentPage <= 4) {
-            return [
-                1,
-                2,
-                3,
-                4,
-                5,
-                "...",
-                totalPages,
-            ];
-        }
-
-        if (
-            currentPage >=
-            totalPages - 3
-        ) {
-            return [
-                1,
-                "...",
-                totalPages - 4,
-                totalPages - 3,
-                totalPages - 2,
-                totalPages - 1,
-                totalPages,
-            ];
-        }
-
+    if (
+        currentPage <= 3
+    ) {
         return [
             1,
-            "...",
-            currentPage - 1,
-            currentPage,
-            currentPage + 1,
+            2,
+            3,
+            4,
             "...",
             totalPages,
         ];
-    };
+    }
 
-    const visiblePages =
-        getVisiblePages();
+    /*
+     * End.
+     */
 
-    const goToPage = (page) => {
-        if (
-            page < 1 ||
-            page > totalPages ||
-            page === currentPage
-        ) {
-            return;
-        }
+    if (
+        currentPage >=
+        totalPages - 2
+    ) {
+        return [
+            1,
+            "...",
+            totalPages - 3,
+            totalPages - 2,
+            totalPages - 1,
+            totalPages,
+        ];
+    }
 
-        onPageChange?.(page);
-    };
+    /*
+     * Middle.
+     */
+
+    return [
+        1,
+        "...",
+        currentPage - 1,
+        currentPage,
+        currentPage + 1,
+        "...",
+        totalPages,
+    ];
+}
+
+export default function UniversityCoursesPagination({
+    currentPage,
+    totalPages,
+    onPageChange,
+}) {
+    if (
+        totalPages <= 1
+    ) {
+        return null;
+    }
+
+    const pages =
+        createPages(
+            currentPage,
+            totalPages
+        );
 
     return (
         <nav
             aria-label="Course pagination"
-            className="
-                mt-10
-                flex
-                flex-col
-                items-center
-                justify-center
-                gap-4
-                sm:flex-row
-            "
+            className="mt-8 flex flex-wrap items-center justify-center gap-2"
         >
-            {/* PREVIOUS */}
+            {/* Previous */}
 
             <button
                 type="button"
+                disabled={
+                    currentPage ===
+                    1
+                }
                 onClick={() =>
-                    goToPage(
-                        currentPage - 1
+                    onPageChange(
+                        currentPage -
+                            1
                     )
                 }
-                disabled={
-                    currentPage === 1
-                }
+                aria-label="Previous course page"
                 className="
                     inline-flex
-                    h-11
+                    size-11
                     items-center
                     justify-center
-                    gap-2
                     rounded-xl
                     border
                     border-slate-200
                     bg-white
-                    px-4
-                    text-sm
-                    font-black
                     text-slate-600
-                    shadow-sm
                     transition
 
-                    hover:border-primary/30
+                    hover:border-primary
                     hover:text-primary
 
-                    disabled:cursor-not-allowed
+                    disabled:pointer-events-none
                     disabled:opacity-40
-                    disabled:hover:border-slate-200
-                    disabled:hover:text-slate-600
                 "
             >
-                <ChevronLeft
-                    size={17}
-                    aria-hidden="true"
-                />
-
-                Previous
+                <ChevronLeft className="size-5" />
             </button>
 
-            {/* PAGE NUMBERS */}
+            {/* Pages */}
 
-            <div
-                className="
-                    flex
-                    flex-wrap
-                    items-center
-                    justify-center
-                    gap-2
-                "
-            >
-                {visiblePages.map(
-                    (
-                        page,
-                        index
-                    ) => {
-                        if (
-                            page === "..."
-                        ) {
-                            return (
-                                <span
-                                    key={`ellipsis-${index}`}
-                                    className="
-                                        grid
-                                        size-10
-                                        place-items-center
-                                        text-sm
-                                        font-bold
-                                        text-slate-400
-                                    "
-                                >
-                                    ...
-                                </span>
-                            );
-                        }
-
-                        const isActive =
-                            page ===
-                            currentPage;
-
+            {pages.map(
+                (
+                    page,
+                    index
+                ) => {
+                    if (
+                        page ===
+                        "..."
+                    ) {
                         return (
-                            <button
-                                key={
-                                    page
-                                }
-                                type="button"
-                                onClick={() =>
-                                    goToPage(
-                                        page
-                                    )
-                                }
-                                aria-current={
-                                    isActive
-                                        ? "page"
-                                        : undefined
-                                }
-                                className={cn(`
-                                    grid
-                                    size-10
-                                    place-items-center
-                                    rounded-xl
-                                    text-sm
-                                    font-black
-                                    transition-all
-                                    duration-200
-
-                                    ${
-                                        isActive
-                                            ? `
-                                                bg-gradient-to-br
-                                                from-primary
-                                                to-darkPrimary
-                                                text-white
-                                                shadow-lg
-                                                shadow-primary/20
-                                            `
-                                            : `
-                                                border
-                                                border-slate-200
-                                                bg-white
-                                                text-slate-600
-                                                hover:border-primary/30
-                                                hover:bg-primary/[0.04]
-                                                hover:text-primary
-                                            `
-                                    }
-                                `)}
+                            <span
+                                key={`ellipsis-${index}`}
+                                className="grid size-11 place-items-center text-sm font-bold text-slate-400"
                             >
-                                {page}
-                            </button>
+                                …
+                            </span>
                         );
                     }
-                )}
-            </div>
 
-            {/* NEXT */}
+                    const active =
+                        page ===
+                        currentPage;
+
+                    return (
+                        <button
+                            key={
+                                page
+                            }
+                            type="button"
+                            aria-current={
+                                active
+                                    ? "page"
+                                    : undefined
+                            }
+                            onClick={() =>
+                                onPageChange(
+                                    page
+                                )
+                            }
+                            className={`
+                                grid
+                                size-11
+                                place-items-center
+                                rounded-xl
+                                border
+                                text-sm
+                                font-black
+                                transition
+
+                                ${
+                                    active
+                                        ? "border-primary bg-primary text-white shadow-lg shadow-primary/15"
+                                        : "border-slate-200 bg-white text-slate-600 hover:border-primary hover:text-primary"
+                                }
+                            `}
+                        >
+                            {
+                                page
+                            }
+                        </button>
+                    );
+                }
+            )}
+
+            {/* Next */}
 
             <button
                 type="button"
-                onClick={() =>
-                    goToPage(
-                        currentPage + 1
-                    )
-                }
                 disabled={
                     currentPage ===
                     totalPages
                 }
+                onClick={() =>
+                    onPageChange(
+                        currentPage +
+                            1
+                    )
+                }
+                aria-label="Next course page"
                 className="
                     inline-flex
-                    h-11
+                    size-11
                     items-center
                     justify-center
-                    gap-2
                     rounded-xl
-                    bg-gradient-to-r
-                    from-darkPrimary
-                    to-primary
-                    px-5
-                    text-sm
-                    font-black
-                    text-white
-                    shadow-lg
-                    shadow-primary/20
+                    border
+                    border-slate-200
+                    bg-white
+                    text-slate-600
                     transition
 
-                    hover:-translate-y-0.5
-                    hover:shadow-xl
+                    hover:border-primary
+                    hover:text-primary
 
-                    disabled:cursor-not-allowed
+                    disabled:pointer-events-none
                     disabled:opacity-40
-                    disabled:hover:translate-y-0
                 "
             >
-                Next
-
-                <ChevronRight
-                    size={17}
-                    aria-hidden="true"
-                />
+                <ChevronRight className="size-5" />
             </button>
         </nav>
     );

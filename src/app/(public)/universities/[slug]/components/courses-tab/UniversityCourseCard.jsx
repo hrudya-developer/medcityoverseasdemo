@@ -6,18 +6,21 @@ import {
     ArrowRight,
     BookOpen,
     Clock,
-    Globe2,
     GraduationCap,
+    Landmark,
     Sparkles,
     Wallet,
 } from "lucide-react";
 
-import cn from "@/lib/cn";
-
 import {
     createPublicCourseHref,
     createPublicCourseSlug,
+    getPublicCourseId,
 } from "@/lib/courseSlug";
+
+/* =========================================================
+   UNIVERSITY COURSE CARD
+========================================================= */
 
 export default function UniversityCourseCard({
     course,
@@ -27,21 +30,19 @@ export default function UniversityCourseCard({
         return null;
     }
 
-    /* =====================================================
-       COURSE DATA
-    ===================================================== */
+    /* =========================================================
+       DATA
+    ========================================================= */
 
-    const courseId = String(
-        course?.id ??
-        course?.uc_id ??
-        course?.university_course_id ??
-        course?.universityCourseId ??
-        ""
-    ).trim();
+    const courseId =
+        getPublicCourseId(
+            course
+        );
 
     const courseName =
         course?.course ||
         course?.course_name ||
+        course?.program_name ||
         course?.title ||
         course?.name ||
         "Course";
@@ -52,12 +53,6 @@ export default function UniversityCourseCard({
         course?.u_name ||
         universityName ||
         "University";
-
-    const countryName =
-        course?.country ||
-        course?.country_name ||
-        course?.destination ||
-        "";
 
     const level =
         course?.level ||
@@ -78,9 +73,9 @@ export default function UniversityCourseCard({
         course?.course_fee ||
         "Not available";
 
-    /* =====================================================
-       ONE STANDARD PUBLIC SLUG
-    ===================================================== */
+    /* =========================================================
+       COURSE URL
+    ========================================================= */
 
     const courseSlug =
         createPublicCourseSlug(
@@ -94,56 +89,54 @@ export default function UniversityCourseCard({
             displayUniversity
         );
 
-    /* =====================================================
-       SAVE EXACT COURSE MAPPING
+    /* =========================================================
+       SAVE COURSE MAPPING
+    ========================================================= */
 
-       IMPORTANT:
-       getCoursedetails requires course.id.
+    const handleCourseClick =
+        () => {
+            if (
+                !courseSlug ||
+                !courseId
+            ) {
+                return;
+            }
 
-       This storage is NOT pendingApplyCourse.
-       It is only slug -> exact ID mapping.
-    ===================================================== */
+            try {
+                sessionStorage.setItem(
+                    `public-course:${courseSlug}`,
+                    JSON.stringify({
+                        id:
+                            courseId,
 
-    const handleCourseClick = () => {
-        if (
-            !courseSlug ||
-            !courseId
-        ) {
-            return;
-        }
+                        slug:
+                            courseSlug,
 
-        try {
-            sessionStorage.setItem(
-                `public-course:${courseSlug}`,
-                JSON.stringify({
-                    id:
-                        courseId,
+                        name:
+                            courseName,
 
-                    slug:
-                        courseSlug,
+                        university:
+                            displayUniversity,
 
-                    name:
-                        courseName,
+                        course,
 
-                    university:
-                        displayUniversity,
-
-                    country:
-                        countryName,
-
-                    course,
-
-                    createdAt:
-                        Date.now(),
-                })
-            );
-        } catch (error) {
-            console.warn(
-                "Unable to store public course mapping:",
+                        createdAt:
+                            Date.now(),
+                    })
+                );
+            } catch (
                 error
-            );
-        }
-    };
+            ) {
+                console.warn(
+                    "Unable to store public course mapping:",
+                    error
+                );
+            }
+        };
+
+    /* =========================================================
+       CARD
+    ========================================================= */
 
     return (
         <article
@@ -152,37 +145,52 @@ export default function UniversityCourseCard({
                 relative
                 flex
                 h-full
+                min-w-0
                 flex-col
                 overflow-hidden
-                rounded-[28px]
+
+                rounded-[18px]
                 border
                 border-slate-200/80
                 bg-white
-                shadow-[0_18px_55px_rgba(15,23,42,0.08)]
+
+                shadow-[0_10px_30px_rgba(15,23,42,0.06)]
+
                 transition-all
                 duration-300
 
-                hover:-translate-y-2
-                hover:border-primary/30
-                hover:shadow-[0_26px_70px_rgba(192,31,83,0.16)]
+                hover:-translate-y-1
+                hover:border-primary/25
+                hover:shadow-[0_20px_50px_rgba(192,31,83,0.12)]
+
+                sm:rounded-[20px]
+
+                md:rounded-[22px]
+
+                lg:rounded-[24px]
+
+                xl:rounded-[26px]
             "
         >
-            {/* DECORATION */}
+            {/* =====================================================
+                BACKGROUND DECORATION
+            ===================================================== */}
 
             <div
                 aria-hidden="true"
                 className="
                     pointer-events-none
                     absolute
-                    -right-16
-                    -top-16
-                    size-40
+                    -right-14
+                    -top-14
+                    size-28
                     rounded-full
-                    bg-primary/10
+                    bg-primary/[0.06]
                     blur-3xl
-                    transition
-                    duration-500
-                    group-hover:bg-primary/20
+
+                    sm:size-32
+                    md:size-36
+                    xl:size-40
                 "
             />
 
@@ -191,100 +199,183 @@ export default function UniversityCourseCard({
                 className="
                     pointer-events-none
                     absolute
-                    -bottom-20
+                    -bottom-16
                     -left-16
-                    size-44
+                    size-32
                     rounded-full
-                    bg-secondary/10
+                    bg-secondary/[0.05]
                     blur-3xl
+
+                    md:size-36
                 "
             />
+
+            {/* =====================================================
+                CONTENT
+            ===================================================== */}
 
             <div
                 className="
                     relative
                     flex
                     h-full
+                    min-w-0
                     flex-col
-                    p-6
-                    sm:p-7
+
+                    p-4
+
+                    sm:p-4
+
+                    md:p-4.5
+
+                    lg:p-5
+
+                    xl:p-6
                 "
             >
-                {/* TOP */}
+                {/* =================================================
+                    TOP
+                ================================================= */}
 
                 <div
                     className="
-                        mb-6
+                        mb-3
                         flex
+                        min-w-0
                         items-start
                         justify-between
-                        gap-4
+                        gap-2
+
+                        sm:mb-3.5
+
+                        md:mb-4
+
+                        lg:mb-5
                     "
                 >
+                    {/* ICON */}
+
                     <div
                         className="
                             grid
-                            size-14
+                            size-10
                             shrink-0
                             place-items-center
-                            rounded-2xl
+                            rounded-xl
+
                             bg-gradient-to-br
                             from-primary
                             to-darkPrimary
-                            text-white
-                            shadow-lg
-                            shadow-primary/20
-                            transition
-                            duration-300
 
-                            group-hover:rotate-3
-                            group-hover:scale-105
+                            text-white
+
+                            shadow-md
+                            shadow-primary/20
+
+                            sm:size-10
+
+                            md:size-11
+
+                            xl:size-12
+                            xl:rounded-2xl
                         "
                     >
                         <BookOpen
-                            className="size-7"
+                            className="
+                                size-[17px]
+
+                                sm:size-[18px]
+
+                                md:size-[18px]
+
+                                xl:size-5
+                            "
                             aria-hidden="true"
                         />
                     </div>
 
+                    {/* FEATURED */}
+
                     <span
                         className="
                             inline-flex
+                            min-w-0
+                            shrink-0
                             items-center
-                            gap-1.5
+                            gap-1
+
                             rounded-full
+
                             border
                             border-primary/10
-                            bg-primary/5
-                            px-3
-                            py-1.5
-                            text-xs
+
+                            bg-primary/[0.05]
+
+                            px-2.5
+                            py-1
+
+                            text-[10px]
                             font-black
                             uppercase
-                            tracking-wide
+                            tracking-[0.07em]
                             text-primary
+
+                            sm:text-[10px]
+
+                            md:text-[9px]
+
+                            lg:text-[10px]
+
+                            xl:px-3
                         "
                     >
                         <Sparkles
-                            className="size-3.5"
+                            className="
+                                size-3
+                                shrink-0
+                            "
                             aria-hidden="true"
                         />
 
-                        Featured
+                        <span className="truncate">
+                            Featured
+                        </span>
                     </span>
                 </div>
 
-                {/* COURSE NAME */}
+                {/* =================================================
+                    COURSE TITLE
+                ================================================= */}
 
-                <div className="mb-5">
+                <div
+                    className="
+                        mb-3.5
+                        min-w-0
+
+                        sm:mb-4
+
+                        md:mb-4
+
+                        lg:mb-5
+                    "
+                >
                     <p
                         className="
-                            mb-2
-                            text-xs
+                            mb-1
+
+                            text-[10px]
                             font-black
                             uppercase
-                            tracking-[0.18em]
+                            tracking-[0.13em]
                             text-secondary
+
+                            sm:text-[10px]
+
+                            md:text-[9px]
+
+                            lg:text-[10px]
+
+                            xl:text-[11px]
                         "
                     >
                         Study Program
@@ -293,35 +384,74 @@ export default function UniversityCourseCard({
                     <h3
                         className="
                             line-clamp-3
-                            text-xl
-                            font-black
-                            leading-snug
+                            break-words
+
+                            text-[15px]
+                            font-bold
+                            leading-[1.45]
                             text-darkPrimary
+
                             transition-colors
-                            duration-300
+
                             group-hover:text-primary
+
+                            min-[400px]:text-base
+
+                            sm:text-[16px]
+
+                            md:text-[15px]
+
+                            lg:text-base
+
+                            xl:text-[17px]
+                            xl:leading-[1.5]
                         "
                     >
                         {courseName}
                     </h3>
                 </div>
 
-                {/* DETAILS */}
+                {/* =================================================
+                    INFORMATION
+                ================================================= */}
 
-                <div className="grid gap-3">
+                <div
+                    className="
+                        grid
+                        min-w-0
+                        gap-2.5
+
+                        sm:gap-2.5
+
+                        md:gap-2.5
+
+                        xl:gap-3
+                    "
+                >
+                    {/* UNIVERSITY */}
+
                     <InfoLine
-                        icon={Globe2}
+                        icon={
+                            Landmark
+                        }
                         label="University"
                         value={
                             displayUniversity
                         }
                     />
 
+                    {/* LEVEL + DURATION */}
+
                     <div
                         className="
                             grid
-                            gap-3
-                            sm:grid-cols-2
+                            min-w-0
+                            grid-cols-1
+                            gap-2.5
+
+                            md:grid-cols-2
+
+                            xl:gap-3
                         "
                     >
                         <InfoLine
@@ -329,12 +459,16 @@ export default function UniversityCourseCard({
                                 GraduationCap
                             }
                             label="Level"
-                            value={level}
+                            value={
+                                level
+                            }
                             compact
                         />
 
                         <InfoLine
-                            icon={Clock}
+                            icon={
+                                Clock
+                            }
                             label="Duration"
                             value={
                                 duration
@@ -343,14 +477,29 @@ export default function UniversityCourseCard({
                         />
                     </div>
 
+                    {/* FEES */}
+
                     <FeeLine
-                        value={fees}
+                        value={
+                            fees
+                        }
                     />
                 </div>
 
-                {/* CTA */}
+                {/* =================================================
+                    CTA
+                ================================================= */}
 
-                <div className="mt-auto pt-6">
+                <div
+                    className="
+                        mt-auto
+                        pt-4
+
+                        sm:pt-4
+
+                        lg:pt-5
+                    "
+                >
                     {courseId &&
                     courseHref ? (
                         <Link
@@ -362,54 +511,95 @@ export default function UniversityCourseCard({
                             }
                             className="
                                 group/link
-                                inline-flex
+
+                                flex
+                                min-h-[44px]
                                 w-full
+                                min-w-0
+
                                 items-center
                                 justify-center
-                                gap-3
-                                rounded-2xl
+                                gap-2
+
+                                rounded-xl
+
                                 bg-gradient-to-r
                                 from-darkPrimary
                                 to-primary
-                                px-5
-                                py-4
-                                text-sm
+
+                                px-3.5
+                                py-2.5
+
+                                text-[13px]
                                 font-black
                                 text-white
-                                shadow-lg
-                                shadow-primary/20
-                                transition
+
+                                shadow-md
+                                shadow-primary/15
+
+                                transition-all
                                 duration-300
 
                                 hover:-translate-y-0.5
-                                hover:shadow-xl
-                                hover:shadow-primary/30
+                                hover:shadow-lg
 
-                                focus-visible:outline-none
-                                focus-visible:ring-2
-                                focus-visible:ring-primary
-                                focus-visible:ring-offset-2
+                                sm:min-h-[46px]
+                                sm:text-[13px]
+
+                                md:min-h-[44px]
+                                md:text-xs
+
+                                lg:min-h-[46px]
+                                lg:text-[13px]
+
+                                xl:min-h-[48px]
+                                xl:rounded-2xl
+                                xl:px-4
+                                xl:text-sm
                             "
                         >
-                            View Course
+                            <span
+                                className="
+                                    min-w-0
+                                    truncate
+                                "
+                            >
+                                View Course
+                            </span>
 
                             <span
                                 className="
                                     grid
-                                    size-8
+                                    size-6
+                                    shrink-0
                                     place-items-center
+
                                     rounded-full
+
                                     bg-white/15
-                                    transition
+
+                                    transition-all
                                     duration-300
 
-                                    group-hover/link:translate-x-1
+                                    group-hover/link:translate-x-0.5
                                     group-hover/link:bg-white
                                     group-hover/link:text-primary
+
+                                    sm:size-6
+
+                                    md:size-7
+
+                                    xl:size-8
                                 "
                             >
                                 <ArrowRight
-                                    className="size-4"
+                                    className="
+                                        size-3.5
+
+                                        md:size-3.5
+
+                                        xl:size-4
+                                    "
                                     aria-hidden="true"
                                 />
                             </span>
@@ -419,20 +609,37 @@ export default function UniversityCourseCard({
                             type="button"
                             disabled
                             className="
-                                inline-flex
+                                flex
+                                min-h-[44px]
                                 w-full
-                                cursor-not-allowed
                                 items-center
                                 justify-center
-                                rounded-2xl
+
+                                rounded-xl
+
                                 border
                                 border-slate-200
                                 bg-slate-100
-                                px-5
-                                py-4
-                                text-sm
+
+                                px-3.5
+                                py-2.5
+
+                                text-[13px]
                                 font-black
                                 text-slate-400
+
+                                sm:min-h-[46px]
+                                sm:text-[13px]
+
+                                md:min-h-[44px]
+                                md:text-xs
+
+                                lg:min-h-[46px]
+                                lg:text-[13px]
+
+                                xl:min-h-[48px]
+                                xl:rounded-2xl
+                                xl:text-sm
                             "
                         >
                             Details unavailable
@@ -444,6 +651,10 @@ export default function UniversityCourseCard({
     );
 }
 
+/* =========================================================
+   INFO LINE
+========================================================= */
+
 function InfoLine({
     icon: Icon,
     label,
@@ -452,61 +663,117 @@ function InfoLine({
 }) {
     return (
         <div
-            className={cn(`
+            className={`
                 group/info
+
                 flex
-                items-start
-                gap-3
-                rounded-2xl
+                min-w-0
+                items-center
+
+                gap-2.5
+
+                rounded-xl
+
                 border
                 border-slate-100
+
                 bg-[#f8f9fc]
+
                 transition
-                duration-300
 
                 hover:border-primary/15
                 hover:bg-primary/[0.035]
 
+                sm:gap-2.5
+                sm:rounded-xl
+
+                md:gap-2.5
+
+                lg:rounded-[14px]
+
+                xl:gap-3
+                xl:rounded-2xl
+
                 ${
                     compact
-                        ? "p-3.5"
-                        : "p-4"
+                        ? `
+                            p-2.5
+
+                            sm:p-2.5
+
+                            md:p-2.5
+
+                            xl:p-3
+                        `
+                        : `
+                            p-3
+
+                            sm:p-3
+
+                            md:p-3
+
+                            xl:p-3.5
+                        `
                 }
-            `)}
+            `}
         >
+            {/* ICON */}
+
             <span
                 className="
                     grid
-                    size-10
+                    size-8
                     shrink-0
                     place-items-center
-                    rounded-xl
+
+                    rounded-lg
+
                     bg-white
+
                     text-primary
+
                     shadow-sm
                     ring-1
                     ring-slate-100
-                    transition
-                    duration-300
 
-                    group-hover/info:bg-primary
-                    group-hover/info:text-white
+                    sm:size-8
+
+                    md:size-9
+
+                    xl:size-10
+                    xl:rounded-xl
                 "
             >
                 <Icon
-                    className="size-4.5"
+                    className="
+                        size-3.5
+
+                        sm:size-3.5
+
+                        md:size-4
+                    "
                     aria-hidden="true"
                 />
             </span>
 
-            <div className="min-w-0">
+            {/* TEXT */}
+
+            <div className="min-w-0 flex-1">
                 <p
                     className="
                         text-[10px]
-                        font-black
+                        font-bold
                         uppercase
-                        tracking-[0.14em]
+                        tracking-[0.09em]
                         text-slate-400
+
+                        sm:text-[10px]
+
+                        md:text-[9px]
+
+                        lg:text-[10px]
+
+                        xl:text-[10px]
                     "
                 >
                     {label}
@@ -514,13 +781,24 @@ function InfoLine({
 
                 <p
                     className="
-                        mt-1
+                        mt-0.5
+
                         line-clamp-2
                         break-words
-                        text-sm
+
+                        text-[13px]
                         font-bold
-                        leading-6
+                        leading-[1.45]
                         text-[#081c47]
+
+                        sm:text-[13px]
+
+                        md:text-[12px]
+
+                        lg:text-[13px]
+
+                        xl:text-sm
+                        xl:leading-5
                     "
                 >
                     {value}
@@ -530,6 +808,10 @@ function InfoLine({
     );
 }
 
+/* =========================================================
+   FEE LINE
+========================================================= */
+
 function FeeLine({
     value,
 }) {
@@ -537,66 +819,104 @@ function FeeLine({
         <div
             className="
                 relative
+                min-w-0
                 overflow-hidden
-                rounded-2xl
+
+                rounded-xl
+
                 border
                 border-primary/15
+
                 bg-gradient-to-r
                 from-primary/[0.07]
                 via-white
                 to-secondary/[0.07]
-                p-4
+
+                p-3
+
+                sm:p-3
+                sm:rounded-xl
+
+                md:p-3
+
+                lg:rounded-[14px]
+
+                xl:rounded-2xl
+                xl:p-3.5
             "
         >
-            <div
-                aria-hidden="true"
-                className="
-                    pointer-events-none
-                    absolute
-                    right-0
-                    top-0
-                    size-20
-                    rounded-full
-                    bg-primary/10
-                    blur-2xl
-                "
-            />
-
             <div
                 className="
                     relative
                     flex
+                    min-w-0
                     items-center
-                    gap-3
+
+                    gap-2.5
+
+                    sm:gap-2.5
+
+                    md:gap-2.5
+
+                    xl:gap-3
                 "
             >
+                {/* ICON */}
+
                 <span
                     className="
                         grid
-                        size-11
+                        size-8
                         shrink-0
                         place-items-center
-                        rounded-xl
+
+                        rounded-lg
+
                         bg-primary
+
                         text-white
-                        shadow-lg
-                        shadow-primary/20
+
+                        shadow-md
+                        shadow-primary/15
+
+                        sm:size-8
+
+                        md:size-9
+
+                        xl:size-10
+                        xl:rounded-xl
                     "
                 >
                     <Wallet
-                        className="size-5"
+                        className="
+                            size-3.5
+
+                            sm:size-3.5
+
+                            md:size-4
+
+                            xl:size-[18px]
+                        "
                         aria-hidden="true"
                     />
                 </span>
 
-                <div className="min-w-0">
+                {/* CONTENT */}
+
+                <div className="min-w-0 flex-1">
                     <p
                         className="
                             text-[10px]
                             font-black
                             uppercase
-                            tracking-[0.16em]
+                            tracking-[0.09em]
                             text-slate-400
+
+                            sm:text-[10px]
+
+                            md:text-[9px]
+
+                            lg:text-[10px]
                         "
                     >
                         Tuition Fees
@@ -604,11 +924,21 @@ function FeeLine({
 
                     <p
                         className="
-                            mt-1
-                            break-words
-                            text-base
+                            mt-0.5
+
+                            truncate
+
+                            text-[13px]
                             font-black
                             text-darkPrimary
+
+                            sm:text-[13px]
+
+                            md:text-xs
+
+                            lg:text-[13px]
+
+                            xl:text-sm
                         "
                     >
                         {value}

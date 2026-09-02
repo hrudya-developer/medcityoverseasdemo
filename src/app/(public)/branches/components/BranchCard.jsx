@@ -181,9 +181,19 @@ export default function BranchCard({
               {branchNumber}
             </span>
 
-            <span className="text-[10px] font-extrabold uppercase tracking-[0.12em] text-slate-700">
-              Branch
-            </span>
+            <span
+    className="
+        max-w-[150px]
+        truncate
+        text-[10px]
+        font-extrabold
+        uppercase
+        tracking-[0.1em]
+        text-slate-700
+    "
+>
+    {city} Branch
+</span>
           </div>
 
           {/* City */}

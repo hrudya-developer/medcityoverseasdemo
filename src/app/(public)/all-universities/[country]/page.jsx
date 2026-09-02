@@ -1,490 +1,881 @@
 import {
-  notFound,
+    notFound,
 } from "next/navigation";
 
 import {
-  createSlug,
+    createSlug,
 } from "@/lib/slug";
 
 import {
-  postOverseasForm,
+    postOverseasForm,
 } from "@/lib/overseasApi";
 
 import CountryUniversitiesHero from "./components/CountryUniversitiesHero";
 import UniversitiesSection from "./components/UniversitiesSection";
 
-const SITE_URL =
-  "https://medcityoverseas.com";
-
-export const revalidate = 3600;
-
 /* =========================================================
- HELPERS
+   SITE CONFIG
 ========================================================= */
 
-function getDestinationName(
-  destination
+const SITE_URL =
+    "https://medcityoverseas.com";
+
+const OG_IMAGE =
+    `${SITE_URL}/og-images/universities.webp`;
+
+export const revalidate =
+    3600;
+
+/* =========================================================
+   HELPERS
+========================================================= */
+
+function cleanText(
+    value = ""
 ) {
-  return (
-      destination?.country ||
-      destination?.name ||
-      destination?.destination ||
-      destination?.country_name ||
-      ""
-  );
+    return String(
+        value ?? ""
+    )
+        .replace(
+            /\s+/g,
+            " "
+        )
+        .trim();
+}
+
+function serializeJsonLd(
+    data
+) {
+    return JSON.stringify(
+        data
+    ).replace(
+        /</g,
+        "\\u003c"
+    );
+}
+
+function getDestinationName(
+    destination
+) {
+    return cleanText(
+        destination?.country ||
+        destination?.name ||
+        destination?.destination ||
+        destination?.country_name ||
+        ""
+    );
 }
 
 function getDestinationId(
-  destination
+    destination
 ) {
-  return String(
-      destination?.d_id ||
-      destination?.id ||
-      destination?.destination_id ||
-      ""
-  );
+    return cleanText(
+        destination?.d_id ||
+        destination?.id ||
+        destination?.destination_id ||
+        ""
+    );
 }
 
 function getUniversityName(
-  university
+    university
 ) {
-  return (
-      university?.name ||
-      university?.university ||
-      university?.university_name ||
-      university?.u_name ||
-      "University"
-  );
+    return cleanText(
+        university?.name ||
+        university?.university ||
+        university?.university_name ||
+        university?.u_name ||
+        "University"
+    );
 }
 
 function getUniversityLocation(
-  university,
-  fallback = ""
+    university,
+    fallback = ""
 ) {
-  return (
-      university?.location ||
-      university?.city ||
-      university?.place ||
-      university?.address ||
-      fallback
-  );
+    return cleanText(
+        university?.location ||
+        university?.city ||
+        university?.place ||
+        university?.address ||
+        fallback
+    );
+}
+
+function getUniversityId(
+    university,
+    fallback = ""
+) {
+    return cleanText(
+        university?.id ||
+        university?.u_id ||
+        university?.university_id ||
+        fallback
+    );
+}
+
+function getUniversityDescription(
+    university,
+    name,
+    countryName
+) {
+    const description =
+        cleanText(
+            university?.description ||
+            university?.about ||
+            university?.short_description ||
+            ""
+        );
+
+    if (description) {
+        return description;
+    }
+
+    return `Explore ${name} in ${countryName}, including available courses, study opportunities and university information for international students.`;
 }
 
 /* =========================================================
- GET DESTINATION
+   GET DESTINATION
 ========================================================= */
 
 async function getDestination(
-  countrySlug
+    countrySlug
 ) {
-  try {
-      const result =
-          await postOverseasForm(
-              "getDestinations",
-              {
-                  uid: 0,
-              },
-              {
-                  next: {
-                      revalidate: 3600,
-                  },
-              }
-          );
+    try {
+        const result =
+            await postOverseasForm(
+                "getDestinations",
+                {
+                    uid: 0,
+                },
+                {
+                    next: {
+                        revalidate:
+                            3600,
+                    },
+                }
+            );
 
-      const destinations =
-          Array.isArray(
-              result?.destinations
-          )
-              ? result.destinations
-              : Array.isArray(
-                  result?.data
-              )
+        const destinations =
+            Array.isArray(
+                result?.destinations
+            )
+                ? result.destinations
+                : Array.isArray(
+                      result?.data
+                  )
                   ? result.data
                   : [];
 
-      return (
-          destinations.find(
-              (destination) => {
-                  const name =
-                      getDestinationName(
-                          destination
-                      );
+        return (
+            destinations.find(
+                (
+                    destination
+                ) => {
+                    const name =
+                        getDestinationName(
+                            destination
+                        );
 
-                  return (
-                      name &&
-                      createSlug(name) ===
-                      countrySlug
-                  );
-              }
-          ) || null
-      );
-  } catch (error) {
-      console.error(
-          "Destination loading error:",
-          error
-      );
+                    return (
+                        name &&
+                        createSlug(
+                            name
+                        ) ===
+                            countrySlug
+                    );
+                }
+            ) || null
+        );
+    } catch (
+        error
+    ) {
+        console.error(
+            "Destination loading error:",
+            error
+        );
 
-      return null;
-  }
+        return null;
+    }
 }
 
 /* =========================================================
- GET UNIVERSITIES
+   GET UNIVERSITIES
 ========================================================= */
 
 async function getUniversities(
-  countryId
+    countryId
 ) {
-  const params =
-      new URLSearchParams({
-          countryId:
-              String(countryId),
+    const params =
+        new URLSearchParams({
+            countryId:
+                String(
+                    countryId
+                ),
 
-          uid:
-              "0",
+            uid:
+                "0",
 
-          offset:
-              "0",
+            offset:
+                "0",
 
-          keyword:
-              "alluniversities",
-      });
+            keyword:
+                "alluniversities",
+        });
 
-  const appUrl =
-      process.env
-          .NEXT_PUBLIC_SITE_URL ||
-      (process.env.NODE_ENV ===
-      "development"
-          ? "http://localhost:3000"
-          : SITE_URL);
+    const appUrl =
+        process.env
+            .NEXT_PUBLIC_SITE_URL ||
+        (process.env
+            .NODE_ENV ===
+        "development"
+            ? "http://localhost:3000"
+            : SITE_URL);
 
-  try {
-      const response =
-          await fetch(
-              `${appUrl}/api/search/universities?${params.toString()}`,
-              {
-                  next: {
-                      revalidate: 3600,
-                  },
-              }
-          );
+    try {
+        const response =
+            await fetch(
+                `${appUrl}/api/search/universities?${params.toString()}`,
+                {
+                    next: {
+                        revalidate:
+                            3600,
+                    },
+                }
+            );
 
-      if (!response.ok) {
-          console.error(
-              "University API status:",
-              response.status
-          );
+        if (
+            !response.ok
+        ) {
+            console.error(
+                "University API status:",
+                response.status
+            );
 
-          return {
-              universities: [],
-              universityImagePath:
-                  "",
-          };
-      }
+            return {
+                universities:
+                    [],
 
-      const result =
-          await response.json();
+                universityImagePath:
+                    "",
+            };
+        }
 
-      /*
-       * Your API returns:
-       *
-       * universities_image_path:
-       * "https://overseas.technocitysolutions.com/public/images/university/"
-       *
-       * universities: [
-       *   {
-       *      logo: "1692439511.png"
-       *   }
-       * ]
-       */
+        const result =
+            await response.json();
 
-      const universities =
-          Array.isArray(
-              result?.universities
-          )
-              ? result.universities
-              : [];
+        const universities =
+            Array.isArray(
+                result?.universities
+            )
+                ? result.universities
+                : [];
 
-      const universityImagePath =
-          result?.universities_image_path ||
-          result?.university_image_path ||
-          result?.universityImagePath ||
-          result?.imagePath ||
-          "";
+        const universityImagePath =
+            result
+                ?.universities_image_path ||
+            result
+                ?.university_image_path ||
+            result
+                ?.universityImagePath ||
+            result?.imagePath ||
+            "";
 
-      return {
-          universities,
-          universityImagePath,
-      };
-  } catch (error) {
-      console.error(
-          "University list loading error:",
-          error
-      );
+        return {
+            universities,
+            universityImagePath,
+        };
+    } catch (
+        error
+    ) {
+        console.error(
+            "University list loading error:",
+            error
+        );
 
-      return {
-          universities: [],
-          universityImagePath:
-              "",
-      };
-  }
+        return {
+            universities:
+                [],
+
+            universityImagePath:
+                "",
+        };
+    }
 }
 
 /* =========================================================
- METADATA
+   METADATA
 ========================================================= */
 
 export async function generateMetadata({
-  params,
+    params,
 }) {
-  const {
-      country: countrySlug,
-  } = await params;
+    const {
+        country:
+            countrySlug,
+    } = await params;
 
-  const destination =
-      await getDestination(
-          countrySlug
-      );
+    const destination =
+        await getDestination(
+            countrySlug
+        );
 
-  if (!destination) {
-      return {
-          title: {
-              absolute:
-                  "Universities Abroad | Medcity Overseas",
-          },
+    if (
+        !destination
+    ) {
+        return {
+            title: {
+                absolute:
+                    "Universities Abroad | Medcity Overseas",
+            },
 
-          robots: {
-              index: false,
-              follow: false,
-          },
-      };
-  }
+            description:
+                "Explore international universities and study abroad opportunities with Medcity Overseas.",
 
-  const countryName =
-      getDestinationName(
-          destination
-      );
+            robots: {
+                index:
+                    false,
 
-//   const canonical =
-//       `${SITE_URL}/all-universities/${countrySlug}`;
+                follow:
+                    false,
+            },
+        };
+    }
 
-      const canonical =
-    `${SITE_URL}/universities-in-${countrySlug}`;
+    const countryName =
+        getDestinationName(
+            destination
+        );
 
-  const title =
-      `Universities in ${countryName} for Indian Students | Medcity Overseas`;
+    const canonical =
+        `${SITE_URL}/universities-in-${countrySlug}`;
 
-  const description =
-      `Explore universities in ${countryName} for Indian students. Compare institutions, courses, admissions and international study opportunities with Medcity Overseas.`;
+    /* =====================================================
+       TITLE
 
-  return {
-      title: {
-          absolute: title,
-      },
+       Keep the primary keyword close to the beginning.
+    ===================================================== */
 
-      description,
+    const title =
+        `Universities in ${countryName} for Indian Students | Medcity Overseas`;
 
-      alternates: {
-          canonical,
-      },
+    const description =
+        `Explore universities in ${countryName} for Indian students. Compare institutions, courses, admissions and study opportunities with guidance from Medcity Overseas.`;
 
-      openGraph: {
-          type:
-              "website",
+    return {
+        title: {
+            absolute:
+                title,
+        },
 
-          locale:
-              "en_IN",
+        description,
 
-          url:
-              canonical,
+        /* =====================================================
+           KEYWORDS
 
-          siteName:
-              "Medcity Overseas",
+           Not a major Google ranking factor, but useful as
+           descriptive metadata for some search/indexing systems.
+        ===================================================== */
 
-          title,
+        keywords: [
+            `universities in ${countryName}`,
+            `universities in ${countryName} for Indian students`,
+            `study in ${countryName}`,
+            `${countryName} universities`,
+            `best universities in ${countryName}`,
+            `international universities in ${countryName}`,
+            `${countryName} university courses`,
+            `${countryName} university admissions`,
+            `study abroad in ${countryName}`,
+            `Medcity Overseas ${countryName}`,
+        ],
 
-          description,
+        alternates: {
+            canonical,
+        },
 
-          images: [
-              {
-                  url:
-                      `${SITE_URL}/og-images/universities.webp`,
+        openGraph: {
+            type:
+                "website",
 
-                  width:
-                      1200,
+            locale:
+                "en_IN",
 
-                  height:
-                      630,
+            url:
+                canonical,
 
-                  alt:
-                      `Universities in ${countryName}`,
-              },
-          ],
-      },
+            siteName:
+                "Medcity Overseas",
 
-      twitter: {
-          card:
-              "summary_large_image",
+            title,
 
-          title,
+            description,
 
-          description,
+            images: [
+                {
+                    url:
+                        OG_IMAGE,
 
-          images: [
-              `${SITE_URL}/og-images/universities.webp`,
-          ],
-      },
+                    width:
+                        1200,
 
-      robots: {
-          index:
-              true,
+                    height:
+                        630,
 
-          follow:
-              true,
+                    alt:
+                        `Universities in ${countryName} for Indian students`,
+                },
+            ],
+        },
 
-          googleBot: {
-              index:
-                  true,
+        twitter: {
+            card:
+                "summary_large_image",
 
-              follow:
-                  true,
+            title,
 
-              "max-image-preview":
-                  "large",
+            description,
 
-              "max-snippet":
-                  -1,
+            images: [
+                OG_IMAGE,
+            ],
+        },
 
-              "max-video-preview":
-                  -1,
-          },
-      },
-  };
+        robots: {
+            index:
+                true,
+
+            follow:
+                true,
+
+            googleBot: {
+                index:
+                    true,
+
+                follow:
+                    true,
+
+                "max-image-preview":
+                    "large",
+
+                "max-snippet":
+                    -1,
+
+                "max-video-preview":
+                    -1,
+            },
+        },
+    };
 }
 
 /* =========================================================
- PAGE
+   PAGE
 ========================================================= */
 
 export default async function UniversitiesByCountryPage({
-  params,
+    params,
 }) {
-  const {
-      country: countrySlug,
-  } = await params;
+    const {
+        country:
+            countrySlug,
+    } = await params;
 
-  const destination =
-      await getDestination(
-          countrySlug
-      );
+    /* =====================================================
+       DESTINATION
+    ===================================================== */
 
-  if (!destination) {
-      notFound();
-  }
+    const destination =
+        await getDestination(
+            countrySlug
+        );
 
-  const countryId =
-      getDestinationId(
-          destination
-      );
+    if (
+        !destination
+    ) {
+        notFound();
+    }
 
-  const countryName =
-      getDestinationName(
-          destination
-      );
+    const countryId =
+        getDestinationId(
+            destination
+        );
 
-  if (!countryId) {
-      notFound();
-  }
+    const countryName =
+        getDestinationName(
+            destination
+        );
 
-  const {
-      universities,
-      universityImagePath,
-  } =
-      await getUniversities(
-          countryId
-      );
+    if (
+        !countryId
+    ) {
+        notFound();
+    }
 
-  /*
-   * IMPORTANT:
-   * preserve the original API object
-   * using ...university.
-   *
-   * Otherwise fields such as:
-   *
-   * logo
-   * image
-   * d_id
-   * rank
-   *
-   * get removed.
-   */
-  const universityItems =
-      universities.map(
-          (
-              university,
-              index
-          ) => {
-              const name =
-                  getUniversityName(
-                      university
-                  );
+    /* =====================================================
+       UNIVERSITIES
+    ===================================================== */
 
-              return {
-                  ...university,
+    const {
+        universities,
+        universityImagePath,
+    } =
+        await getUniversities(
+            countryId
+        );
 
-                  id:
-                      university?.id ||
-                      university?.u_id ||
-                      university
-                          ?.university_id ||
-                      `${createSlug(
-                          name
-                      )}-${index}`,
+    /*
+     * IMPORTANT:
+     *
+     * Preserve the complete API university object.
+     * Fields such as:
+     *
+     * logo
+     * image
+     * d_id
+     * rank
+     *
+     * may be required by the UI.
+     */
 
-                  name,
+    const universityItems =
+        universities.map(
+            (
+                university,
+                index
+            ) => {
+                const name =
+                    getUniversityName(
+                        university
+                    );
 
-                  slug:
-                      createSlug(
-                          name
-                      ),
+                return {
+                    ...university,
 
-                  location:
-                      getUniversityLocation(
-                          university,
-                          countryName
-                      ),
-              };
-          }
-      );
+                    id:
+                        getUniversityId(
+                            university,
+                            `${createSlug(
+                                name
+                            )}-${index}`
+                        ),
 
-  return (
-      <main
-          className="
-              min-h-screen
-              overflow-hidden
-              bg-[#f7f9fd]
-          "
-      >
-          <CountryUniversitiesHero
-              countryName={
-                  countryName
-              }
-              universityCount={
-                  universityItems.length
-              }
-          />
+                    name,
 
-          <UniversitiesSection
-              countryName={
-                  countryName
-              }
-              universities={
-                  universityItems
-              }
-              universityImagePath={
-                  universityImagePath
-              }
-          />
-      </main>
-  );
+                    slug:
+                        createSlug(
+                            name
+                        ),
+
+                    location:
+                        getUniversityLocation(
+                            university,
+                            countryName
+                        ),
+                };
+            }
+        );
+
+    /* =====================================================
+       SEO URLS
+    ===================================================== */
+
+    const pageUrl =
+        `${SITE_URL}/universities-in-${countrySlug}`;
+
+    /* =====================================================
+       COLLECTION PAGE SCHEMA
+    ===================================================== */
+
+    const pageJsonLd = {
+        "@context":
+            "https://schema.org",
+
+        "@type":
+            "CollectionPage",
+
+        "@id":
+            `${pageUrl}#webpage`,
+
+        url:
+            pageUrl,
+
+        name:
+            `Universities in ${countryName} for Indian Students`,
+
+        headline:
+            `Universities in ${countryName} for Indian Students`,
+
+        description:
+            `Explore universities in ${countryName}, compare institutions and discover international study opportunities with Medcity Overseas.`,
+
+        inLanguage:
+            "en-IN",
+
+        isPartOf: {
+            "@id":
+                `${SITE_URL}/#website`,
+        },
+
+        about: {
+            "@type":
+                "Country",
+
+            name:
+                countryName,
+        },
+
+        publisher: {
+            "@id":
+                `${SITE_URL}/#organization`,
+        },
+
+        breadcrumb: {
+            "@id":
+                `${pageUrl}#breadcrumb`,
+        },
+
+        mainEntity: {
+            "@id":
+                `${pageUrl}#universities-list`,
+        },
+    };
+
+    /* =====================================================
+       BREADCRUMB SCHEMA
+    ===================================================== */
+
+    const breadcrumbJsonLd = {
+        "@context":
+            "https://schema.org",
+
+        "@type":
+            "BreadcrumbList",
+
+        "@id":
+            `${pageUrl}#breadcrumb`,
+
+        itemListElement: [
+            {
+                "@type":
+                    "ListItem",
+
+                position:
+                    1,
+
+                name:
+                    "Home",
+
+                item:
+                    SITE_URL,
+            },
+
+            {
+                "@type":
+                    "ListItem",
+
+                position:
+                    2,
+
+                name:
+                    "Universities",
+
+                item:
+                    `${SITE_URL}/universities`,
+            },
+
+            {
+                "@type":
+                    "ListItem",
+
+                position:
+                    3,
+
+                name:
+                    `Universities in ${countryName}`,
+
+                item:
+                    pageUrl,
+            },
+        ],
+    };
+
+    /* =====================================================
+       UNIVERSITY ITEM LIST SCHEMA
+    ===================================================== */
+
+    const universitiesJsonLd = {
+        "@context":
+            "https://schema.org",
+
+        "@type":
+            "ItemList",
+
+        "@id":
+            `${pageUrl}#universities-list`,
+
+        name:
+            `Universities in ${countryName}`,
+
+        description:
+            `Directory of universities in ${countryName} for students exploring international education opportunities.`,
+
+        numberOfItems:
+            universityItems.length,
+
+        itemListOrder:
+            "https://schema.org/ItemListOrderUnordered",
+
+        itemListElement:
+            universityItems.map(
+                (
+                    university,
+                    index
+                ) => {
+                    const universityName =
+                        getUniversityName(
+                            university
+                        );
+
+                    const universitySlug =
+                        university
+                            ?.slug ||
+                        createSlug(
+                            universityName
+                        );
+
+                    const universityUrl =
+                        `${SITE_URL}/university-details/${universitySlug}`;
+
+                    const location =
+                        getUniversityLocation(
+                            university,
+                            countryName
+                        );
+
+                    return {
+                        "@type":
+                            "ListItem",
+
+                        position:
+                            index +
+                            1,
+
+                        url:
+                            universityUrl,
+
+                        item: {
+                            "@type":
+                                "CollegeOrUniversity",
+
+                            "@id":
+                                `${universityUrl}#university`,
+
+                            name:
+                                universityName,
+
+                            url:
+                                universityUrl,
+
+                            description:
+                                getUniversityDescription(
+                                    university,
+                                    universityName,
+                                    countryName
+                                ),
+
+                            address: {
+                                "@type":
+                                    "PostalAddress",
+
+                                addressLocality:
+                                    location,
+
+                                addressCountry:
+                                    countryName,
+                            },
+                        },
+                    };
+                }
+            ),
+    };
+
+    /* =====================================================
+       RENDER
+    ===================================================== */
+
+    return (
+        <>
+            {/* =============================================
+                STRUCTURED DATA
+            ============================================= */}
+
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{
+                    __html:
+                        serializeJsonLd(
+                            pageJsonLd
+                        ),
+                }}
+            />
+
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{
+                    __html:
+                        serializeJsonLd(
+                            breadcrumbJsonLd
+                        ),
+                }}
+            />
+
+            {universityItems.length >
+                0 && (
+                <script
+                    type="application/ld+json"
+                    dangerouslySetInnerHTML={{
+                        __html:
+                            serializeJsonLd(
+                                universitiesJsonLd
+                            ),
+                    }}
+                />
+            )}
+
+            {/* =============================================
+                EXISTING PAGE
+
+                Functionality and UI remain unchanged.
+            ============================================= */}
+
+            <main
+                className="
+                    min-h-screen
+                    overflow-hidden
+                    bg-[#f7f9fd]
+                "
+            >
+                <CountryUniversitiesHero
+                    countryName={
+                        countryName
+                    }
+                    universityCount={
+                        universityItems.length
+                    }
+                />
+
+                <UniversitiesSection
+                    countryName={
+                        countryName
+                    }
+                    universities={
+                        universityItems
+                    }
+                    universityImagePath={
+                        universityImagePath
+                    }
+                />
+            </main>
+        </>
+    );
 }

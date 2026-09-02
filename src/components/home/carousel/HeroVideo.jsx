@@ -1,152 +1,137 @@
 "use client";
 
-import {
-    useCallback,
-    useEffect,
-    useRef,
-    useState,
-} from "react";
-
 const DESKTOP_VIDEO =
     "/videos/study-abroad-desktop.mp4";
 
 const MOBILE_VIDEO =
     "/videos/study-abroad-mobile.mp4";
 
-const DESKTOP_POSTER =
-    "/assets/hero-desktop-poster.webp";
-
-const MOBILE_POSTER =
-    "/assets/hero-mobile-poster.webp";
-
-const MOBILE_QUERY = "(max-width: 767px)";
-
-const HeroVideo = () => {
-    const videoRef = useRef(null);
-
-    const [isVideoReady, setIsVideoReady] =
-        useState(false);
-
-    const handleVideoReady = useCallback(() => {
-        setIsVideoReady(true);
-    }, []);
-
-    useEffect(() => {
-        const video = videoRef.current;
-
-        if (!video) return;
-
-        const mobileMediaQuery =
-            window.matchMedia(MOBILE_QUERY);
-
-        const reducedMotionQuery =
-            window.matchMedia(
-                "(prefers-reduced-motion: reduce)"
-            );
-
-        let cancelled = false;
-
-        const updateVideoSource = async () => {
-            if (cancelled) return;
-
-            const nextSource =
-                mobileMediaQuery.matches
-                    ? MOBILE_VIDEO
-                    : DESKTOP_VIDEO;
-
-            setIsVideoReady(false);
-
-            if (
-                video.getAttribute("src") !==
-                nextSource
-            ) {
-                video.pause();
-                video.src = nextSource;
-                video.load();
-            }
-
-            if (reducedMotionQuery.matches) return;
-
-            try {
-                await video.play();
-            } catch { }
-        };
-
-        void updateVideoSource();
-
-        mobileMediaQuery.addEventListener(
-            "change",
-            updateVideoSource
-        );
-
-        return () => {
-            cancelled = true;
-
-            mobileMediaQuery.removeEventListener(
-                "change",
-                updateVideoSource
-            );
-
-            video.pause();
-            video.removeAttribute("src");
-            video.load();
-        };
-    }, []);
-
+export default function HeroVideo() {
     return (
-        <div className="absolute inset-0 overflow-hidden bg-black">
-            <picture
-                aria-hidden="true"
-                className={`absolute inset-0 transition-opacity duration-300 ease-out ${isVideoReady ? "pointer-events-none opacity-0" : "opacity-100"}`}
-            >
-                <source
-                    media={MOBILE_QUERY}
-                    srcSet={MOBILE_POSTER}
-                />
+        <div
+            className="
+                absolute
+                inset-0
+                overflow-hidden
+                bg-black
+            "
+        >
+            {/* =================================================
+                VIDEO
 
-                <img
-                    src={DESKTOP_POSTER}
-                    alt="Medcity Study Abroad"
-                    width={1920}
-                    height={1080}
-                    fetchPriority="high"
-                    decoding="async"
-                    className="h-full w-full object-cover object-center md:object-top"
-                />
-            </picture>
+                Browser chooses the correct source directly.
+                No JS source switching.
+            ================================================= */}
 
             <video
-                ref={videoRef}
+                autoPlay
                 muted
                 loop
                 playsInline
-                preload="metadata"
+                preload="auto"
                 disablePictureInPicture
                 controlsList="nodownload noplaybackrate nofullscreen"
                 aria-hidden="true"
                 tabIndex={-1}
-                onLoadedData={handleVideoReady}
-                onCanPlay={handleVideoReady}
-                onPlaying={handleVideoReady}
-                className={`absolute inset-0 h-full w-full object-cover object-[center_35%] transition-opacity duration-300 ease-out md:object-center lg:object-top ${isVideoReady ? "opacity-100" : "opacity-0"}`}
-            />
+                className="
+                    absolute
+                    inset-0
+
+                    h-full
+                    w-full
+
+                    object-cover
+                    object-[center_35%]
+
+                    md:object-center
+
+                    lg:object-top
+                "
+            >
+                {/* MOBILE */}
+
+                <source
+                    src={MOBILE_VIDEO}
+                    type="video/mp4"
+                    media="(max-width: 767px)"
+                />
+
+                {/* DESKTOP */}
+
+                <source
+                    src={DESKTOP_VIDEO}
+                    type="video/mp4"
+                    media="(min-width: 768px)"
+                />
+            </video>
+
+            {/* =================================================
+                LEFT / RIGHT OVERLAY
+            ================================================= */}
 
             <div
                 aria-hidden="true"
-                className="pointer-events-none absolute inset-0 bg-gradient-to-r from-black/20 via-transparent to-black/20 md:from-black/10 md:to-black/10"
+                className="
+                    pointer-events-none
+                    absolute
+                    inset-0
+
+                    bg-gradient-to-r
+                    from-black/20
+                    via-transparent
+                    to-black/20
+
+                    md:from-black/10
+                    md:to-black/10
+                "
             />
+
+            {/* =================================================
+                BOTTOM OVERLAY
+            ================================================= */}
 
             <div
                 aria-hidden="true"
-                className="pointer-events-none absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-black/45 via-black/15 to-transparent sm:h-36 lg:h-44"
+                className="
+                    pointer-events-none
+                    absolute
+                    inset-x-0
+                    bottom-0
+
+                    h-28
+
+                    bg-gradient-to-t
+                    from-black/45
+                    via-black/15
+                    to-transparent
+
+                    sm:h-36
+
+                    lg:h-44
+                "
             />
+
+            {/* =================================================
+                TOP OVERLAY
+            ================================================= */}
 
             <div
                 aria-hidden="true"
-                className="pointer-events-none absolute inset-x-0 top-0 h-16 bg-gradient-to-b from-black/25 to-transparent md:h-24"
+                className="
+                    pointer-events-none
+                    absolute
+                    inset-x-0
+                    top-0
+
+                    h-16
+
+                    bg-gradient-to-b
+                    from-black/25
+                    to-transparent
+
+                    md:h-24
+                "
             />
         </div>
     );
-};
-
-export default HeroVideo;
+}

@@ -1,6 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import {
+    useState,
+} from "react";
+
 import Link from "next/link";
 
 import {
@@ -10,73 +13,119 @@ import {
     MapPin,
 } from "lucide-react";
 
-import { createSlug } from "@/lib/slug";
+import {
+    createUniversityPublicSlug,
+    saveUniversityMapping,
+} from "@/lib/universitySlug";
 
 /* =========================================================
    UNIVERSITY HELPERS
 ========================================================= */
 
-const getUniversityId = (university) =>
-    university?.id ||
-    university?.u_id ||
-    university?.university_id ||
-    university?.uid ||
-    "";
+function getUniversityId(
+    university
+) {
+    return String(
+        university?.id ??
+        university?.u_id ??
+        university?.university_id ??
+        university?.universityId ??
+        university?.uid ??
+        ""
+    ).trim();
+}
 
-const getUniversityName = (university) =>
-    university?.name ||
-    university?.university_name ||
-    university?.university ||
-    university?.u_name ||
-    university?.title ||
-    "International University";
+function getUniversityName(
+    university
+) {
+    return String(
+        university?.name ??
+        university?.university_name ??
+        university?.university ??
+        university?.u_name ??
+        university?.title ??
+        "International University"
+    )
+        .replace(/\s+/g, " ")
+        .trim();
+}
 
-const getUniversityLocation = (
+function getUniversityLocation(
     university,
     fallback = ""
-) =>
-    university?.location ||
-    university?.city ||
-    university?.place ||
-    university?.address ||
-    university?.university_location ||
-    fallback;
+) {
+    return String(
+        university?.location ??
+        university?.city ??
+        university?.place ??
+        university?.address ??
+        university?.university_location ??
+        fallback ??
+        ""
+    )
+        .replace(/\s+/g, " ")
+        .trim();
+}
 
 /* =========================================================
-   LOGO HELPERS
+   LOGO
 ========================================================= */
 
-const getLogoFile = (university) =>
-    university?.logo ||
-    university?.university_logo ||
-    university?.university_image ||
-    university?.image ||
-    university?.u_logo ||
-    university?.uni_logo ||
-    university?.logo_image ||
-    university?.image_name ||
-    university?.universityLogo ||
-    "";
+function getLogoFile(
+    university
+) {
+    return (
+        university?.logo ??
+        university?.university_logo ??
+        university?.university_image ??
+        university?.image ??
+        university?.u_logo ??
+        university?.uni_logo ??
+        university?.logo_image ??
+        university?.image_name ??
+        university?.universityLogo ??
+        ""
+    );
+}
 
-const buildMediaUrl = (
+function buildMediaUrl(
     basePath,
     file
-) => {
-    if (!file) return "";
+) {
+    if (!file) {
+        return "";
+    }
 
-    const value = String(file).trim();
+    const value =
+        String(
+            file
+        ).trim();
 
-    if (!value) return "";
+    if (!value) {
+        return "";
+    }
 
-    if (/^https?:\/\//i.test(value)) {
+    if (
+        /^https?:\/\//i.test(
+            value
+        )
+    ) {
         return value;
     }
 
-    if (/^(data:|blob:)/i.test(value)) {
+    if (
+        /^(data:|blob:)/i.test(
+            value
+        )
+    ) {
         return value;
     }
 
-    if (value.startsWith("//")) {
+    if (
+        value.startsWith(
+            "//"
+        )
+    ) {
         return `https:${value}`;
     }
 
@@ -85,15 +134,23 @@ const buildMediaUrl = (
     }
 
     const cleanBasePath =
-        String(basePath)
+        String(
+            basePath
+        )
             .trim()
-            .replace(/\/+$/, "");
+            .replace(
+                /\/+$/,
+                ""
+            );
 
     const cleanFile =
-        value.replace(/^\/+/, "");
+        value.replace(
+            /^\/+/,
+            ""
+        );
 
     return `${cleanBasePath}/${cleanFile}`;
-};
+}
 
 /* =========================================================
    CARD
@@ -108,13 +165,19 @@ export default function UniversityCard({
     const [
         imageFailed,
         setImageFailed,
-    ] = useState(false);
+    ] = useState(
+        false
+    );
 
     const universityId =
-        getUniversityId(university);
+        getUniversityId(
+            university
+        );
 
     const universityName =
-        getUniversityName(university);
+        getUniversityName(
+            university
+        );
 
     const location =
         getUniversityLocation(
@@ -123,7 +186,9 @@ export default function UniversityCard({
         );
 
     const logoFile =
-        getLogoFile(university);
+        getLogoFile(
+            university
+        );
 
     const logoUrl =
         buildMediaUrl(
@@ -131,31 +196,81 @@ export default function UniversityCard({
             logoFile
         );
 
+    /* =====================================================
+       PUBLIC SEO SLUG
+
+       IMPORTANT:
+       Ignore university.slug.
+
+       Always rebuild from:
+       university name + current country.
+    ===================================================== */
+
     const slug =
-        university?.slug ||
-        createSlug(universityName);
+        createUniversityPublicSlug(
+            {
+                ...university,
+
+                id:
+                    universityId,
+
+                name:
+                    universityName,
+
+                /*
+                 * Current listing country takes priority.
+                 *
+                 * This prevents a malformed API object
+                 * from producing the wrong public route.
+                 */
+                country:
+                    countryName ||
+                    university?.country ||
+                    university?.country_name ||
+                    "",
+            },
+            countryName
+        );
 
     const universityHref =
-        universityId || slug
+        slug
             ? `/universities/${slug}`
             : "#";
 
+    /* =====================================================
+       ACCENT
+    ===================================================== */
+
     const accentStyles = [
         {
-            glow: "bg-primary/20",
-            icon: "text-primary",
+            glow:
+                "bg-primary/20",
+
+            icon:
+                "text-primary",
+
             gradient:
                 "from-primary via-[#d52d67] to-secondary",
         },
+
         {
-            glow: "bg-secondary/20",
-            icon: "text-secondary",
+            glow:
+                "bg-secondary/20",
+
+            icon:
+                "text-secondary",
+
             gradient:
                 "from-secondary via-[#168bd7] to-primary",
         },
+
         {
-            glow: "bg-darkPrimary/20",
-            icon: "text-darkPrimary",
+            glow:
+                "bg-darkPrimary/20",
+
+            icon:
+                "text-darkPrimary",
+
             gradient:
                 "from-darkPrimary via-primary to-secondary",
         },
@@ -164,12 +279,48 @@ export default function UniversityCard({
     const accent =
         accentStyles[
             index %
-            accentStyles.length
+                accentStyles.length
         ];
 
     const showLogo =
-        Boolean(logoUrl) &&
+        Boolean(
+            logoUrl
+        ) &&
         !imageFailed;
+
+    /* =====================================================
+       CLICK
+
+       Exact backend ID is stored before Next navigation.
+    ===================================================== */
+
+    function handleUniversityClick() {
+        if (
+            !universityId ||
+            !slug
+        ) {
+            return;
+        }
+
+        saveUniversityMapping(
+            {
+                ...university,
+
+                id:
+                    universityId,
+
+                name:
+                    universityName,
+
+                country:
+                    countryName ||
+                    university?.country ||
+                    university?.country_name ||
+                    "",
+            },
+            countryName
+        );
+    }
 
     return (
         <article
@@ -189,12 +340,14 @@ export default function UniversityCard({
                 shadow-[0_16px_45px_rgba(15,23,42,0.08)]
                 transition-all
                 duration-500
+
                 hover:-translate-y-2
                 hover:border-primary/25
                 hover:shadow-[0_30px_80px_rgba(99,26,51,0.16)]
             "
         >
             {/* TOP ACCENT */}
+
             <div
                 aria-hidden="true"
                 className={`
@@ -209,23 +362,39 @@ export default function UniversityCard({
                     ${accent.gradient}
                     transition-transform
                     duration-500
+
                     group-hover:scale-x-100
                 `}
             />
 
             <Link
-                href={universityHref}
-                aria-label={`View ${universityName}`}
+                href={
+                    universityHref
+                }
+                onClick={
+                    handleUniversityClick
+                }
+                aria-label={
+                    countryName
+                        ? `View ${universityName} in ${countryName}`
+                        : `View ${universityName}`
+                }
                 className="
                     flex
                     h-full
                     flex-1
                     flex-col
+
+                    focus-visible:outline-none
+                    focus-visible:ring-2
+                    focus-visible:ring-inset
+                    focus-visible:ring-primary
                 "
             >
-                {/* =====================================================
+                {/* =================================================
                     LOGO AREA
-                ===================================================== */}
+                ================================================= */}
+
                 <div
                     className="
                         relative
@@ -246,6 +415,7 @@ export default function UniversityCard({
                     "
                 >
                     {/* GRID */}
+
                     <div
                         aria-hidden="true"
                         className="
@@ -253,12 +423,14 @@ export default function UniversityCard({
                             absolute
                             inset-0
                             opacity-70
+
                             [background-image:linear-gradient(rgba(15,38,85,0.08)_1px,transparent_1px),linear-gradient(90deg,rgba(15,38,85,0.08)_1px,transparent_1px)]
                             [background-size:30px_30px]
                         "
                     />
 
                     {/* LEFT GLOW */}
+
                     <div
                         aria-hidden="true"
                         className={`
@@ -275,6 +447,7 @@ export default function UniversityCard({
                     />
 
                     {/* RIGHT GLOW */}
+
                     <div
                         aria-hidden="true"
                         className="
@@ -290,7 +463,6 @@ export default function UniversityCard({
                         "
                     />
 
-                    {/* DECORATIVE ELEMENTS */}
                     <span
                         aria-hidden="true"
                         className="
@@ -321,7 +493,8 @@ export default function UniversityCard({
                         "
                     />
 
-                    {/* BADGE */}
+                    {/* UNIVERSITY BADGE */}
+
                     <span
                         className="
                             absolute
@@ -347,14 +520,17 @@ export default function UniversityCard({
                         "
                     >
                         <GraduationCap
-                            size={12}
+                            size={
+                                12
+                            }
                             aria-hidden="true"
                         />
 
                         University
                     </span>
 
-                    {/* PREMIUM LOGO FRAME */}
+                    {/* LOGO FRAME */}
+
                     <div
                         className="
                             relative
@@ -376,11 +552,11 @@ export default function UniversityCard({
                             backdrop-blur-xl
                             transition-all
                             duration-500
+
                             group-hover:scale-[1.035]
                             group-hover:shadow-[0_28px_65px_rgba(192,31,83,0.16)]
                         "
                     >
-                        {/* INNER SHINE */}
                         <div
                             aria-hidden="true"
                             className="
@@ -397,7 +573,9 @@ export default function UniversityCard({
 
                         {showLogo ? (
                             <img
-                                src={logoUrl}
+                                src={
+                                    logoUrl
+                                }
                                 alt={`${universityName} logo`}
                                 loading="lazy"
                                 decoding="async"
@@ -415,6 +593,7 @@ export default function UniversityCard({
                                     object-contain
                                     transition-transform
                                     duration-500
+
                                     group-hover:scale-[1.03]
                                 "
                             />
@@ -461,16 +640,19 @@ export default function UniversityCard({
                                         text-slate-400
                                     "
                                 >
-                                    {universityName}
+                                    {
+                                        universityName
+                                    }
                                 </span>
                             </div>
                         )}
                     </div>
                 </div>
 
-                {/* =====================================================
+                {/* =================================================
                     CONTENT
-                ===================================================== */}
+                ================================================= */}
+
                 <div
                     className="
                         relative
@@ -525,14 +707,18 @@ export default function UniversityCard({
                                 text-[#10204a]
                                 transition-colors
                                 duration-300
+
                                 group-hover:text-primary
                             "
                         >
-                            {universityName}
+                            {
+                                universityName
+                            }
                         </h3>
                     </div>
 
                     {/* LOCATION */}
+
                     <div
                         className="
                             relative
@@ -545,6 +731,7 @@ export default function UniversityCard({
                         "
                     >
                         <span
+                            aria-hidden="true"
                             className="
                                 mt-0.5
                                 flex
@@ -559,7 +746,6 @@ export default function UniversityCard({
                             "
                         >
                             <MapPin
-                                aria-hidden="true"
                                 className="
                                     h-4
                                     w-4
@@ -583,6 +769,7 @@ export default function UniversityCard({
                     </div>
 
                     {/* FOOTER */}
+
                     <div
                         className="
                             relative
@@ -635,6 +822,7 @@ export default function UniversityCard({
                                 text-primary
                                 transition-all
                                 duration-300
+
                                 group-hover:-translate-y-0.5
                                 group-hover:translate-x-0.5
                                 group-hover:bg-primary
