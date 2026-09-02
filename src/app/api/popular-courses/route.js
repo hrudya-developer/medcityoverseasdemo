@@ -1,6 +1,14 @@
-import { NextResponse } from "next/server";
+import {
+    NextResponse,
+} from "next/server";
 
-import { postOverseasForm } from "@/lib/overseasApi";
+import {
+    postOverseasForm,
+} from "@/lib/overseasApi";
+
+/* =========================================================
+   HELPERS
+========================================================= */
 
 const getId = (item) =>
     String(
@@ -9,48 +17,75 @@ const getId = (item) =>
         item?.course_id ??
         item?.main_course_id ??
         ""
-    );
+    ).trim();
 
 const getName = (item) =>
-    item?.name ??
-    item?.course ??
-    item?.main_course ??
-    item?.course_name ??
-    item?.main_course_name ??
-    item?.title ??
-    "";
+    String(
+        item?.name ??
+        item?.course ??
+        item?.main_course ??
+        item?.course_name ??
+        item?.main_course_name ??
+        item?.title ??
+        ""
+    ).trim();
 
 const getImage = (item) =>
-    item?.icon ??
-    item?.image ??
-    item?.course_image ??
-    item?.main_course_image ??
-    "";
+    String(
+        item?.icon ??
+        item?.image ??
+        item?.course_image ??
+        item?.main_course_image ??
+        ""
+    ).trim();
+
+/* =========================================================
+   GET
+========================================================= */
 
 export async function GET(request) {
     try {
-        const { searchParams } = new URL(request.url);
-
-        const uid = searchParams.get("uid") || "0";
-
-        const result = await postOverseasForm(
-            "getMainCourses",
-            {
-                api:
-                    process.env.OVERSEAS_API_KEY ||
-                    "overseas@Miak2023",
-                uid,
-            }
+        const {
+            searchParams,
+        } = new URL(
+            request.url
         );
 
-       
+        const uid =
+            searchParams.get(
+                "uid"
+            ) || "0";
 
-        /*
-         * Your Postman response returns:
-         *
-         * maincourse: [...]
-         * maincourse_image_path: "..."
-         */
+        /* =================================================
+           API
+
+           postOverseasForm already adds the API key.
+           Do NOT pass api again here.
+        ================================================= */
+
+        const result =
+            await postOverseasForm(
+                "getMainCourses",
+                {
+                    uid,
+                },
+                {
+                    next: {
+                        revalidate:
+                            3600,
+                    },
+                }
+            );
+
+        /* =================================================
+           RESPONSE
+
+           API currently returns:
+
+           maincourse: [...]
+           maincourse_image_path: "..."
+        ================================================= */
+
         const source =
             result?.maincourse ??
             result?.maincourses ??
@@ -61,44 +96,133 @@ export async function GET(request) {
             [];
 
         const imagePath =
-            result?.maincourse_image_path ??
-            result?.main_course_image_path ??
-            result?.course_image_path ??
+            result
+                ?.maincourse_image_path ??
+            result
+                ?.main_course_image_path ??
+            result
+                ?.course_image_path ??
             result?.image_path ??
             result?.path ??
             "";
 
+        /* =================================================
+           ALL ACTIVE MAIN COURSES
+
+           IMPORTANT:
+           We are NOT filtering by popular anymore.
+        ================================================= */
+
         const courses = (
-            Array.isArray(source) ? source : []
+            Array.isArray(
+                source
+            )
+                ? source
+                : []
         )
-            .filter((item) => {
-                const isActive =
-                    item?.status === undefined ||
-                    String(item.status) === "1";
+            .filter(
+                (item) => {
+                    /*
+                     * If status is missing,
+                     * treat it as active.
+                     */
 
-                const isPopular =
-                    item?.popular === undefined ||
-                    String(item.popular).toLowerCase() ===
-                    "true" ||
-                    String(item.popular) === "1";
+                    return (
+                        item?.status ===
+                            undefined ||
+                        item?.status ===
+                            null ||
+                        String(
+                            item.status
+                        ) === "1"
+                    );
+                }
+            )
+            .map(
+                (item) => ({
+                    id:
+                        getId(
+                            item
+                        ),
 
-                return isActive && isPopular;
-            })
-            .map((item) => ({
-                id: getId(item),
-                name: getName(item),
-                icon: getImage(item),
-            }))
+                    name:
+                        getName(
+                            item
+                        ),
+
+                    icon:
+                        getImage(
+                            item
+                        ),
+
+                    /*
+                     * Keep these fields too.
+                     * Useful if UI later wants
+                     * popular indicators.
+                     */
+
+                    popular:
+                        item?.popular ??
+                        false,
+
+                    status:
+                        item?.status ??
+                        "",
+                })
+            )
             .filter(
                 (item) =>
-                    Boolean(item.id) &&
-                    Boolean(item.name)
+                    Boolean(
+                        item.id
+                    ) &&
+                    Boolean(
+                        item.name
+                    )
             );
+
+        if (
+            process.env.NODE_ENV ===
+            "development"
+        ) {
+            console.log(
+                "MAIN COURSES",
+                {
+                    apiCount:
+                        Array.isArray(
+                            source
+                        )
+                            ? source.length
+                            : 0,
+
+                    returnedCount:
+                        courses.length,
+
+                    courses:
+                        courses.map(
+                            (
+                                course
+                            ) => ({
+                                id:
+                                    course.id,
+
+                                name:
+                                    course.name,
+
+                                popular:
+                                    course.popular,
+                            })
+                        ),
+                }
+            );
+        }
 
         return NextResponse.json(
             {
                 courses,
                 imagePath,
+
+                count:
+                    courses.length,
             },
             {
                 status: 200,
@@ -106,17 +230,21 @@ export async function GET(request) {
         );
     } catch (error) {
         console.error(
-            "Popular courses route error:",
+            "Main courses route error:",
             error
         );
 
         return NextResponse.json(
             {
                 courses: [],
-                imagePath: "",
+                imagePath:
+                    "",
+                count: 0,
+
                 message:
-                    error?.message ||
-                    "Failed to load popular courses.",
+                    error
+                        ?.message ||
+                    "Failed to load main courses.",
             },
             {
                 status: 500,

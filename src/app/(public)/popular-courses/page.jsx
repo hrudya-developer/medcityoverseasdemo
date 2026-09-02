@@ -1,4 +1,4 @@
-import FAQ from "@/components/home/FAQ/FAQ";
+
 import StudyTabContent from "@/components/home/services/programs/StudyTabContent";
 import PopularCoursesFAQ from "./PopularCoursesFAQ";
 
