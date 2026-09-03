@@ -9,6 +9,8 @@ import {
 } from "@/components/home/FAQ/faqData";
 import CounsellingSection from "@/components/home/free-counselling/CounsellingSection";
 import GermanCoursesLayout from "@/components/home/german-courses/GermanCoursesLayout";
+import MigrationCTA from "@/components/home/migration-cta/MigrationCTA";
+
 import MobileApp from "@/components/home/mobile-app/MobileApp";
 import SearchSection from "@/components/home/searchSection/SearchSection";
 import ProgramsSection from "@/components/home/services/programs/ProgramsSection";
@@ -17,6 +19,8 @@ import EssentialServices from "@/components/home/students-essential-services/Ess
 import SASteps from "@/components/home/study-abroad-steps/SASteps";
 import TestimonialSection from "@/components/home/testimonials/TestimonialSection";
 import UniversityPartners from "@/components/home/university-partners/UniversityPartners";
+import VisaAchievers from "@/components/home/visa-achievers/VisaAchievers";
+
 
 /* =========================================================
    SITE CONSTANTS
@@ -498,6 +502,8 @@ export default function Home() {
 
       <ProgramsSection />
 
+      <VisaAchievers />
+
       <DestinationsSection />
 
       <DepartureStoriesSection />
@@ -518,6 +524,8 @@ export default function Home() {
 
       <OurBranches />
 
+      
+      <MigrationCTA />
       <FAQ />
     </>
   );

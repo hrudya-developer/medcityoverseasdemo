@@ -16,7 +16,6 @@ export default function Footer() {
                 text-white
             "
             aria-labelledby="footer-heading"
-            data-aos="fade-up"
         >
             <h2
                 id="footer-heading"
