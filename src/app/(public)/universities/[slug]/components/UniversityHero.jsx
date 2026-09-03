@@ -26,6 +26,7 @@ import "swiper/css";
 import "swiper/css/pagination";
 
 import UniversityBreadcrumb from "./UniversityBreadcrumb";
+import { TbH1 } from "react-icons/tb";
 
 export default function UniversityHero({
     data,
@@ -77,11 +78,11 @@ export default function UniversityHero({
                                     University Profile
                                 </p>
 
-                                <h2 className="text-3xl font-extrabold leading-tight text-white sm:text-4xl xl:text-5xl">
+                                <h1 className="text-3xl font-extrabold leading-tight text-white sm:text-4xl xl:text-5xl">
                                     {universityName}
 
                                     <CheckCircle className="ml-3 inline size-7 fill-primary text-white" />
-                                </h2>
+                                </h1>
                             </div>
                         </div>
 
