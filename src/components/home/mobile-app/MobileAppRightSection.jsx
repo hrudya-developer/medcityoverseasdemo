@@ -46,7 +46,7 @@ export default function MobileAppRightSection({
 }) {
     return (
         <div
-            className="relative order-1 mx-auto w-full max-w-[680px] text-center lg:order-2 lg:mx-0 lg:text-left"
+            className="relative order-1 mx-auto w-full max-w-[680px] text-center lg:order-2 lg:mx-0 lg:text-left" data-aos="fade-left"
         >
             {/* Badge */}
             <div

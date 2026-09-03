@@ -40,7 +40,7 @@ export default function CourseCard({
     return (
         <article
             aria-labelledby={headingId}
-            className="group relative mx-auto flex w-full max-w-[390px] flex-col overflow-hidden rounded-[26px] border border-slate-200/70 bg-white shadow-[0_14px_42px_rgba(15,23,42,0.09)] transition-all duration-500 hover:-translate-y-2 hover:border-primary/25 hover:shadow-[0_26px_70px_rgba(192,31,83,0.16)]"
+            className="group relative mx-auto flex w-full max-w-[390px] flex-col overflow-hidden rounded-[26px] border border-slate-200/70 bg-white shadow-[0_14px_42px_rgba(15,23,42,0.09)] transition-all duration-500 hover:-translate-y-2 hover:border-primary/25 hover:shadow-[0_26px_70px_rgba(192,31,83,0.16)]" data-aos="fade-up"
         >
             <CardImageSection
                 imageUrl={imageUrl}

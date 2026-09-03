@@ -14,7 +14,7 @@ export default function PartnerCard({ partner }) {
         hover:-translate-y-2
         hover:border-pink-200
         hover:shadow-[0_18px_45px_rgba(236,72,153,0.16)]
-      "
+      " data-aos="fade-up"
     >
       {/* Pink hover glow */}
       <div

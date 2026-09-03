@@ -49,7 +49,7 @@ const orbitIcons = [
 export default function MobileAppLeftSection() {
     return (
         <div
-            className="relative order-2 flex min-h-[360px] items-center justify-center overflow-visible sm:min-h-[480px] lg:order-1 lg:min-h-[560px]"
+            className="relative order-2 flex min-h-[360px] items-center justify-center overflow-visible sm:min-h-[480px] lg:order-1 lg:min-h-[560px]" data-aos="fade-right"
         >
             <div
                 className="relative h-[350px] w-full max-w-[600px] sm:h-[460px] lg:h-[530px]"

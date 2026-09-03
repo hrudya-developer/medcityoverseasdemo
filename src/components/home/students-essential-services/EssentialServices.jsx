@@ -33,7 +33,7 @@ const EssentialServices = () => {
                 className="absolute left-1/2 top-0 h-px w-2/3 -translate-x-1/2 bg-gradient-to-r from-transparent via-primary/70 to-transparent"
             />
 
-            <div className="mx-auto max-w-[1600px]">
+            <div className="mx-auto max-w-[1600px]" data-aos="fade-up">
                 <EssentialServicesHeader />
 
                 <div

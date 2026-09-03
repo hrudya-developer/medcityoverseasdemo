@@ -43,7 +43,7 @@ export default function DestinationsSection() {
             <SectionBackground />
 
             <div
-                className="relative z-10 mx-auto w-full max-w-[1536px] px-4 sm:px-6 lg:px-8"
+                className="relative z-10 mx-auto w-full max-w-[1536px] px-4 sm:px-6 lg:px-8" data-aos="fade-up"
             >
                 <DestinationHeader />
 

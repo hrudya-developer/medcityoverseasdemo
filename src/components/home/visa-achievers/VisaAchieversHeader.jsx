@@ -40,7 +40,7 @@ export default function VisaAchieversHeader() {
                     shadow-[0_18px_45px_rgba(4,102,175,0.10)]
                     sm:px-8
                     lg:px-9
-                "
+                " data-aos="fade-right"
             >
                 {/* =================================================
                     BACKGROUND DECORATION
@@ -417,7 +417,7 @@ export default function VisaAchieversHeader() {
                     shadow-[0_18px_45px_rgba(143,103,32,0.10)]
                     sm:px-8
                     lg:px-9
-                "
+                " data-aos="fade-left"
             >
                 {/* =================================================
                     BACKGROUND DECORATION

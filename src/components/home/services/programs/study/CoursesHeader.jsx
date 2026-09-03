@@ -1,7 +1,7 @@
 export default function CoursesHeader() {
     return (
         <header
-            className="mx-auto mb-10 max-w-3xl text-center sm:mb-12"
+            className="mx-auto mb-10 max-w-3xl text-center sm:mb-12" data-aos="fade-up"
         >
             <p
                 className="inline-flex items-center gap-2 rounded-full border border-primary/10 bg-primary/[0.06] px-4 py-2 text-xs font-bold uppercase tracking-[0.14em] text-primary"

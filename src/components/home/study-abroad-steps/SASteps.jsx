@@ -6,7 +6,7 @@ const SASteps = () => {
         <section
             id="study-abroad-steps"
             aria-labelledby="study-abroad-steps-heading"
-            className="relative isolate overflow-hidden bg-gradient-to-br from-white via-[#fff8fb] to-[#f4f8ff] px-4 py-12 sm:px-6 sm:py-14 lg:px-8 lg:py-16"
+            className="relative isolate overflow-hidden bg-gradient-to-br from-white via-[#fff8fb] to-[#f4f8ff] px-4 py-12 sm:px-6 sm:py-14 lg:px-8 lg:py-16" data-aos="fade-up"
         >
             {/* Background pattern */}
             <div

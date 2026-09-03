@@ -93,7 +93,7 @@ const TestimonialSection = () => {
         <section
             id="student-testimonials"
             aria-labelledby="testimonial-section-heading"
-            className="relative isolate overflow-hidden bg-gradient-to-br from-[#fff6f9] via-white to-[#f3f9ff] px-4 py-16 sm:px-6 sm:py-20 lg:px-8 lg:py-24"
+            className="relative isolate overflow-hidden bg-gradient-to-br from-[#fff6f9] via-white to-[#f3f9ff] px-4 py-16 sm:px-6 sm:py-20 lg:px-8 lg:py-24" data-aos="fade-up"
         >
             <div
                 aria-hidden="true"

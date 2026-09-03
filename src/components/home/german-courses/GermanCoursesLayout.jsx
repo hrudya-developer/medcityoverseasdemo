@@ -72,7 +72,7 @@ export default function GermanCoursesLayout() {
         <section
             id="german-popular-courses"
             aria-labelledby="german-courses-heading"
-            className="relative overflow-hidden bg-gradient-to-br from-pink-50 via-white to-blue-50 py-14 sm:py-16 lg:py-20"
+            className="relative overflow-hidden bg-gradient-to-br from-pink-50 via-white to-blue-50 py-14 sm:py-16 lg:py-20" data-aos="fade-up"
         >
             <BackgroundDecorations />
 

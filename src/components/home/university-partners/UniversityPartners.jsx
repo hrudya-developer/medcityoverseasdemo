@@ -51,7 +51,7 @@ export default function UniversityPartners() {
   };
 
   return (
-    <section className="relative overflow-hidden bg-[#f4f4f4] py-16 lg:py-20">
+    <section className="relative overflow-hidden bg-[#f4f4f4] py-16 lg:py-20" data-aos="fade-up">
       <BackgroundDecor />
 
       <div className="relative z-10 mx-auto max-w-[1500px] px-4 sm:px-8">

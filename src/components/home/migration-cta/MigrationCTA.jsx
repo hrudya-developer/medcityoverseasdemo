@@ -143,7 +143,7 @@ export default function MigrationCTA() {
                     via-[#210c35]
                     to-primary
                     shadow-[0_28px_80px_rgba(31,14,40,0.18)]
-                "
+                " data-aos="fade-up"
             >
                 {/* Pink glow */}
                 <div
