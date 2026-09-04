@@ -77,12 +77,7 @@ export default function PrivacyPolicyPage() {
                     >
                         <p>
                             Medcity International
-                            Overseas Corporation
-                            (&quot;Medcity
-                            Overseas&quot;,
-                            &quot;we&quot;,
-                            &quot;our&quot; or
-                            &quot;us&quot;) operates
+                            Overseas Corporation operates
                             a study abroad platform
                             that helps students
                             explore global education
