@@ -3,16 +3,12 @@ import {
 } from "react";
 
 import {
-    createSlug,
-} from "@/lib/slug";
+    createUniversityPublicSlug,
+} from "@/lib/universitySlug";
 
 import {
     postOverseasForm,
 } from "@/lib/overseasApi";
-
-import {
-    createUniversityPublicSlug,
-} from "@/lib/universitySlug";
 
 import {
     cleanId,
@@ -21,6 +17,7 @@ import {
     getUniversityCountryId,
     getUniversityFromResponse,
     getUniversityName,
+    normalizeCountrySlug,
     normalizeSlug,
 } from "./universityHelpers";
 
@@ -35,13 +32,7 @@ import {
 /* =========================================================
    SEARCH UNIVERSITIES
 
-   Used only as fallback for:
-   - refresh
-   - Google
-   - shared link
-   - direct visit
-
-   NOT the preferred navigation path.
+   Search only discovers possible internal IDs.
 ========================================================= */
 
 const searchUniversities =
@@ -84,8 +75,7 @@ const searchUniversities =
 
                             keyword,
 
-                            uid:
-                                0,
+                            uid: 0,
                         },
                         {
                             next: {
@@ -98,10 +88,25 @@ const searchUniversities =
                 const candidates = [
                     result?.university,
                     result?.universities,
+
                     result?.suggestion,
                     result?.suggestions,
+
                     result?.data,
                     result?.results,
+                    result?.result,
+
+                    result?.data
+                        ?.university,
+
+                    result?.data
+                        ?.universities,
+
+                    result?.result
+                        ?.university,
+
+                    result?.result
+                        ?.universities,
                 ];
 
                 for (
@@ -161,6 +166,7 @@ function getCandidateIds(
             candidate?.university_id,
             candidate?.universityId,
             candidate?.id,
+            candidate?.uid,
         ];
 
         for (
@@ -184,20 +190,32 @@ function getCandidateIds(
 }
 
 /* =========================================================
-   EXACT INTERNAL ID RESOLVER
+   COUNTRY
+========================================================= */
 
-   This is the preferred resolver.
+function getResolvedCountryName(
+    university,
+    courses
+) {
+    return cleanText(
+        university?.country ??
+        university?.country_name ??
+        university?.destination ??
+        university?.destination_name ??
+        university?.location_country ??
+        courses?.[0]?.country ??
+        courses?.[0]?.country_name ??
+        courses?.[0]?.destination ??
+        ""
+    );
+}
 
-   Example:
+/* =========================================================
+   EXACT ID RESOLVER
 
-   Public URL:
-   /universities/griffith-college-australia
+   Used only when cookie gives us an exact backend ID.
 
-   Internally:
-   universityId = 1548
-
-   Request:
-   getUniversityDetails(1548)
+   Canonical slug is NAME ONLY.
 ========================================================= */
 
 export const resolveUniversityByExactId =
@@ -241,16 +259,14 @@ export const resolveUniversityByExactId =
                 return null;
             }
 
-            /* =================================================
-               VERIFY RETURNED ID
-            ================================================= */
-
             const returnedId =
                 cleanId(
                     university?.id ??
                     university?.u_id ??
                     university
                         ?.university_id ??
+                    university
+                        ?.universityId ??
                     id
                 );
 
@@ -258,16 +274,6 @@ export const resolveUniversityByExactId =
                 returnedId &&
                 returnedId !== id
             ) {
-                console.error(
-                    "University ID mismatch:",
-                    {
-                        requestedId:
-                            id,
-
-                        returnedId,
-                    }
-                );
-
                 return null;
             }
 
@@ -286,13 +292,9 @@ export const resolveUniversityByExactId =
                 );
 
             const countryName =
-                cleanText(
-                    university?.country ??
-                    university
-                        ?.country_name ??
-                    courses?.[0]
-                        ?.country ??
-                    ""
+                getResolvedCountryName(
+                    university,
+                    courses
                 );
 
             const canonicalSlug =
@@ -302,39 +304,23 @@ export const resolveUniversityByExactId =
 
                         name:
                             universityName,
-
-                        country:
-                            countryName,
-                    },
-                    countryName
+                    }
                 );
 
-            /* =================================================
-               VERIFY URL BELONGS TO THIS EXACT ID
-            ================================================= */
+            if (!canonicalSlug) {
+                return null;
+            }
+
+            /*
+             * Cookie fast path is strict.
+             *
+             * New cookies are saved using name-only slug.
+             */
 
             if (
-                canonicalSlug &&
                 canonicalSlug !==
-                    slug
+                slug
             ) {
-                if (
-                    process.env.NODE_ENV ===
-                    "development"
-                ) {
-                    console.warn(
-                        "Stored university ID does not match requested slug:",
-                        {
-                            id,
-
-                            requestedSlug:
-                                slug,
-
-                            canonicalSlug,
-                        }
-                    );
-                }
-
                 return null;
             }
 
@@ -366,23 +352,19 @@ export const resolveUniversityByExactId =
     );
 
 /* =========================================================
-   NAME + COUNTRY FALLBACK
+   SLUG RESOLVER
 
-   Used only when exact internal ID is unavailable.
+   Supports:
 
-   Example:
+   /universities/coventry-university
 
-   /universities/griffith-college-australia
+   and old:
 
-   Candidates:
-   999  -> Ireland
-   1548 -> Australia
+   /universities/coventry-university-uk
 
-   Ireland rejected.
-   Australia accepted.
+   Final canonical URL is always:
 
-   IMPORTANT:
-   Never sort by courseCount.
+   /universities/coventry-university
 ========================================================= */
 
 export const resolveUniversityByNameAndCountry =
@@ -395,7 +377,10 @@ export const resolveUniversityByNameAndCountry =
                     rawSlug
                 );
 
-            if (!context) {
+            if (
+                !context ||
+                !context.nameSlug
+            ) {
                 return null;
             }
 
@@ -411,52 +396,9 @@ export const resolveUniversityByNameAndCountry =
                 return null;
             }
 
-            /* =================================================
-               EXACT UNIVERSITY NAME
-            ================================================= */
-
-            const exactNameMatches =
-                searchResults.filter(
-                    (
-                        item
-                    ) => {
-                        const name =
-                            getUniversityName(
-                                item
-                            );
-
-                        if (!name) {
-                            return false;
-                        }
-
-                        return (
-                            createSlug(
-                                name
-                            ) ===
-                            context.nameSlug
-                        );
-                    }
-                );
-
-            const candidateSource =
-                exactNameMatches.length >
-                0
-                    ? exactNameMatches
-                    : searchResults.length ===
-                        1
-                      ? searchResults
-                      : [];
-
-            if (
-                candidateSource.length ===
-                0
-            ) {
-                return null;
-            }
-
             const candidateIds =
                 getCandidateIds(
-                    candidateSource
+                    searchResults
                 );
 
             if (
@@ -468,10 +410,6 @@ export const resolveUniversityByNameAndCountry =
 
             const verified =
                 [];
-
-            /* =================================================
-               VERIFY EACH CANDIDATE USING DETAILS API
-            ================================================= */
 
             for (
                 const candidateId of
@@ -504,14 +442,17 @@ export const resolveUniversityByNameAndCountry =
                     continue;
                 }
 
-                /* =============================================
-                   UNIVERSITY NAME MUST MATCH
-                ============================================= */
+                const realNameSlug =
+                    normalizeSlug(
+                        universityName
+                    );
+
+                /*
+                 * Exact university name match.
+                 */
 
                 if (
-                    createSlug(
-                        universityName
-                    ) !==
+                    realNameSlug !==
                     context.nameSlug
                 ) {
                     continue;
@@ -522,45 +463,46 @@ export const resolveUniversityByNameAndCountry =
                         details
                     );
 
-                /* =============================================
-                   COUNTRY
-
-                   Some university records may not contain
-                   country, so first course is also checked.
-                ============================================= */
-
                 const countryName =
-                    cleanText(
-                        university
-                            ?.country ??
-                        university
-                            ?.country_name ??
-                        courses?.[0]
-                            ?.country ??
-                        ""
+                    getResolvedCountryName(
+                        university,
+                        courses
                     );
 
-                const countrySlug =
-                    createSlug(
+                const realCountrySlug =
+                    normalizeCountrySlug(
                         countryName
                     );
 
-                /* =============================================
-                   DUPLICATE NAME DISCRIMINATOR
-                ============================================= */
+                const requestedCountrySlug =
+                    normalizeCountrySlug(
+                        context.countrySlug
+                    );
+
+                /*
+                 * OLD COUNTRY-AWARE URL:
+                 *
+                 * /coventry-university-uk
+                 *
+                 * If country exists in the old URL,
+                 * verify it matches the university.
+                 */
 
                 if (
-                    context.countrySlug
+                    requestedCountrySlug &&
+                    (
+                        !realCountrySlug ||
+                        realCountrySlug !==
+                            requestedCountrySlug
+                    )
                 ) {
-                    if (
-                        !countrySlug ||
-                        countrySlug !==
-                            context
-                                .countrySlug
-                    ) {
-                        continue;
-                    }
+                    continue;
                 }
+
+                /*
+                 * Canonical URL is ALWAYS
+                 * university name only.
+                 */
 
                 const canonicalSlug =
                     createUniversityPublicSlug(
@@ -569,105 +511,73 @@ export const resolveUniversityByNameAndCountry =
 
                             name:
                                 universityName,
-
-                            country:
-                                countryName,
-                        },
-                        countryName
+                        }
                     );
 
-                /* =============================================
-                   FULL SLUG MUST MATCH
-                ============================================= */
-
-                if (
-                    context.countrySlug &&
-                    canonicalSlug !==
-                        context.slug
-                ) {
+                if (!canonicalSlug) {
                     continue;
                 }
 
-                verified.push({
-                    id:
-                        cleanId(
-                            university?.id ??
-                            university?.u_id ??
-                            candidateId
-                        ),
+                const resolvedId =
+                    cleanId(
+                        university?.id ??
+                        university?.u_id ??
+                        university
+                            ?.university_id ??
+                        university
+                            ?.universityId ??
+                        candidateId
+                    );
 
-                    university,
+                if (!resolvedId) {
+                    continue;
+                }
 
-                    details,
+                verified.push(
+                    {
+                        id:
+                            resolvedId,
 
-                    universityName,
+                        university,
 
-                    universitySlug:
-                        canonicalSlug,
+                        details,
 
-                    countryId:
-                        getUniversityCountryId(
-                            university
-                        ),
+                        universityName,
 
-                    countryName,
+                        universitySlug:
+                            canonicalSlug,
 
-                    courses,
+                        countryId:
+                            getUniversityCountryId(
+                                university
+                            ),
 
-                    courseCount:
-                        courses.length,
-                });
+                        countryName,
+
+                        courses,
+
+                        courseCount:
+                            courses.length,
+                    }
+                );
+            }
+
+            if (
+                verified.length ===
+                0
+            ) {
+                return null;
             }
 
             /* =================================================
-               COUNTRY-AWARE URL
+               OLD COUNTRY-AWARE URL
 
-               Name + country should identify the university.
+               Country was already verified above.
             ================================================= */
 
             if (
                 context.countrySlug
             ) {
-                if (
-                    verified.length ===
-                    0
-                ) {
-                    return null;
-                }
-
-                if (
-                    verified.length >
-                        1 &&
-                    process.env.NODE_ENV ===
-                        "development"
-                ) {
-                    console.warn(
-                        "Multiple universities match the same name and country:",
-                        {
-                            slug:
-                                context.slug,
-
-                            matches:
-                                verified.map(
-                                    (
-                                        item
-                                    ) => ({
-                                        id:
-                                            item.id,
-
-                                        universityName:
-                                            item
-                                                .universityName,
-
-                                        country:
-                                            item
-                                                .countryName,
-                                    })
-                                ),
-                        }
-                    );
-                }
-
                 return (
                     verified[0] ??
                     null
@@ -675,49 +585,65 @@ export const resolveUniversityByNameAndCountry =
             }
 
             /* =================================================
-               LEGACY NAME-ONLY URL
+               NORMAL CANONICAL NAME-ONLY URL
 
-               Safe only when one result exists.
+               Prefer record with country metadata.
             ================================================= */
 
+            const withCountry =
+                verified.find(
+                    (
+                        item
+                    ) =>
+                        Boolean(
+                            normalizeCountrySlug(
+                                item
+                                    ?.countryName
+                            )
+                        )
+                );
+
+            const selected =
+                withCountry ??
+                verified[0];
+
             if (
-                verified.length ===
-                1
+                !selected
             ) {
-                return verified[0];
+                return null;
             }
 
             if (
-                verified.length >
-                1
+                process.env.NODE_ENV ===
+                "development"
             ) {
-                console.warn(
-                    "Ambiguous name-only university URL:",
+                console.log(
+                    "UNIVERSITY SLUG RESOLVED",
                     {
-                        slug:
+                        requestedSlug:
                             context.slug,
 
+                        selectedId:
+                            selected.id,
+
+                        universityName:
+                            selected
+                                .universityName,
+
+                        country:
+                            selected
+                                .countryName,
+
+                        canonicalSlug:
+                            selected
+                                .universitySlug,
+
                         matches:
-                            verified.map(
-                                (
-                                    item
-                                ) => ({
-                                    id:
-                                        item.id,
-
-                                    universityName:
-                                        item
-                                            .universityName,
-
-                                    country:
-                                        item
-                                            .countryName,
-                                })
-                            ),
+                            verified.length,
                     }
                 );
             }
 
-            return null;
+            return selected;
         }
     );

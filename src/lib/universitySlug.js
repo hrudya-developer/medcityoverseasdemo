@@ -1,15 +1,95 @@
 import { createSlug } from "@/lib/slug";
 
-const COOKIE_PREFIX = "medcity_university_";
+/* =========================================================
+   CONFIG
+========================================================= */
 
-function cleanText(value = "") {
-    return String(value ?? "")
+const COOKIE_PREFIX =
+    "medcity_university_";
+
+const SESSION_PREFIX =
+    "public-university:";
+
+/* =========================================================
+   CLEANERS
+========================================================= */
+
+function cleanText(
+    value = ""
+) {
+    return String(
+        value ?? ""
+    )
+        .replace(/<[^>]*>/g, " ")
         .replace(/\s+/g, " ")
         .trim();
 }
 
-export function getUniversityPublicId(university) {
-    return cleanText(
+function cleanId(
+    value = ""
+) {
+    return String(
+        value ?? ""
+    ).trim();
+}
+
+/* =========================================================
+   COUNTRY NORMALIZATION
+
+   Used internally only.
+
+   University URLs themselves do NOT contain country.
+========================================================= */
+
+export function normalizeUniversityCountrySlug(
+    value = ""
+) {
+    const slug =
+        createSlug(
+            cleanText(
+                value
+            )
+        );
+
+    const aliases = {
+        "united-kingdom":
+            "uk",
+
+        "great-britain":
+            "uk",
+
+        "united-states":
+            "usa",
+
+        "united-states-of-america":
+            "usa",
+
+        "u-s-a":
+            "usa",
+
+        "u-s":
+            "usa",
+
+        newzealand:
+            "new-zealand",
+    };
+
+    return (
+        aliases[slug] ||
+        slug
+    );
+}
+
+/* =========================================================
+   UNIVERSITY ID
+
+   INTERNAL ONLY.
+========================================================= */
+
+export function getUniversityPublicId(
+    university
+) {
+    return cleanId(
         university?.id ??
         university?.u_id ??
         university?.university_id ??
@@ -19,7 +99,13 @@ export function getUniversityPublicId(university) {
     );
 }
 
-export function getUniversityPublicName(university) {
+/* =========================================================
+   UNIVERSITY NAME
+========================================================= */
+
+export function getUniversityPublicName(
+    university
+) {
     return cleanText(
         university?.name ??
         university?.university_name ??
@@ -30,6 +116,12 @@ export function getUniversityPublicName(university) {
     );
 }
 
+/* =========================================================
+   UNIVERSITY COUNTRY
+
+   Internal metadata only.
+========================================================= */
+
 export function getUniversityPublicCountry(
     university,
     fallbackCountry = ""
@@ -39,13 +131,20 @@ export function getUniversityPublicCountry(
         university?.country_name ??
         university?.destination ??
         university?.destination_name ??
+        university?.countryName ??
         fallbackCountry ??
         ""
     );
 }
 
-export function getUniversityPublicCountryId(university) {
-    return cleanText(
+/* =========================================================
+   COUNTRY ID
+========================================================= */
+
+export function getUniversityPublicCountryId(
+    university
+) {
+    return cleanId(
         university?.d_id ??
         university?.country_id ??
         university?.destination_id ??
@@ -55,58 +154,69 @@ export function getUniversityPublicCountryId(university) {
 }
 
 /* =========================================================
-   PUBLIC SEO SLUG
+   CANONICAL PUBLIC UNIVERSITY SLUG
 
-   Griffith College + Australia
-   -> griffith-college-australia
+   IMPORTANT:
 
-   The database ID is NOT exposed in the URL.
+   Country is NOT included.
+
+   Coventry University
+   ↓
+   coventry-university
+
+   Monash University
+   ↓
+   monash-university
+
+   No ID.
+   No country.
 ========================================================= */
 
 export function createUniversityPublicSlug(
-    university,
-    fallbackCountry = ""
+    university
 ) {
     const name =
-        getUniversityPublicName(university);
-
-    const country =
-        getUniversityPublicCountry(
-            university,
-            fallbackCountry
+        getUniversityPublicName(
+            university
         );
 
     if (!name) {
         return "";
     }
 
-    if (!country) {
-        return createSlug(name);
-    }
-
     return createSlug(
-        `${name} ${country}`
+        name
     );
 }
 
+/* =========================================================
+   PUBLIC UNIVERSITY URL
+========================================================= */
+
 export function createUniversityPublicHref(
-    university,
-    fallbackCountry = ""
+    university
 ) {
     const slug =
         createUniversityPublicSlug(
-            university,
-            fallbackCountry
+            university
         );
 
     return slug
         ? `/universities/${slug}`
-        : "";
+        : "/universities";
 }
 
-export function getUniversityMappingCookieName(slug) {
+/* =========================================================
+   COOKIE NAME
+========================================================= */
+
+export function getUniversityMappingCookieName(
+    slug
+) {
     const safeSlug =
-        createSlug(slug ?? "");
+        createSlug(
+            slug ?? ""
+        );
 
     if (!safeSlug) {
         return "";
@@ -116,22 +226,33 @@ export function getUniversityMappingCookieName(slug) {
 }
 
 /* =========================================================
-   STORE EXACT UNIVERSITY ID INTERNALLY
+   SAVE SLUG -> ID MAPPING
+
+   Optional performance optimization.
+
+   ID stays internal.
 ========================================================= */
 
 export function saveUniversityMapping(
     university,
     fallbackCountry = ""
 ) {
-    if (typeof window === "undefined") {
+    if (
+        typeof window ===
+        "undefined"
+    ) {
         return null;
     }
 
     const id =
-        getUniversityPublicId(university);
+        getUniversityPublicId(
+            university
+        );
 
     const name =
-        getUniversityPublicName(university);
+        getUniversityPublicName(
+            university
+        );
 
     const country =
         getUniversityPublicCountry(
@@ -146,11 +267,13 @@ export function saveUniversityMapping(
 
     const slug =
         createUniversityPublicSlug(
-            university,
-            fallbackCountry
+            university
         );
 
-    if (!id || !name || !slug) {
+    if (
+        !id ||
+        !slug
+    ) {
         return null;
     }
 
@@ -162,18 +285,16 @@ export function saveUniversityMapping(
         countryId,
     };
 
-    /* SESSION STORAGE */
-
     try {
         sessionStorage.setItem(
-            `public-university:${slug}`,
-            JSON.stringify(payload)
+            `${SESSION_PREFIX}${slug}`,
+            JSON.stringify(
+                payload
+            )
         );
     } catch {
-        // Do not block navigation.
+        // Optional only.
     }
-
-    /* SERVER-READABLE COOKIE */
 
     try {
         const cookieName =
@@ -185,15 +306,65 @@ export function saveUniversityMapping(
             document.cookie =
                 `${cookieName}=` +
                 `${encodeURIComponent(
-                    JSON.stringify(payload)
+                    JSON.stringify(
+                        payload
+                    )
                 )}; ` +
                 "Path=/; " +
                 "Max-Age=1800; " +
                 "SameSite=Lax";
         }
     } catch {
-        // Do not block navigation.
+        // Optional only.
     }
 
     return payload;
+}
+
+/* =========================================================
+   READ CLIENT MAPPING
+========================================================= */
+
+export function getSavedUniversityMapping(
+    slug
+) {
+    if (
+        typeof window ===
+        "undefined"
+    ) {
+        return null;
+    }
+
+    const safeSlug =
+        createSlug(
+            slug ?? ""
+        );
+
+    if (!safeSlug) {
+        return null;
+    }
+
+    try {
+        const raw =
+            sessionStorage.getItem(
+                `${SESSION_PREFIX}${safeSlug}`
+            );
+
+        if (!raw) {
+            return null;
+        }
+
+        const parsed =
+            JSON.parse(
+                raw
+            );
+
+        if (!parsed?.id) {
+            return null;
+        }
+
+        return parsed;
+    } catch {
+        return null;
+    }
 }

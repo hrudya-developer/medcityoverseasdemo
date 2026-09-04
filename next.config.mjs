@@ -128,11 +128,7 @@ const nextConfig = {
                 destination: "/study-in-germany",
                 permanent: true,
             },
-            {
-                source: "/course-search",
-                destination: "/courses",
-                permanent: true,
-            },
+           
         ];
     },
 };

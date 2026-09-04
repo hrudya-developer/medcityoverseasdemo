@@ -12,12 +12,17 @@ import {
 } from "./universityFallbackResolver";
 
 /* =========================================================
-   MAIN RESOLVER
+   UNIVERSITY RESOLVER
 
-   1. Exact internal backend ID
-   2. Name + country SEO fallback
+   CANONICAL:
 
-   Backend ID never appears in public URL.
+   /universities/coventry-university
+
+   OLD URLS CAN STILL RESOLVE:
+
+   /universities/coventry-university-uk
+
+   Backend ID remains internal.
 ========================================================= */
 
 export async function resolveUniversity(
@@ -33,7 +38,7 @@ export async function resolveUniversity(
     }
 
     /* =====================================================
-       EXACT INTERNAL ID
+       FAST PATH - STORED INTERNAL ID
     ===================================================== */
 
     const storedId =
@@ -49,79 +54,33 @@ export async function resolveUniversity(
             );
 
         if (exact) {
-            if (
-                process.env.NODE_ENV ===
-                "development"
-            ) {
-                console.log(
-                    "UNIVERSITY RESOLVED",
-                    {
-                        slug,
-
-                        source:
-                            "exact-internal-id",
-
-                        selectedId:
-                            exact.id,
-
-                        universityName:
-                            exact
-                                .universityName,
-
-                        country:
-                            exact
-                                .countryName,
-
-                        courseCount:
-                            exact
-                                .courseCount,
-                    }
-                );
-            }
-
             return exact;
         }
     }
 
     /* =====================================================
-       SEO FALLBACK
+       SERVER RESOLUTION
+
+       Works for:
+       - refresh
+       - direct URL
+       - Google
+       - incognito
+       - old country-aware links
     ===================================================== */
 
-    const fallback =
+    const resolved =
         await resolveUniversityByNameAndCountry(
             slug
         );
 
     if (
-        fallback &&
-        process.env.NODE_ENV ===
-            "development"
+        !resolved?.id ||
+        !resolved?.university ||
+        !resolved?.details
     ) {
-        console.log(
-            "UNIVERSITY RESOLVED",
-            {
-                slug,
-
-                source:
-                    "name-country-fallback",
-
-                selectedId:
-                    fallback.id,
-
-                universityName:
-                    fallback
-                        .universityName,
-
-                country:
-                    fallback
-                        .countryName,
-
-                courseCount:
-                    fallback
-                        .courseCount,
-            }
-        );
+        return null;
     }
 
-    return fallback;
+    return resolved;
 }

@@ -15,6 +15,9 @@ import {
 import {
     getDestinations,
 } from "./universityApi";
+import {
+    normalizeCountrySlug,
+} from "./universityHelpers";
 
 /* =========================================================
    NORMALIZE DESTINATIONS
@@ -37,7 +40,7 @@ const getNormalizedDestinations =
                             );
 
                         const slug =
-                            createSlug(
+                            normalizeCountrySlug(
                                 name
                             );
 
@@ -77,7 +80,6 @@ const getNormalizedDestinations =
                 );
         }
     );
-
 /* =========================================================
    GET UNIVERSITY SLUG CONTEXT
 

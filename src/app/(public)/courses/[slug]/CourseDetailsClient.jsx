@@ -18,10 +18,10 @@ import CourseBenefits from "./components/CourseBenefits";
 import CourseDetailsError from "./components/CourseDetailsError";
 import CourseDetailsFAQ from "./components/CourseDetailsFAQ";
 import CourseDetailsGrid from "./components/CourseDetailsGrid";
-import CourseDetailsHero from "./components/CourseDetailsHero";
 import CourseDetailsSkeleton from "./components/CourseDetailsSkeleton";
-import CourseQuickFacts from "./components/CourseQuickFacts";
 import EnglishRequirements from "./components/EnglishRequirements";
+
+import CourseDetailsHero from "./components/course-details-hero/CourseDetailsHero";
 
 import {
     formatCourseDetails,
@@ -53,6 +53,226 @@ function getCourseId(course) {
     return String(
         value
     ).trim();
+}
+
+/* =========================================================
+   FIRST NON-EMPTY VALUE
+========================================================= */
+
+function firstValue(
+    ...values
+) {
+    for (
+        const value of values
+    ) {
+        if (
+            value !== undefined &&
+            value !== null &&
+            String(
+                value
+            ).trim() !== ""
+        ) {
+            return value;
+        }
+    }
+
+    return "";
+}
+
+/* =========================================================
+   UNIVERSITY ID
+========================================================= */
+
+function getUniversityId(
+    course
+) {
+    return String(
+        firstValue(
+            course?.u_id,
+            course?.university_id,
+            course?.universityId,
+            course?.university?.id,
+            course?.university?.u_id,
+            course?.university
+                ?.university_id,
+            ""
+        )
+    ).trim();
+}
+
+/* =========================================================
+   COUNTRY ID
+========================================================= */
+
+function getCountryId(
+    course
+) {
+    return String(
+        firstValue(
+            course?.d_id,
+            course?.country_id,
+            course?.destination_id,
+            course?.destinationId,
+            course?.university?.d_id,
+            course?.university
+                ?.country_id,
+            ""
+        )
+    ).trim();
+}
+
+/* =========================================================
+   UNIVERSITY LOGO
+
+   Supports the different shapes returned by
+   course/university API responses.
+========================================================= */
+
+function getUniversityLogo(
+    course
+) {
+    return firstValue(
+        /*
+         * Normalized fields
+         */
+        course?.universityLogoUrl,
+        course?.university_logo_url,
+        course?.universityLogo,
+        course?.university_logo,
+
+        /*
+         * Common university logo fields
+         */
+        course?.u_logo,
+        course?.logo,
+        course?.logo_image,
+        course?.logoImage,
+
+        /*
+         * University image aliases
+         */
+        course?.university_image,
+        course?.universityImage,
+        course?.image,
+        course?.image_name,
+        course?.imageName,
+
+        /*
+         * Nested university object
+         */
+        course?.university?.logo,
+        course?.university
+            ?.university_logo,
+        course?.university
+            ?.universityLogo,
+        course?.university?.u_logo,
+        course?.university
+            ?.logo_image,
+        course?.university
+            ?.logoImage,
+        course?.university?.image,
+        course?.university
+            ?.image_name,
+        course?.university
+            ?.imageName,
+
+        /*
+         * Nested info object
+         */
+        course?.info?.logo,
+        course?.info
+            ?.university_logo,
+        course?.info
+            ?.universityLogo,
+        course?.info?.u_logo,
+        course?.info?.image,
+
+        /*
+         * Nested data object
+         */
+        course?.data?.logo,
+        course?.data
+            ?.university_logo,
+        course?.data
+            ?.universityLogo,
+        course?.data?.u_logo,
+        course?.data?.image,
+
+        ""
+    );
+}
+
+/* =========================================================
+   UNIVERSITY IMAGE BASE PATH
+
+   Used when API returns:
+   logo = "abc.png"
+   image_path = "https://domain.com/path"
+========================================================= */
+
+function getUniversityImagePath(
+    course
+) {
+    return firstValue(
+        /*
+         * Normalized fields
+         */
+        course?.universitiesImagePath,
+        course
+            ?.universities_image_path,
+
+        course?.universityImagePath,
+        course
+            ?.university_image_path,
+
+        course?.universityLogoPath,
+        course
+            ?.university_logo_path,
+
+        /*
+         * Generic API image path
+         */
+        course?.image_path,
+        course?.imagePath,
+
+        /*
+         * Nested university object
+         */
+        course?.university
+            ?.image_path,
+        course?.university
+            ?.imagePath,
+
+        course?.university
+            ?.logo_path,
+        course?.university
+            ?.logoPath,
+
+        course?.university
+            ?.university_image_path,
+
+        /*
+         * Nested info object
+         */
+        course?.info
+            ?.universities_image_path,
+        course?.info
+            ?.university_image_path,
+        course?.info?.image_path,
+        course?.info?.imagePath,
+
+        /*
+         * Nested data object
+         */
+        course?.data
+            ?.universities_image_path,
+        course?.data
+            ?.university_image_path,
+        course?.data?.image_path,
+        course?.data?.imagePath,
+
+        ""
+    );
 }
 
 /* =========================================================
@@ -89,10 +309,15 @@ export default function CourseDetailsClient({
 
     useEffect(() => {
         setStoredCourseId("");
-        setStorageChecked(false);
+        setStorageChecked(
+            false
+        );
 
         if (!slug) {
-            setStorageChecked(true);
+            setStorageChecked(
+                true
+            );
+
             return;
         }
 
@@ -110,7 +335,9 @@ export default function CourseDetailsClient({
             }
 
             const parsed =
-                JSON.parse(raw);
+                JSON.parse(
+                    raw
+                );
 
             /*
              * Reject stale mapping belonging
@@ -174,7 +401,9 @@ export default function CourseDetailsClient({
                 true
             );
         }
-    }, [slug]);
+    }, [
+        slug,
+    ]);
 
     /* =======================================================
        FETCH PUBLIC COURSE
@@ -235,12 +464,6 @@ export default function CourseDetailsClient({
 
     /* =======================================================
        SAVE RESOLVED COURSE MAPPING
-
-       If page was opened directly using only
-       slug, server resolver returns the course.
-
-       Once we know the exact ID, save it so
-       future visits can use the faster path.
     ======================================================= */
 
     useEffect(() => {
@@ -334,10 +557,112 @@ export default function CourseDetailsClient({
        FORMAT DETAILS
     ======================================================= */
 
-    const details =
+    const formattedDetails =
         formatCourseDetails(
             selectedCourse
         );
+
+    /*
+     * Preserve logo fields that may not be
+     * returned by formatCourseDetails().
+     */
+    const universityLogo =
+        firstValue(
+            formattedDetails
+                ?.universityLogoUrl,
+
+            formattedDetails
+                ?.universityLogo,
+
+            formattedDetails?.logo,
+
+            getUniversityLogo(
+                selectedCourse
+            )
+        );
+
+    const universityImagePath =
+        firstValue(
+            formattedDetails
+                ?.universitiesImagePath,
+
+            formattedDetails
+                ?.universityImagePath,
+
+            getUniversityImagePath(
+                selectedCourse
+            )
+        );
+
+    const details = {
+        ...formattedDetails,
+
+        /*
+         * Give CourseDetailsHero every supported
+         * logo property.
+         */
+        universityLogo:
+            universityLogo,
+
+        universityLogoUrl:
+            universityLogo,
+
+        logo:
+            universityLogo,
+
+        /*
+         * Give CourseDetailsHero every supported
+         * image-base-path property.
+         */
+        universityImagePath:
+            universityImagePath,
+
+        universitiesImagePath:
+            universityImagePath,
+    };
+
+    /* =======================================================
+       DEVELOPMENT LOGO DEBUG
+
+       Remove this after verifying the logo.
+    ======================================================= */
+
+    if (
+        process.env.NODE_ENV ===
+        "development"
+    ) {
+        console.log(
+            "COURSE UNIVERSITY LOGO DEBUG",
+            {
+                universityId:
+                    getUniversityId(
+                        selectedCourse
+                    ),
+
+                universityName:
+                    details
+                        ?.universityName,
+
+                rawLogo:
+                    getUniversityLogo(
+                        selectedCourse
+                    ),
+
+                rawImagePath:
+                    getUniversityImagePath(
+                        selectedCourse
+                    ),
+
+                finalLogo:
+                    details
+                        ?.universityLogo,
+
+                finalImagePath:
+                    details
+                        ?.universityImagePath,
+            }
+        );
+    }
 
     /* =======================================================
        APPLY COURSE
@@ -360,14 +685,14 @@ export default function CourseDetailsClient({
                 slug,
 
             universityId:
-                selectedCourse?.u_id ??
-                selectedCourse?.university_id ??
-                "",
+                getUniversityId(
+                    selectedCourse
+                ),
 
             countryId:
-                selectedCourse?.d_id ??
-                selectedCourse?.country_id ??
-                "",
+                getCountryId(
+                    selectedCourse
+                ),
 
             createdAt:
                 Date.now(),
@@ -446,21 +771,6 @@ export default function CourseDetailsClient({
                 }
                 onApply={
                     handleApply
-                }
-            />
-
-            <CourseQuickFacts
-                duration={
-                    details.duration
-                }
-                level={
-                    details.level
-                }
-                intakes={
-                    details.intakes
-                }
-                intakesRaw={
-                    details.intakesRaw
                 }
             />
 

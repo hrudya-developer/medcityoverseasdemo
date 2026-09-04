@@ -54,9 +54,9 @@ export default function FooterBottom() {
                         Privacy Policy
                     </BottomLink>
 
-                    <BottomLink href="/terms-and-conditions">
+                    {/* <BottomLink href="/terms-and-conditions">
                         Terms and Conditions
-                    </BottomLink>
+                    </BottomLink> */}
                 </div>
             </div>
         </div>
