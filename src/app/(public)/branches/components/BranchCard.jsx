@@ -10,6 +10,62 @@ import {
   Phone,
 } from "lucide-react";
 
+/* =========================================================
+   HELPERS
+========================================================= */
+
+function slugify(value = "") {
+  return String(value ?? "")
+    .toLowerCase()
+    .trim()
+    .replace(/&/g, "and")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
+function getBranchSlug(center) {
+  const storedSlug =
+    slugify(center?.slug);
+
+  if (storedSlug) {
+    return storedSlug;
+  }
+
+  const city =
+    center?.seoLocation ||
+    center?.city ||
+    center?.district ||
+    center?.name ||
+    "branch";
+
+  const citySlug =
+    slugify(city);
+
+  return citySlug.startsWith(
+    "medcity-"
+  )
+    ? citySlug
+    : `medcity-${citySlug}`;
+}
+
+function getBranchUrl(center) {
+  if (center?.branchUrl) {
+    return center.branchUrl;
+  }
+
+  if (center?.seoUrl) {
+    return center.seoUrl;
+  }
+
+  return `/branch/${getBranchSlug(
+    center
+  )}`;
+}
+
+/* =========================================================
+   COMPONENT
+========================================================= */
+
 export default function BranchCard({
   center,
   index,
@@ -18,15 +74,32 @@ export default function BranchCard({
     return null;
   }
 
-  const branchNumber = String(
-    index + 1
-  ).padStart(2, "0");
+  const branchNumber =
+    String(index + 1).padStart(
+      2,
+      "0"
+    );
 
+  /*
+   * SEO-facing location.
+   *
+   * Example:
+   * city: "Kozhikode"
+   * seoLocation: "Calicut"
+   *
+   * Result displayed:
+   * Calicut
+   */
   const city =
+    center?.seoLocation ||
     center?.city ||
     center?.district ||
     center?.location ||
     "Kerala";
+
+  const branchName =
+    center?.name ||
+    `Medcity Overseas ${city}`;
 
   const branchTitle =
     center?.seoTitle ||
@@ -34,73 +107,106 @@ export default function BranchCard({
 
   const branchDescription =
     center?.seoDescription ||
-    `Visit Medcity Overseas ${city} for study abroad counselling, university applications, course selection and student visa guidance.`;
+    `Visit Medcity Overseas ${city} for expert study abroad counselling, university admissions, course selection, applications and student visa guidance.`;
 
   const imageAlt =
     center?.imageAlt ||
-    `${
-      center?.name ||
-      "Medcity Overseas"
-    } study abroad counselling center in ${city}`;
+    `${branchName} study abroad consultants in ${city}`;
 
-  const phones = Array.isArray(
-    center?.phones
-  )
-    ? center.phones
-    : [];
+  const phones =
+    Array.isArray(
+      center?.phones
+    )
+      ? center.phones.filter(
+          Boolean
+        )
+      : center?.phone
+        ? [center.phone]
+        : [];
+
+  const branchUrl =
+    getBranchUrl(center);
 
   return (
     <article
       role="listitem"
       className="
-        group relative flex h-full flex-col overflow-hidden
+        group
+        relative
+        flex
+        h-full
+        flex-col
+        overflow-hidden
         rounded-[30px]
-        border border-slate-200/80
+        border
+        border-slate-200/80
         bg-white
         shadow-[0_16px_45px_rgba(15,23,42,0.07)]
-        transition-all duration-500 ease-out
+        transition-all
+        duration-500
+        ease-out
         hover:-translate-y-2
         hover:border-primary/20
         hover:shadow-[0_28px_65px_rgba(99,26,51,0.14)]
       "
     >
-      {/* Top accent */}
+      {/* =====================================================
+          TOP ACCENT
+      ===================================================== */}
+
       <div
         aria-hidden="true"
         className="
-          absolute inset-x-8 top-0 z-20 h-[3px]
-          origin-center scale-x-0
+          absolute
+          inset-x-8
+          top-0
+          z-20
+          h-[3px]
+          origin-center
+          scale-x-0
           rounded-full
           bg-gradient-to-r
           from-transparent
           via-primary
           to-transparent
-          transition-transform duration-500
+          transition-transform
+          duration-500
           group-hover:scale-x-100
         "
       />
 
-      {/* Background glow */}
+      {/* =====================================================
+          BACKGROUND GLOW
+      ===================================================== */}
+
       <div
         aria-hidden="true"
         className="
           pointer-events-none
-          absolute -right-20 -top-20
-          h-48 w-48
+          absolute
+          -right-20
+          -top-20
+          h-48
+          w-48
           rounded-full
           bg-primary/[0.08]
           blur-3xl
-          transition-all duration-700
+          transition-all
+          duration-700
           group-hover:scale-125
           group-hover:bg-primary/[0.13]
         "
       />
 
-      {/* ================= IMAGE ================= */}
+      {/* =====================================================
+          IMAGE
+      ===================================================== */}
+
       <div className="relative p-2.5 pb-0">
         <div
           className="
-            relative h-[215px]
+            relative
+            h-[215px]
             overflow-hidden
             rounded-[24px]
             bg-slate-100
@@ -128,11 +234,13 @@ export default function BranchCard({
             />
           )}
 
-          {/* Image overlays */}
+          {/* Image overlay */}
+
           <div
             aria-hidden="true"
             className="
-              absolute inset-0
+              absolute
+              inset-0
               bg-gradient-to-t
               from-[#101828]/75
               via-[#101828]/5
@@ -143,38 +251,54 @@ export default function BranchCard({
           <div
             aria-hidden="true"
             className="
-              absolute inset-0
+              absolute
+              inset-0
               bg-gradient-to-br
               from-primary/[0.08]
               via-transparent
               to-secondary/[0.08]
               opacity-0
-              transition-opacity duration-500
+              transition-opacity
+              duration-500
               group-hover:opacity-100
             "
           />
 
-          {/* Branch number */}
+          {/* =================================================
+              BRANCH NUMBER
+          ================================================= */}
+
           <div
             className="
-              absolute left-4 top-4
-              inline-flex items-center gap-2
+              absolute
+              left-4
+              top-4
+              inline-flex
+              items-center
+              gap-2
               rounded-full
-              border border-white/60
+              border
+              border-white/60
               bg-white/90
-              py-1.5 pl-1.5 pr-3
+              py-1.5
+              pl-1.5
+              pr-3
               shadow-[0_8px_25px_rgba(15,23,42,0.16)]
               backdrop-blur-xl
             "
           >
             <span
               className="
-                flex h-7 min-w-7
-                items-center justify-center
+                flex
+                h-7
+                min-w-7
+                items-center
+                justify-center
                 rounded-full
                 bg-primary
                 px-1.5
-                text-[10px] font-black
+                text-[10px]
+                font-black
                 text-white
               "
             >
@@ -182,64 +306,87 @@ export default function BranchCard({
             </span>
 
             <span
-    className="
-        max-w-[150px]
-        truncate
-        text-[10px]
-        font-extrabold
-        uppercase
-        tracking-[0.1em]
-        text-slate-700
-    "
->
-    {city} Branch
-</span>
+              className="
+                max-w-[150px]
+                truncate
+                text-[10px]
+                font-extrabold
+                uppercase
+                tracking-[0.1em]
+                text-slate-700
+              "
+            >
+              {city} Branch
+            </span>
           </div>
 
-          {/* City */}
+          {/* =================================================
+              CITY
+          ================================================= */}
+
           <div
             className="
-              absolute bottom-4 left-4
-              inline-flex items-center gap-2
+              absolute
+              bottom-4
+              left-4
+              inline-flex
+              items-center
+              gap-2
               rounded-full
-              border border-white/25
+              border
+              border-white/25
               bg-slate-950/45
-              px-3.5 py-2
-              text-xs font-bold text-white
+              px-3.5
+              py-2
+              text-xs
+              font-bold
+              text-white
               shadow-lg
               backdrop-blur-xl
             "
           >
             <MapPin
-              className="h-3.5 w-3.5 text-white"
+              className="
+                h-3.5
+                w-3.5
+                text-white
+              "
               aria-hidden="true"
             />
 
             {city}
           </div>
 
-          {/* Google Maps */}
+          {/* =================================================
+              GOOGLE MAPS
+          ================================================= */}
+
           {center?.mapLink && (
             <a
-              href={center.mapLink}
+              href={
+                center.mapLink
+              }
               target="_blank"
               rel="noopener noreferrer"
-              aria-label={`View ${
-                center?.name || city
-              } on Google Maps`}
-              title={`View ${
-                center?.name || city
-              } on Google Maps`}
+              aria-label={`View ${branchName} on Google Maps`}
+              title={`View ${branchName} on Google Maps`}
               className="
-                absolute bottom-4 right-4
-                flex h-10 w-10
-                items-center justify-center
+                absolute
+                bottom-4
+                right-4
+                flex
+                h-10
+                w-10
+                items-center
+                justify-center
                 rounded-full
-                border border-white/70
+                border
+                border-white/70
                 bg-white
                 text-primary
                 shadow-[0_10px_25px_rgba(15,23,42,0.22)]
-                transition-all duration-300
+                transition-all
+                duration-300
                 hover:-translate-y-0.5
                 hover:scale-105
                 hover:bg-primary
@@ -250,7 +397,10 @@ export default function BranchCard({
               "
             >
               <ArrowUpRight
-                className="h-4 w-4"
+                className="
+                  h-4
+                  w-4
+                "
                 aria-hidden="true"
               />
             </a>
@@ -258,21 +408,49 @@ export default function BranchCard({
         </div>
       </div>
 
-      {/* ================= CONTENT ================= */}
-      <div className="relative flex flex-1 flex-col px-5 pb-5 pt-5 sm:px-6">
+      {/* =====================================================
+          CONTENT
+      ===================================================== */}
+
+      <div
+        className="
+          relative
+          flex
+          flex-1
+          flex-col
+          px-5
+          pb-5
+          pt-5
+          sm:px-6
+        "
+      >
         {/* Category */}
-        <div className="mb-2 flex items-center gap-2">
+
+        <div
+          className="
+            mb-2
+            flex
+            items-center
+            gap-2
+          "
+        >
           <span
             className="
-              flex h-7 w-7
-              items-center justify-center
+              flex
+              h-7
+              w-7
+              items-center
+              justify-center
               rounded-lg
               bg-primary/[0.08]
               text-primary
             "
           >
             <Building2
-              className="h-3.5 w-3.5"
+              className="
+                h-3.5
+                w-3.5
+              "
               aria-hidden="true"
             />
           </span>
@@ -280,7 +458,8 @@ export default function BranchCard({
           <p
             className="
               text-[10px]
-              font-extrabold uppercase
+              font-extrabold
+              uppercase
               tracking-[0.17em]
               text-primary
             "
@@ -289,14 +468,19 @@ export default function BranchCard({
           </p>
         </div>
 
-        {/* Branch heading - NOT A LINK */}
+        {/* =================================================
+            BRANCH TITLE
+        ================================================= */}
+
         <h2
           className="
-            text-[20px] font-black
+            text-[20px]
+            font-black
             leading-[1.35]
             tracking-[-0.02em]
             text-darkPrimary
-            transition-colors duration-300
+            transition-colors
+            duration-300
             group-hover:text-primary
             sm:text-[21px]
           "
@@ -305,16 +489,48 @@ export default function BranchCard({
         </h2>
 
         {/* Decorative line */}
+
         <div
           aria-hidden="true"
-          className="mt-3 flex items-center gap-1.5"
+          className="
+            mt-3
+            flex
+            items-center
+            gap-1.5
+          "
         >
-          <span className="h-1 w-8 rounded-full bg-primary" />
-          <span className="h-1 w-3 rounded-full bg-secondary" />
-          <span className="h-1 w-1 rounded-full bg-logoYellow" />
+          <span
+            className="
+              h-1
+              w-8
+              rounded-full
+              bg-primary
+            "
+          />
+
+          <span
+            className="
+              h-1
+              w-3
+              rounded-full
+              bg-secondary
+            "
+          />
+
+          <span
+            className="
+              h-1
+              w-1
+              rounded-full
+              bg-logoYellow
+            "
+          />
         </div>
 
-        {/* Description */}
+        {/* =================================================
+            DESCRIPTION
+        ================================================= */}
+
         <p
           className="
             mt-3
@@ -326,69 +542,128 @@ export default function BranchCard({
           {branchDescription}
         </p>
 
-        {/* ================= CONTACT ================= */}
+        {/* =================================================
+            CONTACT DETAILS
+        ================================================= */}
+
         <div
           className="
-            mt-5 overflow-hidden
+            mt-5
+            overflow-hidden
             rounded-[20px]
-            border border-slate-100
+            border
+            border-slate-100
             bg-slate-50/70
           "
         >
           {/* Address */}
+
           {center?.address && (
             <div
               className="
-                flex items-start gap-3
-                border-b border-slate-200/60
-                px-4 py-3.5
-                transition-colors duration-300
+                flex
+                items-start
+                gap-3
+                border-b
+                border-slate-200/60
+                px-4
+                py-3.5
+                transition-colors
+                duration-300
                 hover:bg-white
               "
             >
               <ContactIcon>
                 <MapPin
-                  className="h-4 w-4"
+                  className="
+                    h-4
+                    w-4
+                  "
                   aria-hidden="true"
                 />
               </ContactIcon>
 
               <div className="min-w-0">
-                <p className="text-[10px] font-extrabold uppercase tracking-[0.12em] text-slate-400">
+                <p
+                  className="
+                    text-[10px]
+                    font-extrabold
+                    uppercase
+                    tracking-[0.12em]
+                    text-slate-400
+                  "
+                >
                   Address
                 </p>
 
-                <address className="mt-1 text-[13px] not-italic leading-5 text-slate-600">
-                  {center.address}
+                <address
+                  className="
+                    mt-1
+                    text-[13px]
+                    not-italic
+                    leading-5
+                    text-slate-600
+                  "
+                >
+                  {
+                    center.address
+                  }
                 </address>
               </div>
             </div>
           )}
 
-          {/* Phones */}
+          {/* =================================================
+              PHONES
+          ================================================= */}
+
           {phones.length > 0 && (
             <div
               className="
-                flex items-start gap-3
-                border-b border-slate-200/60
-                px-4 py-3.5
-                transition-colors duration-300
+                flex
+                items-start
+                gap-3
+                border-b
+                border-slate-200/60
+                px-4
+                py-3.5
+                transition-colors
+                duration-300
                 hover:bg-white
               "
             >
               <ContactIcon>
                 <Phone
-                  className="h-4 w-4"
+                  className="
+                    h-4
+                    w-4
+                  "
                   aria-hidden="true"
                 />
               </ContactIcon>
 
               <div className="min-w-0">
-                <p className="text-[10px] font-extrabold uppercase tracking-[0.12em] text-slate-400">
+                <p
+                  className="
+                    text-[10px]
+                    font-extrabold
+                    uppercase
+                    tracking-[0.12em]
+                    text-slate-400
+                  "
+                >
                   Call Us
                 </p>
 
-                <div className="mt-1 flex flex-wrap gap-x-2 gap-y-1">
+                <div
+                  className="
+                    mt-1
+                    flex
+                    flex-wrap
+                    gap-x-2
+                    gap-y-1
+                  "
+                >
                   {phones.map(
                     (
                       phone,
@@ -400,10 +675,7 @@ export default function BranchCard({
                           /[^\d+]/g,
                           ""
                         )}`}
-                        aria-label={`Call ${
-                          center?.name ||
-                          city
-                        } at ${phone}`}
+                        aria-label={`Call ${branchName} at ${phone}`}
                         className="
                           text-[13px]
                           font-bold
@@ -413,7 +685,9 @@ export default function BranchCard({
                           hover:underline
                         "
                       >
-                        {phone}
+                        {
+                          phone
+                        }
                       </a>
                     )
                   )}
@@ -422,36 +696,52 @@ export default function BranchCard({
             </div>
           )}
 
-          {/* Email */}
+          {/* =================================================
+              EMAIL
+          ================================================= */}
+
           {center?.email && (
             <div
               className="
-                flex items-start gap-3
-                px-4 py-3.5
-                transition-colors duration-300
+                flex
+                items-start
+                gap-3
+                px-4
+                py-3.5
+                transition-colors
+                duration-300
                 hover:bg-white
               "
             >
               <ContactIcon>
                 <Mail
-                  className="h-4 w-4"
+                  className="
+                    h-4
+                    w-4
+                  "
                   aria-hidden="true"
                 />
               </ContactIcon>
 
               <div className="min-w-0">
-                <p className="text-[10px] font-extrabold uppercase tracking-[0.12em] text-slate-400">
+                <p
+                  className="
+                    text-[10px]
+                    font-extrabold
+                    uppercase
+                    tracking-[0.12em]
+                    text-slate-400
+                  "
+                >
                   Email
                 </p>
 
                 <a
                   href={`mailto:${center.email}`}
-                  aria-label={`Email ${
-                    center?.name ||
-                    city
-                  }`}
+                  aria-label={`Email ${branchName}`}
                   className="
-                    mt-1 block
+                    mt-1
+                    block
                     break-all
                     text-[13px]
                     font-bold
@@ -461,59 +751,81 @@ export default function BranchCard({
                     hover:underline
                   "
                 >
-                  {center.email}
+                  {
+                    center.email
+                  }
                 </a>
               </div>
             </div>
           )}
         </div>
 
-        {/* ================= CTA ================= */}
+        {/* =================================================
+            VIEW BRANCH CTA
+        ================================================= */}
+
         <div className="mt-auto pt-5">
           <Link
-            href="/contact-us"
-            aria-label={`Contact Medcity Overseas ${city}`}
+            href={branchUrl}
+            aria-label={`View ${branchName} branch details`}
             className="
               group/cta
-              flex w-full
-              items-center justify-between
+              flex
+              w-full
+              items-center
+              justify-between
               rounded-2xl
-              border border-primary/10
+              border
+              border-primary/10
               bg-gradient-to-r
               from-primary/[0.07]
               via-primary/[0.035]
               to-secondary/[0.06]
-              px-4 py-3.5
-              text-sm font-extrabold
+              px-4
+              py-3.5
+              text-sm
+              font-extrabold
               text-darkPrimary
-              transition-all duration-300
-              hover:border-primary/20
-              hover:from-primary/[0.12]
-              hover:to-secondary/[0.10]
-              hover:text-primary
+              transition-all
+              duration-300
+
+              hover:border-primary/30
+              hover:from-primary
+              hover:via-primary
+              hover:to-darkPrimary
+              hover:text-white
+              hover:shadow-[0_12px_30px_rgba(192,31,83,0.20)]
+
               focus-visible:outline-none
               focus-visible:ring-4
               focus-visible:ring-primary/15
             "
           >
-            <span>Contact Us</span>
+            <span>
+              View Branch Details
+            </span>
 
             <span
               className="
-                flex h-8 w-8
-                items-center justify-center
+                flex
+                h-8
+                w-8
+                items-center
+                justify-center
                 rounded-full
                 bg-white
                 text-primary
                 shadow-sm
-                transition-all duration-300
+                transition-all
+                duration-300
                 group-hover/cta:translate-x-1
-                group-hover/cta:bg-primary
-                group-hover/cta:text-white
               "
             >
               <ArrowRight
-                className="h-4 w-4"
+                className="
+                  h-4
+                  w-4
+                "
                 aria-hidden="true"
               />
             </span>
@@ -524,16 +836,26 @@ export default function BranchCard({
   );
 }
 
+/* =========================================================
+   CONTACT ICON
+========================================================= */
+
 function ContactIcon({
   children,
 }) {
   return (
     <span
       className="
-        mt-0.5 flex h-9 w-9
-        shrink-0 items-center justify-center
+        mt-0.5
+        flex
+        h-9
+        w-9
+        shrink-0
+        items-center
+        justify-center
         rounded-xl
-        border border-primary/[0.08]
+        border
+        border-primary/[0.08]
         bg-white
         text-primary
         shadow-[0_5px_14px_rgba(15,23,42,0.05)]

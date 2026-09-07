@@ -11,33 +11,228 @@ import mavelikkaraImage from "../images/medcity-mavelikkara.webp";
 import muvattupuzhaImage from "../images/medcity-muvattupuzha.webp";
 import palaImage from "../images/medcity-pala.webp";
 import pala2Image from "../images/medcity-pala2.webp";
-import thiruvallaImage from "../images/medcity-thiruvalla.webp";
+import thiruvallaChandrimaImage from "../images/medcity-thiruvalla-chandrima.webp";
+import thiruvallaKsrtcImage from "../images/medcity-thiruvalla-ksrtc.webp";
 import thodupuzhaImage from "../images/medcity-thodupuzha.webp";
 import thrissurImage from "../images/medcity-thrissur.webp";
 import tvmImage from "../images/medcity-tvm.webp";
 
-export const centers = [
+/* =========================================================
+   TEXT HELPERS
+========================================================= */
+
+function cleanText(value = "") {
+  return String(value ?? "")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function getLocation(center) {
+  return cleanText(
+    center?.seoLocation ||
+      center?.city ||
+      center?.district ||
+      ""
+  );
+}
+
+/* =========================================================
+   SEO TITLE
+========================================================= */
+
+function buildSeoTitle(center) {
+  const location =
+    getLocation(center);
+
+  if (center?.seoTitle) {
+    return cleanText(
+      center.seoTitle
+    );
+  }
+
+  return `Study Abroad Consultants in ${location}`;
+}
+
+/* =========================================================
+   SEO DESCRIPTION
+========================================================= */
+
+function buildSeoDescription(
+  center
+) {
+  const location =
+    getLocation(center);
+
+  if (center?.seoDescription) {
+    return cleanText(
+      center.seoDescription
+    );
+  }
+
+  return cleanText(
+    `Visit Medcity Overseas ${location} for expert study abroad counselling, overseas university admissions, course and university selection, application support, student visa guidance, language training and pre-departure assistance.`
+  );
+}
+
+/* =========================================================
+   IMAGE ALT
+========================================================= */
+
+function buildImageAlt(center) {
+  const location =
+    getLocation(center);
+
+  return cleanText(
+    center?.imageAlt ||
+      `${center?.name} study abroad consultants in ${location}, ${center?.state || "India"}`
+  );
+}
+
+/* =========================================================
+   BRANCH FAQS
+   EXACTLY 6 FAQS PER BRANCH
+========================================================= */
+
+function buildBranchFaqs(center) {
+  const location =
+    getLocation(center);
+
+  const branchName =
+    center?.name ||
+    `Medcity ${location}`;
+
+  const district =
+    cleanText(
+      center?.district
+    );
+
+  const state =
+    cleanText(
+      center?.state
+    );
+
+  const phone =
+    Array.isArray(
+      center?.phones
+    )
+      ? center.phones[0]
+      : "";
+
+  const destinationText =
+    "Germany, the UK, Australia, Canada, Ireland, New Zealand and other popular international study destinations";
+
+  return [
+    {
+      question:
+        `Which study abroad consultancy can I visit in ${location}?`,
+
+      answer:
+        `${branchName} provides personalised study abroad counselling for students in ${location}${district && district !== location ? ` and nearby areas of ${district}` : ""}. Students can get support with course selection, university shortlisting, overseas applications, student visa guidance, language preparation and pre-departure planning.`,
+    },
+
+    {
+      question:
+        `What study abroad services are available at Medcity Overseas ${location}?`,
+
+      answer:
+        `Medcity Overseas ${location} supports students with study abroad counselling, course and university selection, application assistance, admission guidance, student visa support, language training and pre-departure guidance based on the student's academic profile and overseas education goals.`,
+    },
+
+    {
+      question:
+        `Which countries can students apply to through Medcity Overseas ${location}?`,
+
+      answer:
+        `Students visiting Medcity Overseas ${location} can explore study opportunities in ${destinationText}. Suitable destinations, universities and courses are recommended according to academic qualifications, career plans, budget and admission eligibility.`,
+    },
+
+    {
+      question:
+        `Does Medcity Overseas ${location} provide student visa assistance?`,
+
+      answer:
+        `Yes. Medcity Overseas ${location} provides student visa guidance for eligible students, including support with visa documentation, application requirements, financial documentation guidance and preparation for the visa process of the selected study destination.`,
+    },
+
+    {
+      question:
+        `Can Medcity Overseas ${location} help me choose the right university and course?`,
+
+      answer:
+        `Yes. The counsellors at ${branchName} help students compare suitable universities, courses, entry requirements, tuition considerations and study destinations. The guidance is based on the student's academic background, interests and long-term career goals.`,
+    },
+
+    {
+      question:
+        `How can I contact Medcity Overseas ${location}?`,
+
+      answer:
+        `You can visit ${branchName} at ${center?.address || `${location}, ${state}`}.${phone ? ` You can also call ${phone}` : ""}${center?.email ? ` or email ${center.email}` : ""} to enquire about study abroad counselling, university applications and student visa guidance.`,
+    },
+  ];
+}
+
+/* =========================================================
+   ADD SEO + FAQ DATA
+========================================================= */
+
+function prepareCenter(center) {
+  return {
+    ...center,
+
+    seoTitle:
+      buildSeoTitle(center),
+
+    seoDescription:
+      buildSeoDescription(
+        center
+      ),
+
+    imageAlt:
+      buildImageAlt(center),
+
+    faqs:
+      buildBranchFaqs(center),
+  };
+}
+
+/* =========================================================
+   RAW BRANCH DATA
+========================================================= */
+
+const rawCenters = [
   {
     id: 1,
-    name: "Medcity Thiruvalla Building",
 
-    city: "Thiruvalla",
-    district: "Pathanamthitta",
-    state: "Kerala",
-    postalCode: "689101",
+    name:
+      "Medcity Thiruvalla - KSRTC",
 
-    slug: "thiruvalla",
+    city:
+      "Thiruvalla",
+
+    seoLocation:
+      "Thiruvalla",
+
+    district:
+      "Pathanamthitta",
+
+    state:
+      "Kerala",
+
+    postalCode:
+      "689101",
+
+    slug:
+      "medcity-thiruvalla-ksrtc",
 
     seoTitle:
       "Study Abroad Consultants in Thiruvalla",
 
     seoDescription:
-      "Visit Medcity Overseas Thiruvalla for study abroad counselling, overseas university applications, course selection, student visa guidance and language training.",
+      "Visit Medcity Overseas Thiruvalla KSRTC for expert study abroad counselling, overseas university applications, course selection, student visa guidance and language training.",
 
-    seoUrl:
-      "/study-abroad-consultants-thiruvalla",
-
-    image: thiruvallaImage,
+    image:
+      thiruvallaKsrtcImage,
 
     address:
       "3rd Floor, KSRTC Bus Terminal Complex, Thiruvalla, Kerala 689101",
@@ -52,25 +247,33 @@ export const centers = [
 
   {
     id: 2,
-    name: "Medcity Kottayam",
 
-    city: "Kottayam",
-    district: "Kottayam",
-    state: "Kerala",
-    postalCode: "686002",
+    name:
+      "Medcity Kottayam",
 
-    slug: "kottayam",
+    city:
+      "Kottayam",
+
+    district:
+      "Kottayam",
+
+    state:
+      "Kerala",
+
+    postalCode:
+      "686002",
+
+    slug:
+      "medcity-kottayam",
 
     seoTitle:
       "Study Abroad Consultants in Kottayam",
 
     seoDescription:
-      "Visit Medcity Overseas Kottayam for study abroad counselling, university and course selection, overseas applications and student visa guidance.",
+      "Visit Medcity Overseas Kottayam for expert study abroad counselling, university and course selection, overseas applications and student visa guidance.",
 
-    seoUrl:
-      "/study-abroad-consultants-kottayam",
-
-    image: kottayamImage,
+    image:
+      kottayamImage,
 
     address:
       "Medcity Complex, Near Collectorate Junction, Kottayam, Kerala 686002",
@@ -85,25 +288,33 @@ export const centers = [
 
   {
     id: 3,
-    name: "Medcity Kollam",
 
-    city: "Kollam",
-    district: "Kollam",
-    state: "Kerala",
-    postalCode: "691008",
+    name:
+      "Medcity Kollam",
 
-    slug: "kollam",
+    city:
+      "Kollam",
+
+    district:
+      "Kollam",
+
+    state:
+      "Kerala",
+
+    postalCode:
+      "691008",
+
+    slug:
+      "medcity-kollam",
 
     seoTitle:
       "Study Abroad Consultants in Kollam",
 
     seoDescription:
-      "Connect with Medcity Overseas Kollam for study abroad counselling, international university applications, course selection and student visa guidance.",
+      "Connect with Medcity Overseas Kollam for expert study abroad counselling, international university applications, course selection and student visa guidance.",
 
-    seoUrl:
-      "/study-abroad-consultants-kollam",
-
-    image: kollamImage,
+    image:
+      kollamImage,
 
     address:
       "3rd Floor, Arpan Tower, Prathibha Junction, Kadappakkada, Kollam 691008",
@@ -119,25 +330,33 @@ export const centers = [
 
   {
     id: 4,
-    name: "Medcity Kannur",
 
-    city: "Kannur",
-    district: "Kannur",
-    state: "Kerala",
-    postalCode: "670004",
+    name:
+      "Medcity Kannur",
 
-    slug: "kannur",
+    city:
+      "Kannur",
+
+    district:
+      "Kannur",
+
+    state:
+      "Kerala",
+
+    postalCode:
+      "670004",
+
+    slug:
+      "medcity-kannur",
 
     seoTitle:
       "Study Abroad Consultants in Kannur",
 
     seoDescription:
-      "Visit Medcity Overseas Kannur for study abroad counselling, overseas university admissions, course selection, student visa guidance and language training.",
+      "Visit Medcity Overseas Kannur for expert study abroad counselling, overseas university admissions, course selection, student visa guidance and language training.",
 
-    seoUrl:
-      "/study-abroad-consultants-kannur",
-
-    image: kannurImage,
+    image:
+      kannurImage,
 
     address:
       "Chettipeedika, Kannur, Puzhathi, Kerala 670004",
@@ -147,30 +366,39 @@ export const centers = [
       "+91 99619 19293",
     ],
 
-    email: "info@miak.in",
+    email:
+      "info@miak.in",
   },
 
   {
     id: 5,
-    name: "Medcity Kochi",
 
-    city: "Kochi",
-    district: "Ernakulam",
-    state: "Kerala",
-    postalCode: "682021",
+    name:
+      "Medcity Kochi",
 
-    slug: "kochi",
+    city:
+      "Kochi",
+
+    district:
+      "Ernakulam",
+
+    state:
+      "Kerala",
+
+    postalCode:
+      "682021",
+
+    slug:
+      "medcity-kochi",
 
     seoTitle:
       "Study Abroad Consultants in Kochi",
 
     seoDescription:
-      "Visit Medcity Overseas Kochi for study abroad counselling, overseas university admissions, course selection, applications and student visa guidance.",
+      "Visit Medcity Overseas Kochi for expert study abroad counselling, overseas university admissions, course selection, applications and student visa guidance.",
 
-    seoUrl:
-      "/study-abroad-consultants-kochi",
-
-    image: kochiImage,
+    image:
+      kochiImage,
 
     address:
       "Civil Line Road, Chembumukku, Ernakulam, Kerala 682021",
@@ -185,25 +413,36 @@ export const centers = [
 
   {
     id: 6,
-    name: "Medcity Trivandrum",
 
-    city: "Thiruvananthapuram",
-    district: "Thiruvananthapuram",
-    state: "Kerala",
-    postalCode: "695001",
+    name:
+      "Medcity Trivandrum",
 
-    slug: "thiruvananthapuram",
+    city:
+      "Thiruvananthapuram",
+
+    seoLocation:
+      "Trivandrum",
+
+    district:
+      "Thiruvananthapuram",
+
+    state:
+      "Kerala",
+
+    postalCode:
+      "695001",
+
+    slug:
+      "medcity-trivandrum",
 
     seoTitle:
-      "Study Abroad Consultants in Thiruvananthapuram",
+      "Study Abroad Consultants in Trivandrum",
 
     seoDescription:
-      "Visit Medcity Overseas Thiruvananthapuram for overseas education counselling, university applications, course selection and student visa guidance.",
+      "Visit Medcity Overseas Trivandrum for expert overseas education counselling, university applications, course selection and student visa guidance.",
 
-    seoUrl:
-      "/study-abroad-consultants-thiruvananthapuram",
-
-    image: tvmImage,
+    image:
+      tvmImage,
 
     address:
       "1st Floor, Axis Tower, SS Kovil Road, Thampanoor, Thiruvananthapuram 695001",
@@ -219,25 +458,33 @@ export const centers = [
 
   {
     id: 7,
-    name: "Medcity Kanjikuzhi",
 
-    city: "Kanjikuzhi",
-    district: "Kottayam",
-    state: "Kerala",
-    postalCode: "686004",
+    name:
+      "Medcity Kanjikuzhi",
 
-    slug: "kanjikuzhi",
+    city:
+      "Kanjikuzhi",
+
+    district:
+      "Kottayam",
+
+    state:
+      "Kerala",
+
+    postalCode:
+      "686004",
+
+    slug:
+      "medcity-kanjikuzhi",
 
     seoTitle:
       "Study Abroad Consultants in Kanjikuzhi",
 
     seoDescription:
-      "Visit Medcity Overseas Kanjikuzhi for study abroad counselling, overseas university applications, course guidance and student visa support.",
+      "Visit Medcity Overseas Kanjikuzhi for expert study abroad counselling, overseas university applications, course guidance and student visa support.",
 
-    seoUrl:
-      "/study-abroad-consultants-kanjikuzhi",
-
-    image: kanjikuzhyImage,
+    image:
+      kanjikuzhyImage,
 
     address:
       "Kosamattam Arcade, Kanjikuzhi, Kottayam, Kerala 686004",
@@ -252,25 +499,33 @@ export const centers = [
 
   {
     id: 8,
-    name: "Medcity Thrissur",
 
-    city: "Thrissur",
-    district: "Thrissur",
-    state: "Kerala",
-    postalCode: "680001",
+    name:
+      "Medcity Thrissur",
 
-    slug: "thrissur",
+    city:
+      "Thrissur",
+
+    district:
+      "Thrissur",
+
+    state:
+      "Kerala",
+
+    postalCode:
+      "680001",
+
+    slug:
+      "medcity-thrissur",
 
     seoTitle:
       "Study Abroad Consultants in Thrissur",
 
     seoDescription:
-      "Visit Medcity Overseas Thrissur for study abroad counselling, university admissions, course selection, applications and student visa guidance.",
+      "Visit Medcity Overseas Thrissur for expert study abroad counselling, university admissions, course selection, applications and student visa guidance.",
 
-    seoUrl:
-      "/study-abroad-consultants-thrissur",
-
-    image: thrissurImage,
+    image:
+      thrissurImage,
 
     address:
       "Perinchery's Building, Round North, Thrissur, Kerala 680001",
@@ -286,25 +541,33 @@ export const centers = [
 
   {
     id: 9,
-    name: "Medcity Pala",
 
-    city: "Pala",
-    district: "Kottayam",
-    state: "Kerala",
-    postalCode: "686575",
+    name:
+      "Medcity Pala",
 
-    slug: "pala",
+    city:
+      "Pala",
+
+    district:
+      "Kottayam",
+
+    state:
+      "Kerala",
+
+    postalCode:
+      "686575",
+
+    slug:
+      "medcity-pala",
 
     seoTitle:
       "Study Abroad Consultants in Pala",
 
     seoDescription:
-      "Visit Medcity Overseas Pala for study abroad counselling, overseas university admissions, course selection and student visa support.",
+      "Visit Medcity Overseas Pala for expert study abroad counselling, overseas university admissions, course selection and student visa support.",
 
-    seoUrl:
-      "/study-abroad-consultants-pala",
-
-    image: palaImage,
+    image:
+      palaImage,
 
     address:
       "2nd Floor, Christuraj Grande, Kottaramattom Bus Stand, Pala 686575",
@@ -320,25 +583,33 @@ export const centers = [
 
   {
     id: 10,
-    name: "Medcity Mavelikkara",
 
-    city: "Mavelikkara",
-    district: "Alappuzha",
-    state: "Kerala",
-    postalCode: "690101",
+    name:
+      "Medcity Mavelikkara",
 
-    slug: "mavelikkara",
+    city:
+      "Mavelikkara",
+
+    district:
+      "Alappuzha",
+
+    state:
+      "Kerala",
+
+    postalCode:
+      "690101",
+
+    slug:
+      "medcity-mavelikkara",
 
     seoTitle:
       "Study Abroad Consultants in Mavelikkara",
 
     seoDescription:
-      "Visit Medcity Overseas Mavelikkara for study abroad counselling, overseas university applications, course selection and student visa guidance.",
+      "Visit Medcity Overseas Mavelikkara for expert study abroad counselling, overseas university applications, course selection and student visa guidance.",
 
-    seoUrl:
-      "/study-abroad-consultants-mavelikkara",
-
-    image: mavelikkaraImage,
+    image:
+      mavelikkaraImage,
 
     address:
       "Koippallil Arcade, Puthiyakavu, Mavelikkara, Kerala 690101",
@@ -354,24 +625,30 @@ export const centers = [
 
   {
     id: 11,
-    name: "Medcity Mangalore",
 
-    city: "Mangalore",
-    district: "Dakshina Kannada",
-    state: "Karnataka",
+    name:
+      "Medcity Mangalore",
 
-    slug: "mangalore",
+    city:
+      "Mangalore",
+
+    district:
+      "Dakshina Kannada",
+
+    state:
+      "Karnataka",
+
+    slug:
+      "medcity-mangalore",
 
     seoTitle:
       "Study Abroad Consultants in Mangalore",
 
     seoDescription:
-      "Visit Medcity Overseas Mangalore for study abroad counselling, international university applications, course selection and student visa guidance.",
+      "Visit Medcity Overseas Mangalore for expert study abroad counselling, international university applications, course selection and student visa guidance.",
 
-    seoUrl:
-      "/study-abroad-consultants-mangalore",
-
-    image: mangaloreImage,
+    image:
+      mangaloreImage,
 
     address:
       "GA Complex, Near Omega Hospital, Kankanady, Mangalore, Karnataka",
@@ -387,26 +664,36 @@ export const centers = [
 
   {
     id: 12,
-    name: "Medcity Thiruvalla Chandrima Building",
 
-    city: "Thiruvalla",
-    district: "Pathanamthitta",
-    state: "Kerala",
-    postalCode: "689101",
+    name:
+      "Medcity Thiruvalla - Chandrima",
+
+    city:
+      "Thiruvalla",
+
+    seoLocation:
+      "Thiruvalla",
+
+    district:
+      "Pathanamthitta",
+
+    state:
+      "Kerala",
+
+    postalCode:
+      "689101",
 
     slug:
-      "thiruvalla-chandrima",
+      "medcity-thiruvalla-chandrima",
 
     seoTitle:
-      "Study Abroad Consultants in Thiruvalla – Chandrima Branch",
+      "Study Abroad Consultants in Thiruvalla - Chandrima",
 
     seoDescription:
-      "Visit the Medcity Overseas Chandrima branch in Thiruvalla for study abroad counselling, university applications, course selection and student visa guidance.",
+      "Visit Medcity Overseas Chandrima branch in Thiruvalla for expert study abroad counselling, university applications, course selection and student visa guidance.",
 
-    seoUrl:
-      "/study-abroad-consultants-thiruvalla-chandrima",
-
-    image: thiruvallaImage,
+    image:
+      thiruvallaChandrimaImage,
 
     address:
       "Chandrima Building, Near Cross Junction, M.C. Road, Thiruvalla 689101",
@@ -421,25 +708,33 @@ export const centers = [
 
   {
     id: 13,
-    name: "Medcity Thodupuzha",
 
-    city: "Thodupuzha",
-    district: "Idukki",
-    state: "Kerala",
-    postalCode: "685584",
+    name:
+      "Medcity Thodupuzha",
 
-    slug: "thodupuzha",
+    city:
+      "Thodupuzha",
+
+    district:
+      "Idukki",
+
+    state:
+      "Kerala",
+
+    postalCode:
+      "685584",
+
+    slug:
+      "medcity-thodupuzha",
 
     seoTitle:
       "Study Abroad Consultants in Thodupuzha",
 
     seoDescription:
-      "Visit Medcity Overseas Thodupuzha for study abroad counselling, overseas university applications, course selection and student visa guidance.",
+      "Visit Medcity Overseas Thodupuzha for expert study abroad counselling, overseas university applications, course selection and student visa guidance.",
 
-    seoUrl:
-      "/study-abroad-consultants-thodupuzha",
-
-    image: thodupuzhaImage,
+    image:
+      thodupuzhaImage,
 
     address:
       "Pulimoottil Plaza, Opposite Town Church, Thodupuzha, Kerala 685584",
@@ -455,25 +750,33 @@ export const centers = [
 
   {
     id: 14,
-    name: "Medcity Kattappana",
 
-    city: "Kattappana",
-    district: "Idukki",
-    state: "Kerala",
-    postalCode: "685508",
+    name:
+      "Medcity Kattappana",
 
-    slug: "kattappana",
+    city:
+      "Kattappana",
+
+    district:
+      "Idukki",
+
+    state:
+      "Kerala",
+
+    postalCode:
+      "685508",
+
+    slug:
+      "medcity-kattappana",
 
     seoTitle:
       "Study Abroad Consultants in Kattappana",
 
     seoDescription:
-      "Visit Medcity Overseas Kattappana for study abroad counselling, overseas education guidance, university applications and student visa support.",
+      "Visit Medcity Overseas Kattappana for expert study abroad counselling, overseas education guidance, university applications and student visa support.",
 
-    seoUrl:
-      "/study-abroad-consultants-kattappana",
-
-    image: kattappanaImage,
+    image:
+      kattappanaImage,
 
     address:
       "Near Co-operative Hospital, New Bus Stand Road, Kattappana 685508",
@@ -489,25 +792,36 @@ export const centers = [
 
   {
     id: 15,
-    name: "Medcity Kozhikode",
 
-    city: "Kozhikode",
-    district: "Kozhikode",
-    state: "Kerala",
-    postalCode: "673011",
+    name:
+      "Medcity Calicut",
 
-    slug: "kozhikode",
+    city:
+      "Kozhikode",
+
+    seoLocation:
+      "Calicut",
+
+    district:
+      "Kozhikode",
+
+    state:
+      "Kerala",
+
+    postalCode:
+      "673011",
+
+    slug:
+      "medcity-calicut",
 
     seoTitle:
-      "Study Abroad Consultants in Kozhikode",
+      "Study Abroad Consultants in Calicut",
 
     seoDescription:
-      "Visit Medcity Overseas Kozhikode for study abroad counselling, university admissions, course selection, overseas applications and student visa guidance.",
+      "Visit Medcity Overseas Calicut for expert study abroad counselling, university admissions, course selection, overseas applications and student visa guidance.",
 
-    seoUrl:
-      "/study-abroad-consultants-kozhikode",
-
-    image: calicutImage,
+    image:
+      calicutImage,
 
     address:
       "Kadooli Tower, Kannur Road, West Nadakkavu, Kozhikode 673011",
@@ -522,25 +836,33 @@ export const centers = [
 
   {
     id: 16,
-    name: "Medcity Muvattupuzha",
 
-    city: "Muvattupuzha",
-    district: "Ernakulam",
-    state: "Kerala",
-    postalCode: "686661",
+    name:
+      "Medcity Muvattupuzha",
 
-    slug: "muvattupuzha",
+    city:
+      "Muvattupuzha",
+
+    district:
+      "Ernakulam",
+
+    state:
+      "Kerala",
+
+    postalCode:
+      "686661",
+
+    slug:
+      "medcity-muvattupuzha",
 
     seoTitle:
       "Study Abroad Consultants in Muvattupuzha",
 
     seoDescription:
-      "Visit Medcity Overseas Muvattupuzha for study abroad counselling, overseas university applications, course selection and student visa guidance.",
+      "Visit Medcity Overseas Muvattupuzha for expert study abroad counselling, overseas university applications, course selection and student visa guidance.",
 
-    seoUrl:
-      "/study-abroad-consultants-muvattupuzha",
-
-    image: muvattupuzhaImage,
+    image:
+      muvattupuzhaImage,
 
     address:
       "Aramana Junction, Near Grand Centre Mall, Muvattupuzha 686661",
@@ -556,25 +878,33 @@ export const centers = [
 
   {
     id: 17,
-    name: "Medcity Kothamangalam",
 
-    city: "Kothamangalam",
-    district: "Ernakulam",
-    state: "Kerala",
-    postalCode: "686691",
+    name:
+      "Medcity Kothamangalam",
 
-    slug: "kothamangalam",
+    city:
+      "Kothamangalam",
+
+    district:
+      "Ernakulam",
+
+    state:
+      "Kerala",
+
+    postalCode:
+      "686691",
+
+    slug:
+      "medcity-kothamangalam",
 
     seoTitle:
       "Study Abroad Consultants in Kothamangalam",
 
     seoDescription:
-      "Visit Medcity Overseas Kothamangalam for study abroad counselling, overseas university applications, course selection and student visa support.",
+      "Visit Medcity Overseas Kothamangalam for expert study abroad counselling, overseas university applications, course selection and student visa support.",
 
-    seoUrl:
-      "/study-abroad-consultants-kothamangalam",
-
-    image: kothamangalamImage,
+    image:
+      kothamangalamImage,
 
     address:
       "PMS Building, Near Ann Theatre, Kothamangalam, Kerala 686691",
@@ -590,24 +920,33 @@ export const centers = [
 
   {
     id: 18,
-    name: "Medcity Pala 2",
 
-    city: "Pala",
-    district: "Kottayam",
-    state: "Kerala",
+    name:
+      "Medcity Pala - Branch 2",
 
-    slug: "pala-2",
+    city:
+      "Pala",
+
+    seoLocation:
+      "Pala",
+
+    district:
+      "Kottayam",
+
+    state:
+      "Kerala",
+
+    slug:
+      "medcity-pala-2",
 
     seoTitle:
-      "Study Abroad Consultants in Pala – Branch 2",
+      "Study Abroad Consultants in Pala - Branch 2",
 
     seoDescription:
-      "Visit Medcity Overseas Pala Branch 2 for study abroad counselling, overseas university applications, course selection and student visa guidance.",
+      "Visit Medcity Overseas Pala Branch 2 for expert study abroad counselling, overseas university applications, course selection and student visa guidance.",
 
-    seoUrl:
-      "/study-abroad-consultants-pala-2",
-
-    image: pala2Image,
+    image:
+      pala2Image,
 
     address:
       "Century Vee Tee Arcade, Next to Private Bus Stand, Kottaramattom, Pala",
@@ -620,3 +959,104 @@ export const centers = [
       "medcitypala1@miak.in",
   },
 ];
+
+/* =========================================================
+   PREPARED CENTERS
+
+   Every center automatically receives:
+   - seoTitle
+   - seoDescription
+   - imageAlt
+   - exactly 6 FAQs
+========================================================= */
+
+export const centers =
+  rawCenters.map(
+    prepareCenter
+  );
+
+/* =========================================================
+   GET CENTER BY SLUG
+========================================================= */
+
+export function getCenterBySlug(
+  slug
+) {
+  if (!slug) {
+    return null;
+  }
+
+  const normalizedSlug =
+    String(slug)
+      .trim()
+      .toLowerCase();
+
+  return (
+    centers.find(
+      (center) =>
+        center.slug ===
+        normalizedSlug
+    ) || null
+  );
+}
+
+/* =========================================================
+   GET CENTER BY ID
+========================================================= */
+
+export function getCenterById(
+  id
+) {
+  if (!id) {
+    return null;
+  }
+
+  return (
+    centers.find(
+      (center) =>
+        String(center.id) ===
+        String(id)
+    ) || null
+  );
+}
+
+/* =========================================================
+   SEO LOCATION
+========================================================= */
+
+export function getCenterSeoLocation(
+  center
+) {
+  return getLocation(center);
+}
+
+/* =========================================================
+   PUBLIC CENTER URL
+========================================================= */
+
+export function getCenterUrl(
+  center
+) {
+  if (!center?.slug) {
+    return "/branches";
+  }
+
+  return `/branch/${center.slug}`;
+}
+
+/* =========================================================
+   ABSOLUTE CENTER URL
+========================================================= */
+
+export function getCenterAbsoluteUrl(
+  center
+) {
+  const SITE_URL =
+    "https://medcityoverseas.com";
+
+  if (!center?.slug) {
+    return `${SITE_URL}/branches`;
+  }
+
+  return `${SITE_URL}/branch/${center.slug}`;
+}

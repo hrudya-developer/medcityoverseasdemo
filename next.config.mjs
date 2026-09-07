@@ -128,7 +128,13 @@ const nextConfig = {
                 destination: "/study-in-germany",
                 permanent: true,
             },
-           
+            {
+                source:
+                  "/branch/medcity-thiruvalla",
+                destination:
+                  "/branch/medcity-thiruvalla-ksrtc",
+                permanent: true,
+              },
         ];
     },
 };

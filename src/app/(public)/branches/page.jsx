@@ -1,9 +1,18 @@
 import AcademyCentersClient from "./AcademyCentersClient";
 import { centers } from "./data/centersData";
 
-const SITE_URL = "https://medcityoverseas.com";
-const PAGE_PATH = "/branches";
-const PAGE_URL = `${SITE_URL}${PAGE_PATH}`;
+/* =========================================================
+   CONFIG
+========================================================= */
+
+const SITE_URL =
+  "https://medcityoverseas.com";
+
+const PAGE_PATH =
+  "/branches";
+
+const PAGE_URL =
+  `${SITE_URL}${PAGE_PATH}`;
 
 const OG_IMAGE_PATH =
   "/og-images/medcity-branches-kerala.webp";
@@ -11,18 +20,23 @@ const OG_IMAGE_PATH =
 const OG_IMAGE_URL =
   `${SITE_URL}${OG_IMAGE_PATH}`;
 
+/* =========================================================
+   PAGE SEO
+========================================================= */
+
 const PAGE_TITLE =
-  "Study Abroad Consultants in Kerala | Medcity Overseas Branches";
+  "Study Abroad Consultants in Kerala & Mangalore | Medcity Overseas";
 
 const PAGE_DESCRIPTION =
-  "Find Medcity Overseas study abroad consultants across Kerala. Visit your nearest branch for overseas education counselling, university and course selection, application support and student visa guidance.";
+  "Find Medcity Overseas study abroad consultants across Kerala and Mangalore. Visit your nearest branch for overseas education counselling, university admissions, course selection, application support and student visa guidance.";
 
 export const metadata = {
   title: {
     absolute: PAGE_TITLE,
   },
 
-  description: PAGE_DESCRIPTION,
+  description:
+    PAGE_DESCRIPTION,
 
   keywords: [
     "study abroad consultants in Kerala",
@@ -40,47 +54,62 @@ export const metadata = {
     "overseas university admission Kerala",
     "student visa guidance Kerala",
     "international education consultants Kerala",
+    "study abroad consultants in Mangalore",
+    "overseas education consultants Mangalore",
     "Medcity Overseas branches",
     "Medcity Overseas Kerala",
   ],
 
   alternates: {
-    canonical: PAGE_URL,
+    canonical:
+      PAGE_URL,
   },
 
   openGraph: {
     type: "website",
+
     locale: "en_IN",
-    url: PAGE_URL,
-    siteName: "Medcity Overseas",
+
+    url:
+      PAGE_URL,
+
+    siteName:
+      "Medcity Overseas",
 
     title:
-      "Study Abroad Consultants in Kerala | Medcity Overseas Branches",
+      PAGE_TITLE,
 
     description:
-      "Find your nearest Medcity Overseas branch in Kerala for study abroad counselling, university applications, course selection and student visa guidance.",
+      PAGE_DESCRIPTION,
 
     images: [
       {
-        url: OG_IMAGE_URL,
+        url:
+          OG_IMAGE_URL,
+
         width: 1200,
+
         height: 630,
+
         alt:
-          "Medcity Overseas study abroad consultants and branches across Kerala",
+          "Medcity Overseas study abroad consultants and branches across Kerala and Mangalore",
       },
     ],
   },
 
   twitter: {
-    card: "summary_large_image",
+    card:
+      "summary_large_image",
 
     title:
-      "Study Abroad Consultants in Kerala | Medcity Overseas",
+      PAGE_TITLE,
 
     description:
-      "Find Medcity Overseas branches across Kerala for overseas education counselling, university applications and study abroad guidance.",
+      PAGE_DESCRIPTION,
 
-    images: [OG_IMAGE_URL],
+    images: [
+      OG_IMAGE_URL,
+    ],
   },
 
   robots: {
@@ -90,163 +119,428 @@ export const metadata = {
     googleBot: {
       index: true,
       follow: true,
-      "max-image-preview": "large",
-      "max-snippet": -1,
-      "max-video-preview": -1,
+
+      "max-image-preview":
+        "large",
+
+      "max-snippet":
+        -1,
+
+      "max-video-preview":
+        -1,
     },
   },
 };
 
 /* =========================================================
-   HELPERS
+   BASIC HELPERS
 ========================================================= */
 
-function slugify(value = "") {
-  return String(value)
+function cleanText(
+  value = ""
+) {
+  return String(
+    value ?? ""
+  )
+    .replace(
+      /<[^>]*>/g,
+      " "
+    )
+    .replace(
+      /\s+/g,
+      " "
+    )
+    .trim();
+}
+
+function slugify(
+  value = ""
+) {
+  return String(
+    value ?? ""
+  )
     .toLowerCase()
     .trim()
-    .replace(/&/g, "and")
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "");
+    .replace(
+      /&/g,
+      "and"
+    )
+    .replace(
+      /[^a-z0-9]+/g,
+      "-"
+    )
+    .replace(
+      /^-+|-+$/g,
+      ""
+    );
 }
 
-function getBranchName(center, index) {
+/* =========================================================
+   BRANCH NAME
+========================================================= */
+
+function getBranchName(
+  center,
+  index
+) {
   return (
-    center?.name ||
-    center?.title ||
-    center?.branch ||
-    `Medcity Overseas Branch ${index + 1}`
+    cleanText(
+      center?.name
+    ) ||
+    cleanText(
+      center?.title
+    ) ||
+    cleanText(
+      center?.branch
+    ) ||
+    `Medcity Overseas Branch ${
+      index + 1
+    }`
   );
 }
 
-function getBranchCity(center, index) {
+/* =========================================================
+   PHYSICAL CITY
+========================================================= */
+
+function getBranchCity(
+  center,
+  index
+) {
   return (
-    center?.city ||
-    center?.district ||
-    getBranchName(center, index)
+    cleanText(
+      center?.city
+    ) ||
+    cleanText(
+      center?.district
+    ) ||
+    getBranchName(
+      center,
+      index
+    )
   );
 }
 
-function getBranchSlug(center, index) {
+/* =========================================================
+   SEO LOCATION
+
+   Example:
+   city: Kozhikode
+   seoLocation: Calicut
+
+   SEO text can use "Calicut"
+   while postal address remains "Kozhikode".
+========================================================= */
+
+function getSeoLocation(
+  center,
+  index
+) {
+  return (
+    cleanText(
+      center?.seoLocation
+    ) ||
+    getBranchCity(
+      center,
+      index
+    )
+  );
+}
+
+/* =========================================================
+   BRANCH SLUG
+
+   IMPORTANT:
+   Use center.slug FIRST.
+
+   Example:
+   slug: "medcity-calicut"
+
+   Result:
+   /branch/medcity-calicut
+========================================================= */
+
+function getBranchSlug(
+  center,
+  index
+) {
+  const storedSlug =
+    slugify(
+      center?.slug
+    );
+
+  if (storedSlug) {
+    return storedSlug;
+  }
+
+  const fallbackName =
+    getBranchName(
+      center,
+      index
+    );
+
+  const fallbackCity =
+    getBranchCity(
+      center,
+      index
+    );
+
   return slugify(
-    center?.city ||
-      center?.district ||
-      center?.slug ||
-      getBranchName(center, index)
+    fallbackName ||
+      `medcity-${fallbackCity}`
   );
 }
 
-/*
-  SEO landing page format:
-
-  /study-abroad-consultants-kannur
-  /study-abroad-consultants-kozhikode
-  /study-abroad-consultants-kochi
-*/
-function getBranchUrl(center, index) {
-  const slug = getBranchSlug(
-    center,
-    index
-  );
-
-  return `${SITE_URL}/study-abroad-consultants-${slug}`;
-}
+/* =========================================================
+   BRANCH URL
+========================================================= */
 
 function getBranchRelativeUrl(
   center,
   index
 ) {
-  const slug = getBranchSlug(
-    center,
-    index
-  );
+  const slug =
+    getBranchSlug(
+      center,
+      index
+    );
 
-  return `/study-abroad-consultants-${slug}`;
+  return `/branch/${slug}`;
 }
 
-function getTelephoneNumbers(center) {
-  if (Array.isArray(center?.phones)) {
-    return center.phones.filter(Boolean);
+function getBranchUrl(
+  center,
+  index
+) {
+  return `${SITE_URL}${getBranchRelativeUrl(
+    center,
+    index
+  )}`;
+}
+
+/* =========================================================
+   IMAGE
+========================================================= */
+
+function getBranchImage(
+  center
+) {
+  if (!center?.image) {
+    return undefined;
+  }
+
+  const image =
+    typeof center.image ===
+    "string"
+      ? center.image
+      : center.image?.src;
+
+  if (!image) {
+    return undefined;
+  }
+
+  if (
+    image.startsWith(
+      "http://"
+    ) ||
+    image.startsWith(
+      "https://"
+    )
+  ) {
+    return image;
+  }
+
+  const normalized =
+    image.startsWith("/")
+      ? image
+      : `/${image}`;
+
+  return `${SITE_URL}${normalized}`;
+}
+
+/* =========================================================
+   TELEPHONE
+========================================================= */
+
+function getTelephoneNumbers(
+  center
+) {
+  if (
+    Array.isArray(
+      center?.phones
+    )
+  ) {
+    return center.phones
+      .map((phone) =>
+        cleanText(phone)
+      )
+      .filter(Boolean);
   }
 
   if (center?.phone) {
-    return [center.phone];
+    const phone =
+      cleanText(
+        center.phone
+      );
+
+    return phone
+      ? [phone]
+      : [];
   }
 
   return [];
 }
 
-function createPostalAddress(center) {
+/* =========================================================
+   POSTAL ADDRESS
+========================================================= */
+
+function createPostalAddress(
+  center
+) {
   if (!center?.address) {
     return undefined;
   }
 
-  return {
-    "@type": "PostalAddress",
+  const address = {
+    "@type":
+      "PostalAddress",
 
     streetAddress:
-      center.address,
+      cleanText(
+        center.address
+      ),
 
-    ...(center?.city && {
-      addressLocality:
-        center.city,
-    }),
-
-    addressRegion:
-      center?.state || "Kerala",
-
-    ...(center?.postalCode && {
-      postalCode:
-        String(
-          center.postalCode
-        ),
-    }),
-
-    addressCountry: "IN",
+    addressCountry:
+      "IN",
   };
+
+  if (center?.city) {
+    address.addressLocality =
+      cleanText(
+        center.city
+      );
+  }
+
+  if (center?.state) {
+    address.addressRegion =
+      cleanText(
+        center.state
+      );
+  }
+
+  if (
+    center?.postalCode
+  ) {
+    address.postalCode =
+      String(
+        center.postalCode
+      ).trim();
+  }
+
+  return address;
+}
+
+/* =========================================================
+   BRANCH DESCRIPTION
+========================================================= */
+
+function getBranchDescription(
+  center,
+  index
+) {
+  const location =
+    getSeoLocation(
+      center,
+      index
+    );
+
+  return (
+    cleanText(
+      center?.seoDescription
+    ) ||
+    `Visit Medcity Overseas ${location} for expert study abroad counselling, university admissions, course selection, overseas applications and student visa guidance.`
+  );
+}
+
+/* =========================================================
+   BRANCH SEO TITLE
+========================================================= */
+
+function getBranchSeoTitle(
+  center,
+  index
+) {
+  const location =
+    getSeoLocation(
+      center,
+      index
+    );
+
+  return (
+    cleanText(
+      center?.seoTitle
+    ) ||
+    `Study Abroad Consultants in ${location}`
+  );
 }
 
 /* =========================================================
    BRANCH SCHEMA ITEMS
 ========================================================= */
 
-const branchItems = centers.map(
-  (center, index) => {
-    const branchName =
-      getBranchName(
-        center,
-        index
-      );
+const branchItems =
+  centers.map(
+    (
+      center,
+      index
+    ) => {
+      const branchName =
+        getBranchName(
+          center,
+          index
+        );
 
-    const city =
-      getBranchCity(
-        center,
-        index
-      );
+      const city =
+        getBranchCity(
+          center,
+          index
+        );
 
-    const branchUrl =
-      getBranchUrl(
-        center,
-        index
-      );
+      const seoLocation =
+        getSeoLocation(
+          center,
+          index
+        );
 
-    const telephoneNumbers =
-      getTelephoneNumbers(
-        center
-      );
+      const branchUrl =
+        getBranchUrl(
+          center,
+          index
+        );
 
-    const address =
-      createPostalAddress(
-        center
-      );
+      const telephoneNumbers =
+        getTelephoneNumbers(
+          center
+        );
 
-    return {
-      "@type": "ListItem",
+      const address =
+        createPostalAddress(
+          center
+        );
 
-      position:
-        index + 1,
+      const image =
+        getBranchImage(
+          center
+        );
 
-      item: {
+      const description =
+        getBranchDescription(
+          center,
+          index
+        );
+
+      const item = {
         "@type": [
           "EducationalOrganization",
           "LocalBusiness",
@@ -261,70 +555,34 @@ const branchItems = centers.map(
         url:
           branchUrl,
 
-        description:
-          `Medcity Overseas ${city} provides study abroad counselling, overseas university application guidance, course selection support and student visa assistance.`,
+        description,
 
-        parentOrganization: {
-          "@id":
-            `${SITE_URL}/#organization`,
-        },
+        parentOrganization:
+          {
+            "@id":
+              `${SITE_URL}/#organization`,
+          },
 
-        ...(address && {
-          address,
-        }),
+        areaServed: [
+          {
+            "@type":
+              "City",
 
-        ...(telephoneNumbers.length >
-          0 && {
-          telephone:
-            telephoneNumbers,
-        }),
+            name:
+              seoLocation,
+          },
 
-        ...(center?.email && {
-          email:
-            center.email,
-        }),
+          {
+            "@type":
+              "AdministrativeArea",
 
-        ...(center?.mapLink && {
-          hasMap:
-            center.mapLink,
-        }),
-
-        ...(center?.latitude &&
-          center?.longitude && {
-            geo: {
-              "@type":
-                "GeoCoordinates",
-
-              latitude:
-                Number(
-                  center.latitude
-                ),
-
-              longitude:
-                Number(
-                  center.longitude
-                ),
-            },
-          }),
-
-        ...(Array.isArray(
-          center?.openingHours
-        ) &&
-          center.openingHours
-            .length > 0 && {
-            openingHours:
-              center.openingHours,
-          }),
-
-        ...(center?.image && {
-          image:
-            center.image,
-        }),
-
-        areaServed: {
-          "@type": "City",
-          name: city,
-        },
+            name:
+              cleanText(
+                center?.district ||
+                  city
+              ),
+          },
+        ],
 
         knowsAbout: [
           "Study Abroad Counselling",
@@ -334,153 +592,240 @@ const branchItems = centers.map(
           "Student Visa Guidance",
           "International Education",
         ],
-      },
-    };
-  }
-);
+      };
+
+      if (address) {
+        item.address =
+          address;
+      }
+
+      if (
+        telephoneNumbers.length >
+        0
+      ) {
+        item.telephone =
+          telephoneNumbers;
+      }
+
+      if (center?.email) {
+        item.email =
+          cleanText(
+            center.email
+          );
+      }
+
+      if (
+        center?.mapLink
+      ) {
+        item.hasMap =
+          center.mapLink;
+      }
+
+      if (
+        center?.latitude &&
+        center?.longitude
+      ) {
+        item.geo = {
+          "@type":
+            "GeoCoordinates",
+
+          latitude:
+            Number(
+              center.latitude
+            ),
+
+          longitude:
+            Number(
+              center.longitude
+            ),
+        };
+      }
+
+      if (
+        Array.isArray(
+          center?.openingHours
+        ) &&
+        center.openingHours
+          .length > 0
+      ) {
+        item.openingHours =
+          center.openingHours;
+      }
+
+      if (image) {
+        item.image =
+          image;
+      }
+
+      return {
+        "@type":
+          "ListItem",
+
+        position:
+          index + 1,
+
+        item,
+      };
+    }
+  );
 
 /* =========================================================
    STRUCTURED DATA
 ========================================================= */
 
-const branchesStructuredData = {
-  "@context":
-    "https://schema.org",
+const branchesStructuredData =
+  {
+    "@context":
+      "https://schema.org",
 
-  "@graph": [
-    {
-      "@type":
-        "CollectionPage",
+    "@graph": [
+      {
+        "@type":
+          "CollectionPage",
 
-      "@id":
-        `${PAGE_URL}#webpage`,
+        "@id":
+          `${PAGE_URL}#webpage`,
 
-      url:
-        PAGE_URL,
+        url:
+          PAGE_URL,
 
-      name:
-        "Study Abroad Consultants in Kerala | Medcity Overseas Branches",
+        name:
+          PAGE_TITLE,
 
-      description:
-        PAGE_DESCRIPTION,
+        description:
+          PAGE_DESCRIPTION,
 
-      inLanguage:
-        "en-IN",
+        inLanguage:
+          "en-IN",
 
-      primaryImageOfPage: {
+        primaryImageOfPage:
+          {
+            "@id":
+              `${PAGE_URL}#primaryimage`,
+          },
+
+        isPartOf: {
+          "@id":
+            `${SITE_URL}/#website`,
+        },
+
+        about: {
+          "@id":
+            `${SITE_URL}/#organization`,
+        },
+
+        publisher: {
+          "@id":
+            `${SITE_URL}/#organization`,
+        },
+
+        breadcrumb: {
+          "@id":
+            `${PAGE_URL}#breadcrumb`,
+        },
+
+        mainEntity: {
+          "@id":
+            `${PAGE_URL}#branches-list`,
+        },
+      },
+
+      {
+        "@type":
+          "ImageObject",
+
         "@id":
           `${PAGE_URL}#primaryimage`,
+
+        url:
+          OG_IMAGE_URL,
+
+        contentUrl:
+          OG_IMAGE_URL,
+
+        width:
+          1200,
+
+        height:
+          630,
+
+        caption:
+          "Medcity Overseas study abroad branches across Kerala and Mangalore",
       },
 
-      isPartOf: {
-        "@id":
-          `${SITE_URL}/#website`,
-      },
+      {
+        "@type":
+          "BreadcrumbList",
 
-      about: {
-        "@id":
-          `${SITE_URL}/#organization`,
-      },
-
-      publisher: {
-        "@id":
-          `${SITE_URL}/#organization`,
-      },
-
-      breadcrumb: {
         "@id":
           `${PAGE_URL}#breadcrumb`,
+
+        itemListElement: [
+          {
+            "@type":
+              "ListItem",
+
+            position:
+              1,
+
+            name:
+              "Home",
+
+            item:
+              SITE_URL,
+          },
+
+          {
+            "@type":
+              "ListItem",
+
+            position:
+              2,
+
+            name:
+              "Study Abroad Consultants in Kerala & Mangalore",
+
+            item:
+              PAGE_URL,
+          },
+        ],
       },
 
-      mainEntity: {
+      {
+        "@type":
+          "ItemList",
+
         "@id":
           `${PAGE_URL}#branches-list`,
+
+        name:
+          "Medcity Overseas Study Abroad Branches",
+
+        description:
+          "Directory of Medcity Overseas study abroad counselling and overseas education branches across Kerala and Mangalore.",
+
+        numberOfItems:
+          branchItems.length,
+
+        itemListOrder:
+          "https://schema.org/ItemListOrderUnordered",
+
+        itemListElement:
+          branchItems,
       },
-    },
+    ],
+  };
 
-    {
-      "@type":
-        "ImageObject",
+/* =========================================================
+   SAFE JSON-LD
+========================================================= */
 
-      "@id":
-        `${PAGE_URL}#primaryimage`,
-
-      url:
-        OG_IMAGE_URL,
-
-      contentUrl:
-        OG_IMAGE_URL,
-
-      width: 1200,
-
-      height: 630,
-
-      caption:
-        "Medcity Overseas study abroad branches across Kerala",
-    },
-
-    {
-      "@type":
-        "BreadcrumbList",
-
-      "@id":
-        `${PAGE_URL}#breadcrumb`,
-
-      itemListElement: [
-        {
-          "@type":
-            "ListItem",
-
-          position: 1,
-
-          name: "Home",
-
-          item:
-            SITE_URL,
-        },
-
-        {
-          "@type":
-            "ListItem",
-
-          position: 2,
-
-          name:
-            "Study Abroad Consultants in Kerala",
-
-          item:
-            PAGE_URL,
-        },
-      ],
-    },
-
-    {
-      "@type":
-        "ItemList",
-
-      "@id":
-        `${PAGE_URL}#branches-list`,
-
-      name:
-        "Medcity Overseas Study Abroad Branches Across Kerala",
-
-      description:
-        "Directory of Medcity Overseas study abroad counselling and overseas education branches across Kerala.",
-
-      numberOfItems:
-        branchItems.length,
-
-      itemListOrder:
-        "https://schema.org/ItemListOrderUnordered",
-
-      itemListElement:
-        branchItems,
-    },
-  ],
-};
-
-function serializeJsonLd(data) {
-  return JSON.stringify(data).replace(
+function serializeJsonLd(
+  data
+) {
+  return JSON.stringify(
+    data
+  ).replace(
     /</g,
     "\\u003c"
   );
@@ -491,28 +836,69 @@ function serializeJsonLd(data) {
 ========================================================= */
 
 export default function BranchesPage() {
-  /*
-    Add SEO URLs to the data passed to the client
-    without modifying centersData.js.
-  */
-
-  const centersWithSeoUrls =
+  const centersWithUrls =
     centers.map(
-      (center, index) => ({
-        ...center,
-
-        seoUrl:
-          getBranchRelativeUrl(
+      (
+        center,
+        index
+      ) => {
+        const seoLocation =
+          getSeoLocation(
             center,
             index
-          ),
+          );
 
-        seoTitle:
-          `Study Abroad Consultants in ${getBranchCity(
-            center,
-            index
-          )}`,
-      })
+        return {
+          ...center,
+
+          /*
+           * Public branch URL.
+           *
+           * Example:
+           * /branch/medcity-calicut
+           */
+
+          branchUrl:
+            getBranchRelativeUrl(
+              center,
+              index
+            ),
+
+          /*
+           * Keep seoUrl temporarily too
+           * if AcademyCentersClient
+           * currently reads center.seoUrl.
+           *
+           * Both point to the SAME URL.
+           */
+
+          seoUrl:
+            getBranchRelativeUrl(
+              center,
+              index
+            ),
+
+          /*
+           * Never overwrite an SEO
+           * title already defined in
+           * centersData.js.
+           */
+
+          seoTitle:
+            getBranchSeoTitle(
+              center,
+              index
+            ),
+
+          seoDescription:
+            getBranchDescription(
+              center,
+              index
+            ),
+
+          seoLocation,
+        };
+      }
     );
 
   return (
@@ -529,7 +915,7 @@ export default function BranchesPage() {
 
       <AcademyCentersClient
         centers={
-          centersWithSeoUrls
+          centersWithUrls
         }
       />
     </>
