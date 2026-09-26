@@ -1,165 +1,217 @@
 "use client";
 
 import {
-    useEffect,
-    useMemo,
-    useState,
+  useEffect,
+  useMemo,
+  useState,
 } from "react";
 
-const INITIAL_VISIBLE = 6;
-const LOAD_COUNT = 3;
+const ITEMS_PER_PAGE = 6;
 
 export default function useBlogs() {
-    const [blogs, setBlogs] =
-        useState([]);
+  const [
+    blogs,
+    setBlogs,
+  ] = useState([]);
 
-    const [
-        imagePath,
-        setImagePath,
-    ] = useState("");
+  const [
+    imagePath,
+    setImagePath,
+  ] = useState("");
 
-    const [loading, setLoading] =
-        useState(true);
+  const [
+    loading,
+    setLoading,
+  ] = useState(true);
 
-    const [error, setError] =
-        useState("");
+  const [
+    error,
+    setError,
+  ] = useState("");
 
-    const [
-        visibleCount,
-        setVisibleCount,
-    ] = useState(INITIAL_VISIBLE);
+  const [
+    currentPage,
+    setCurrentPage,
+  ] = useState(1);
 
-    useEffect(() => {
-        const controller =
-            new AbortController();
+  /* =========================================================
+     LOAD BLOGS
+  ========================================================= */
 
-        async function fetchBlogs() {
-            try {
-                setLoading(true);
-                setError("");
+  useEffect(() => {
+    const controller =
+      new AbortController();
 
-                const response =
-                    await fetch(
-                        "/api/blogs?uid=0",
-                        {
-                            method: "GET",
-                            cache: "no-store",
-                            signal:
-                                controller.signal,
-                            headers: {
-                                Accept:
-                                    "application/json",
-                            },
-                        }
-                    );
+    async function fetchBlogs() {
+      try {
+        setLoading(true);
+        setError("");
 
-                const result =
-                    await response.json();
+        const response =
+          await fetch(
+            "/api/blogs",
+            {
+              method: "GET",
 
-                if (!response.ok) {
-                    throw new Error(
-                        result?.message ||
-                        "Unable to load blogs."
-                    );
-                }
+              cache:
+                "no-store",
 
-                setBlogs(
-                    Array.isArray(
-                        result?.blogs
-                    )
-                        ? result.blogs
-                        : []
-                );
+              signal:
+                controller.signal,
 
-                setImagePath(
-                    typeof result?.imagePath ===
-                        "string"
-                        ? result.imagePath
-                        : ""
-                );
-
-                setVisibleCount(
-                    INITIAL_VISIBLE
-                );
-            } catch (requestError) {
-                if (
-                    requestError?.name ===
-                    "AbortError"
-                ) {
-                    return;
-                }
-
-                setError(
-                    requestError?.message ||
-                    "Unable to load blogs."
-                );
-            } finally {
-                if (
-                    !controller.signal
-                        .aborted
-                ) {
-                    setLoading(false);
-                }
+              headers: {
+                Accept:
+                  "application/json",
+              },
             }
+          );
+
+        const result =
+          await response.json();
+
+        if (!response.ok) {
+          throw new Error(
+            result?.message ||
+              "Unable to load blogs."
+          );
         }
 
-        void fetchBlogs();
+        const blogList =
+          Array.isArray(
+            result?.blogs
+          )
+            ? result.blogs
+            : [];
 
-        return () => {
-            controller.abort();
-        };
-    }, []);
+        setBlogs(
+          blogList
+        );
 
-    const visibleBlogs = useMemo(
-        () =>
-            blogs.slice(
-                0,
-                visibleCount
-            ),
-        [
-            blogs,
-            visibleCount,
-        ]
+        setImagePath(
+          typeof result?.imagePath ===
+            "string"
+            ? result.imagePath
+            : ""
+        );
+
+        setCurrentPage(1);
+      } catch (
+        requestError
+      ) {
+        if (
+          requestError?.name ===
+          "AbortError"
+        ) {
+          return;
+        }
+
+        console.error(
+          "Blog fetch error:",
+          requestError
+        );
+
+        setError(
+          requestError?.message ||
+            "Unable to load blogs."
+        );
+      } finally {
+        if (
+          !controller
+            .signal.aborted
+        ) {
+          setLoading(false);
+        }
+      }
+    }
+
+    fetchBlogs();
+
+    return () => {
+      controller.abort();
+    };
+  }, []);
+
+  /* =========================================================
+     PAGINATION
+  ========================================================= */
+
+  const totalPages =
+    Math.max(
+      1,
+      Math.ceil(
+        blogs.length /
+          ITEMS_PER_PAGE
+      )
     );
 
-    const hasMore =
-        visibleCount < blogs.length;
+  const paginatedBlogs =
+    useMemo(() => {
+      const startIndex =
+        (currentPage - 1) *
+        ITEMS_PER_PAGE;
 
-    const canShowLess =
-        visibleCount >
-        INITIAL_VISIBLE;
+      const endIndex =
+        startIndex +
+        ITEMS_PER_PAGE;
 
-    const showMore = () => {
-        setVisibleCount(
-            (current) =>
-                Math.min(
-                    current +
-                    LOAD_COUNT,
-                    blogs.length
-                )
-        );
+      return blogs.slice(
+        startIndex,
+        endIndex
+      );
+    }, [
+      blogs,
+      currentPage,
+    ]);
+
+  const goToPage = (
+    page
+  ) => {
+    const safePage =
+      Math.min(
+        Math.max(
+          page,
+          1
+        ),
+        totalPages
+      );
+
+    setCurrentPage(
+      safePage
+    );
+
+    window.scrollTo({
+      top: 0,
+      behavior:
+        "smooth",
+    });
+  };
+
+  const nextPage = () => {
+    goToPage(
+      currentPage + 1
+    );
+  };
+
+  const previousPage =
+    () => {
+      goToPage(
+        currentPage - 1
+      );
     };
 
-    const showLess = () => {
-        setVisibleCount(
-            (current) =>
-                Math.max(
-                    current -
-                    LOAD_COUNT,
-                    INITIAL_VISIBLE
-                )
-        );
-    };
+  return {
+    blogs,
+    paginatedBlogs,
+    imagePath,
 
-    return {
-        blogs,
-        visibleBlogs,
-        imagePath,
-        loading,
-        error,
-        hasMore,
-        canShowLess,
-        showMore,
-        showLess,
-    };
+    loading,
+    error,
+
+    currentPage,
+    totalPages,
+
+    goToPage,
+    nextPage,
+    previousPage,
+  };
 }

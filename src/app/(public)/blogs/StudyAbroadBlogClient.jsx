@@ -1,89 +1,129 @@
 "use client";
 
-import FAQ from "@/components/home/FAQ/FAQ";
-
-import BlogControls from "./components/BlogControls";
-import BlogGrid from "./components/BlogGrid";
-import useBlogs from "./hooks/useBlogs";
-import BlogHeader from "./components/BlogHeader";
 import BlogFAQ from "./components/BlogFAQ";
+import BlogGrid from "./components/BlogGrid";
+import BlogHeader from "./components/BlogHeader";
+import BlogPagination from "./components/BlogPagination";
+
+import useBlogs from "./hooks/useBlogs";
+
 export default function StudyAbroadBlogClient() {
-    const {
-        blogs,
-        visibleBlogs,
-        imagePath,
-        loading,
-        error,
-        hasMore,
-        canShowLess,
-        showMore,
-        showLess,
-    } = useBlogs();
+  const {
+    blogs,
+    paginatedBlogs,
+    imagePath,
 
-    return (
-        <main className="bg-white">
-            <section className="relative mx-auto max-w-9xl overflow-hidden">
-                <div className="relative">
-                    <BlogHeader />
+    loading,
+    error,
 
-                    {loading && (
-                        <p className="py-16 text-center font-semibold text-slate-600">
-                            Loading blogs...
-                        </p>
-                    )}
+    currentPage,
+    totalPages,
 
-                    {!loading &&
-                        error && (
-                            <p className="rounded-3xl bg-red-50 px-6 py-12 text-center font-semibold text-red-600">
-                                {error}
-                            </p>
-                        )}
+    goToPage,
+    nextPage,
+    previousPage,
+  } = useBlogs();
 
-                    {!loading &&
-                        !error &&
-                        blogs.length ===
-                        0 && (
-                            <p className="rounded-3xl bg-white px-6 py-12 text-center font-semibold text-slate-500">
-                                No blogs are
-                                currently
-                                available.
-                            </p>
-                        )}
+  return (
+    <main className="min-h-screen bg-white">
+      {/* HEADER */}
 
-                    {!loading &&
-                        !error &&
-                        blogs.length >
-                        0 && (
-                            <>
-                                <BlogGrid
-                                    blogs={
-                                        visibleBlogs
-                                    }
-                                    imagePath={
-                                        imagePath
-                                    }
-                                />
+      <section className="px-4 pt-5 sm:px-6 lg:px-8">
+        <BlogHeader />
+      </section>
 
-                                <BlogControls
-                                    hasMore={
-                                        hasMore
-                                    }
-                                    canShowLess={
-                                        canShowLess
-                                    }
-                                    onShowMore={
-                                        showMore
-                                    }
-                                    onShowLess={
-                                        showLess
-                                    }
-                                />
-                            </>
-                        )}
-                </div>
-            </section>
+      {/* BLOGS */}
 
-            <BlogFAQ />
-        </main>
-    );
+      <section
+        className="
+          mx-auto
+          w-full
+          max-w-[1450px]
+          px-4
+          pb-16
+          sm:px-6
+          lg:px-8
+        "
+      >
+        {loading && (
+          <div className="py-20 text-center">
+            <div
+              className="
+                mx-auto
+                h-10
+                w-10
+                animate-spin
+                rounded-full
+                border-4
+                border-primary/20
+                border-t-primary
+              "
+            />
+
+            <p className="mt-4 font-semibold text-slate-500">
+              Loading blogs...
+            </p>
+          </div>
+        )}
+
+        {!loading &&
+          error && (
+            <div className="rounded-3xl bg-red-50 px-6 py-14 text-center">
+              <p className="font-semibold text-red-600">
+                {error}
+              </p>
+            </div>
+          )}
+
+        {!loading &&
+          !error &&
+          blogs.length ===
+            0 && (
+            <div className="rounded-3xl bg-slate-50 px-6 py-14 text-center">
+              <p className="font-semibold text-slate-500">
+                No blogs are
+                currently
+                available.
+              </p>
+            </div>
+          )}
+
+        {!loading &&
+          !error &&
+          blogs.length >
+            0 && (
+            <>
+              <BlogGrid
+                blogs={
+                  paginatedBlogs
+                }
+                imagePath={
+                  imagePath
+                }
+              />
+
+              <BlogPagination
+                currentPage={
+                  currentPage
+                }
+                totalPages={
+                  totalPages
+                }
+                onPageChange={
+                  goToPage
+                }
+                onPrevious={
+                  previousPage
+                }
+                onNext={
+                  nextPage
+                }
+              />
+            </>
+          )}
+      </section>
+
+      <BlogFAQ />
+    </main>
+  );
 }

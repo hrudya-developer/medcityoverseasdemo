@@ -1,8 +1,13 @@
 import StudyAbroadBlogClient from "./StudyAbroadBlogClient";
 
-const SITE_URL = "https://medcityoverseas.com";
-const PAGE_PATH = "/blogs";
-const PAGE_URL = `${SITE_URL}${PAGE_PATH}`;
+const SITE_URL =
+  "https://medcityoverseas.com";
+
+const PAGE_PATH =
+  "/blogs";
+
+const PAGE_URL =
+  `${SITE_URL}${PAGE_PATH}`;
 
 const OG_IMAGE =
   `${SITE_URL}/og-images/study-abroad-blog-og.webp`;
@@ -13,10 +18,16 @@ const PAGE_TITLE =
 const PAGE_DESCRIPTION =
   "Read expert study abroad blogs covering student visas, scholarships, university admissions, destinations, courses and international student experiences.";
 
-export const metadata = {
-  title: PAGE_TITLE,
+/* =========================================================
+   METADATA
+========================================================= */
 
-  description: PAGE_DESCRIPTION,
+export const metadata = {
+  title:
+    PAGE_TITLE,
+
+  description:
+    PAGE_DESCRIPTION,
 
   keywords: [
     "study abroad blogs",
@@ -30,71 +41,139 @@ export const metadata = {
   ],
 
   alternates: {
-    canonical: PAGE_PATH,
+    canonical:
+      PAGE_PATH,
   },
 
   openGraph: {
-    title: PAGE_TITLE,
-    description: PAGE_DESCRIPTION,
-    url: PAGE_URL,
-    siteName: "Medcity Study Abroad",
-    type: "website",
-    locale: "en_IN",
+    title:
+      PAGE_TITLE,
+
+    description:
+      PAGE_DESCRIPTION,
+
+    url:
+      PAGE_URL,
+
+    siteName:
+      "Medcity Study Abroad",
+
+    type:
+      "website",
+
+    locale:
+      "en_IN",
 
     images: [
       {
-        url: OG_IMAGE,
-        width: 1200,
-        height: 630,
-        alt: "Medcity Study Abroad Blogs",
+        url:
+          OG_IMAGE,
+
+        width:
+          1200,
+
+        height:
+          630,
+
+        alt:
+          "Medcity Study Abroad Blogs",
       },
     ],
   },
 
   twitter: {
-    card: "summary_large_image",
-    title: PAGE_TITLE,
-    description: PAGE_DESCRIPTION,
-    images: [OG_IMAGE],
+    card:
+      "summary_large_image",
+
+    title:
+      PAGE_TITLE,
+
+    description:
+      PAGE_DESCRIPTION,
+
+    images: [
+      OG_IMAGE,
+    ],
   },
 
   robots: {
-    index: true,
-    follow: true,
+    index:
+      true,
+
+    follow:
+      true,
 
     googleBot: {
-      index: true,
-      follow: true,
-      "max-image-preview": "large",
-      "max-snippet": -1,
-      "max-video-preview": -1,
+      index:
+        true,
+
+      follow:
+        true,
+
+      "max-image-preview":
+        "large",
+
+      "max-snippet":
+        -1,
+
+      "max-video-preview":
+        -1,
     },
   },
 };
 
-const structuredData = {
-  "@context": "https://schema.org",
-  "@type": "Blog",
-  "@id": `${PAGE_URL}#blog`,
+/* =========================================================
+   STRUCTURED DATA
+========================================================= */
 
-  name: PAGE_TITLE,
-  description: PAGE_DESCRIPTION,
-  url: PAGE_URL,
-  inLanguage: "en-IN",
+const structuredData = {
+  "@context":
+    "https://schema.org",
+
+  "@type":
+    "Blog",
+
+  "@id":
+    `${PAGE_URL}#blog`,
+
+  name:
+    PAGE_TITLE,
+
+  description:
+    PAGE_DESCRIPTION,
+
+  url:
+    PAGE_URL,
+
+  inLanguage:
+    "en-IN",
 
   publisher: {
-    "@type": "Organization",
-    name: "Medcity Study Abroad",
-    url: SITE_URL,
+    "@type":
+      "Organization",
+
+    name:
+      "Medcity Study Abroad",
+
+    url:
+      SITE_URL,
   },
 };
 
-function serializeJsonLd(data) {
-  return JSON.stringify(data).replace(
+function serializeJsonLd(
+  data
+) {
+  return JSON.stringify(
+    data
+  ).replace(
     /</g,
     "\\u003c"
   );
 }
+
+/* =========================================================
+   PAGE
+========================================================= */
 
 export default function StudyAbroadBlogPage() {
   return (
@@ -102,9 +181,10 @@ export default function StudyAbroadBlogPage() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: serializeJsonLd(
-            structuredData
-          ),
+          __html:
+            serializeJsonLd(
+              structuredData
+            ),
         }}
       />
 
