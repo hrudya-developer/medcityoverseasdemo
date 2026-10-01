@@ -83,6 +83,15 @@ export default function BlogDetailsHero({
       imagePath
     );
 
+  /*
+   * alt_text1 belongs to the landscape/main image.
+   * Fall back to title if old blogs do not have alt_text1.
+   */
+  const imageAlt =
+    blog?.alt_text1 ||
+    title ||
+    "Study abroad blog image";
+
   return (
     <section
       className="
@@ -172,11 +181,11 @@ export default function BlogDetailsHero({
         "
       >
         {/* ===================================================
-            LEFT CONTENT
+            LEFT
         =================================================== */}
 
         <div>
-          {/* BACK BUTTON */}
+          {/* BACK */}
 
           <Link
             href="/blogs"
@@ -221,7 +230,7 @@ export default function BlogDetailsHero({
 
           <div
             className="
-              mb-5 lg:mx-2
+              mb-5
               inline-flex
               items-center
               gap-2
@@ -236,6 +245,7 @@ export default function BlogDetailsHero({
               uppercase
               tracking-[0.14em]
               text-primary
+              lg:mx-2
             "
           >
             <Sparkles
@@ -263,7 +273,7 @@ export default function BlogDetailsHero({
             {title}
           </h1>
 
-          {/* SMALL DECORATIVE LINE */}
+          {/* LINE */}
 
           <div
             className="
@@ -385,7 +395,7 @@ export default function BlogDetailsHero({
               max-w-[720px]
             "
           >
-            {/* BACK GLOW */}
+            {/* GLOW */}
 
             <div
               aria-hidden="true"
@@ -401,7 +411,7 @@ export default function BlogDetailsHero({
               "
             />
 
-            {/* DECORATIVE TOP CARD */}
+            {/* DECORATION */}
 
             <div
               aria-hidden="true"
@@ -422,8 +432,6 @@ export default function BlogDetailsHero({
               "
             />
 
-            {/* DECORATIVE BOTTOM CARD */}
-
             <div
               aria-hidden="true"
               className="
@@ -439,7 +447,7 @@ export default function BlogDetailsHero({
               "
             />
 
-            {/* IMAGE WRAPPER */}
+            {/* IMAGE */}
 
             <div
               className="
@@ -455,7 +463,7 @@ export default function BlogDetailsHero({
             >
               <Image
                 src={image}
-                alt={title}
+                alt={imageAlt}
                 fill
                 priority
                 unoptimized
@@ -471,8 +479,6 @@ export default function BlogDetailsHero({
                 "
               />
 
-              {/* IMAGE OVERLAY */}
-
               <div
                 aria-hidden="true"
                 className="
@@ -484,8 +490,6 @@ export default function BlogDetailsHero({
                   to-transparent
                 "
               />
-
-              {/* TOP SHINE */}
 
               <div
                 aria-hidden="true"

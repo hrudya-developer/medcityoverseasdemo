@@ -3,6 +3,8 @@ import Link from "next/link";
 
 import {
   ArrowRight,
+  CalendarDays,
+  Clock3,
   ImageOff,
 } from "lucide-react";
 
@@ -63,6 +65,21 @@ function getBlogImage(
     : "";
 }
 
+function stripHtml(
+  value = ""
+) {
+  return String(value)
+    .replace(
+      /<[^>]*>/g,
+      " "
+    )
+    .replace(
+      /\s+/g,
+      " "
+    )
+    .trim();
+}
+
 export default function BlogCard({
   blog,
   index,
@@ -85,12 +102,20 @@ export default function BlogCard({
     );
 
   const slug =
-    blog?.id
-      ? createBlogSlug(
-          title,
-          blog.id
-        )
-      : "";
+    createBlogSlug(
+      title
+    );
+
+  const excerpt =
+    stripHtml(
+      blog?.blog ||
+      blog?.subtext1 ||
+      ""
+    );
+
+  const imageAlt =
+    blog?.alt_text1 ||
+    title;
 
   return (
     <article
@@ -114,10 +139,17 @@ export default function BlogCard({
       {/* IMAGE */}
 
       {image ? (
-        <div className="relative h-[230px] overflow-hidden bg-slate-100">
+        <div
+          className="
+            relative
+            h-[230px]
+            overflow-hidden
+            bg-slate-100
+          "
+        >
           <Image
             src={image}
-            alt={title}
+            alt={imageAlt}
             fill
             priority={
               index === 0
@@ -156,7 +188,66 @@ export default function BlogCard({
 
       {/* CONTENT */}
 
-      <div className="flex flex-1 flex-col p-6">
+      <div
+        className="
+          flex
+          flex-1
+          flex-col
+          p-6
+        "
+      >
+        {/* META */}
+
+        {(blog?.date ||
+          blog?.duration) && (
+          <div
+            className="
+              mb-3
+              flex
+              flex-wrap
+              items-center
+              gap-4
+              text-xs
+              font-semibold
+              text-slate-400
+            "
+          >
+            {blog?.date && (
+              <div
+                className="
+                  flex
+                  items-center
+                  gap-1.5
+                "
+              >
+                <CalendarDays
+                  size={14}
+                  className="text-primary"
+                />
+
+                {blog.date}
+              </div>
+            )}
+
+            {blog?.duration && (
+              <div
+                className="
+                  flex
+                  items-center
+                  gap-1.5
+                "
+              >
+                <Clock3
+                  size={14}
+                  className="text-primary"
+                />
+
+                {blog.duration}
+              </div>
+            )}
+          </div>
+        )}
+
         <h2
           className="
             line-clamp-2
@@ -169,35 +260,52 @@ export default function BlogCard({
           {title}
         </h2>
 
-        {slug && (
-          <div className="mt-auto pt-6">
-            <Link
-              href={`/blog-details/${slug}`}
-              className="
-                inline-flex
-                items-center
-                gap-2
-                rounded-xl
-                bg-primary
-                px-5
-                py-3
-                text-sm
-                font-extrabold
-                text-white
-                shadow-md
-                transition
-                hover:-translate-y-0.5
-                hover:bg-darkPrimary
-              "
-            >
-              Read More
-
-              <ArrowRight
-                size={17}
-              />
-            </Link>
-          </div>
+        {excerpt && (
+          <p
+            className="
+              mt-3
+              line-clamp-3
+              text-sm
+              leading-6
+              text-slate-500
+            "
+          >
+            {excerpt}
+          </p>
         )}
+
+        <div
+          className="
+            mt-auto
+            pt-6
+          "
+        >
+          <Link
+            href={`/blog-details/${slug}`}
+            className="
+              inline-flex
+              items-center
+              gap-2
+              rounded-xl
+              bg-primary
+              px-5
+              py-3
+              text-sm
+              font-extrabold
+              text-white
+              shadow-md
+              transition
+              hover:-translate-y-0.5
+              hover:bg-darkPrimary
+            "
+          >
+            Read More
+
+            <ArrowRight
+              size={17}
+            />
+          </Link>
+        </div>
       </div>
     </article>
   );
