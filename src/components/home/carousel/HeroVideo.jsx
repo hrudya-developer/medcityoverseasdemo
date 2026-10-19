@@ -1,21 +1,108 @@
 "use client";
 
+import { useEffect, useRef } from "react";
+
 const YOUTUBE_VIDEO_ID = "eLdVVDgkYmU";
+const MAX_PLAYS = 2;
 
 export default function HeroVideo() {
-  const videoUrl =
-    `https://www.youtube.com/embed/${YOUTUBE_VIDEO_ID}` +
-    `?autoplay=1` +
-    `&mute=1` +
-    `&loop=1` +
-    `&playlist=${YOUTUBE_VIDEO_ID}` +
-    `&controls=0` +
-    `&playsinline=1` +
-    `&rel=0` +
-    `&modestbranding=1` +
-    `&disablekb=1` +
-    `&fs=0` +
-    `&iv_load_policy=3`;
+  const playerContainerRef = useRef(null);
+  const playerRef = useRef(null);
+  const playCountRef = useRef(0);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    const createPlayer = () => {
+      if (
+        cancelled ||
+        !playerContainerRef.current ||
+        !window.YT?.Player
+      ) {
+        return;
+      }
+
+      playerRef.current = new window.YT.Player(
+        playerContainerRef.current,
+        {
+          videoId: YOUTUBE_VIDEO_ID,
+
+          playerVars: {
+            autoplay: 1,
+            mute: 1,
+            controls: 0,
+            playsinline: 1,
+            rel: 0,
+            disablekb: 1,
+            fs: 0,
+            iv_load_policy: 3,
+          },
+
+          events: {
+            onReady: (event) => {
+              event.target.mute();
+              event.target.playVideo();
+            },
+
+            onStateChange: (event) => {
+              if (
+                event.data === window.YT.PlayerState.ENDED
+              ) {
+                playCountRef.current += 1;
+
+                if (playCountRef.current < MAX_PLAYS) {
+                  event.target.seekTo(0);
+                  event.target.playVideo();
+                }
+              }
+            },
+          },
+        }
+      );
+    };
+
+    // YouTube API already loaded
+    if (window.YT?.Player) {
+      createPlayer();
+    } else {
+      // Load YouTube IFrame API only once
+      if (
+        !document.querySelector(
+          'script[src="https://www.youtube.com/iframe_api"]'
+        )
+      ) {
+        const script = document.createElement("script");
+
+        script.src =
+          "https://www.youtube.com/iframe_api";
+
+        script.async = true;
+
+        document.body.appendChild(script);
+      }
+
+      const previousCallback =
+        window.onYouTubeIframeAPIReady;
+
+      window.onYouTubeIframeAPIReady = () => {
+        if (previousCallback) {
+          previousCallback();
+        }
+
+        createPlayer();
+      };
+    }
+
+    return () => {
+      cancelled = true;
+
+      if (playerRef.current?.destroy) {
+        playerRef.current.destroy();
+      }
+
+      playerRef.current = null;
+    };
+  }, []);
 
   return (
     <div
@@ -26,16 +113,11 @@ export default function HeroVideo() {
         bg-black
       "
     >
-      {/* =================================================
+      {/* =========================================
           YOUTUBE BACKGROUND VIDEO
-      ================================================= */}
+      ========================================== */}
 
-      <iframe
-        src={videoUrl}
-        title="Hero background video"
-        allow="autoplay; encrypted-media"
-        aria-hidden="true"
-        tabIndex={-1}
+      <div
         className="
           pointer-events-none
           absolute
@@ -50,14 +132,22 @@ export default function HeroVideo() {
 
           -translate-x-1/2
           -translate-y-1/2
-
-          border-0
         "
-      />
+      >
+        <div
+          ref={playerContainerRef}
+          className="
+            absolute
+            inset-0
+            h-full
+            w-full
+          "
+        />
+      </div>
 
-      {/* =================================================
+      {/* =========================================
           SIDE OVERLAY
-      ================================================= */}
+      ========================================== */}
 
       <div
         aria-hidden="true"
@@ -76,9 +166,9 @@ export default function HeroVideo() {
         "
       />
 
-      {/* =================================================
+      {/* =========================================
           BOTTOM OVERLAY
-      ================================================= */}
+      ========================================== */}
 
       <div
         aria-hidden="true"
@@ -100,9 +190,9 @@ export default function HeroVideo() {
         "
       />
 
-      {/* =================================================
+      {/* =========================================
           TOP OVERLAY
-      ================================================= */}
+      ========================================== */}
 
       <div
         aria-hidden="true"

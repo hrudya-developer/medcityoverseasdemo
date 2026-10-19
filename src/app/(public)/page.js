@@ -12,6 +12,7 @@ import GermanCoursesLayout from "@/components/home/german-courses/GermanCoursesL
 import MigrationCTA from "@/components/home/migration-cta/MigrationCTA";
 
 import MobileApp from "@/components/home/mobile-app/MobileApp";
+import PlacementAssistanceSection from "@/components/home/placement-assistance/PlacementAssistanceSection";
 import SearchSection from "@/components/home/searchSection/SearchSection";
 import ProgramsSection from "@/components/home/services/programs/ProgramsSection";
 import ServicesSection from "@/components/home/services/ServicesSection";
@@ -519,6 +520,8 @@ export default function Home() {
       <SASteps />
 
       <TestimonialSection />
+
+      <PlacementAssistanceSection />
 
       <CounsellingSection />
 
