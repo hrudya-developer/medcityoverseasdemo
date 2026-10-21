@@ -128,8 +128,7 @@ export default function MedcityServicesSection() {
             id="medcity-services-title"
             className="
               mt-6
-              text-[clamp(2rem,3.7vw,3.8rem)]
-              font-black
+              text-3xl sm:text-4xl md:text-5xl font-black
               leading-[1.15]
               tracking-[-0.045em]
               text-[#201733]

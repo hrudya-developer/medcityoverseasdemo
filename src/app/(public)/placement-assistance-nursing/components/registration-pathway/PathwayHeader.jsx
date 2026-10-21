@@ -31,8 +31,7 @@ export default function PathwayHeader() {
       <h2
         id="registration-pathway-title"
         className="
-          mt-7 text-[clamp(2rem,4vw,4rem)]
-          font-extrabold
+          mt-7 text-3xl sm:text-4xl md:text-5xl font-black
           leading-[1.15]
           tracking-[-0.045em]
           text-[#101936]

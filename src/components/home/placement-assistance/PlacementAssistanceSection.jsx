@@ -1,4 +1,3 @@
-
 import PlacementIntro from "./PlacementIntro";
 import PlacementGrid from "./PlacementGrid";
 
@@ -13,10 +12,10 @@ export default function PlacementAssistanceSection({
       className="
         relative isolate
         w-full overflow-hidden
-        bg-white
+        bg-[#EFF8FF]
       "
     >
-      <div className="mx-auto w-full max-w-[1920px]">
+      <div className="mx-auto w-full max-w-[1600px]">
         <div
           className="
             grid w-full
@@ -24,7 +23,8 @@ export default function PlacementAssistanceSection({
             items-center
             gap-0
             lg:grid-cols-2
-          " data-aos="fade-up"
+          "
+          data-aos="fade-up"
         >
           {/* Left content */}
           <div className="relative z-10 min-w-0">

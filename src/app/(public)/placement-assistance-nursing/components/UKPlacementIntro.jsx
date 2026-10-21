@@ -10,6 +10,7 @@ import {
 import { ukPlacementContent } from "./ukPlacementData";
 
 export default function UKPlacementIntro() {
+  
   const {
     badge,
     eyebrow,
@@ -93,9 +94,9 @@ export default function UKPlacementIntro() {
             className="
               mt-1 block
               bg-gradient-to-r
-              from-[#f01473]
-              via-[#d20b85]
-              to-[#9e0fa7]
+              from-primary
+              via-darkPrimary
+              to-secondary
               bg-clip-text
               text-transparent
             "
@@ -132,10 +133,10 @@ export default function UKPlacementIntro() {
               group inline-flex
               min-h-[54px]
               items-center justify-center
-              gap-4 rounded-full
+              gap-4 rounded-xl
               bg-gradient-to-r
-              from-[#f01473]
-              to-[#a10ca5]
+              from-primary
+              to-secondary
               px-7 py-3
               text-sm font-bold text-white
               shadow-[0_14px_30px_rgba(214,20,120,0.2)]
@@ -153,28 +154,31 @@ export default function UKPlacementIntro() {
             />
           </Link>
 
-          <Link
-            href={brochureHref}
-            className="
-              inline-flex min-h-[54px]
-              items-center justify-center
-              gap-3 rounded-full
-              border-[1.5px]
-              border-[#e31884]
-              bg-white/90
-              px-7 py-3
-              text-sm font-bold
-              text-[#971178]
-              transition-all duration-300
-              hover:-translate-y-1
-              hover:bg-pink-50
-              sm:px-9 sm:text-base
-            "
-          >
-            <Download size={19} />
+         
 
-            Get the Brochure
-          </Link>
+<a
+  href={brochureHref}
+  download="Medcity-UK-Nursing-MSc-Brochure.pdf"
+  className="
+    relative z-50
+    inline-flex min-h-[54px]
+    cursor-pointer items-center
+    justify-center gap-3
+    rounded-xl border-[1.5px]
+    border-[#e31884]
+    bg-white/90 px-7 py-3
+    text-sm font-bold text-[#971178]
+    transition-all duration-300
+    hover:-translate-y-1
+    hover:bg-pink-50
+    sm:px-9 sm:text-base
+  "
+>
+  <Download size={19} />
+  <span>Get the Brochure</span>
+</a>
+
+
         </div>
       </div>
     </div>

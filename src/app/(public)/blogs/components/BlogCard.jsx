@@ -3,9 +3,9 @@ import Link from "next/link";
 
 import {
   ArrowRight,
+  BookOpenText,
   CalendarDays,
   Clock3,
-  ImageOff,
 } from "lucide-react";
 
 import {
@@ -119,7 +119,7 @@ export default function BlogCard({
 
   return (
     <article
-      className="
+      className={`
         group
         flex
         h-full
@@ -128,17 +128,17 @@ export default function BlogCard({
         rounded-[26px]
         border
         border-slate-200/80
-        bg-white
         shadow-[0_12px_38px_rgba(15,23,42,0.08)]
         transition-all
         duration-300
         hover:-translate-y-1
         hover:shadow-[0_22px_50px_rgba(15,23,42,0.12)]
-      "
+        ${image
+          ? "bg-white"
+          : "border-t-4 border-t-primary bg-gradient-to-br from-rose-50/80 via-white to-sky-50/70"}
+      `}
     >
-      {/* IMAGE */}
-
-      {image ? (
+      {image && (
         <div
           className="
             relative
@@ -168,25 +168,7 @@ export default function BlogCard({
             "
           />
         </div>
-      ) : (
-        <div
-          className="
-            grid
-            h-[230px]
-            place-content-center
-            bg-gradient-to-br
-            from-pink-50
-            to-slate-100
-          "
-        >
-          <ImageOff
-            size={38}
-            className="text-primary"
-          />
-        </div>
       )}
-
-      {/* CONTENT */}
 
       <div
         className="
@@ -194,9 +176,19 @@ export default function BlogCard({
           flex-1
           flex-col
           p-6
+          sm:p-7
         "
       >
-        {/* META */}
+        {!image && (
+          <div className="mb-5 flex items-center gap-3">
+            <span className="flex size-11 items-center justify-center rounded-2xl bg-gradient-to-br from-primary to-secondary text-white shadow-lg shadow-primary/15">
+              <BookOpenText size={21} strokeWidth={1.8} />
+            </span>
+            <span className="text-[11px] font-extrabold uppercase tracking-[0.18em] text-primary">
+              Study Abroad Insights
+            </span>
+          </div>
+        )}
 
         {(blog?.date ||
           blog?.duration) && (

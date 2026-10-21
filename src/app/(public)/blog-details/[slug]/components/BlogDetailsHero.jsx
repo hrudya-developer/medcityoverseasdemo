@@ -94,14 +94,14 @@ export default function BlogDetailsHero({
 
   return (
     <section
-      className="
+      className={`
         relative
         overflow-hidden
         bg-white
         py-10
         sm:py-14
         lg:py-16
-      "
+      `}
     >
       {/* =====================================================
           BACKGROUND
@@ -164,27 +164,32 @@ export default function BlogDetailsHero({
       ===================================================== */}
 
       <div
-        className="
+        className={`
           relative
           z-10
           mx-auto
-          grid
           w-full
-          max-w-[1400px]
-          gap-10
           px-4
           sm:px-6
-          lg:grid-cols-[0.92fr_1.08fr]
-          lg:items-center
-          lg:gap-14
           lg:px-8
-        "
+          ${
+            image
+              ? "grid max-w-[1400px] gap-10 lg:grid-cols-[0.92fr_1.08fr] lg:items-center lg:gap-14"
+              : "max-w-4xl text-center"
+          }
+        `}
       >
         {/* ===================================================
-            LEFT
+            MAIN CONTENT
         =================================================== */}
 
-        <div>
+        <div
+          className={
+            image
+              ? ""
+              : "mx-auto flex flex-col items-center text-center"
+          }
+        >
           {/* BACK */}
 
           <Link
@@ -245,7 +250,6 @@ export default function BlogDetailsHero({
               uppercase
               tracking-[0.14em]
               text-primary
-              lg:mx-2
             "
           >
             <Sparkles
@@ -258,17 +262,21 @@ export default function BlogDetailsHero({
           {/* TITLE */}
 
           <h1
-            className="
-              max-w-3xl
-              text-3xl
+            className={`
               font-black
-              leading-[1.12]
+              leading-[1.14]
               tracking-[-0.025em]
               text-secondary
+              text-3xl
               sm:text-4xl
-              lg:text-[48px]
-              xl:text-[54px]
-            "
+              lg:text-[46px]
+              xl:text-[52px]
+              ${
+                image
+                  ? "max-w-3xl text-left"
+                  : "max-w-3xl text-center"
+              }
+            `}
           >
             {title}
           </h1>
@@ -276,27 +284,29 @@ export default function BlogDetailsHero({
           {/* LINE */}
 
           <div
-            className="
+            className={`
               mt-6
-              h-1
-              w-20
+              h-1.5
+              w-24
               rounded-full
               bg-gradient-to-r
               from-primary
               to-secondary
-            "
+              ${image ? "" : "mx-auto"}
+            `}
           />
 
           {/* META */}
 
           <div
-            className="
+            className={`
               mt-7
               flex
               flex-wrap
               items-center
               gap-3
-            "
+              ${image ? "" : "justify-center"}
+            `}
           >
             {blog?.date && (
               <div
@@ -383,7 +393,7 @@ export default function BlogDetailsHero({
         </div>
 
         {/* ===================================================
-            RIGHT IMAGE
+            RIGHT IMAGE (Only if image exists)
         =================================================== */}
 
         {image && (

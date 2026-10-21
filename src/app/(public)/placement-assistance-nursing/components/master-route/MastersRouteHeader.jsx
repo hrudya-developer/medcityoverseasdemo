@@ -22,12 +22,9 @@ export default function MastersRouteHeader() {
 
       {/* Heading */}
       <h2
-        className="
-          text-4xl font-extrabold
+        className="text-3xl sm:text-4xl md:text-5xl font-black
           leading-[1.15] tracking-tight
           text-[#281623]
-          sm:text-5xl
-          lg:text-[58px]
         "
       >
         Why the{" "}

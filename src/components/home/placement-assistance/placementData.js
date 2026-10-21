@@ -19,26 +19,26 @@ export const placementContent = {
 export const placementCountries = [
   {
     name: "USA",
-    flag: "🇺🇸",
+    flag: "https://flagcdn.com/w80/us.png",
   },
   {
     name: "United Kingdom",
-    flag: "🇬🇧",
+    flag: "https://flagcdn.com/w80/gb.png",
   },
   {
     name: "Ireland",
-    flag: "🇮🇪",
+    flag: "https://flagcdn.com/w80/ie.png",
   },
   {
     name: "Germany",
-    flag: "🇩🇪",
+    flag: "https://flagcdn.com/w80/de.png",
   },
   {
     name: "Australia",
-    flag: "🇦🇺",
+    flag: "https://flagcdn.com/w80/au.png",
   },
   {
     name: "New Zealand",
-    flag: "🇳🇿",
+    flag: "https://flagcdn.com/w80/nz.png",
   },
 ];

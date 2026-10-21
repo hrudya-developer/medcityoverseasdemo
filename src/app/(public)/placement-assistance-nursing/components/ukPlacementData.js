@@ -13,7 +13,7 @@ export const ukPlacementContent = {
     "/assets/nurse-placement.png",
 
   eligibilityHref: "/contact",
-  brochureHref: "/contact",
+  brochureHref: "/assets/Medcity-UK-Nursing-MSc-Brochure_9.pdf",
 };
 
 export const ukPlacementHighlights = [

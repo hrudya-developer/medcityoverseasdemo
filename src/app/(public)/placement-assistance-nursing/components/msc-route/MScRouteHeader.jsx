@@ -31,8 +31,7 @@ export default function MScRouteHeader() {
         id="msc-route-title"
         className="
           mt-6 max-w-[1250px]
-          text-[clamp(2rem,4vw,4.2rem)]
-          font-extrabold
+          text-3xl sm:text-4xl md:text-5xl font-black
           leading-[1.12]
           tracking-[-0.045em]
           text-[#10172f]

@@ -99,7 +99,7 @@ export default function EligibilitySection() {
 
           <h2
             id="eligibility-title"
-            className="mt-6 text-[clamp(2.2rem,4.2vw,4.5rem)] font-black leading-[1.12] tracking-[-0.05em] text-[#101638]"
+            className="mt-6 text-3xl sm:text-4xl md:text-5xl font-black leading-[1.12] tracking-[-0.05em] text-[#101638]"
           >
             Who Can{" "}
             <span className="text-[#c01f53]">

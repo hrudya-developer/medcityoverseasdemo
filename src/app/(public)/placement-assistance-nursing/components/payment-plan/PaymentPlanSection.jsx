@@ -92,8 +92,7 @@ export default function PaymentPlanSection() {
             id="payment-plan-title"
             className="
               mt-5
-              text-[clamp(2rem,4vw,3.8rem)]
-              font-black
+              text-3xl sm:text-4xl md:text-5xl font-black
               leading-[1.12]
               tracking-[-0.045em]
               text-[#111638]

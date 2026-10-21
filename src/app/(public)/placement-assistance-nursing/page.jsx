@@ -21,6 +21,9 @@ import RegistrationPathway from "./components/registration-pathway/RegistrationP
 import PaymentPlanSection from "./components/payment-plan/PaymentPlanSection";
 import MedcityServicesSection from "./components/medcity-services/MedcityServicesSection";
 import EligibilitySection from "./components/eligibility/EligibilitySection";
+import PlacementBrochure from "./components/placement-brochure/PlacementBrochure";
+import PlacementContactDetails from "./components/placement-contact-details/PlacementContactDetails";
+import PlacementRegistrationSection from "./components/placement-registration-form/PlacementRegistrationSection";
 
 
 export const metadata = {
@@ -101,7 +104,7 @@ function HeroSection() {
               MSc Nursing Pathway · United Kingdom
             </p>
 
-            <h1 className="mt-5 text-[clamp(2.8rem,5vw,5.5rem)] font-extrabold leading-[1.08] tracking-[-0.055em] text-[#101638]">
+            <h1 className="mt-5 text-3xl sm:text-4xl md:text-5xl font-black leading-[1.08] tracking-[-0.055em] text-[#101638]">
               Work as a Nurse
               <span className="block bg-gradient-to-r from-[#f01473] via-[#cf148d] to-[#9a14b5] bg-clip-text text-transparent">
                 in the UK
@@ -119,7 +122,7 @@ function HeroSection() {
             <div className="mt-9 flex flex-wrap justify-center gap-3 lg:justify-start">
               <Link
                 href="/contact-us"
-                className="group inline-flex min-h-[54px] items-center justify-center gap-4 rounded-full bg-gradient-to-r from-[#f01473] to-[#a10ca5] px-7 py-3 text-sm font-bold text-white shadow-[0_14px_30px_rgba(214,20,120,0.2)] transition hover:-translate-y-1 sm:px-9 sm:text-base"
+                className="group inline-flex min-h-[54px] items-center justify-center gap-4 rounded-xl bg-gradient-to-r from-primary to-secondary px-7 py-3 text-sm font-bold text-white shadow-[0_14px_30px_rgba(214,20,120,0.2)] transition hover:-translate-y-1 sm:px-9 sm:text-base"
               >
                 Check Eligibility
                 <ArrowRight
@@ -128,13 +131,29 @@ function HeroSection() {
                 />
               </Link>
 
-              <Link
-                href="/contact-us"
-                className="inline-flex min-h-[54px] items-center justify-center gap-3 rounded-full border-[1.5px] border-[#e31884] bg-white px-7 py-3 text-sm font-bold text-[#971178] transition hover:-translate-y-1 hover:bg-pink-50 sm:px-9 sm:text-base"
-              >
-                <Download size={19} />
-                Get the Brochure
-              </Link>
+             
+<a
+  href="/assets/Medcity-UK-Nursing-MSc-Brochure_9.pdf"
+  download="Medcity-UK-Nursing-MSc-Brochure.pdf"
+  className="
+    inline-flex min-h-[54px]
+    items-center justify-center
+    gap-3 rounded-xl
+    border-[1.5px] border-[#e31884]
+    bg-white px-7 py-3
+    text-sm font-bold text-[#971178]
+    shadow-sm
+    transition-all duration-300
+    hover:-translate-y-1
+    hover:bg-pink-50
+    hover:shadow-[0_12px_30px_rgba(192,31,83,0.12)]
+    sm:px-9 sm:text-base
+  "
+>
+  <Download size={19} />
+  Get the Brochure
+</a>
+
             </div>
           </div>
 
@@ -219,6 +238,9 @@ export default function PlacementAssistanceNursingPage() {
      <PaymentPlanSection />
      <MedcityServicesSection />
      <EligibilitySection />
+      <PlacementBrochure />
+      <PlacementContactDetails />
+       <PlacementRegistrationSection />
     </main>
   );
 }

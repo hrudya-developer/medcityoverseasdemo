@@ -1,5 +1,6 @@
 
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowRight } from "lucide-react";
 
 import {
@@ -24,16 +25,17 @@ export default function PlacementIntro({
     >
       <div
         className="
-          relative z-10 w-full max-w-[740px]
-          mx-auto text-center
+          relative z-10 mx-auto
+          w-full max-w-[740px]
+          text-center
           lg:mx-0 lg:text-left
         "
       >
         {/* Section eyebrow */}
         <div
           className="
-            flex items-center justify-center gap-4
-            lg:justify-start
+            flex items-center justify-center
+            gap-4 lg:justify-start
           "
         >
           <span
@@ -60,11 +62,12 @@ export default function PlacementIntro({
         <h2
           id="placement-assistance-title"
           className="
-            mt-7 font-extrabold
+            mt-7 text-3xl font-black
             leading-[1.08]
             tracking-[-0.055em]
             text-[#111111]
-            text-[clamp(2.3rem,4.15vw,5.25rem)]
+            sm:text-4xl
+            md:text-5xl
           "
         >
           <span className="block">
@@ -83,12 +86,13 @@ export default function PlacementIntro({
         {/* Description */}
         <p
           className="
-            mx-auto mt-6 max-w-[640px]
+            mx-auto mt-6
+            max-w-[640px]
             text-[14px] leading-[1.85]
             text-[#5b6a83]
             sm:text-[16px]
-            xl:text-[18px]
             lg:mx-0
+            xl:text-[18px]
           "
         >
           {placementContent.description}
@@ -107,28 +111,37 @@ export default function PlacementIntro({
           {placementCountries.map((country) => (
             <div
               key={country.name}
-              role="img"
-              aria-label={country.name}
               title={country.name}
               className="
-                flex h-11 w-11 shrink-0
-                items-center justify-center
-                rounded-full border border-gray-100
-                bg-white text-[27px]
-                leading-none
-                shadow-[0_7px_20px_rgba(0,0,0,0.1)]
+                group flex h-14 w-14
+                shrink-0 items-center
+                justify-center
+                rounded-full
+                border border-[#f5d5e1]
+                bg-white
+                shadow-[0_5px_15px_rgba(192,31,83,0.07)]
                 transition-all duration-300
-                hover:-translate-y-1.5
-                hover:shadow-[0_12px_25px_rgba(192,31,83,0.18)]
-                sm:h-14 sm:w-14
-                sm:text-[33px]
-                xl:h-16 xl:w-16
-                xl:text-[37px]
+                hover:-translate-y-1
+                hover:border-[#c01f53]
+                hover:shadow-[0_10px_25px_rgba(192,31,83,0.15)]
+                sm:h-16 sm:w-16
               "
             >
-              <span aria-hidden="true">
-                {country.flag}
-              </span>
+              <Image
+                src={country.flag}
+                alt={`${country.name} flag`}
+                width={44}
+                height={32}
+                unoptimized
+                className="
+                  h-7 w-10
+                  rounded-[5px]
+                  object-cover
+                  transition-transform duration-300
+                  group-hover:scale-110
+                  sm:h-8 sm:w-11
+                "
+              />
             </div>
           ))}
         </div>
@@ -144,11 +157,13 @@ export default function PlacementIntro({
             href="/placement-assistance-nursing"
             className="
               group inline-flex
-              min-h-[54px] items-center
-              justify-center gap-5
-              rounded-xl bg-[#c01f53]
+              min-h-[54px]
+              items-center justify-center
+              gap-5 rounded-xl
+              bg-[#c01f53]
               px-7 py-3.5
-              text-sm font-semibold text-white
+              text-sm font-semibold
+              text-white
               shadow-[0_12px_25px_rgba(192,31,83,0.17)]
               transition-all duration-300
               hover:-translate-y-1
