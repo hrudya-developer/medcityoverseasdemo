@@ -36,9 +36,8 @@ const points = [
 export default function BranchAbout({
     center,
 }) {
-    const location =
-        center.seoLocation ||
-        center.city;
+    const aboutContent =
+        center.aboutContent;
 
     return (
         <section className="bg-white py-16 lg:py-20">
@@ -77,10 +76,7 @@ export default function BranchAbout({
                             sm:text-4xl
                         "
                     >
-                        Medcity Overseas{" "}
-                        <span className="text-primary">
-                            {location}
-                        </span>
+                        {aboutContent.heading}
                     </h2>
 
                     <p
@@ -91,18 +87,7 @@ export default function BranchAbout({
                             text-slate-600
                         "
                     >
-                        Medcity Overseas{" "}
-                        {location} provides
-                        personalised guidance
-                        for students planning to
-                        study abroad. Our team
-                        helps with course and
-                        university selection,
-                        overseas applications,
-                        documentation, student
-                        visas and other important
-                        steps in the admission
-                        journey.
+                        {aboutContent.introduction}
                     </p>
 
                     <p
@@ -113,27 +98,33 @@ export default function BranchAbout({
                             text-slate-600
                         "
                     >
-                        Students from{" "}
-                        {center.city},{" "}
-                        {center.district} and
-                        nearby areas can visit
-                        our branch for direct,
-                        one-to-one support from
-                        our education
-                        counsellors.
+                        {aboutContent.coverage}
+                    </p>
+
+                    <p
+                        className="
+                            mt-7
+                            text-sm
+                            font-bold
+                            text-darkPrimary
+                        "
+                    >
+                        Our services include:
                     </p>
 
                     <div
                         className="
-                            mt-7
+                            mt-3
                             space-y-3
                         "
                     >
                         {[
                             "Personalised study abroad counselling",
-                            "Course and university shortlisting",
-                            "Application and documentation support",
+                            "Course & university selection",
+                            "University application & documentation support",
+                            "Scholarship & funding guidance",
                             "Student visa guidance",
+                            "Pre-departure assistance",
                         ].map((item) => (
                             <div
                                 key={item}

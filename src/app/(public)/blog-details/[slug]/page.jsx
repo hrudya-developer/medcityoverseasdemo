@@ -9,6 +9,10 @@ import {
 
 import BlogDetailsHero from "./components/BlogDetailsHero";
 import BlogDetailsContent from "./components/BlogDetailsContent";
+import BranchesInfo from "../../branches/components/BranchesInfo";
+import {
+  getBranchInfoForBlogTitle,
+} from "../../branches/data/branchesInfo";
 
 /* =========================================================
    CONFIG
@@ -746,6 +750,11 @@ export default async function BlogDetailsPage({
   const blog =
     result.blog;
 
+  const branchInfo =
+    getBranchInfoForBlogTitle(
+      blog?.title
+    );
+
   /* =====================================================
      3. CANONICAL CLEAN SLUG
   ===================================================== */
@@ -829,9 +838,15 @@ export default async function BlogDetailsPage({
         }
       />
 
-      <BlogDetailsContent
-        blog={blog}
-      />
+      {branchInfo ? (
+        <BranchesInfo
+          branch={branchInfo}
+        />
+      ) : (
+        <BlogDetailsContent
+          blog={blog}
+        />
+      )}
     </main>
   );
 }

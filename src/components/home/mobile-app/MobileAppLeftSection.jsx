@@ -61,23 +61,23 @@ export default function MobileAppLeftSection() {
 
                 <div
                     aria-hidden="true"
-                    className="app-orbit-clockwise absolute left-1/2 top-1/2 h-[280px] w-[280px] rounded-full border border-dashed border-primary/25 sm:h-[400px] sm:w-[400px] lg:h-[470px] lg:w-[470px]"
+                    className="app-orbit-clockwise absolute left-1/2 top-1/2 rounded-full border border-dashed border-primary/25"
                 >
                     <span
-                        className="absolute left-1/2 top-[-5px] h-3 w-3 -translate-x-1/2 rounded-full bg-primary shadow-[0_0_18px_rgba(192,31,83,0.65)]"
+                        className="absolute left-1/2 top-0 h-3 w-3 -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary shadow-[0_0_18px_rgba(192,31,83,0.65)]"
                     />
 
                     <span
-                        className="absolute bottom-[16%] right-[2%] h-2.5 w-2.5 rounded-full bg-secondary shadow-[0_0_16px_rgba(4,102,175,0.6)]"
+                        className="absolute bottom-0 right-1/2 h-2.5 w-2.5 translate-x-1/2 translate-y-1/2 rounded-full bg-secondary shadow-[0_0_16px_rgba(4,102,175,0.6)]"
                     />
                 </div>
 
                 <div
                     aria-hidden="true"
-                    className="app-orbit-counter absolute left-1/2 top-1/2 h-[230px] w-[230px] rounded-full border border-violet-300/45 sm:h-[330px] sm:w-[330px] lg:h-[390px] lg:w-[390px]"
+                    className="app-orbit-counter absolute left-1/2 top-1/2 rounded-full border border-violet-300/45"
                 >
                     <span
-                        className="absolute left-[9%] top-[18%] h-2.5 w-2.5 rounded-full bg-violet-500 shadow-[0_0_15px_rgba(139,92,246,0.55)]"
+                        className="absolute right-0 top-1/2 h-2.5 w-2.5 -translate-y-1/2 translate-x-1/2 rounded-full bg-violet-500 shadow-[0_0_15px_rgba(139,92,246,0.55)]"
                     />
                 </div>
 

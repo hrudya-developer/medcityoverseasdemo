@@ -107,11 +107,37 @@
 .app-orbit-clockwise {
     animation:
         appOrbitClockwise 24s linear infinite;
+    width: min(100%, 280px);
+    height: auto;
+    aspect-ratio: 1;
 }
 
 .app-orbit-counter {
     animation:
         appOrbitCounterClockwise 18s linear infinite;
+    width: min(82.15%, 230px);
+    height: auto;
+    aspect-ratio: 1;
+}
+
+@media (min-width: 640px) {
+    .app-orbit-clockwise {
+        width: min(100%, 400px);
+    }
+
+    .app-orbit-counter {
+        width: min(82.5%, 330px);
+    }
+}
+
+@media (min-width: 1024px) {
+    .app-orbit-clockwise {
+        width: min(100%, 470px);
+    }
+
+    .app-orbit-counter {
+        width: min(82.98%, 390px);
+    }
 }
 
 .app-icon-float {
