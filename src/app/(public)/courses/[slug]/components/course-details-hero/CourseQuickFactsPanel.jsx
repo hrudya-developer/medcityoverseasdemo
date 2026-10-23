@@ -550,11 +550,12 @@ export default function CourseQuickFactsPanel({
                                                 }
                                             </p>
 
+                                            {/* The month list, only when it was summed up as all year. */}
                                             {fact.key ===
                                                 "intakes" &&
                                                 intakesRaw &&
-                                                intakesRaw !==
-                                                    intakes && (
+                                                intakes ===
+                                                    "All Year Round" && (
                                                     <p
                                                         title={
                                                             intakesRaw
