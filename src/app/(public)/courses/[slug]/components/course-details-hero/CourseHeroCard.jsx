@@ -163,7 +163,9 @@ export default function CourseHeroCard({
                     lg:mx-0
                 "
             >
-                Build a global career with
+                Build a global career with{" "}
+                {courseTitle}
+                {universityName ? ` at ${universityName}` : ""}:
                 industry-focused learning,
                 international exposure and
                 hands-on training designed

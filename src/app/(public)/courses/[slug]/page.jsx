@@ -5,10 +5,15 @@ import { notFound } from "next/navigation";
 import { findCourseBySlug } from "@/lib/courseIndex";
 import { callLegacy } from "@/lib/legacy";
 import { createSlug } from "@/lib/slug";
+import { countrySlug as toCountrySlug } from "@/lib/sitemapData";
 import { createUniversityPublicSlug } from "@/lib/universitySlug";
 
 import CourseDetailsClient from "./CourseDetailsClient";
+import { COURSE_TEMPLATE_UPDATED, CourseInShort, CourseLinks } from "./components/CourseSeoSections";
+import { formatCourseDetails } from "./utils/courseDetailsHelpers";
+import { createCourseFaqs } from "./utils/courseFaqs";
 import { withSeoOverrides } from "@/lib/pageSeo";
+import { faqPageNode, latestDate, organizationNode, websiteNode } from "@/lib/seoSchema";
 
 const SITE_URL = "https://medcityoverseas.com";
 
@@ -86,6 +91,31 @@ function describe(facts) {
     return parts.join(" ").slice(0, 300);
 }
 
+/** A 120 to 160 character meta description from the course facts. */
+function metaDescription(facts) {
+    const where = [facts.location, facts.country].filter(Boolean).join(", ");
+    const endings = [
+        "Entry requirements and application help from Medcity Overseas.",
+        "Entry requirements and help from Medcity Overseas.",
+        "Apply with Medcity Overseas.",
+    ];
+    let text = `${facts.name} at ${facts.university}${where ? ` (${where})` : ""}.`;
+
+    for (const extra of [facts.level && `Level: ${facts.level}.`, facts.duration && `Duration: ${facts.duration}.`, facts.intakes && `Intakes: ${facts.intakes}.`]) {
+        if (extra && `${text} ${extra}`.length <= 160 - 30) {
+            text = `${text} ${extra}`;
+        }
+    }
+
+    const ending = endings.find((item) => `${text} ${item}`.length <= 160);
+
+    if (ending) {
+        return `${text} ${ending}`;
+    }
+
+    return text.length <= 160 ? text : `${text.slice(0, 157).replace(/\s+\S*$/, "")}...`;
+}
+
 function imageUrl(base, file) {
     const name = present(file);
 
@@ -113,7 +143,7 @@ async function pageGenerateMetadata({ params }) {
 
     const facts = courseFacts(loaded.course);
     const title = `${facts.name} at ${facts.university}${facts.country ? `, ${facts.country}` : ""}`;
-    const description = describe(facts);
+    const description = metaDescription(facts);
     const url = `${SITE_URL}/courses/${loaded.slug}`;
     const image = imageUrl(loaded.universityImagePath, loaded.course.image || loaded.course.logo);
 
@@ -188,12 +218,33 @@ function structuredData(loaded) {
         { name: facts.name, item: url },
     ];
 
+    const details = formatCourseDetails(loaded.course);
+    const faqs = createCourseFaqs({ course: loaded.course, details });
+
     return {
         "@context": "https://schema.org",
         "@graph": [
+            organizationNode(),
+            websiteNode(),
+            {
+                "@type": "WebPage",
+                "@id": `${url}#webpage`,
+                url,
+                name: `${facts.name} at ${facts.university}`,
+                description: metaDescription(facts),
+                inLanguage: "en-IN",
+                isPartOf: { "@id": `${SITE_URL}/#website` },
+                about: { "@id": `${url}#course` },
+                publisher: { "@id": `${SITE_URL}/#organization` },
+                author: { "@id": `${SITE_URL}/#organization` },
+                dateModified: courseUpdated(loaded.course),
+                breadcrumb: { "@id": `${url}#breadcrumb` },
+            },
             course,
+            ...(faqs.length ? [faqPageNode(`/courses/${loaded.slug}`, faqs)] : []),
             {
                 "@type": "BreadcrumbList",
+                "@id": `${url}#breadcrumb`,
                 itemListElement: crumbs.map((crumb, index) => ({
                     "@type": "ListItem",
                     position: index + 1,
@@ -205,6 +256,10 @@ function structuredData(loaded) {
     };
 }
 
+function courseUpdated(course) {
+    return latestDate(course?.created_at, course?.created_date, COURSE_TEMPLATE_UPDATED);
+}
+
 export default async function CourseDetailsPage({ params }) {
     const { slug } = await params;
     const loaded = await loadCourse(slug);
@@ -212,6 +267,9 @@ export default async function CourseDetailsPage({ params }) {
     if (!loaded) {
         notFound();
     }
+
+    const facts = courseFacts(loaded.course);
+    const universitySlug = createUniversityPublicSlug({ name: facts.university });
 
     return (
         <>
@@ -222,7 +280,17 @@ export default async function CourseDetailsPage({ params }) {
                 }}
             />
 
-            <CourseDetailsClient slug={loaded.slug} initialCourse={loaded.course} />
+            <CourseDetailsClient
+                slug={loaded.slug}
+                initialCourse={loaded.course}
+                summary={<CourseInShort facts={facts} updated={courseUpdated(loaded.course)} />}
+            >
+                <CourseLinks
+                    facts={facts}
+                    universityPath={universitySlug ? `/universities/${universitySlug}` : ""}
+                    countrySlug={facts.country ? toCountrySlug(facts.country) : ""}
+                />
+            </CourseDetailsClient>
         </>
     );
 }

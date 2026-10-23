@@ -11,7 +11,7 @@ export default function CourseHeroBackground() {
 
             <Image
                 src={heroBg}
-                alt=""
+                alt="Globe, books and a graduation cap in front of a city skyline"
                 fill
                 priority
                 sizes="100vw"

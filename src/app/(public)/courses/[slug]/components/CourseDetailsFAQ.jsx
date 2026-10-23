@@ -10,78 +10,7 @@ import {
 } from "lucide-react";
 
 import { formatCourseDetails } from "../utils/courseDetailsHelpers";
-
-function createFaqs({ course, details }) {
-    const safeCourse = details.courseTitle || "this course";
-    const safeUniversity = details.universityName || "the university";
-    const safeCountry = details.country || "N/A";
-
-    const faqs = [];
-
-    // 1. Course Description
-    if (details.remarks && details.remarks !== "Course details are not available.") {
-        faqs.push({
-            question: `What is ${safeCourse} about?`,
-            answer: details.remarks,
-        });
-    }
-
-    // 2. Entry Requirement
-    if (details.entryRequirement && details.entryRequirement !== "Entry requirement not available.") {
-        faqs.push({
-            question: `What are the entry requirements for ${safeCourse}?`,
-            answer: details.entryRequirement,
-        });
-    }
-
-    // 3. Level & Duration
-    const levelText = details.level && details.level !== "N/A" ? `It is a ${details.level} program.` : "";
-    const durationText = details.duration && details.duration !== "N/A" ? `The program duration is ${details.duration}.` : "";
-    const intakeText = details.intakes && details.intakes !== "Not available" ? `Available intakes are ${details.intakes}.` : "";
-    
-    if (levelText || durationText || intakeText) {
-        faqs.push({
-            question: `What is the level, duration, and intake availability for ${safeCourse}?`,
-            answer: `${levelText} ${durationText} ${intakeText}`.trim(),
-        });
-    }
-
-    // 4. Fees
-    const feesText = details.fees && details.fees !== "Not available" ? `The tuition fee is ${details.fees}.` : "";
-    const appFeeText = details.applicationFee && details.applicationFee !== "N/A" ? `The application fee is ${details.applicationFee}.` : "";
-    const deadlineText = details.deadline && details.deadline !== "N/A" ? `The application deadline is ${details.deadline}.` : "";
-
-    if (feesText || appFeeText || deadlineText) {
-        faqs.push({
-            question: `How much does ${safeCourse} cost and what is the deadline?`,
-            answer: `${feesText} ${appFeeText} ${deadlineText}`.trim(),
-        });
-    }
-
-    // 5. English language requirements
-    const testScores = [];
-    if (course?.ielts && course?.ielts !== "-") testScores.push(`IELTS: ${course.ielts}`);
-    if (course?.toefl && course?.toefl !== "-") testScores.push(`TOEFL: ${course.toefl}`);
-    if (course?.pte && course?.pte !== "-") testScores.push(`PTE: ${course.pte}`);
-    if (course?.duolingo && course?.duolingo !== "-") testScores.push(`Duolingo: ${course.duolingo}`);
-    if (course?.gre && course?.gre !== "-") testScores.push(`GRE: ${course.gre}`);
-    if (course?.gmat && course?.gmat !== "-") testScores.push(`GMAT: ${course.gmat}`);
-
-    if (testScores.length > 0) {
-        faqs.push({
-            question: `What English language and test scores are required for ${safeCourse}?`,
-            answer: `The minimum test scores required are: ${testScores.join(", ")}.`,
-        });
-    }
-
-    // 6. Generic Medcity Help
-    faqs.push({
-        question: `How can Medcity Study Abroad help with my application to ${safeUniversity}?`,
-        answer: `Medcity Study Abroad provides end-to-end assistance for your application to ${safeUniversity} in ${safeCountry}. We help with course shortlisting, preparing application documents, reviewing entry and English requirements, and guiding you through the student visa process.`,
-    });
-
-    return faqs;
-}
+import { createCourseFaqs as createFaqs } from "../utils/courseFaqs";
 
 export default function CourseDetailsFAQ({
     course,

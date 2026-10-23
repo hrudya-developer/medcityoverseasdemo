@@ -15,7 +15,7 @@ export default function CourseBenefits({
             icon: Globe,
             title: "Global Learning",
             text:
-                country !== "N/A"
+                country
                     ? `Study in ${country}`
                     : "Study globally",
         },

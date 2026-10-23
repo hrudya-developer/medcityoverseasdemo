@@ -282,6 +282,8 @@ function getUniversityImagePath(
 export default function CourseDetailsClient({
     slug,
     initialCourse = null,
+    summary = null,
+    children = null,
 }) {
     const router =
         useRouter();
@@ -786,6 +788,9 @@ export default function CourseDetailsClient({
                 }
             />
 
+            {/* Server-rendered "In short" box */}
+            {summary}
+
             <CourseDetailsGrid
                 details={
                     details
@@ -818,6 +823,9 @@ export default function CourseDetailsClient({
                     slug
                 }
             />
+
+            {/* Server-rendered links and official sources */}
+            {children}
         </div>
     );
 }

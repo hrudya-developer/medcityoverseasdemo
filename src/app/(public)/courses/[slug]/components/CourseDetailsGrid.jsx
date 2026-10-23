@@ -60,7 +60,7 @@ export default function CourseDetailsGrid({
                 <MiniInfo
                     icon={<Globe />}
                     title="Country"
-                    text={details.country}
+                    text={details.country || "Not recorded"}
                 />
 
                 <MiniInfo

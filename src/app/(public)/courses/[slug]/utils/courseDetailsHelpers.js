@@ -1,3 +1,6 @@
+// Shown when the database has no value: never a guess.
+export const NOT_RECORDED = "Not recorded";
+
 export const getValue = (...values) =>
     values.find(
         (value) =>
@@ -25,8 +28,7 @@ export const formatCourseDetails = (course) => {
     const country = getValue(
         course?.country,
         course?.country_name,
-        course?.destination,
-        "N/A"
+        course?.destination
     );
 
     const locationName = getValue(
@@ -34,20 +36,20 @@ export const formatCourseDetails = (course) => {
         course?.city,
         course?.state,
         country,
-        "Location not available"
+        NOT_RECORDED
     );
 
     const level = getValue(
         course?.level,
         course?.course_level,
         course?.study_level,
-        "N/A"
+        NOT_RECORDED
     );
 
     const duration = getValue(
         course?.duration,
         course?.course_duration,
-        "N/A"
+        NOT_RECORDED
     );
 
     const remarks = getValue(
@@ -78,12 +80,15 @@ export const formatCourseDetails = (course) => {
     const intakes =
         intakeItems.length === 12
             ? "All Year Round"
-            : intakesRaw || "Not available";
+            : intakesRaw || NOT_RECORDED;
 
-    const feesValue = getValue(
+    // A fee of 0 or a dash is a missing value, not a free course.
+    const feesValue = [
         course?.fees,
-        course?.tuition_fee
-    );
+        course?.tuition_fee,
+    ]
+        .map((value) => String(value ?? "").trim())
+        .find((value) => value && !/^(0+(\.0+)?|-|null|n\/a)$/i.test(value)) || "";
 
     const currency = getValue(
         course?.currency,
@@ -92,18 +97,18 @@ export const formatCourseDetails = (course) => {
 
     const fees = feesValue
         ? `${currency}${feesValue}`
-        : "Not available";
+        : NOT_RECORDED;
 
     const applicationFee = getValue(
         course?.applicationfee,
         course?.application_fee,
-        "N/A"
+        NOT_RECORDED
     );
 
     const deadline = getValue(
         course?.deadline,
         course?.application_deadline,
-        "N/A"
+        NOT_RECORDED
     );
 
     const universityLogoUrl = getValue(
