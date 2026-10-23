@@ -77,6 +77,9 @@ export default function DestinationUniversities({
     countryName,
     universities = [],
     universityImagePath = "",
+    // Whether /universities-in-<country> is indexable; a noindex page
+    // is not linked.
+    linkUniversities = false,
 }) {
     const visibleUniversities =
         Array.isArray(universities)
@@ -128,18 +131,20 @@ export default function DestinationUniversities({
                         </p>
                     </div>
 
-                    <Link
-                        href={`/universities-in-${createSlug(countryName)}`}
-                        className="group mx-auto inline-flex min-h-12 items-center justify-center gap-2 rounded-xl border border-primary/15 bg-white px-5 text-sm font-bold text-primary shadow-sm transition duration-300 hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-md lg:mx-0"
-                    >
-                        View All Universities
+                    {linkUniversities && (
+                        <Link
+                            href={`/universities-in-${createSlug(countryName)}`}
+                            className="group mx-auto inline-flex min-h-12 items-center justify-center gap-2 rounded-xl border border-primary/15 bg-white px-5 text-sm font-bold text-primary shadow-sm transition duration-300 hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-md lg:mx-0"
+                        >
+                            View All Universities
 
-                        <ArrowRight
-                            size={17}
-                            aria-hidden="true"
-                            className="transition-transform group-hover:translate-x-1"
-                        />
-                    </Link>
+                            <ArrowRight
+                                size={17}
+                                aria-hidden="true"
+                                className="transition-transform group-hover:translate-x-1"
+                            />
+                        </Link>
+                    )}
                 </header>
 
                 {visibleUniversities.length >

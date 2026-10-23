@@ -56,6 +56,7 @@ export default function DestinationDetailsClient({
   highlights = [],
   universities = [],
   universityImagePath = "",
+  linkUniversities = false,
   image,
   flag,
   seo,
@@ -126,6 +127,9 @@ export default function DestinationDetailsClient({
         }
         universityImagePath={
           universityImagePath
+        }
+        linkUniversities={
+          linkUniversities
         }
       />
 

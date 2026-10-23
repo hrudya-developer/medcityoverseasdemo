@@ -13,6 +13,8 @@ import {
     postOverseasForm,
 } from "@/lib/overseasApi";
 
+import { fetchUniversityBatch, universityItems } from "@/lib/countryUniversities";
+
 import CountryUniversitiesHero from "./components/CountryUniversitiesHero";
 import UniversitiesSection from "./components/UniversitiesSection";
 import CountryFacts from "./components/CountryFacts";
@@ -245,23 +247,16 @@ async function loadUniversities(
             batch < MAX_UNIVERSITY_BATCHES;
             batch += 1
         ) {
+            // Shared with countryUniversitiesIndexable, which other
+            // pages use to link here only when this list is not empty.
             const result =
-                await postOverseasForm(
-                    "getUniversitybyOffset",
-                    {
-                        uid: "0",
-                        id: String(countryId),
-                        offset,
-                        keyword: "alluniversities",
-                    },
+                await fetchUniversityBatch(
+                    countryId,
+                    offset
                 );
 
             const items =
-                Array.isArray(result?.universities)
-                    ? result.universities
-                    : Array.isArray(result?.data)
-                        ? result.data
-                        : [];
+                universityItems(result);
 
             universities.push(...items);
 

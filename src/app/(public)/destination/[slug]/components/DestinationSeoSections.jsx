@@ -77,15 +77,23 @@ export function DestinationInShort({ countryName, country, facts, updated }) {
     );
 }
 
-export function DestinationLinks({ countryName, destinationSlug }) {
+// linkUniversities: whether /universities-in-<country> is indexable;
+// a noindex page is not linked.
+export function DestinationLinks({ countryName, destinationSlug, linkUniversities = false }) {
     return (
         <div className="space-y-12 bg-white py-14">
             <p className="mx-auto max-w-5xl px-4 text-sm leading-7 text-slate-600 sm:px-6 lg:px-8">
-                Compare{" "}
-                <Link href={`/universities-in-${destinationSlug}`} className="font-bold text-primary hover:underline">
-                    universities in {countryName}
-                </Link>
-                , search the{" "}
+                {linkUniversities ? (
+                    <>
+                        Compare{" "}
+                        <Link href={`/universities-in-${destinationSlug}`} className="font-bold text-primary hover:underline">
+                            universities in {countryName}
+                        </Link>
+                        , search the{" "}
+                    </>
+                ) : (
+                    "Search the "
+                )}
                 <Link href="/courses" className="font-bold text-primary hover:underline">
                     course finder
                 </Link>
