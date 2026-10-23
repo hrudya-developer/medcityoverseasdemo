@@ -13,7 +13,11 @@ const COURSE_DETAIL_API =
   "https://overseas.technocitysolutions.com/public/api/getCoursedetails";
 
 function normalize(value) {
+  // Strip accents first, as the database collation ignores them:
+  // "universitat" must still match "Universität".
   return String(value || "")
+    .normalize("NFD")
+    .replace(/\p{Diacritic}/gu, "")
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, " ")
     .trim();

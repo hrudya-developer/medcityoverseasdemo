@@ -172,8 +172,12 @@ export async function getCoursesByFilters(input) {
     const keyword = String(input.keyword ?? "").trim();
 
     if (keyword) {
-        where.push("(c.course LIKE ? OR m.name LIKE ? OR u.name LIKE ? OR d.country LIKE ?)");
-        params.push(...Array(4).fill(likePattern(keyword)));
+        // The route filters these rows again by keyword in JS; these
+        // columns are among the ones it checks, so it keeps every match.
+        const columns = ["c.course", "m.name", "u.name", "d.country", "c.level", "c.intakes"];
+
+        where.push(`(${columns.map((column) => `${column} LIKE ?`).join(" OR ")})`);
+        params.push(...columns.map(() => likePattern(keyword)));
     }
 
     if (toId(input.intake)) {
