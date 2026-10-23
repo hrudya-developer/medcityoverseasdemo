@@ -70,6 +70,6 @@ export const canadaFaqs = [
     question:
       "Who can give advice on my Canada immigration case?",
     answer:
-      "The information on this page is general and is not advice on your case. Under Canadian law, only authorised representatives may charge for immigration advice or represent you: licensed immigration consultants (RCICs) who are members of the College of Immigration and Citizenship Consultants, lawyers and paralegals who are members of a Canadian provincial or territorial law society, and notaries who are members of the Chambre des notaires du Québec. Check that anyone you pay is on the relevant public register.",
+      "The information on this page is general and is not advice on your case. Under Canadian law, only authorised representatives may charge a fee, or receive any other payment, for immigration advice or representation: licensed immigration consultants (RCICs) who are members of the College of Immigration and Citizenship Consultants, lawyers and paralegals who are members of a Canadian provincial or territorial law society, and notaries who are members of the Chambre des notaires du Québec. Check that anyone you pay is on the relevant public register.",
   },
 ];
