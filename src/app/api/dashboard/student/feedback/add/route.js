@@ -12,6 +12,8 @@ import {
 } from "@/lib/auth/session";
 
 
+import { legacyFetch } from "@/lib/legacy";
+
 const ADD_FEEDBACK_URL =
     "https://overseas.technocitysolutions.com/public/api/AddFeedback";
 
@@ -215,8 +217,7 @@ export async function POST(request) {
 
 
         const externalResponse =
-            await fetch(
-                ADD_FEEDBACK_URL,
+            await legacyFetch(ADD_FEEDBACK_URL,
                 {
                     method:
                         "POST",

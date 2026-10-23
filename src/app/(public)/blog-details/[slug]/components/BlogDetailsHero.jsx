@@ -31,6 +31,11 @@ function getImageUrl(
       imageName
     ).trim();
 
+  // Uploaded through the website admin: served by this site.
+  if (/^\/media\/\d+$/.test(imageValue)) {
+    return imageValue;
+  }
+
   if (
     imageValue.startsWith(
       "http://"

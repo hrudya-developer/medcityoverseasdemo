@@ -4,6 +4,8 @@ import {
 } from "@/lib/auth/sessionUid";
 import { NextResponse } from "next/server";
 
+import { legacyFetch } from "@/lib/legacy";
+
 const WISHLIST_API_URL =
     "https://overseas.technocitysolutions.com/public/api/getPrefereList";
 
@@ -70,8 +72,7 @@ export async function POST(request) {
          * 4. Call external API
          * --------------------------------- */
         const response =
-            await fetch(
-                WISHLIST_API_URL,
+            await legacyFetch(WISHLIST_API_URL,
                 {
                     method: "POST",
                     body: formData,

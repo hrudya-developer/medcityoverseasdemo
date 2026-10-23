@@ -12,6 +12,8 @@ import {
 } from "@/lib/auth/session";
 
 
+import { legacyFetch } from "@/lib/legacy";
+
 const APPLICATIONS_URL =
     "https://overseas.technocitysolutions.com/public/api/getUserEnquiries";
 
@@ -124,8 +126,7 @@ export async function POST() {
 
 
         const externalResponse =
-            await fetch(
-                APPLICATIONS_URL,
+            await legacyFetch(APPLICATIONS_URL,
                 {
                     method:
                         "POST",

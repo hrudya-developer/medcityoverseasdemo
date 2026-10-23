@@ -6,6 +6,8 @@ import {
     NextResponse,
   } from "next/server";
   
+import { legacyFetch } from "@/lib/legacy";
+
   export async function POST(request) {
     try {
       const body =
@@ -76,8 +78,7 @@ import {
   
   
       const response =
-        await fetch(
-          "https://overseas.technocitysolutions.com/public/api/removePreferlist",
+        await legacyFetch("https://overseas.technocitysolutions.com/public/api/removePreferlist",
           {
             method: "POST",
             body: formData,

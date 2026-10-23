@@ -1,5 +1,7 @@
 import { unstable_cache } from "next/cache";
 
+import { legacyFetch } from "@/lib/legacy";
+
 const API_URL =
   "https://overseas.technocitysolutions.com/public/api/getHomeTileDetails";
 
@@ -176,7 +178,7 @@ async function requestGermanProgram(programId, uid) {
 
   // Failures throw so unstable_cache never stores them; the
   // exported wrapper turns them into null for callers.
-  const response = await fetch(API_URL, {
+  const response = await legacyFetch(API_URL, {
     method: "POST",
     body,
     cache: "no-store",
@@ -270,7 +272,7 @@ async function requestGermanProgramsList(uid) {
 
   // Failures throw so unstable_cache never stores an empty list
   // for an hour; getGermanProgramsList decides how to recover.
-  const response = await fetch(HOME_API_URL, {
+  const response = await legacyFetch(HOME_API_URL, {
     method: "POST",
     body,
     cache: "no-store",

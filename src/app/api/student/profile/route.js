@@ -11,6 +11,8 @@ import {
     verifySessionToken,
 } from "@/lib/auth/session";
 
+import { legacyFetch } from "@/lib/legacy";
+
 const PROFILE_URL =
     "https://overseas.technocitysolutions.com/public/api/getStudentProfile";
 
@@ -92,8 +94,7 @@ export async function GET() {
         );
 
         const upstreamResponse =
-            await fetch(
-                PROFILE_URL,
+            await legacyFetch(PROFILE_URL,
                 {
                     method: "POST",
                     body: formData,

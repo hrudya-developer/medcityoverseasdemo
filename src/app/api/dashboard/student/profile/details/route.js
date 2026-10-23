@@ -6,6 +6,8 @@ import {
     NextResponse,
 } from "next/server";
 
+import { legacyFetch } from "@/lib/legacy";
+
 /*
 |--------------------------------------------------------------------------
 | Helpers
@@ -254,8 +256,7 @@ export async function POST(
         );
 
         const response =
-            await fetch(
-                "https://overseas.technocitysolutions.com/public/api/getStudentProfile",
+            await legacyFetch("https://overseas.technocitysolutions.com/public/api/getStudentProfile",
                 {
                     method:
                         "POST",

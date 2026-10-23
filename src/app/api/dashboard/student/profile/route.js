@@ -4,6 +4,8 @@ import {
 } from "@/lib/auth/sessionUid";
 import { NextResponse } from "next/server";
 
+import { legacyFetch } from "@/lib/legacy";
+
 const API_URL =
   "https://overseas.technocitysolutions.com/public/api/setUserProfile";
 
@@ -147,8 +149,7 @@ export async function POST(request) {
     );
 
     const response =
-      await fetch(
-        API_URL,
+      await legacyFetch(API_URL,
         {
           method: "POST",
           body: formData,

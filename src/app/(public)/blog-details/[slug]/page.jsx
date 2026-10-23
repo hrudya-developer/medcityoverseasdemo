@@ -16,6 +16,8 @@ import {
   getBranchInfoForBlogTitle,
 } from "../../branches/data/branchesInfo";
 
+import { legacyFetch } from "@/lib/legacy";
+
 /* =========================================================
    CONFIG
 ========================================================= */
@@ -76,8 +78,7 @@ async function fetchAllBlogs() {
     );
 
     const response =
-      await fetch(
-        BLOG_LIST_API_URL,
+      await legacyFetch(BLOG_LIST_API_URL,
         {
           method: "POST",
 
@@ -264,8 +265,7 @@ async function fetchBlogDetails(
     );
 
     const response =
-      await fetch(
-        BLOG_DETAIL_API_URL,
+      await legacyFetch(BLOG_DETAIL_API_URL,
         {
           method: "POST",
 
@@ -434,6 +434,11 @@ function createImageUrl(
     String(
       imageName
     ).trim();
+
+  // Uploaded through the website admin: served by this site.
+  if (/^\/media\/\d+$/.test(image)) {
+    return `${SITE_URL}${image}`;
+  }
 
   if (
     image.startsWith(

@@ -3,6 +3,8 @@ import {
 } from "next/server";
 import { createSlug } from "@/lib/slug";
 
+import { legacyFetch } from "@/lib/legacy";
+
 const API_URL =
     "https://overseas.technocitysolutions.com/public/api/getCoursedetails";
 
@@ -38,7 +40,7 @@ async function searchResults(keyword, keytype) {
     formData.append("keytype", keytype);
     formData.append("keyword", keyword);
 
-    const response = await fetch(COURSE_SEARCH_API, {
+    const response = await legacyFetch(COURSE_SEARCH_API, {
         method: "POST",
         body: formData,
         cache: "no-store",
@@ -203,8 +205,7 @@ export async function GET(request) {
             String(courseId)
         );
 
-        const response = await fetch(
-            API_URL,
+        const response = await legacyFetch(API_URL,
             {
                 method: "POST",
                 body: formData,

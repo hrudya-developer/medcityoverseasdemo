@@ -4,6 +4,8 @@ import {
 } from "@/lib/auth/sessionUid";
 import { NextResponse } from "next/server";
 
+import { legacyFetch } from "@/lib/legacy";
+
 const QUALIFICATION_FIELDS = [
     "highest",
 
@@ -96,8 +98,7 @@ export async function POST(request) {
         }
 
         const externalResponse =
-            await fetch(
-                "https://overseas.technocitysolutions.com/public/api/updateQualifications",
+            await legacyFetch("https://overseas.technocitysolutions.com/public/api/updateQualifications",
                 {
                     method: "POST",
                     body: formData,

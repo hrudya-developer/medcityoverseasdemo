@@ -1,5 +1,7 @@
 import sanitizeHtml from "sanitize-html";
 
+import { BLOG_SANITIZE_OPTIONS } from "@/lib/blogHtml";
+
 import {
   BookOpenText,
   CalendarDays,
@@ -17,31 +19,9 @@ function hasValue(
   );
 }
 
-/**
- * Blog HTML comes from the backend. Allow ordinary article markup
- * only, so a script, event handler or javascript: link stored in a
- * blog can never run on medcityoverseas.com.
- */
-const SANITIZE_OPTIONS = {
-  allowedTags: sanitizeHtml.defaults.allowedTags.concat([
-    "img",
-    "h1",
-    "h2",
-    "span",
-    "u",
-  ]),
-  allowedAttributes: {
-    a: ["href", "name", "target", "rel"],
-    img: ["src", "alt", "title", "width", "height", "loading"],
-    "*": ["class", "id"],
-  },
-  allowedSchemes: ["http", "https", "mailto", "tel"],
-  transformTags: {
-    a: sanitizeHtml.simpleTransform("a", {
-      rel: "noopener noreferrer",
-    }),
-  },
-};
+// Blog HTML comes from the database: only ordinary article markup
+// survives (see src/lib/blogHtml.js).
+const SANITIZE_OPTIONS = BLOG_SANITIZE_OPTIONS;
 
 function escapeHtml(value) {
   return value
@@ -149,23 +129,7 @@ function AdditionalSection({
 
       {content && (
         <article
-          className="
-            prose
-            prose-slate
-            max-w-none
-
-            prose-p:text-base
-            prose-p:leading-8
-            prose-p:text-slate-600
-
-            prose-a:font-bold
-            prose-a:text-primary
-
-            prose-strong:text-slate-900
-
-            prose-ul:text-slate-600
-            prose-ol:text-slate-600
-          "
+          className="blog-body max-w-none"
           dangerouslySetInnerHTML={{
             __html:
               formatContent(
@@ -318,25 +282,7 @@ export default function BlogDetailsContent({
 
           {content ? (
             <article
-              className="
-                prose
-                prose-slate
-                max-w-none
-
-                prose-headings:font-black
-                prose-headings:text-secondary
-
-                prose-p:text-base
-                prose-p:leading-8
-                prose-p:text-slate-600
-
-                prose-a:font-bold
-                prose-a:text-primary
-
-                prose-strong:text-slate-900
-
-                prose-img:rounded-2xl
-              "
+              className="blog-body max-w-none"
               dangerouslySetInnerHTML={{
                 __html:
                   formatContent(

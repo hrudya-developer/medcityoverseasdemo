@@ -30,6 +30,13 @@ export default function PlacementRegistrationSection() {
         lastname,
         email: formData.email,
         mobile: formData.whatsapp,
+        // The enquiry table has no free-text field, so the registration
+        // details go into the closest existing columns: UK (destination 2),
+        // qualification as study level, city as nearest office.
+        destination: "2",
+        studylevel: formData.qualification,
+        nearestidp: formData.city,
+        modeofcounselling: "UK Nursing Placement",
         message: [
           "UK Nursing placement registration",
           `Qualification: ${formData.qualification || ""}`,

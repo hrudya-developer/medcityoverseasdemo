@@ -3,6 +3,11 @@ import TestimonialsGrid from "./TestimonialsGrid";
 import TestimonialsHero from "./TestimonialsHero";
 import TestimonialsSuccessSection from "./TestimonialsSuccessSection";
 
+// Read straight from the database on each request (same server, a few
+// milliseconds). Prerendering at build time cannot reach the database on
+// Hostinger's build machines and would publish an empty page.
+export const dynamic = "force-dynamic";
+
 const SITE_URL =
     process.env.SITE_URL ||
     process.env.NEXT_PUBLIC_SITE_URL ||

@@ -1,6 +1,8 @@
 import { createSlug } from "@/lib/slug";
 import { postOverseasForm } from "@/lib/overseasApi";
 
+import { legacyFetch } from "@/lib/legacy";
+
 const DESTINATION_DETAILS_API =
   "https://overseas.technocitysolutions.com/public/api/getDestinationDetails";
 
@@ -81,8 +83,7 @@ export async function getDestinationDetails(
   }
 
   const response =
-    await fetch(
-      DESTINATION_DETAILS_API,
+    await legacyFetch(DESTINATION_DETAILS_API,
       {
         method: "POST",
 

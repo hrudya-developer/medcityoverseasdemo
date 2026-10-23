@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 
+import { legacyFetch } from "@/lib/legacy";
+
 const API_KEY =
   process.env.OVERSEAS_API_KEY;
 
@@ -158,8 +160,7 @@ async function getCourseDetails({
     String(id)
   );
 
-  const response = await fetch(
-    COURSE_DETAIL_API,
+  const response = await legacyFetch(COURSE_DETAIL_API,
     {
       method: "POST",
       body: formData,
@@ -219,8 +220,7 @@ async function getCoursePage({
     String(offset || 0)
   );
 
-  const response = await fetch(
-    COURSE_API,
+  const response = await legacyFetch(COURSE_API,
     {
       method: "POST",
       body: formData,
