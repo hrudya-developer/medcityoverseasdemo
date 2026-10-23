@@ -64,7 +64,7 @@ const SCHEMES = [
         name: "GREAT Scholarships (India)",
         country: "United Kingdom",
         type: "British Council and UK universities",
-        who: "Indian students on one year taught postgraduate courses at participating universities; at least 10,000 pounds towards tuition for 2026 to 2027. Apply through each university.",
+        who: "Indian students on one year taught postgraduate courses at participating universities; 10,000 pounds towards tuition for 2026 to 2027. Apply through each university, and check whether a new round has opened.",
         href: SRC.great,
         source: "British Council",
     },
@@ -72,7 +72,7 @@ const SCHEMES = [
         name: "Government of Ireland International Education Scholarship",
         country: "Ireland",
         type: "Irish government (HEA)",
-        who: "Students from outside the EU with an offer for a one year master's, level 9 diploma or research programme; the 2026 call gave a 10,000 euro stipend and a full fee waiver for one year.",
+        who: "Students from outside the EU, EEA, Switzerland and the UK with an offer for a master's, a level 9 diploma or a research programme of at least one year; the 2026 call gave a 10,000 euro stipend and a full fee waiver for one year.",
         href: SRC.goiies,
         source: "Higher Education Authority",
     },
@@ -95,7 +95,7 @@ const FAQS = [
     {
         question: "Can Indian students get a full scholarship?",
         answer:
-            "Some schemes cover a lot, but few cover everything. The Government of Ireland International Education Scholarship 2026 call gave a full fee waiver for one year plus a 10,000 euro stipend. GREAT Scholarships for India give at least 10,000 pounds towards tuition. Plan your budget assuming you pay the rest.",
+            "Some schemes cover a lot, but few cover everything. The Government of Ireland International Education Scholarship 2026 call gave a full fee waiver for one year plus a 10,000 euro stipend. GREAT Scholarships for India gave 10,000 pounds towards tuition for 2026 to 2027. Plan your budget assuming you pay the rest.",
     },
     {
         question: "When should I apply for scholarships?",
