@@ -276,7 +276,7 @@ export default async function CoursesPage() {
       <CoursesHero />
 
       <QuickAnswer updated={TEMPLATE_UPDATED} className="pt-4 sm:pt-6">
-        {total > 0
+        {Number.isFinite(total) && total > 0
           ? `Search ${total.toLocaleString("en-IN")} study abroad courses listed on Medcity Overseas${
               countries > 0 ? ` in ${countries} ${countries === 1 ? "country" : "countries"}` : ""
             }, by country, university, course, intake and study level. Open a course for its duration, intakes, fees and entry requirements where recorded, then book a counselling session to shortlist and apply.`

@@ -24,8 +24,8 @@ export default async function LatestCoursesTable({ className = "" }) {
             </h2>
 
             <p className="mt-3 max-w-3xl leading-7 text-slate-600">
-                {/* No count sentence without a real total. */}
-                {total > 0 && (
+                {/* No count sentence without a real total (null when unknown). */}
+                {Number.isFinite(total) && total > 0 && (
                     <>
                         {courses.length < total
                             ? `The ${courses.length} newest of the ${total.toLocaleString("en-IN")} courses listed on Medcity Overseas. Use the course finder above to search them all.`

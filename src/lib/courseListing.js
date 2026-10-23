@@ -14,7 +14,7 @@ import { intakeList, recordedValue } from "@/lib/recordValue";
  * destination summaries, so the totals on the page agree. Addresses
  * come from the course index, so every link opens a live course page.
  * Placeholders ("0", "-", "N/A") become null so the page shows
- * "Not recorded".
+ * "Not recorded". total is null when no real count is known.
  */
 const LIVE_COURSES = `FROM tb_courses c
      JOIN tb_universities u ON u.id = c.u_id
@@ -66,14 +66,16 @@ export const getLatestCourses = cache(async (limit = 24) => {
             .slice(0, limit);
 
         const sum = destinations.reduce((total, row) => total + (Number(row.courses) || 0), 0);
-        // Never fewer than the rows shown, so the page cannot say "All 0
-        // courses" above a list (for example when the summaries failed).
-        const total = Math.max(sum, courses.length);
+        // The summaries' sum is the total only when it covers the rows
+        // shown. Otherwise (for example the summaries failed and came
+        // back empty) there is no real total: null, and no count is
+        // shown, rather than "All 0 courses" or "All 24 courses".
+        const total = sum >= courses.length ? sum : null;
 
         return { total, courses };
     } catch (error) {
         console.error("Latest courses could not be loaded:", error);
 
-        return { total: 0, courses: [] };
+        return { total: null, courses: [] };
     }
 });
