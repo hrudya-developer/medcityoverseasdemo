@@ -96,7 +96,9 @@ export function UniversityInShort({ universityName, countryName, facts, updated 
     );
 }
 
-export function UniversityGuide({ universityName, countryName, countrySlug, countryLive = false, facts, faqs, path }) {
+// countryLive: /study-in-<country> exists. universitiesIndexable:
+// /universities-in-<country> lists universities (it is noindex otherwise).
+export function UniversityGuide({ universityName, countryName, countrySlug, countryLive = false, universitiesIndexable = false, facts, faqs, path }) {
     const rows = [
         ["Location", place(facts, countryName) || NOT_RECORDED],
         ["Courses listed on Medcity Overseas", facts ? String(facts.courses ?? 0) : NOT_RECORDED],
@@ -165,21 +167,25 @@ export function UniversityGuide({ universityName, countryName, countrySlug, coun
             />
 
             <p className="mx-auto max-w-5xl px-4 text-sm leading-7 text-slate-600 sm:px-6 lg:px-8">
-                {countrySlug && countryLive ? (
+                {countrySlug && universitiesIndexable && (
                     <>
                         Compare other{" "}
                         <Link href={`/universities-in-${countrySlug}`} className="font-bold text-primary hover:underline">
                             universities in {countryName}
                         </Link>
-                        , read the{" "}
+                        {countryLive ? ", read the " : ", search the "}
+                    </>
+                )}
+                {countrySlug && countryLive && (
+                    <>
+                        {universitiesIndexable ? "" : "Read the "}
                         <Link href={`/study-in-${countrySlug}`} className="font-bold text-primary hover:underline">
                             study in {countryName} guide
                         </Link>
                         , search the{" "}
                     </>
-                ) : (
-                    "Search the "
                 )}
+                {!(countrySlug && (universitiesIndexable || countryLive)) && "Search the "}
                 <Link href="/courses" className="font-bold text-primary hover:underline">
                     course finder
                 </Link>{" "}

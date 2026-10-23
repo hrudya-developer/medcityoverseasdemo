@@ -10,6 +10,7 @@ import { cache } from "react";
 import { notFound, permanentRedirect } from "next/navigation";
 import { createSlug } from "@/lib/slug";
 import { getGermanProgramsList } from "@/lib/germanPrograms";
+import { universitiesPageIndexable } from "@/lib/destinationSummary";
 
 import { callLegacy } from "@/lib/legacy";
 import { withSeoOverrides } from "@/lib/pageSeo";
@@ -1005,6 +1006,10 @@ export default async function GermanProgramPage({
 
   const pagePath = `/study-in-germany/${programSlug}`;
 
+  // /universities-in-germany is noindex while it lists no universities,
+  // so it is linked only when it is indexable.
+  const linkGermanUniversities = await universitiesPageIndexable("germany");
+
   return (
     <div className="bg-slate-50">
 
@@ -1061,11 +1066,17 @@ export default async function GermanProgramPage({
           <Link href="/study-in-germany" className="font-bold text-primary hover:underline">
             Germany programmes
           </Link>
-          , browse{" "}
-          <Link href="/universities-in-germany" className="font-bold text-primary hover:underline">
-            universities in Germany
-          </Link>{" "}
-          or{" "}
+          {linkGermanUniversities ? (
+            <>
+              , browse{" "}
+              <Link href="/universities-in-germany" className="font-bold text-primary hover:underline">
+                universities in Germany
+              </Link>{" "}
+              or{" "}
+            </>
+          ) : (
+            " or "
+          )}
           <Link href="/contact-us" className="font-bold text-primary hover:underline">
             contact a Medcity Overseas counsellor
           </Link>

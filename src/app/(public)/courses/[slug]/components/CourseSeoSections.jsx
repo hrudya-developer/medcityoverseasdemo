@@ -2,7 +2,6 @@ import Link from "next/link";
 
 import OfficialSources from "@/components/seo/OfficialSources";
 import QuickAnswer from "@/components/seo/QuickAnswer";
-import { getLiveDestination } from "@/lib/destinationSummary";
 import { officialSourcesFor } from "@/lib/officialSources";
 import { intakeSentence } from "@/lib/recordValue";
 import { joinList } from "@/lib/seoSchema";
@@ -47,9 +46,10 @@ export function CourseInShort({ facts, updated }) {
     );
 }
 
-export async function CourseLinks({ facts, universityPath, countrySlug }) {
-    // Country pages exist only for live destinations; hidden ones 404.
-    const countryLive = countrySlug ? Boolean(await getLiveDestination(countrySlug)) : false;
+// countryLive: the country is a live destination (hidden ones 404), so
+// /study-in-<country> exists. universitiesIndexable: /universities-in-<country>
+// lists at least one university; it is noindex otherwise and not linked.
+export function CourseLinks({ facts, universityPath, countrySlug, countryLive = false, universitiesIndexable = false }) {
     // Nursing courses link to the nursing guides: UK masters courses to
     // the MSc Nursing list, the rest to the nursing hub.
     const name = String(facts.name ?? "");
@@ -75,25 +75,25 @@ export async function CourseLinks({ facts, universityPath, countrySlug }) {
                             </Link>
                         </li>
                     )}
-                    {countryLive && (
-                        <>
-                            <li>
-                                <Link
-                                    href={`/universities-in-${countrySlug}`}
-                                    className="block rounded-2xl border border-slate-200 p-4 font-bold text-slate-900 transition hover:border-primary/30 hover:text-primary"
-                                >
-                                    Universities in {facts.country}
-                                </Link>
-                            </li>
-                            <li>
-                                <Link
-                                    href={`/study-in-${countrySlug}`}
-                                    className="block rounded-2xl border border-slate-200 p-4 font-bold text-slate-900 transition hover:border-primary/30 hover:text-primary"
-                                >
-                                    Study in {facts.country} guide
-                                </Link>
-                            </li>
-                        </>
+                    {countrySlug && universitiesIndexable && (
+                        <li>
+                            <Link
+                                href={`/universities-in-${countrySlug}`}
+                                className="block rounded-2xl border border-slate-200 p-4 font-bold text-slate-900 transition hover:border-primary/30 hover:text-primary"
+                            >
+                                Universities in {facts.country}
+                            </Link>
+                        </li>
+                    )}
+                    {countrySlug && countryLive && (
+                        <li>
+                            <Link
+                                href={`/study-in-${countrySlug}`}
+                                className="block rounded-2xl border border-slate-200 p-4 font-bold text-slate-900 transition hover:border-primary/30 hover:text-primary"
+                            >
+                                Study in {facts.country} guide
+                            </Link>
+                        </li>
                     )}
                     <li>
                         <Link

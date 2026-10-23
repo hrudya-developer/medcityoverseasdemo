@@ -17,7 +17,7 @@ import OfficialSources from "@/components/seo/OfficialSources";
 import PageSchema from "@/components/seo/PageSchema";
 import QuestionAnswer from "@/components/seo/QuestionAnswer";
 import QuickAnswer from "@/components/seo/QuickAnswer";
-import { getDestinationSummaries } from "@/lib/destinationSummary";
+import { getDestinationSummaries, universitiesPageIndexableLookup } from "@/lib/destinationSummary";
 import { STUDY_ABROAD_SOURCES } from "@/lib/officialSources";
 import { joinList } from "@/lib/seoSchema";
 
@@ -131,25 +131,39 @@ async function getDestinations() {
 }
 
 export default async function UniversitiesPage() {
-  const destinations = await getDestinations();
+  const [destinations, isIndexable] = await Promise.all([
+    getDestinations(),
+    universitiesPageIndexableLookup(),
+  ]);
 
+  // universitiesIndexable: whether /universities-in-<country> lists any
+  // universities. It is noindex otherwise, so its card is not a link and
+  // it is left out of the ItemList.
   const validDestinations = destinations
-    .map((destination) => ({
-      ...destination,
-      destinationName:
-        getDestinationName(destination),
-    }))
+    .map((destination) => {
+      const destinationName = getDestinationName(destination);
+
+      return {
+        ...destination,
+        destinationName,
+        universitiesIndexable: isIndexable(createSlug(destinationName)),
+      };
+    })
     .filter(
       (destination) =>
         destination.destinationName
     );
+
+  const linkedDestinations = validDestinations.filter(
+    (destination) => destination.universitiesIndexable
+  );
 
   const itemListJsonLd = {
     "@context": "https://schema.org",
     "@type": "ItemList",
 
     itemListElement:
-        validDestinations.map(
+        linkedDestinations.map(
             (destination, index) => ({
                 "@type": "ListItem",
 
@@ -209,7 +223,7 @@ export default async function UniversitiesPage() {
         ]}
       />
 
-      {validDestinations.length > 0 && (
+      {linkedDestinations.length > 0 && (
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{

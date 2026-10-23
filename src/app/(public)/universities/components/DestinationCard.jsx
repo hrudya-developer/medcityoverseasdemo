@@ -14,11 +14,20 @@ export default function DestinationCard({
 }) {
   const name = destination.destinationName;
   const slug = createSlug(name);
+  // /universities-in-<country> is noindex while it lists no
+  // universities, so the card only links to it when it is indexable.
+  const linked = destination.universitiesIndexable === true;
+  const Card = linked ? Link : "div";
+  const linkProps = linked
+    ? {
+        href: `/universities-in-${slug}`,
+        "aria-label": `Explore universities in ${name}`,
+      }
+    : {};
 
   return (
-    <Link
-      href={`/universities-in-${slug}`}
-      aria-label={`Explore universities in ${name}`}
+    <Card
+      {...linkProps}
       className="
         group
         relative
@@ -263,34 +272,42 @@ export default function DestinationCard({
             text-primary
           "
         >
-          View Universities
+          {linked ? (
+            <>
+              View Universities
 
-          <ArrowUpRight
-            size={16}
+              <ArrowUpRight
+                size={16}
+                className="
+                  transition-transform
+                  duration-300
+                  group-hover:translate-x-1
+                  group-hover:-translate-y-1
+                "
+              />
+            </>
+          ) : (
+            "Universities coming soon"
+          )}
+        </span>
+
+        {linked && (
+          <span
             className="
-              transition-transform
-              duration-300
-              group-hover:translate-x-1
-              group-hover:-translate-y-1
+              rounded-full
+              bg-logoYellow/80
+              px-3
+              py-1
+              text-[10px]
+              font-black
+              uppercase
+              tracking-[0.12em]
+              text-darkPrimary
             "
-          />
-        </span>
-
-        <span
-          className="
-            rounded-full
-            bg-logoYellow/80
-            px-3
-            py-1
-            text-[10px]
-            font-black
-            uppercase
-            tracking-[0.12em]
-            text-darkPrimary
-          "
-        >
-          Explore
-        </span>
+          >
+            Explore
+          </span>
+        )}
       </div>
 
       {/* BOTTOM GRADIENT */}
@@ -312,6 +329,6 @@ export default function DestinationCard({
           group-hover:scale-x-100
         "
       />
-    </Link>
+    </Card>
   );
 }

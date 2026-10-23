@@ -1,9 +1,10 @@
 import { centers, getCenterUrl } from "@/app/(public)/branches/data/centersData";
 import { blogPublicSlug } from "@/lib/blogSlug";
 import { query } from "@/lib/db";
+import { loadDestinationSummaries } from "@/lib/destinationSummary";
 import { getGermanProgramsList } from "@/lib/germanPrograms";
 import { createSlug } from "@/lib/slug";
-import { countrySlug, SITE_URL } from "@/lib/sitemapData";
+import { SITE_URL } from "@/lib/sitemapData";
 
 export const dynamic = "force-dynamic";
 
@@ -50,14 +51,10 @@ function line(title, url, note = "") {
 }
 
 export async function GET() {
+    // The destination summaries are the sitemap's source too, so the
+    // same /universities-in-<country> pages are listed in both.
     const [destinations, programs, posts] = await Promise.all([
-        query(
-            `SELECT d.country,
-                    (SELECT COUNT(*) FROM tb_universities u WHERE u.d_id = d.id AND u.status = '1') AS universities
-             FROM tb_destinations d
-             WHERE d.status = '1'
-             ORDER BY d.order ASC`
-        ),
+        loadDestinationSummaries(),
         getGermanProgramsList(6, { throwOnError: true }),
         query(
             `SELECT title, slug, meta_description, summary FROM tb_blog_web
@@ -94,11 +91,12 @@ export async function GET() {
             "## Study destinations",
             "",
             ...destinations.flatMap((destination) => {
-                const slug = countrySlug(destination.country);
-                const count = Number(destination.universities) || 0;
+                const slug = destination.slug;
+                const count = destination.universities;
 
                 return [
                     line(`Study in ${destination.country}`, `${SITE_URL}/study-in-${slug}`),
+                    // noindex while it lists no universities, so left out.
                     ...(count > 0
                         ? [line(`Universities in ${destination.country}`, `${SITE_URL}/universities-in-${slug}`, `${count} ${count === 1 ? "university" : "universities"} listed`)]
                         : []),

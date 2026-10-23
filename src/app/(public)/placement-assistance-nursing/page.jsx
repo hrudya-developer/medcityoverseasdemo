@@ -30,6 +30,7 @@ import PageSchema from "@/components/seo/PageSchema";
 import QuestionAnswer from "@/components/seo/QuestionAnswer";
 import QuickAnswer from "@/components/seo/QuickAnswer";
 import { applySeoOverrides } from "@/lib/pageSeo";
+import { universitiesPageIndexable } from "@/lib/destinationSummary";
 import GuideLinks, { GUIDES } from "@/components/landing/GuideLinks";
 
 const PAGE_PATH = "/placement-assistance-nursing";
@@ -287,7 +288,11 @@ function HeroSection() {
 
 
 
-export default function PlacementAssistanceNursingPage() {
+export default async function PlacementAssistanceNursingPage() {
+  // /universities-in-uk is noindex while it lists no universities, so it
+  // is linked only when it is indexable.
+  const linkUkUniversities = await universitiesPageIndexable("uk");
+
   return (
     <div>
       <PageSchema
@@ -373,10 +378,14 @@ export default function PlacementAssistanceNursingPage() {
         <Link href="/study-in-uk" className="font-bold text-primary hover:underline">
           study in UK guide
         </Link>
-        , see{" "}
-        <Link href="/universities-in-uk" className="font-bold text-primary hover:underline">
-          universities in the UK
-        </Link>
+        {linkUkUniversities ? (
+          <>
+            , see{" "}
+            <Link href="/universities-in-uk" className="font-bold text-primary hover:underline">
+              universities in the UK
+            </Link>
+          </>
+        ) : null}
         , explore{" "}
         <Link href="/study-in-germany" className="font-bold text-primary hover:underline">
           nursing in Germany

@@ -1,6 +1,7 @@
 import {
     getGermanProgramsList,
 } from "@/lib/germanPrograms";
+import { universitiesPageIndexable } from "@/lib/destinationSummary";
 
 import GermanProgramsClient from "./GermanProgramsClient";
 import WhyStudyGermany from "./components/WhyStudyGermany";
@@ -344,11 +345,16 @@ function serializeJsonLd(
 ========================================================= */
 
 export default async function GermanProgramsPage() {
-    const {
-        programs,
-        imagePath,
-    } =
-        await getGermanProgramsList(
+    const [
+        {
+            programs,
+            imagePath,
+        },
+        // /universities-in-germany is noindex while it lists no
+        // universities, so it is linked only when it is indexable.
+        linkGermanUniversities,
+    ] = await Promise.all([
+        getGermanProgramsList(
             6,
             {
                 // At runtime a failed refresh throws, so Next keeps
@@ -357,7 +363,9 @@ export default async function GermanProgramsPage() {
                     process.env.NEXT_PHASE !==
                     "phase-production-build",
             }
-        );
+        ),
+        universitiesPageIndexable("germany"),
+    ]);
 
     const validPrograms =
         Array.isArray(
@@ -550,11 +558,17 @@ export default async function GermanProgramsPage() {
                     />
 
                     <p className="mx-auto max-w-5xl px-4 text-sm leading-7 text-slate-600 sm:px-6 lg:px-8">
-                        Browse{" "}
-                        <Link href="/universities-in-germany" className="font-bold text-primary hover:underline">
-                            universities in Germany
-                        </Link>
-                        , search the{" "}
+                        {linkGermanUniversities ? (
+                            <>
+                                Browse{" "}
+                                <Link href="/universities-in-germany" className="font-bold text-primary hover:underline">
+                                    universities in Germany
+                                </Link>
+                                , search the{" "}
+                            </>
+                        ) : (
+                            "Search the "
+                        )}
                         <Link href="/courses" className="font-bold text-primary hover:underline">
                             course finder
                         </Link>{" "}

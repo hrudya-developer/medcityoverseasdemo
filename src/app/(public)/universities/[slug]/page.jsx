@@ -9,7 +9,7 @@ import {
 } from "@/lib/universitySlug";
 
 import { queryOne } from "@/lib/db";
-import { getLiveDestination } from "@/lib/destinationSummary";
+import { getLiveDestination, universitiesPageIndexable } from "@/lib/destinationSummary";
 
 import UniversityDetailsClient from "./components/UniversityDetailsClient";
 
@@ -529,13 +529,18 @@ export default async function UniversityDetailsPage({
         );
 
     // Hidden destinations have no country pages (they 404), so no links.
-    const countryLive =
+    // /universities-in-<country> is also noindex while it lists no
+    // universities, so it is linked only when it is indexable.
+    const [countryLive, universitiesIndexable] =
         countrySlug
-            ? Boolean(await getLiveDestination(countrySlug))
-            : false;
+            ? await Promise.all([
+                  getLiveDestination(countrySlug).then(Boolean),
+                  universitiesPageIndexable(countrySlug),
+              ])
+            : [false, false];
 
     const countryUniversitiesUrl =
-        countryLive
+        universitiesIndexable
             ? `${SITE_URL}/universities-in-${countrySlug}`
             : "";
 
@@ -948,6 +953,7 @@ export default async function UniversityDetailsPage({
                     countryName={resolvedCountryName}
                     countrySlug={countrySlug}
                     countryLive={countryLive}
+                    universitiesIndexable={universitiesIndexable}
                     facts={pageFacts}
                     faqs={faqs}
                     path={`/universities/${canonicalSlug}`}

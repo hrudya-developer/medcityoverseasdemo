@@ -22,6 +22,7 @@ import {
     th,
     theadClass,
 } from "@/components/landing/Guide";
+import { universitiesPageIndexable } from "@/lib/destinationSummary";
 import { guideMetadata } from "@/lib/guideMeta";
 import { getUkNursingMasters } from "@/lib/landingData";
 
@@ -79,7 +80,12 @@ export async function generateMetadata() {
 }
 
 export default async function MscNursingUkPage() {
-    const { courses, error } = await getUkNursingMasters();
+    // /universities-in-uk is noindex while it lists no universities, so
+    // it is linked only when it is indexable.
+    const [{ courses, error }, linkUkUniversities] = await Promise.all([
+        getUkNursingMasters(),
+        universitiesPageIndexable("uk"),
+    ]);
     const universities = [...new Set(courses.map((course) => course.university))];
     const withEntry = courses.filter((course) => course.entry || course.ielts || course.pte);
     const intakes = [...new Set(courses.flatMap((course) => String(course.intakes ?? "").split(/[,/]/).map((item) => item.trim()).filter(Boolean)))];
@@ -215,15 +221,26 @@ export default async function MscNursingUkPage() {
                     ) : (
                         <Prose>
                             <p>
-                                Our UK nursing course list is being updated. Browse all{" "}
-                                <TextLink href="/universities-in-uk">universities in the UK</TextLink> or talk to a counsellor for the current options.
+                                Our UK nursing course list is being updated.{" "}
+                                {linkUkUniversities ? (
+                                    <>
+                                        Browse all <TextLink href="/universities-in-uk">universities in the UK</TextLink> or talk to a counsellor for the current options.
+                                    </>
+                                ) : (
+                                    "Talk to a counsellor for the current options."
+                                )}
                             </p>
                         </Prose>
                     )}
                     <Prose>
                         <p>
-                            See more options on the <TextLink href="/courses?q=nursing">nursing course search</TextLink> and the{" "}
-                            <TextLink href="/universities-in-uk">list of UK universities</TextLink>.
+                            See more options on the <TextLink href="/courses?q=nursing">nursing course search</TextLink>
+                            {linkUkUniversities ? (
+                                <>
+                                    {" "}and the <TextLink href="/universities-in-uk">list of UK universities</TextLink>
+                                </>
+                            ) : null}
+                            .
                         </p>
                     </Prose>
                 </GuideSection>

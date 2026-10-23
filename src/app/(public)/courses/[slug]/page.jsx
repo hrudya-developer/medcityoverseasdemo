@@ -3,7 +3,7 @@ import { cache } from "react";
 import { notFound } from "next/navigation";
 
 import { findCourseBySlug } from "@/lib/courseIndex";
-import { getLiveDestination } from "@/lib/destinationSummary";
+import { getLiveDestination, universitiesPageIndexable } from "@/lib/destinationSummary";
 import { callLegacy } from "@/lib/legacy";
 import { intakeList, recordedValue } from "@/lib/recordValue";
 import { countrySlug as toCountrySlug } from "@/lib/sitemapData";
@@ -170,12 +170,14 @@ async function pageGenerateMetadata({ params }) {
     };
 }
 
-function structuredData(loaded, countryLive) {
+function structuredData(loaded, universitiesIndexable) {
     const facts = courseFacts(loaded.course);
     const url = `${SITE_URL}/courses/${loaded.slug}`;
     const universitySlug = createUniversityPublicSlug({ name: facts.university });
     const universityUrl = universitySlug ? `${SITE_URL}/universities/${universitySlug}` : undefined;
-    const countrySlug = countryLive && facts.country ? toCountrySlug(facts.country) : "";
+    // The country step links /universities-in-<country>, so it is left
+    // out when that page is noindex.
+    const countrySlug = universitiesIndexable && facts.country ? toCountrySlug(facts.country) : "";
 
     const course = {
         "@type": "Course",
@@ -270,14 +272,17 @@ export default async function CourseDetailsPage({ params }) {
 
     const facts = courseFacts(loaded.course);
     const universitySlug = createUniversityPublicSlug({ name: facts.university });
-    const countryLive = facts.country ? Boolean(await getLiveDestination(toCountrySlug(facts.country))) : false;
+    const countrySlug = facts.country ? toCountrySlug(facts.country) : "";
+    const [countryLive, universitiesIndexable] = countrySlug
+        ? await Promise.all([getLiveDestination(countrySlug).then(Boolean), universitiesPageIndexable(countrySlug)])
+        : [false, false];
 
     return (
         <>
             <script
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{
-                    __html: JSON.stringify(await withPageSeoFaqs(structuredData(loaded, countryLive))).replace(/</g, "\\u003c"),
+                    __html: JSON.stringify(await withPageSeoFaqs(structuredData(loaded, universitiesIndexable))).replace(/</g, "\\u003c"),
                 }}
             />
 
@@ -289,7 +294,9 @@ export default async function CourseDetailsPage({ params }) {
                 <CourseLinks
                     facts={facts}
                     universityPath={universitySlug ? `/universities/${universitySlug}` : ""}
-                    countrySlug={facts.country ? toCountrySlug(facts.country) : ""}
+                    countrySlug={countrySlug}
+                    countryLive={countryLive}
+                    universitiesIndexable={universitiesIndexable}
                 />
             </CourseDetailsClient>
         </>
