@@ -1,13 +1,17 @@
 import { MessageCircle, Phone, Sparkles } from "lucide-react";
 
+import { currentPagePath, getPageSeo } from "@/lib/pageSeo";
+import { templateShowsQuickAnswer } from "@/lib/quickAnswerPaths";
 import { CONTACT_PHONE, CONTACT_PHONE_DISPLAY, CONTACT_WHATSAPP, displayDate, isoDate } from "@/lib/seoSchema";
 
 /*
  * The "In short" box near the top of a page: a short summary that names
  * the topic, a counselling contact line and the "Last updated" date.
- * Branch pages pass their own phone and WhatsApp numbers.
+ * Branch pages pass their own phone and WhatsApp numbers. A summary
+ * written for the page in the admin's SEO manager replaces the
+ * template's text (pages listed in lib/quickAnswerPaths.js).
  */
-export default function QuickAnswer({
+export default async function QuickAnswer({
     children,
     updated,
     phone = CONTACT_PHONE,
@@ -16,8 +20,11 @@ export default function QuickAnswer({
     showContact = true,
     className = "",
 }) {
+    const path = await currentPagePath();
+    const adminSummary = path && templateShowsQuickAnswer(path) ? (await getPageSeo(path))?.summary : "";
+    const content = adminSummary || children;
     const updatedText = displayDate(updated);
-    const paragraphs = typeof children === "string" ? children.split(/\n\s*\n/) : null;
+    const paragraphs = typeof content === "string" ? content.split(/\n\s*\n/) : null;
 
     return (
         <section aria-label="In short" className={`mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 ${className}`}>
@@ -28,7 +35,7 @@ export default function QuickAnswer({
                 </p>
 
                 <div className="mt-2 space-y-3 text-[1.02rem] leading-8 text-slate-800">
-                    {paragraphs ? paragraphs.map((paragraph, index) => <p key={index}>{paragraph}</p>) : children}
+                    {paragraphs ? paragraphs.map((paragraph, index) => <p key={index}>{paragraph}</p>) : content}
                 </div>
 
                 {(showContact || updatedText) && (

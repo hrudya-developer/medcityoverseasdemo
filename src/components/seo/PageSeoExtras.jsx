@@ -3,6 +3,7 @@ import Image from "next/image";
 import { ChevronRight, Sparkles } from "lucide-react";
 
 import { currentPagePath, getPageSeo, SITE_URL } from "@/lib/pageSeo";
+import { templateShowsQuickAnswer } from "@/lib/quickAnswerPaths";
 
 /*
  * The quick answer, photos and FAQs added to a page in the admin's SEO
@@ -18,7 +19,10 @@ export default async function PageSeoExtras() {
         return null;
     }
 
-    const seo = await getPageSeo(path);
+    const found = await getPageSeo(path);
+
+    // Templates with their own "In short" box show the admin's summary there.
+    const seo = found && templateShowsQuickAnswer(path) ? { ...found, summary: "" } : found;
 
     if (!seo || (!seo.summary && !seo.faqs.length && !seo.gallery.length)) {
         return null;

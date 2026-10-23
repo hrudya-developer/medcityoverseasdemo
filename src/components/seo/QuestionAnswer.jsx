@@ -1,3 +1,5 @@
+import { isValidElement } from "react";
+
 /*
  * A heading written as a question, followed straight away by a short
  * direct answer (aim for 40 to 60 words) and, optionally, a list of
@@ -34,7 +36,7 @@ export default function QuestionAnswer({
                                 dark ? "border-white/10 bg-white/10 text-white/85" : "border-slate-100 bg-slate-50 text-slate-700"
                             } ${ordered ? "ml-1" : ""}`}
                         >
-                            {typeof point === "string" ? (
+                            {typeof point === "string" || isValidElement(point) ? (
                                 point
                             ) : (
                                 <>
