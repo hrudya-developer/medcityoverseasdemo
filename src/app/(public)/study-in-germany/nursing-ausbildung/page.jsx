@@ -275,7 +275,7 @@ export default function NursingAusbildungPage() {
                     </Prose>
                 </GuideSection>
 
-                <GuideSection title="How Medcity Study Abroad helps">
+                <GuideSection title="How Medcity Overseas helps">
                     <Prose>
                         <p>
                             Medcity Overseas guides your applications. We do not promise a training place or a visa: employers choose their trainees and the German Mission decides on the visa.

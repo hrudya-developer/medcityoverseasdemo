@@ -98,7 +98,7 @@ export default async function MscNursingUkPage() {
         {
             question: "Can I work while studying MSc Nursing in the UK?",
             answer:
-                "Student visa holders on degree level courses can usually work up to 20 hours a week in term time and full time in official holidays, as Goldsmiths explains. Your own visa conditions and your university's rules apply, and placement hours on the course are separate from paid work.",
+                "Student visa holders on degree level courses can usually work up to 20 hours a week in term time and full time in official holidays, as Goldsmiths explains. For postgraduate students the summer is usually still term time. Your own visa conditions and your university's rules apply, and placement hours on the course are separate from paid work.",
         },
         {
             question: "When are the intakes for MSc Nursing in the UK?",
