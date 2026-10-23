@@ -46,8 +46,9 @@ function MigrationDisclaimer() {
                 arrangements can change. Confirm current
                 requirements with the Australian
                 Department of Home Affairs, a registered
-                migration agent (MARA) or an Australian
-                legal practitioner before applying.
+                migration agent (on the OMARA register) or
+                an Australian legal practitioner before
+                applying.
             </div>
         </aside>
     );
