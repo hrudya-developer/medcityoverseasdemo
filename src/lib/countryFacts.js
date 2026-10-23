@@ -1,5 +1,6 @@
 import "server-only";
 
+import { unstable_cache } from "next/cache";
 import { cache } from "react";
 
 import { query, queryOne } from "@/lib/db";
@@ -11,7 +12,8 @@ import { recordedValue } from "@/lib/recordValue";
  * the study levels on offer and the most common course durations (as
  * written in the course records). `latest` is the newest university or
  * course record, for the page's last updated date. Nothing here is
- * estimated.
+ * estimated. Cached per country for 15 minutes (failures are thrown,
+ * so they are not cached).
  */
 function named(rows, field) {
     return rows
@@ -19,13 +21,7 @@ function named(rows, field) {
         .filter((row) => row.name);
 }
 
-export const getCountryFacts = cache(async (countryId) => {
-    const id = String(countryId ?? "").trim();
-
-    if (!id) {
-        return null;
-    }
-
+async function loadCountryFacts(id) {
     const [totals, cities, levels, durations] = await Promise.all([
         queryOne(
             `SELECT
@@ -78,6 +74,24 @@ export const getCountryFacts = cache(async (countryId) => {
         durations: named(durations, "duration").slice(0, 4),
         latest: latest && !Number.isNaN(latest.getTime()) && latest.getFullYear() > 1970 ? latest : null,
     };
+}
+
+const cachedCountryFacts = unstable_cache(loadCountryFacts, ["country-facts-v1"], {
+    revalidate: 15 * 60,
+});
+
+export const getCountryFacts = cache(async (countryId) => {
+    const id = String(countryId ?? "").trim();
+
+    if (!id) {
+        return null;
+    }
+
+    const facts = await cachedCountryFacts(id);
+    // The cache stores JSON, so the date comes back as text.
+    const latest = facts?.latest ? new Date(facts.latest) : null;
+
+    return facts ? { ...facts, latest: latest && !Number.isNaN(latest.getTime()) ? latest : null } : null;
 });
 
 function listText(items) {
