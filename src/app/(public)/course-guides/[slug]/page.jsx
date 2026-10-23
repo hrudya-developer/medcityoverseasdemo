@@ -153,7 +153,7 @@ export default async function CourseGuidePage({ params }) {
                           ]
                         : []
                 }
-                faqs={faqs}
+                faqs={indexable ? faqs : undefined}
             />
 
             <GuideHero
