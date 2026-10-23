@@ -19,23 +19,23 @@ export const mastersRouteData = [
     id: 2,
     title: "Faster Integration",
     description:
-      "An accelerated route into the NHS compared to traditional pathways.",
+      "A 1-year pre-registration route, shorter than a full nursing degree.",
     icon: Rocket,
     theme: "blue",
   },
   {
     id: 3,
-    title: "Better Salary Prospects",
+    title: "Postgraduate Qualification",
     description:
-      "A Masters positions you for higher pay bands and faster progression in the NHS.",
+      "Graduate with a Masters in Mental Health Nursing and Leadership.",
     icon: Coins,
     theme: "yellow",
   },
   {
     id: 4,
-    title: "Stronger PR Prospects",
+    title: "Clear Registration Goal",
     description:
-      "Advanced degree and skilled-worker status strengthen eligibility for UK settlement.",
+      "The course is designed to lead to UK nursing registration with the NMC.",
     icon: BadgeCheck,
     theme: "purple",
   },
