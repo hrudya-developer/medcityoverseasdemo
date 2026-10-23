@@ -134,8 +134,8 @@ export default function NursingAusbildungPage() {
             />
 
             <div className="space-y-14 py-12 sm:py-14">
-                <QuickAnswer updated={UPDATED}>
-                    Nursing Ausbildung in Germany takes three years full time (up to five part time) under the Nursing Professions Act. You need at least ten years of schooling, a training contract with a German employer and, for the visa, usually German at B1. The employer must pay a reasonable training allowance. Medcity Overseas helps Kerala students with German training, documents, applications and the visa file.
+                <QuickAnswer updated={UPDATED} showContact={false}>
+                    Nursing Ausbildung in Germany takes three years full time (up to five part time) under the Nursing Professions Act. You need at least ten years of schooling, a training contract with a German employer and, for the visa, usually German at B1. The employer must pay a reasonable training allowance. Medcity Overseas guides Kerala students through documents, applications and the visa file, and German classes are available at Medcity International Academy.
                 </QuickAnswer>
 
                 <QuestionAnswer
@@ -188,7 +188,7 @@ export default function NursingAusbildungPage() {
                             Your employer or nursing school may ask for more than the visa minimum, and classes, placements and the final exam are in German, so plan to keep learning after B1.
                         </p>
                     </Prose>
-                    <AcademyNote>German classes from A1 to C2, with exam preparation, are run by our sister institute, Medcity Academy.</AcademyNote>
+                    <AcademyNote subjects="German" />
                 </GuideSection>
 
                 <GuideSection title="Is the training allowance paid every month?">
@@ -277,12 +277,12 @@ export default function NursingAusbildungPage() {
                 <GuideSection title="How Medcity Study Abroad helps">
                     <Prose>
                         <p>
-                            Medcity Overseas gives guidance, training and application help. We do not promise a training place or a visa: employers choose their trainees and the German Mission decides on the visa.
+                            Medcity Overseas guides your applications. We do not promise a training place or a visa: employers choose their trainees and the German Mission decides on the visa.
                         </p>
                     </Prose>
                     <PointList
                         items={[
-                            "German training from A1 upwards at Medcity Academy, with exam preparation.",
+                            "Pointing you to German classes, which are available at Medcity International Academy.",
                             "A document checklist and help with your CV and motivation letter in the German style.",
                             "Help applying to training places and preparing for interviews.",
                             "Explaining your training contract and the visa checklist line by line.",

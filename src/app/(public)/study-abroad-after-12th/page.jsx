@@ -148,7 +148,7 @@ export default async function AfterTwelfthPage() {
             />
 
             <div className="space-y-14 py-12 sm:py-14">
-                <QuickAnswer updated={UPDATED}>
+                <QuickAnswer updated={UPDATED} showContact={false}>
                     After Class 12 you can apply for a bachelor&apos;s degree in the UK, Ireland or Australia, or go to Germany through a Studienkolleg (usually 2 semesters, then an assessment test) or Ausbildung. You need English (or German for Germany), your marksheets, a passport and proof of funds for the visa. Start planning in Class 11 or early Class 12.
                 </QuickAnswer>
 
@@ -298,7 +298,7 @@ export default async function AfterTwelfthPage() {
                             <SourceLink href={SRC.studienkolleg}>DAAD</SourceLink> notes that Studienkollegs teach German up to C1.
                         </p>
                     </Prose>
-                    <AcademyNote>Medcity Academy runs IELTS, PTE and German classes from A1 to C2 across Kerala.</AcademyNote>
+                    <AcademyNote subjects="IELTS, PTE and German" />
                 </GuideSection>
 
                 <FaqList path={PATH} faqs={faqs} schema={false} title="Study abroad after 12th: frequently asked questions" />

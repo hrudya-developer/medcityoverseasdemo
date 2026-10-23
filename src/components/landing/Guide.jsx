@@ -168,13 +168,18 @@ export function RelatedLinks({ title = "Related guides", links, className = "" }
     );
 }
 
-/** The language training note that sends readers to Medcity Academy. */
-export function AcademyNote({ children }) {
+/*
+ * The language training note. Classes are given by Medcity
+ * International Academy (medcityacademy.com), not Medcity Overseas.
+ * subjects: "German", "IELTS and OET", ...
+ */
+export function AcademyNote({ lead, subjects = "German" }) {
     return (
         <div className="mt-6 rounded-2xl border border-primary/15 bg-primary/[0.04] p-5 leading-7 text-slate-700">
-            {children}{" "}
+            {lead ? `${lead} ` : ""}
+            {subjects} classes are available at{" "}
             <a href="https://medcityacademy.com/courses/" target="_blank" rel="noopener" className="font-bold text-primary hover:underline">
-                See language courses at Medcity Academy
+                Medcity International Academy
             </a>
             .
         </div>
@@ -188,7 +193,7 @@ export function ContactBand({ title = "Talk to a Medcity Overseas counsellor", t
                 <h2 className="text-2xl font-black sm:text-3xl">{title}</h2>
                 <p className="mt-3 max-w-3xl leading-7 text-white/85">
                     {text ??
-                        "Counselling is free. Call or WhatsApp us, or visit one of our branches across Kerala, and we will look at your marks, test plans and budget with you."}
+                        "Call or WhatsApp us to book a counselling session, or visit one of our branches across Kerala, and we will look at your marks, test plans and budget with you."}
                 </p>
                 <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
                     <a href={`tel:${CONTACT_PHONE}`} className="inline-flex items-center justify-center gap-2 rounded-full bg-white px-6 py-3 font-bold text-secondary">

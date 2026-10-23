@@ -75,7 +75,7 @@ const FAQS = [
     {
         question: "Does Medcity Overseas find nursing jobs in Germany?",
         answer:
-            "No. We do not offer job placement or promise a job, a recognition result or a visa. We help with German training at Medcity Academy, explain the recognition steps, help you prepare documents and applications, and guide you through the visa checklist. Employers, German authorities and the German Mission make the decisions.",
+            "No. Medcity Overseas guides study applications and does not offer jobs, placements or migration advice. For nurses, we guide applications to study and training routes such as the UK pre-registration MSc and nursing Ausbildung in Germany. For the recognition route, use the official recognition portal and the free advice of the Service Center for Professional Recognition.",
     },
 ];
 
@@ -121,8 +121,8 @@ export default function NursingInGermanyPage() {
             />
 
             <div className="space-y-14 py-12 sm:py-14">
-                <QuickAnswer updated={UPDATED}>
-                    Nurses qualified in India can work in Germany once their qualification is recognised and they hold permission to use the nursing title. Recognition normally needs German at B2. If your training differs from the German one, you close the gap with a knowledge test or an adaptation course of up to three years. Medcity Overseas helps with German training, documents and the visa checklist, not job placement.
+                <QuickAnswer updated={UPDATED} showContact={false}>
+                    Nurses qualified in India can work in Germany once their qualification is recognised and they hold permission to use the nursing title. Recognition normally needs German at B2. If your training differs from the German one, you close the gap with a knowledge test or an adaptation course of up to three years. Medcity Overseas does not give migration advice or offer jobs; it guides study and training routes, and German classes are available at Medcity International Academy.
                 </QuickAnswer>
 
                 <QuestionAnswer
@@ -160,7 +160,7 @@ export default function NursingInGermanyPage() {
                             <SourceLink href={SRC.pflbg2}>Nursing Professions Act</SourceLink> also requires the German needed to practise the profession. For the recognition partnership visa, Make it in Germany names level A2 at entry; you still reach B2 for recognition later.
                         </p>
                     </Prose>
-                    <AcademyNote>Medcity Academy teaches German from A1 to C2, with trainers qualified at C2 and exam preparation.</AcademyNote>
+                    <AcademyNote subjects="German" />
                 </GuideSection>
 
                 <GuideSection
@@ -190,7 +190,7 @@ export default function NursingInGermanyPage() {
                     </TableWrap>
                 </GuideSection>
 
-                <GuideSection title="Visa routes for nurses" intro="From Make it in Germany and section 16d of the Residence Act. The EU Blue Card does not apply to nursing.">
+                <GuideSection title="What the official guidance says about visas for nurses" intro="A summary of Make it in Germany and section 16d of the Residence Act, not migration advice. The EU Blue Card does not apply to nursing.">
                     <TableWrap minWidth={640}>
                         <thead className={theadClass}>
                             <tr>
@@ -220,23 +220,22 @@ export default function NursingInGermanyPage() {
                     <Prose>
                         <p>
                             The legal text is in <SourceLink href={SRC.aufenthg16d}>section 16d of the Residence Act</SourceLink>; appointments and checklists are on the{" "}
-                            <SourceLink href={SRC.mission}>German Missions in India</SourceLink> site. Our <TextLink href="/student-visa-guidance">visa guidance page</TextLink> explains how we help with visa files.
+                            <SourceLink href={SRC.mission}>German Missions in India</SourceLink> site. For recognition and work visas, rely on these official sources and the free advice of the Service Center for Professional Recognition; Medcity Overseas does not advise on work visas.
                         </p>
                     </Prose>
                 </GuideSection>
 
-                <GuideSection title="How Medcity helps, and what we do not do">
+                <GuideSection title="How Medcity Overseas can help, and what we do not do">
                     <PointList
                         items={[
-                            "German training from A1 to B2 and beyond at Medcity Academy.",
-                            "Explaining the recognition steps and the choice between the test and the adaptation course.",
-                            "A document checklist and help preparing your recognition and visa applications.",
-                            "Pre-departure guidance for you and your family.",
+                            "Guiding applications to study routes for nurses, such as the UK pre-registration MSc on our UK nursing pathway.",
+                            "Guiding applications to nursing Ausbildung in Germany for students who are not yet qualified.",
+                            "Pointing you to the official recognition portal and advice service for the recognition route.",
                         ]}
                     />
                     <Prose>
                         <p>
-                            We do not offer job placement and we never promise a job, a recognition result or a visa. Not qualified yet? Look at{" "}
+                            We do not give migration advice, offer jobs or placements, or promise a recognition result or a visa. Not qualified yet? Look at{" "}
                             <TextLink href="/study-in-germany/nursing-ausbildung">nursing Ausbildung in Germany</TextLink>, which starts after Class 12. You can also compare all{" "}
                             <TextLink href="/study-in-germany">Germany programmes</TextLink> or the{" "}
                             <TextLink href="/study-in-germany/weiterbildung">Weiterbildung route</TextLink>.

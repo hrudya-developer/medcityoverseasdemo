@@ -151,7 +151,7 @@ export default async function MscNursingUkPage() {
             />
 
             <div className="space-y-14 py-12 sm:py-14">
-                <QuickAnswer updated={UPDATED}>
+                <QuickAnswer updated={UPDATED} showContact={false}>
                     {`MSc Nursing in the UK is a postgraduate degree for nurses. ${
                         courses.length
                             ? `We currently list ${courses.length} MSc Nursing ${courses.length === 1 ? "course" : "courses"} at ${universities.length} UK ${universities.length === 1 ? "university" : "universities"}.`
@@ -255,7 +255,7 @@ export default async function MscNursingUkPage() {
                             <SourceLink href={SRC.cas}>lists B2 with an IELTS equivalent of 5.5 in each component</SourceLink> for its Masters courses; each university and course sets its own score.
                         </p>
                     </Prose>
-                    <AcademyNote>Preparing for IELTS or OET? Medcity Academy runs coaching for both.</AcademyNote>
+                    <AcademyNote lead="Preparing for a test?" subjects="IELTS and OET" />
                 </GuideSection>
 
                 <GuideSection
@@ -326,7 +326,7 @@ export default async function MscNursingUkPage() {
                         items={[
                             "Checking your BSc or GNM marks, experience and goals against the courses we list.",
                             "Shortlisting MSc Nursing courses and preparing your statement, CV and references.",
-                            "IELTS and OET preparation through Medcity Academy.",
+                            "Pointing you to IELTS and OET classes at Medcity International Academy.",
                             "Help with the CAS stage, the funds evidence and the Student visa application.",
                             "Pre-departure guidance on housing, travel and your first weeks in the UK.",
                         ]}
@@ -334,7 +334,7 @@ export default async function MscNursingUkPage() {
                     <Prose>
                         <p>
                             We give guidance and application help; universities decide admissions and UK Visas and Immigration decides visas. Visit one of our{" "}
-                            <TextLink href="/branches">branches</TextLink> for free counselling.
+                            <TextLink href="/branches">branches</TextLink> to book a counselling session.
                         </p>
                     </Prose>
                 </GuideSection>

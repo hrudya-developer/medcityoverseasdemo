@@ -167,8 +167,8 @@ export default async function StudyAbroadForNursesPage() {
             />
 
             <div className="space-y-14 py-12 sm:py-14">
-                <QuickAnswer updated={UPDATED}>
-                    Nurses from Kerala have three kinds of route abroad: study (an MSc or a nursing degree), training (nursing Ausbildung in Germany) and registration (joining the nursing register in the UK, Ireland, Germany, Australia, New Zealand or Malta). Each country&apos;s regulator sets its own steps and language level. Medcity Overseas helps you compare them and prepare your applications.
+                <QuickAnswer updated={UPDATED} showContact={false}>
+                    Nurses from Kerala have three kinds of route abroad: study (an MSc or a nursing degree), training (nursing Ausbildung in Germany) and registration (joining the nursing register in the UK, Ireland, Germany, Australia, New Zealand or Malta). Each country&apos;s regulator sets its own steps and language level. Medcity Overseas guides applications to study routes such as the UK pre-registration MSc and nursing Ausbildung.
                 </QuickAnswer>
 
                 <QuestionAnswer
@@ -276,7 +276,7 @@ export default async function StudyAbroadForNursesPage() {
                         items={[
                             {
                                 title: "UK",
-                                text: "nurses trained outside the UK apply to the NMC and pass the Test of Competence. Our UK nursing pathway page explains the MSc route we support.",
+                                text: "nurses trained outside the UK apply to the NMC and pass the Test of Competence.",
                             },
                             {
                                 title: "Germany",
@@ -290,8 +290,9 @@ export default async function StudyAbroadForNursesPage() {
                     />
                     <Prose>
                         <p>
-                            Read <TextLink href="/placement-assistance-nursing">UK nursing placement assistance</TextLink> and{" "}
-                            <TextLink href="/nursing-in-germany-for-indian-nurses">nursing in Germany for Indian nurses</TextLink>. Medcity Overseas gives guidance, training and application help; we do not offer job placement or promise jobs.
+                            This is a summary of each regulator&apos;s published steps, not migration advice: follow the regulator&apos;s own guidance for registration and work visas. Medcity Overseas guides applications to study routes, such as the MSc on our{" "}
+                            <TextLink href="/placement-assistance-nursing">UK nursing pathway</TextLink>, and does not offer jobs or placements. See also{" "}
+                            <TextLink href="/nursing-in-germany-for-indian-nurses">nursing in Germany for Indian nurses</TextLink>.
                         </p>
                     </Prose>
                 </GuideSection>
@@ -304,7 +305,7 @@ export default async function StudyAbroadForNursesPage() {
                             <SourceLink href={REG.ukWork}>work up to 20 hours a week</SourceLink> in term time.
                         </p>
                     </Prose>
-                    <AcademyNote>IELTS, OET and German from A1 to C2 are taught at Medcity Academy.</AcademyNote>
+                    <AcademyNote subjects="IELTS, OET and German" />
                 </GuideSection>
 
                 <FaqList path={PATH} faqs={faqs} schema={false} title="Study abroad for nurses: frequently asked questions" />

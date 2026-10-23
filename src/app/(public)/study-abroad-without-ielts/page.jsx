@@ -154,7 +154,7 @@ export default async function WithoutIeltsPage() {
             />
 
             <div className="space-y-14 py-12 sm:py-14">
-                <QuickAnswer updated={UPDATED}>
+                <QuickAnswer updated={UPDATED} showContact={false}>
                     You can study abroad without IELTS in many cases, but you still prove your English. The UK lets universities assess degree level students themselves to CEFR B2. Ireland and Australia accept other tests such as PTE Academic, TOEFL iBT or Duolingo (Ireland). Germany&apos;s English taught programmes set their own proof. Always check the visa rules as well as the university&apos;s.
                 </QuickAnswer>
 
@@ -299,7 +299,7 @@ export default async function WithoutIeltsPage() {
                             <TextLink href="/study-in-uk">UK</TextLink> and <TextLink href="/study-in-ireland">Ireland</TextLink> go further.
                         </p>
                     </Prose>
-                    <AcademyNote>Need a test after all? Medcity Academy prepares students for IELTS, PTE and OET.</AcademyNote>
+                    <AcademyNote lead="Need a test after all?" subjects="IELTS, PTE and OET" />
                 </GuideSection>
 
                 <FaqList path={PATH} faqs={faqs} schema={false} title="Study abroad without IELTS: frequently asked questions" />

@@ -17,6 +17,9 @@ import { createUniversityPublicHref } from "@/lib/universitySlug";
 
 export const NOT_RECORDED = "Not recorded";
 
+// Placeholder values that mean "nothing recorded" and must never show.
+const PLACEHOLDER = /^(-+|\.|0+(\.0+)?|0000-00-00( 00:00:00)?|null|undefined|none|nil|n\/?a|tba|tbc|not available|not applicable)$/i;
+
 function text(value) {
     const clean = String(value ?? "")
         .replace(/<[^>]*>/g, " ")
@@ -24,7 +27,7 @@ function text(value) {
         .replace(/\s+/g, " ")
         .trim();
 
-    return clean && !/^(-|null|n\/a|na|0+(\.0+)?)$/i.test(clean) ? clean : null;
+    return clean && !PLACEHOLDER.test(clean) ? clean : null;
 }
 
 /** "Yes", "No" or null (unknown) from a recorded yes or no field. */
@@ -186,7 +189,7 @@ export const getWithoutIeltsOptions = cache(async () => {
     return {
         universities: flagged,
         universitiesChecked: universities.length,
-        courses: courses.map(courseRow),
+        courses: courses.map(courseRow).filter((row) => row.ieltsLess || row.pteLess || row.toeflLess || row.duolingo),
     };
 });
 
