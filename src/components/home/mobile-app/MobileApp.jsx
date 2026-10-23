@@ -4,7 +4,7 @@ import { memo, useCallback, useState } from "react";
 
 import MobileAppLeftSection from "./MobileAppLeftSection";
 import MobileAppRightSection from "./MobileAppRightSection";
-import CounsellingModal from "@/components/counselling/CounsellingModal";
+import CounsellingModal from "@/components/counselling/LazyCounsellingModal";
 
 import "./mobileApp.css";
 

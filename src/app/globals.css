@@ -23,7 +23,6 @@
   --color-darkPrimary: #631a33;
   --color-dark-primary: #631a33;
 
-  --font-ubuntu: "Ubuntu", sans-serif;
   --font-nunito: "Nunito", sans-serif;
 
   --container-8xl: 90rem;
@@ -138,10 +137,6 @@
 
 .textColor {
   color: #000000;
-}
-
-.font-ubuntu {
-  font-family: var(--font-ubuntu);
 }
 
 .font-nunito {

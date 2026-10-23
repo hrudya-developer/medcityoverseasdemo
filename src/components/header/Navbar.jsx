@@ -8,7 +8,7 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 
-import CounsellingModal from "../counselling/CounsellingModal";
+import CounsellingModal from "../counselling/LazyCounsellingModal";
 import DesktopNavigation from "./DesktopNavigation";
 import MobileMenu from "./MobileMenu";
 import MobileMenuButton from "./MobileMenuButton";

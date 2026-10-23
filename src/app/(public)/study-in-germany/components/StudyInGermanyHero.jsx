@@ -158,7 +158,7 @@ export default function StudyInGermanyHero() {
             {/* Main image */}
             <div className="relative aspect-[4/3] overflow-hidden rounded-[32px] border-[6px] border-white bg-white shadow-[0_30px_80px_rgba(15,23,42,0.18)]">
               <Image
-                src="/assets/study-in-germany.png"
+                src="/assets/study-in-germany.webp"
                 alt="Germany destination for international students"
                 fill
                 priority

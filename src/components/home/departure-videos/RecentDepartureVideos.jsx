@@ -32,6 +32,8 @@ const RecentDepartureVideos = ({
                             src={video.poster}
                             alt={video.title}
                             draggable="false"
+                            loading="lazy"
+                            decoding="async"
                             onError={(event) =>
                                 onImageError?.(
                                     event,

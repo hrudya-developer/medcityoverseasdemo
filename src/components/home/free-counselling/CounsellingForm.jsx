@@ -1,6 +1,7 @@
 "use client";
 
 import {
+    useEffect,
     useMemo,
     useState,
 } from "react";
@@ -19,7 +20,7 @@ import {
 
 import dynamic from "next/dynamic";
 
-import Swal from "sweetalert2";
+import { fireSwal, preloadSwal } from "@/lib/swal";
 
 import cn from "@/lib/cn";
 import { isValidMobile } from "@/lib/phone";
@@ -177,6 +178,31 @@ const CounsellingForm = ({ onSuccess, }) => {
 
     const [submitting, setSubmitting] =
         useState(false);
+
+    // Fetch SweetAlert2 while the visitor fills in the form, so the
+    // result dialog opens without waiting for the network. It waits
+    // for an idle moment so it does not compete with hydration.
+    useEffect(() => {
+        if ("requestIdleCallback" in window) {
+            const idleId = window.requestIdleCallback(
+                preloadSwal,
+                { timeout: 5000 }
+            );
+
+            return () => {
+                window.cancelIdleCallback(idleId);
+            };
+        }
+
+        const timerId = window.setTimeout(
+            preloadSwal,
+            2000
+        );
+
+        return () => {
+            window.clearTimeout(timerId);
+        };
+    }, []);
 
     const {
         data: destinationsData,
@@ -393,7 +419,7 @@ const CounsellingForm = ({ onSuccess, }) => {
         setSubmitting(true);
 
         const showError = (text) =>
-            Swal.fire({
+            fireSwal({
                 icon: "error",
                 title: "Submission Failed",
                 text,
@@ -422,16 +448,20 @@ const CounsellingForm = ({ onSuccess, }) => {
             );
         } catch (error) {
             // Only the request itself fails here: the network is down.
-            setSubmitting(false);
-
             console.error(
                 "Counselling form error:",
                 error
             );
 
-            await showError(
-                "We could not reach our server. Please check your connection and try again."
-            );
+            // Stay in the submitting state until the message is
+            // closed, so a second tap cannot send the form again.
+            try {
+                await showError(
+                    "We could not reach our server. Please check your connection and try again."
+                );
+            } finally {
+                setSubmitting(false);
+            }
 
             return;
         }
@@ -442,12 +472,14 @@ const CounsellingForm = ({ onSuccess, }) => {
             .catch(() => null);
 
         if (!response.ok || !result || result.success === false) {
-            setSubmitting(false);
-
-            await showError(
-                result?.message ||
-                "Unable to submit your enquiry. Please try again."
-            );
+            try {
+                await showError(
+                    result?.message ||
+                    "Unable to submit your enquiry. Please try again."
+                );
+            } finally {
+                setSubmitting(false);
+            }
 
             return;
         }
@@ -459,7 +491,7 @@ const CounsellingForm = ({ onSuccess, }) => {
 
         // Show Swal after the modal closes.
         window.setTimeout(() => {
-            Swal.fire({
+            fireSwal({
                 icon: "success",
                 title:
                     "Submitted Successfully!",

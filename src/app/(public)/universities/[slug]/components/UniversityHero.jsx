@@ -26,7 +26,6 @@ import "swiper/css";
 import "swiper/css/pagination";
 
 import UniversityBreadcrumb from "./UniversityBreadcrumb";
-import { TbH1 } from "react-icons/tb";
 
 export default function UniversityHero({
     data,

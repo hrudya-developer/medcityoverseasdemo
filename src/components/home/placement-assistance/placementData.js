@@ -10,7 +10,7 @@ export const placementContent = {
     "Take your nursing career beyond borders. Explore international placement assistance programmes for nurses across the USA, UK, Ireland, Germany, Australia and New Zealand. Let us help you take the next step towards your global career.",
 
   images: {
-    destination: "/assets/placement-assistance-uk.png",
+    destination: "/assets/placement-assistance-uk.webp",
     nurse: "/assets/placement-assistance-nurse.webp",
     student: "/assets/placement-assistance-candidate.webp",
   },
