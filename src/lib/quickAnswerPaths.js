@@ -16,6 +16,17 @@ const PATTERNS = [
     /^\/universities\/[^/]+$/,
     /^\/courses\/[^/]+$/,
     /^\/branch\/[^/]+$/,
+    /^\/courses$/,
+    /^\/universities$/,
+    /^\/blogs$/,
+    /^\/about-us$/,
+    /^\/contact-us$/,
+    /^\/add-on-services$/,
+    /^\/branches$/,
+    /^\/community-posts$/,
+    /^\/placement-assistance-nursing$/,
+    /^\/migrate-to-canada$/,
+    /^\/migrate-to-australia$/,
 ];
 
 export function templateShowsQuickAnswer(path) {
