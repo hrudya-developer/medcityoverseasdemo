@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 
 const API_URL =
-  "http://overseas.technocitysolutions.com/public/api/getWebBlogs";
+  "https://overseas.technocitysolutions.com/public/api/getWebBlogs";
 
 const API_KEY =
   process.env.OVERSEAS_API_KEY;
@@ -108,58 +108,6 @@ export async function GET() {
         ? result.blog_image_path
         : "";
 
-    console.log(
-      "TOTAL BLOGS FROM API:",
-      blogs.length
-    );
-    console.log(
-  "BLOGS FROM getWebBlogs:",
-  blogs.map(
-    (blog) => ({
-      id:
-        blog?.id,
-
-      title:
-        blog?.title,
-
-      status:
-        blog?.status,
-
-      image_land:
-        blog?.image_land,
-
-      image_prt:
-        blog?.image_prt,
-
-      subheading1:
-        blog?.subheading1,
-
-      subheading2:
-        blog?.subheading2,
-
-      subheading3:
-        blog?.subheading3,
-
-      subtext1:
-        blog?.subtext1,
-
-      subtext2:
-        blog?.subtext2,
-
-      subtext3:
-        blog?.subtext3,
-
-      alt_text1:
-        blog?.alt_text1,
-
-      alt_text2:
-        blog?.alt_text2,
-
-      link:
-        blog?.link,
-    })
-  )
-);
     return NextResponse.json({
       blogs,
       imagePath,

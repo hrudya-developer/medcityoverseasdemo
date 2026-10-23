@@ -160,6 +160,28 @@ export async function POST(request) {
                 payload
             );
 
+        // The upstream can answer HTTP 200 with status false when it
+        // rejects an enquiry. Do not tell the visitor it was sent.
+        if (
+            result?.status === false ||
+            result?.status === 0 ||
+            result?.status === "0" ||
+            result?.status === "false"
+        ) {
+            return NextResponse.json(
+                {
+                    success: false,
+                    message:
+                        result?.msg ||
+                        result?.message ||
+                        "Unable to submit your enquiry.",
+                },
+                {
+                    status: 400,
+                }
+            );
+        }
+
         return NextResponse.json(
             {
                 success: true,

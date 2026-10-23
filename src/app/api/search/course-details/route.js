@@ -7,7 +7,7 @@ const API_URL =
     "https://overseas.technocitysolutions.com/public/api/getCoursedetails";
 
 const API_KEY =
-    "overseas@Miak2023";
+    process.env.OVERSEAS_API_KEY;
 
 const COURSE_SEARCH_API =
     "https://overseas.technocitysolutions.com/public/api/searchResults";
@@ -128,6 +128,20 @@ async function resolveCourseId(courseSlug, uid) {
 }
 
 export async function GET(request) {
+    if (!process.env.OVERSEAS_API_KEY) {
+        console.error("OVERSEAS_API_KEY is missing");
+
+        return NextResponse.json(
+            {
+                status: false,
+                msg: "Server configuration error.",
+            },
+            {
+                status: 500,
+            }
+        );
+    }
+
     try {
         const {
             searchParams,

@@ -125,10 +125,6 @@ export async function POST() {
                 .text();
 
 
-        console.log(
-            "GET FEEDBACK RAW:",
-            raw
-        );
 
 
         let result;

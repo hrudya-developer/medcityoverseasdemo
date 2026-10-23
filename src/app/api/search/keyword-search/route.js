@@ -1,8 +1,7 @@
 import { NextResponse } from "next/server";
 
 const API_KEY =
-  process.env.OVERSEAS_API_KEY ||
-  "overseas@Miak2023";
+  process.env.OVERSEAS_API_KEY;
 
 const COURSE_API =
   "https://overseas.technocitysolutions.com/public/api/getAllUniversityCoursesLatest";
@@ -260,6 +259,20 @@ async function getCoursePage({
 }
 
 export async function GET(request) {
+    if (!process.env.OVERSEAS_API_KEY) {
+        console.error("OVERSEAS_API_KEY is missing");
+
+        return NextResponse.json(
+            {
+                status: false,
+                msg: "Server configuration error.",
+            },
+            {
+                status: 500,
+            }
+        );
+    }
+
   try {
     const { searchParams } =
       new URL(request.url);

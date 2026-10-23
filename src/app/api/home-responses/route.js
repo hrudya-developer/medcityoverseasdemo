@@ -4,6 +4,20 @@ const HOME_RESPONSES_URL =
     "https://overseas.technocitysolutions.com/public/api/getHomeResponses";
 
 export async function POST(request) {
+    if (!process.env.OVERSEAS_API_KEY) {
+        console.error("OVERSEAS_API_KEY is missing");
+
+        return NextResponse.json(
+            {
+                status: false,
+                msg: "Server configuration error.",
+            },
+            {
+                status: 500,
+            }
+        );
+    }
+
     try {
         const body = await request
             .json()
@@ -15,8 +29,7 @@ export async function POST(request) {
 
         formData.append(
             "api",
-            process.env.OVERSEAS_API_KEY ||
-            "overseas@Miak2023"
+            process.env.OVERSEAS_API_KEY
         );
 
         formData.append("uid", String(uid));

@@ -139,6 +139,19 @@ export function verifySessionToken(
             return null;
         }
 
+        // The cookie's maxAge only limits the browser. Enforce the
+        // same lifetime here so a copied token stops working too.
+        const createdAt =
+            Number(payload.createdAt);
+
+        if (
+            !createdAt ||
+            Date.now() - createdAt >
+                SESSION_MAX_AGE * 1000
+        ) {
+            return null;
+        }
+
         return payload;
     } catch {
         return null;

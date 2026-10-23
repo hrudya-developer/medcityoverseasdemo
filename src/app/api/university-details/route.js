@@ -4,6 +4,20 @@ const API_URL =
     "https://overseas.technocitysolutions.com/public/api/getUniversityDetails";
 
 export async function POST(request) {
+    if (!process.env.OVERSEAS_API_KEY) {
+        console.error("OVERSEAS_API_KEY is missing");
+
+        return NextResponse.json(
+            {
+                status: false,
+                msg: "Server configuration error.",
+            },
+            {
+                status: 500,
+            }
+        );
+    }
+
     try {
         const body = await request.json();
 

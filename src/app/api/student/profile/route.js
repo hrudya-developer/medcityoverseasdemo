@@ -128,14 +128,6 @@ export async function GET() {
             );
         }
 
-        console.log(
-            "getStudentProfile response:",
-            JSON.stringify(
-                data,
-                null,
-                2
-            )
-        );
 
         if (!upstreamResponse.ok) {
             return NextResponse.json(

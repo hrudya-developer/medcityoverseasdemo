@@ -10,6 +10,20 @@ const REQUIRED_FIELDS = [
 ];
 
 export async function POST(request) {
+    if (!process.env.OVERSEAS_API_KEY) {
+        console.error("OVERSEAS_API_KEY is missing");
+
+        return NextResponse.json(
+            {
+                status: false,
+                msg: "Server configuration error.",
+            },
+            {
+                status: 500,
+            }
+        );
+    }
+
     try {
         const body = await request.json();
 
@@ -171,6 +185,28 @@ export async function POST(request) {
                 },
                 {
                     status: response.status,
+                }
+            );
+        }
+
+        // The upstream can answer HTTP 200 with status false when it
+        // rejects an enquiry. Do not tell the visitor it was sent.
+        if (
+            result?.status === false ||
+            result?.status === 0 ||
+            result?.status === "0" ||
+            result?.status === "false"
+        ) {
+            return NextResponse.json(
+                {
+                    success: false,
+                    message:
+                        result?.msg ||
+                        result?.message ||
+                        "Unable to submit your enquiry.",
+                },
+                {
+                    status: 400,
                 }
             );
         }

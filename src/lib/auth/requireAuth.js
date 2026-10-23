@@ -1,10 +1,17 @@
-import { cookies } from 'next/headers';
-import { redirect } from 'next/navigation';
+import { redirect } from "next/navigation";
 
+import { getSessionUid } from "@/lib/auth/sessionUid";
+
+/**
+ * Server-side guard: returns the logged-in student's uid,
+ * or redirects to /login when there is no valid session.
+ */
 export async function requireAuth() {
-  const cookieStore = await cookies();
-  const session = cookieStore.get('session')?.value;
+    const uid = await getSessionUid();
 
-  if (!session) redirect('/login');
-  return session;
+    if (!uid) {
+        redirect("/login");
+    }
+
+    return uid;
 }

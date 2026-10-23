@@ -1,23 +1,20 @@
+import {
+    getSessionUid,
+    unauthorizedResponse,
+} from "@/lib/auth/sessionUid";
 // src/app/api/dashboard/student/profile/delete-profile/route.js
 
 import { NextResponse } from "next/server";
 
-export async function POST(request) {
+export async function POST() {
     try {
-        const body = await request.json();
-
-        const uid = body?.uid;
+        // The uid always comes from the signed session cookie,
+        // never from the request body.
+        const uid =
+            await getSessionUid();
 
         if (!uid) {
-            return NextResponse.json(
-                {
-                    status: false,
-                    msg: "User ID is required",
-                },
-                {
-                    status: 400,
-                }
-            );
+            return unauthorizedResponse();
         }
 
         const apiKey =
@@ -79,10 +76,6 @@ export async function POST(request) {
             };
         }
 
-        console.log(
-            "Delete account API response:",
-            data
-        );
 
         if (!externalResponse.ok) {
             return NextResponse.json(
@@ -99,7 +92,14 @@ export async function POST(request) {
             );
         }
 
-        if (data?.status !== true) {
+        if (
+            !(
+                data?.status === true ||
+                data?.status === 1 ||
+                data?.status === "1" ||
+                data?.status === "true"
+            )
+        ) {
             return NextResponse.json(
                 {
                     status: false,

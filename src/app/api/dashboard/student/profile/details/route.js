@@ -1,4 +1,8 @@
 import {
+    getSessionUid,
+    unauthorizedResponse,
+} from "@/lib/auth/sessionUid";
+import {
     NextResponse,
 } from "next/server";
 
@@ -188,27 +192,20 @@ export async function POST(
         const body =
             await request.json();
 
+        // The uid always comes from the signed session cookie,
+        // never from the request body.
         const uid =
-            body?.uid;
+            await getSessionUid();
+
+        if (!uid) {
+            return unauthorizedResponse();
+        }
 
         /*
         |--------------------------------------------------------------------------
         | Validate UID
         |--------------------------------------------------------------------------
         */
-
-        if (!hasValue(uid)) {
-            return NextResponse.json(
-                {
-                    status: false,
-                    msg:
-                        "User ID is required.",
-                },
-                {
-                    status: 400,
-                }
-            );
-        }
 
         /*
         |--------------------------------------------------------------------------
@@ -307,24 +304,9 @@ export async function POST(
             );
         }
 
-        console.log(
-            "======================================"
-        );
 
-        console.log(
-            "RAW GET STUDENT PROFILE RESPONSE:"
-        );
 
-        console.dir(
-            result,
-            {
-                depth: null,
-            }
-        );
 
-        console.log(
-            "======================================"
-        );
 
         /*
         |--------------------------------------------------------------------------
@@ -383,27 +365,9 @@ export async function POST(
                 result
             ) || {};
 
-        console.log(
-            "PERSONAL PROFILE FOUND:"
-        );
 
-        console.dir(
-            personalProfile,
-            {
-                depth: null,
-            }
-        );
 
-        console.log(
-            "QUALIFICATION PROFILE FOUND:"
-        );
 
-        console.dir(
-            qualificationProfile,
-            {
-                depth: null,
-            }
-        );
 
         /*
         |--------------------------------------------------------------------------
@@ -502,96 +466,8 @@ export async function POST(
         |--------------------------------------------------------------------------
         */
 
-        console.log(
-            "FINAL MERGED PROFILE:"
-        );
 
-        console.dir(
-            profile,
-            {
-                depth: null,
-            }
-        );
 
-        console.log(
-            "PROFILE DETAILS:",
-            {
-                uid:
-                    profile?.uid,
-
-                name:
-                    profile?.name,
-
-                highest:
-                    profile?.highest,
-
-                tenth_syllabus:
-                    profile
-                        ?.tenth_syllabus,
-
-                tenth_overall:
-                    profile
-                        ?.tenth_overall,
-
-                twelth_stream:
-                    profile
-                        ?.twelth_stream,
-
-                twelth_overall:
-                    profile
-                        ?.twelth_overall,
-
-                twelth_english:
-                    profile
-                        ?.twelth_english,
-
-                degree_stream:
-                    profile
-                        ?.degree_stream,
-
-                degree_overall:
-                    profile
-                        ?.degree_overall,
-
-                degree_english:
-                    profile
-                        ?.degree_english,
-
-                pg_stream:
-                    profile
-                        ?.pg_stream,
-
-                pg_overall:
-                    profile
-                        ?.pg_overall,
-
-                pg_english:
-                    profile
-                        ?.pg_english,
-
-                ielts_overall:
-                    profile
-                        ?.ielts_overall,
-
-                ielts_l:
-                    profile
-                        ?.ielts_l,
-
-                ielts_r:
-                    profile
-                        ?.ielts_r,
-
-                ielts_w:
-                    profile
-                        ?.ielts_w,
-
-                ielts_s:
-                    profile
-                        ?.ielts_s,
-
-                qualificationComplete,
-            }
-        );
 
         /*
         |--------------------------------------------------------------------------

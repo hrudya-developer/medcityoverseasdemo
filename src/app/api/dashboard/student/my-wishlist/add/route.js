@@ -1,4 +1,8 @@
 import {
+    getSessionUid,
+    unauthorizedResponse,
+} from "@/lib/auth/sessionUid";
+import {
   NextResponse,
 } from "next/server";
 
@@ -7,23 +11,17 @@ export async function POST(request) {
     const body =
       await request.json();
 
+    // The uid always comes from the signed session cookie,
+    // never from the request body.
     const uid =
-      body?.uid;
+        await getSessionUid();
+
+    if (!uid) {
+        return unauthorizedResponse();
+    }
 
     const id =
       body?.id;
-
-    if (!uid) {
-      return NextResponse.json(
-        {
-          status: false,
-          msg: "Student ID is required.",
-        },
-        {
-          status: 400,
-        }
-      );
-    }
 
     if (!id) {
       return NextResponse.json(
@@ -76,14 +74,6 @@ export async function POST(request) {
       "course"
     );
 
-    console.log(
-      "ADD WISHLIST REQUEST:",
-      {
-        uid: String(uid),
-        id: String(id),
-        type: "course",
-      }
-    );
 
     const response =
       await fetch(
@@ -98,10 +88,6 @@ export async function POST(request) {
     const raw =
       await response.text();
 
-    console.log(
-      "ADD WISHLIST RAW:",
-      raw
-    );
 
     let result = {};
 

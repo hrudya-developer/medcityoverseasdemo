@@ -24,11 +24,30 @@ export async function POST(request) {
       );
     }
 
+    const apiKey =
+      process.env.OVERSEAS_API_KEY;
+
+    if (!apiKey) {
+      console.error(
+        "OVERSEAS_API_KEY is missing"
+      );
+
+      return NextResponse.json(
+        {
+          status: false,
+          msg: "Server configuration error.",
+        },
+        {
+          status: 500,
+        }
+      );
+    }
+
     const formData = new FormData();
 
     formData.append(
       "api",
-      "overseas@Miak2023"
+      apiKey
     );
 
     formData.append(
@@ -69,10 +88,20 @@ export async function POST(request) {
       );
     }
 
- 
+    // Only pass on the fields the login form needs, never the
+    // raw upstream payload (it could carry OTP details).
+    const isSuccess =
+      data?.status === true ||
+      data?.status === 1 ||
+      data?.status === "1" ||
+      data?.status === "true";
 
     return NextResponse.json(
-      data,
+      {
+        status: isSuccess,
+        msg: data?.msg || data?.message || "",
+        uid: data?.uid ?? data?.data?.uid ?? null,
+      },
       {
         status: upstreamResponse.ok
           ? 200

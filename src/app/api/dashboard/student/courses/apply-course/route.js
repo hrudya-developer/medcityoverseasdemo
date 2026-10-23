@@ -172,16 +172,6 @@ export async function POST(request) {
         );
 
 
-        console.log(
-            "APPLY COURSE REQUEST:",
-            {
-                uid:
-                    session.uid,
-
-                c_id:
-                    courseId,
-            }
-        );
 
 
         /* =================================================
@@ -212,10 +202,6 @@ export async function POST(request) {
             await upstreamResponse
                 .text();
 
-        console.log(
-            "APPLY COURSE RESPONSE:",
-            responseText
-        );
 
 
         /* =================================================

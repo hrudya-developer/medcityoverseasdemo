@@ -1,3 +1,7 @@
+import {
+    getSessionUid,
+    unauthorizedResponse,
+} from "@/lib/auth/sessionUid";
 import { NextResponse } from "next/server";
 
 const QUALIFICATION_FIELDS = [
@@ -29,18 +33,13 @@ export async function POST(request) {
     try {
         const body = await request.json();
 
-        const uid = body?.uid;
+        // The uid always comes from the signed session cookie,
+        // never from the request body.
+        const uid =
+            await getSessionUid();
 
         if (!uid) {
-            return NextResponse.json(
-                {
-                    status: false,
-                    msg: "User ID is required.",
-                },
-                {
-                    status: 400,
-                }
-            );
+            return unauthorizedResponse();
         }
 
         if (!body?.highest) {
@@ -134,10 +133,6 @@ export async function POST(request) {
             );
         }
 
-        console.log(
-            "updateQualifications:",
-            result
-        );
 
         if (!externalResponse.ok) {
             return NextResponse.json(

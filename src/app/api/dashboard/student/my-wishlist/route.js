@@ -1,3 +1,7 @@
+import {
+    getSessionUid,
+    unauthorizedResponse,
+} from "@/lib/auth/sessionUid";
 import { NextResponse } from "next/server";
 
 const WISHLIST_API_URL =
@@ -11,21 +15,13 @@ export async function POST(request) {
         const body =
             await request.json();
 
+        // The uid always comes from the signed session cookie,
+        // never from the request body.
         const uid =
-            body?.uid;
+            await getSessionUid();
 
         if (!uid) {
-            return NextResponse.json(
-                {
-                    status: false,
-                    msg: "Student ID is required.",
-                    data: [],
-                    imagePath: "",
-                },
-                {
-                    status: 400,
-                }
-            );
+            return unauthorizedResponse();
         }
 
         /* ---------------------------------
@@ -53,10 +49,6 @@ export async function POST(request) {
             );
         }
 
-        console.log(
-            "GET WISHLIST UID:",
-            String(uid)
-        );
 
         /* ---------------------------------
          * 3. Prepare external API request
@@ -90,10 +82,6 @@ export async function POST(request) {
         const raw =
             await response.text();
 
-        console.log(
-            "GET WISHLIST RAW RESPONSE:",
-            raw
-        );
 
         /* ---------------------------------
          * 5. Parse API response
@@ -124,10 +112,6 @@ export async function POST(request) {
             );
         }
 
-        console.log(
-            "GET WISHLIST PARSED RESPONSE:",
-            result
-        );
 
         /* ---------------------------------
          * 6. External API HTTP error
@@ -182,20 +166,8 @@ export async function POST(request) {
                 ? result.course_image_path
                 : "";
 
-        console.log(
-            "WISHLIST COURSES:",
-            courses
-        );
 
-        console.log(
-            "WISHLIST COURSE COUNT:",
-            courses.length
-        );
 
-        console.log(
-            "WISHLIST IMAGE PATH:",
-            imagePath
-        );
 
         /* ---------------------------------
          * 8. Return normalized response

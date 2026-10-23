@@ -120,10 +120,6 @@ export async function GET() {
         const responseText =
             await upstreamResponse.text();
 
-        console.log(
-            "PROFILE STATUS API RESPONSE:",
-            responseText
-        );
 
         let data;
 
@@ -196,16 +192,6 @@ export async function GET() {
             stage ===
                 "completed";
 
-        console.log(
-            "PROFILE STATUS RESULT:",
-            {
-                uid: session.uid,
-                apiStatus:
-                    data?.status,
-                stage,
-                completed,
-            }
-        );
 
         return NextResponse.json(
             {

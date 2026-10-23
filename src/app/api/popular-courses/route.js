@@ -184,36 +184,6 @@ export async function GET(request) {
             process.env.NODE_ENV ===
             "development"
         ) {
-            console.log(
-                "MAIN COURSES",
-                {
-                    apiCount:
-                        Array.isArray(
-                            source
-                        )
-                            ? source.length
-                            : 0,
-
-                    returnedCount:
-                        courses.length,
-
-                    courses:
-                        courses.map(
-                            (
-                                course
-                            ) => ({
-                                id:
-                                    course.id,
-
-                                name:
-                                    course.name,
-
-                                popular:
-                                    course.popular,
-                            })
-                        ),
-                }
-            );
         }
 
         return NextResponse.json(

@@ -51,6 +51,20 @@ function uniqueSuggestions(
 }
 
 export async function GET(request) {
+    if (!process.env.OVERSEAS_API_KEY) {
+        console.error("OVERSEAS_API_KEY is missing");
+
+        return NextResponse.json(
+            {
+                status: false,
+                msg: "Server configuration error.",
+            },
+            {
+                status: 500,
+            }
+        );
+    }
+
   try {
     const { searchParams } =
       new URL(request.url);

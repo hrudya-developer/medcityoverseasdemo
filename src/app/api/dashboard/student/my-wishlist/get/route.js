@@ -124,13 +124,6 @@ export async function POST() {
       );
 
 
-      console.log(
-          "GET WISHLIST REQUEST:",
-          {
-              uid:
-                  String(uid),
-          }
-      );
 
 
       const response =
@@ -159,10 +152,6 @@ export async function POST() {
           await response.text();
 
 
-      console.log(
-          "GET WISHLIST RAW:",
-          raw
-      );
 
 
       let result = {};
@@ -193,10 +182,6 @@ export async function POST() {
       }
 
 
-      console.log(
-          "GET WISHLIST PARSED:",
-          result
-      );
 
 
       /*
@@ -332,10 +317,6 @@ export async function POST() {
               : [];
 
 
-      console.log(
-          "WISHLIST COURSES:",
-          courses
-      );
 
 
       /*

@@ -121,13 +121,6 @@ export async function POST() {
         );
 
 
-        console.log(
-            "GET APPLICATIONS REQUEST:",
-            {
-                uid:
-                    String(uid),
-            }
-        );
 
 
         const externalResponse =
@@ -165,10 +158,6 @@ export async function POST() {
             await externalResponse
                 .text();
 
-        console.log(
-            "GET APPLICATIONS RAW RESPONSE:",
-            rawResponse
-        );
 
 
         let result = {};
@@ -202,10 +191,6 @@ export async function POST() {
         }
 
 
-        console.log(
-            "GET APPLICATIONS PARSED RESPONSE:",
-            result
-        );
 
 
         /*
@@ -292,36 +277,11 @@ export async function POST() {
                 : [];
 
 
-        console.log(
-            "NORMALIZED APPLICATIONS:",
-            applications
-        );
 
 
         /*
          * Useful while debugging Apply Now.
          */
-        console.log(
-            "APPLICATION IDS:",
-            applications.map(
-                (item) => ({
-                    id:
-                        item?.id,
-
-                    c_id:
-                        item?.c_id,
-
-                    course_id:
-                        item
-                            ?.course_id,
-
-                    course:
-                        item?.course ??
-                        item
-                            ?.course_name,
-                })
-            )
-        );
 
 
         /*

@@ -1,3 +1,7 @@
+import {
+    getSessionUid,
+    unauthorizedResponse,
+} from "@/lib/auth/sessionUid";
 import { NextResponse } from "next/server";
 
 const API_URL =
@@ -27,8 +31,16 @@ export async function POST(request) {
     const body =
       await request.json();
 
+    // The uid always comes from the signed session cookie,
+    // never from the request body.
+    const uid =
+      await getSessionUid();
+
+    if (!uid) {
+      return unauthorizedResponse();
+    }
+
     const {
-      uid,
       name,
       mobile,
       country,
@@ -37,18 +49,6 @@ export async function POST(request) {
       gender,
       dob,
     } = body;
-
-    if (!uid) {
-      return NextResponse.json(
-        {
-          message:
-            "User ID is required.",
-        },
-        {
-          status: 400,
-        }
-      );
-    }
 
     if (!name?.trim()) {
       return NextResponse.json(

@@ -410,20 +410,6 @@ export async function POST(
             dob
         );
 
-        console.log(
-            "UPDATE PROFILE PAYLOAD:",
-            {
-                uid:
-                    session.uid,
-                name,
-                mobile,
-                code,
-                country,
-                address,
-                gender,
-                dob,
-            }
-        );
 
         /* =========================
            UPSTREAM REQUEST
@@ -447,10 +433,6 @@ export async function POST(
         const responseText =
             await upstreamResponse.text();
 
-        console.log(
-            "UPDATE PROFILE RESPONSE:",
-            responseText
-        );
 
         let data;
 

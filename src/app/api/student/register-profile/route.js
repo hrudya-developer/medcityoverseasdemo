@@ -282,20 +282,6 @@ export async function POST(
             dob
         );
 
-        console.log(
-            "Creating profile:",
-            {
-                uid,
-                name,
-                mobile,
-                country,
-                gender,
-                code,
-                dob,
-                email:
-                    session?.email,
-            }
-        );
 
         /* =========================================
            6. CALL MEDCITY API
@@ -343,14 +329,6 @@ export async function POST(
             );
         }
 
-        console.log(
-            "setUserProfile response:",
-            JSON.stringify(
-                data,
-                null,
-                2
-            )
-        );
 
         /* =========================================
            7. HANDLE UPSTREAM HTTP ERROR
