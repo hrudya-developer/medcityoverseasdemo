@@ -623,8 +623,10 @@ export default async function UniversitiesByCountryPage({
     const facts =
         await getCountryFacts(countryId);
 
+    // Only FAQs that are shown: CountryFacts hides them when there
+    // are no universities.
     const faqs =
-        facts
+        facts && facts.universities > 0
             ? countryFaqs(countryName, facts)
             : [];
 
