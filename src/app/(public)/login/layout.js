@@ -7,6 +7,10 @@ export const metadata = {
     alternates: {
         canonical: "/login",
     },
+    openGraph: {
+        title: "Student Login | Medcity Overseas",
+        url: "/login",
+    },
     robots: {
         index: false,
         follow: true,
