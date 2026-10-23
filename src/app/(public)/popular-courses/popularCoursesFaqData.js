@@ -8,7 +8,7 @@ export const faqs = [
     question:
       "What are the most popular courses for studying abroad?",
     answer:
-      "Popular study abroad options often include Nursing, Medicine, Engineering, Business, Computer Science, Data Science, Hospitality, Health Sciences and other career-focused programs. The best course depends on your academic background and future goals. Medcity Overseas guides applications to the courses listed on this site.",
+      "Popular study abroad options often include Nursing, Engineering, Business, Computer Science, Data Science, Hospitality, Health Sciences and other career-focused programs. The best course depends on your academic background and future goals.",
   },
   {
     question:
