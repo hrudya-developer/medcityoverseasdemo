@@ -120,7 +120,7 @@ const HorizontalExternalLink = ({
             href={href}
             target="_blank"
             rel="noopener noreferrer"
-            aria-label={`${label} — opens in a new tab`}
+            aria-label={`${label}, opens in a new tab`}
             title={label}
             onClick={() => onNavigate?.()}
             className={getLinkClasses(active)}

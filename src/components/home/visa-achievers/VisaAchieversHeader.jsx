@@ -511,7 +511,7 @@ export default function VisaAchieversHeader() {
                 />
 
                 {/* =================================================
-                    TROPHY — TOP RIGHT
+                    TROPHY: TOP RIGHT
                 ================================================= */}
 
                 <div

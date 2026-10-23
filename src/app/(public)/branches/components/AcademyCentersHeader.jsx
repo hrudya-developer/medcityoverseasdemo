@@ -289,7 +289,7 @@ export default function AcademyCentersHeader({
           </div>
 
           {/* ==========================================
-              RIGHT — KERALA BRANCH MAP
+              RIGHT: KERALA BRANCH MAP
           ========================================== */}
 
           <div

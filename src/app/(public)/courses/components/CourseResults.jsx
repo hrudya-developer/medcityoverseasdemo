@@ -7,9 +7,9 @@ import {
 } from "lucide-react";
 
 import {
-  useEffect,
   useMemo,
   useRef,
+  useSyncExternalStore,
   useState,
 } from "react";
 
@@ -25,61 +25,46 @@ function getCourseId(course) {
   );
 }
 
+const WIDE_SCREEN = "(min-width: 1024px)";
+
+function subscribeToWideScreen(onChange) {
+  const mediaQuery = window.matchMedia(WIDE_SCREEN);
+
+  mediaQuery.addEventListener("change", onChange);
+
+  return () => mediaQuery.removeEventListener("change", onChange);
+}
+
+function isWideScreen() {
+  return window.matchMedia(WIDE_SCREEN).matches;
+}
+
 export default function CourseResults({
   courses = [],
   loading = false,
   error = "",
   keyword = "",
 }) {
-  const [currentPage, setCurrentPage] =
-    useState(1);
+  // The page belongs to one list of results: new courses or a new
+  // keyword start again at page 1, and the page never passes the end.
+  const [paging, setPaging] =
+    useState({ page: 1, courses, keyword });
 
-  const [
-    itemsPerPage,
-    setItemsPerPage,
-  ] = useState(2);
+  // 4 results per page on wide screens, 2 on small ones.
+  const isWide = useSyncExternalStore(
+    subscribeToWideScreen,
+    isWideScreen,
+    () => false
+  );
+
+  const itemsPerPage = isWide ? 4 : 2;
 
   const resultsRef = useRef(null);
 
-  // Responsive pagination
-  useEffect(() => {
-    const mediaQuery =
-      window.matchMedia(
-        "(min-width: 1024px)"
-      );
-
-    function updateItemsPerPage(event) {
-      setItemsPerPage(
-        event.matches ? 4 : 2
-      );
-    }
-
-    setItemsPerPage(
-      mediaQuery.matches ? 4 : 2
-    );
-
-    mediaQuery.addEventListener(
-      "change",
-      updateItemsPerPage
-    );
-
-    return () => {
-      mediaQuery.removeEventListener(
-        "change",
-        updateItemsPerPage
-      );
-    };
-  }, []);
-
-  // Reset pagination
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [courses, keyword]);
-
-  const safeCourses =
-    Array.isArray(courses)
-      ? courses
-      : [];
+  const safeCourses = useMemo(
+    () => (Array.isArray(courses) ? courses : []),
+    [courses]
+  );
 
   const totalCourses =
     safeCourses.length;
@@ -91,12 +76,17 @@ export default function CourseResults({
     )
   );
 
-  // Keep current page valid
-  useEffect(() => {
-    if (currentPage > totalPages) {
-      setCurrentPage(totalPages);
-    }
-  }, [currentPage, totalPages]);
+  const samePaging =
+    paging.courses === courses &&
+    paging.keyword === keyword;
+
+  const currentPage = Math.min(
+    samePaging ? paging.page : 1,
+    totalPages
+  );
+
+  const setCurrentPage = (page) =>
+    setPaging({ page, courses, keyword });
 
   const paginatedCourses =
     useMemo(() => {
@@ -282,7 +272,7 @@ export default function CourseResults({
                     <span className="text-[#c01f53]">
                       {startResult}
                     </span>
-                    {" – "}
+                    {" to "}
                     <span className="text-[#c01f53]">
                       {endResult}
                     </span>{" "}

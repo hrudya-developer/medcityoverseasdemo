@@ -120,7 +120,7 @@ export default function CourseResults({
                         {(currentPage - 1) *
                             COURSES_PER_PAGE +
                             1}
-                        –
+                        {" to "}
                         {Math.min(
                             currentPage *
                             COURSES_PER_PAGE,
