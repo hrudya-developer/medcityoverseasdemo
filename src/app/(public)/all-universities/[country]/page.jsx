@@ -2,6 +2,7 @@ import { cache } from "react";
 
 import {
     notFound,
+    permanentRedirect,
 } from "next/navigation";
 
 import {
@@ -17,6 +18,7 @@ import UniversitiesSection from "./components/UniversitiesSection";
 import CountryFacts from "./components/CountryFacts";
 import { countryFaqs, getCountryFacts } from "@/lib/countryFacts";
 import { withSeoOverrides } from "@/lib/pageSeo";
+import { findDestinationSlugById } from "../../destination/[slug]/lib/destinationApi";
 
 /* =========================================================
    SITE CONFIG
@@ -512,6 +514,22 @@ export default async function UniversitiesByCountryPage({
         country:
             countrySlug,
     } = await params;
+
+    // Old numeric addresses (/universities-in-17) move to the slug page.
+    if (/^\d+$/.test(String(countrySlug ?? "").trim())) {
+        const destinationSlug =
+            await findDestinationSlugById(
+                countrySlug
+            );
+
+        if (destinationSlug) {
+            permanentRedirect(
+                `/universities-in-${destinationSlug}`
+            );
+        }
+
+        notFound();
+    }
 
     /* =====================================================
        DESTINATION

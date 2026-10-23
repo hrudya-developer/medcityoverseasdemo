@@ -1,11 +1,13 @@
 import {
   notFound,
+  permanentRedirect,
 } from "next/navigation";
 
 import DestinationDetailsClient
   from "./components/DestinationDetailsClient";
 
 import {
+  findDestinationSlugById,
   getDestinationDetails,
   resolveDestinationId,
 } from "./lib/destinationApi";
@@ -238,6 +240,18 @@ export default async function DestinationDetailsPage({
 }) {
   const { slug } =
     await params;
+
+  // Old numeric addresses (/study-in-39) move to the slug page.
+  if (/^\d+$/.test(String(slug ?? "").trim())) {
+    const destinationSlug =
+      await findDestinationSlugById(slug);
+
+    if (destinationSlug) {
+      permanentRedirect(`/study-in-${destinationSlug}`);
+    }
+
+    notFound();
+  }
 
   let destination;
 
