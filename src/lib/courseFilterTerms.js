@@ -6,19 +6,23 @@
  * follow-up filter, so both keep the same rows. Pure functions only.
  */
 
-// Each option and the lower case substrings of a stored level that mean
-// the same. Only these options are accepted, so a crafted URL cannot add
-// unbounded LIKE clauses or cache keys.
-const LEVEL_TERMS = {
-    Undergraduate: ["bachelor", "undergraduate"],
-    Postgraduate: ["master", "postgraduate", "post graduate"],
-    Masters: ["master"],
-    PhD: ["phd", "ph.d", "doctorate"],
-    Diploma: ["diploma"],
-    Certificate: ["certificate"],
+// Each option and how a stored level (compared in lower case) means the
+// same: it contains one of `terms`, or equals one of `exact` once
+// trimmed, and contains none of `exclude`. A pre-master's course is a
+// preparation course, not a master's degree. Only these options are
+// accepted, so a crafted URL cannot add unbounded clauses or cache keys.
+const PRE_MASTERS = ["pre-master", "pre master", "premaster"];
+
+const LEVEL_RULES = {
+    Undergraduate: { terms: ["undergrad", "bachelor"], exact: ["ug"], exclude: [] },
+    Postgraduate: { terms: ["postgrad", "post graduate", "master"], exact: ["pg", "pgt"], exclude: PRE_MASTERS },
+    Masters: { terms: ["master"], exact: [], exclude: PRE_MASTERS },
+    PhD: { terms: ["phd", "ph.d", "doctorate"], exact: [], exclude: [] },
+    Diploma: { terms: ["diploma"], exact: [], exclude: [] },
+    Certificate: { terms: ["certificate"], exact: [], exclude: [] },
 };
 
-export const FILTER_LEVELS = Object.keys(LEVEL_TERMS);
+export const FILTER_LEVELS = Object.keys(LEVEL_RULES);
 
 /**
  * The known level options in a comma separated list, in canonical
@@ -34,18 +38,62 @@ export function normaliseLevels(value) {
         .sort();
 }
 
-/** The stored level substrings that any of these options match. */
-export function levelTerms(levels) {
-    const terms = levels.flatMap((level) => LEVEL_TERMS[level] ?? []);
-
-    return terms.filter((term, index) => terms.indexOf(term) === index);
+function rulesFor(levels) {
+    return levels.map((level) => LEVEL_RULES[level]).filter(Boolean);
 }
 
-/** Whether a stored level matches any of these options. */
+// MySQL's TRIM() removes spaces only, so the JS side does the same.
+function trimSpaces(value) {
+    return value.replace(/^ +| +$/g, "");
+}
+
+function containsPattern(term) {
+    return `%${term.replace(/[\\%_]/g, (match) => `\\${match}`)}%`;
+}
+
+/** Whether a stored level matches any of these options (as levelSql). */
 export function levelMatches(storedLevel, levels) {
     const level = String(storedLevel ?? "").toLowerCase();
 
-    return levelTerms(levels).some((term) => level.includes(term));
+    return rulesFor(levels).some(
+        (rule) =>
+            (rule.terms.some((term) => level.includes(term)) || rule.exact.includes(trimSpaces(level))) &&
+            !rule.exclude.some((term) => level.includes(term))
+    );
+}
+
+/**
+ * The SQL condition on `column` for these options, the same test as
+ * levelMatches: { clause, params }, or null when no option is known.
+ * LIKE is case insensitive under the table's collation; the exact
+ * values are compared with LOWER(TRIM()).
+ */
+export function levelSql(levels, column = "c.level") {
+    const rules = rulesFor(levels);
+
+    if (rules.length === 0) {
+        return null;
+    }
+
+    const params = [];
+    const options = rules.map((rule) => {
+        const matches = rule.terms.map(() => `${column} LIKE ?`);
+
+        params.push(...rule.terms.map(containsPattern));
+
+        if (rule.exact.length > 0) {
+            matches.push(`LOWER(TRIM(${column})) IN (${rule.exact.map(() => "?").join(", ")})`);
+            params.push(...rule.exact);
+        }
+
+        const excludes = rule.exclude.map(() => `${column} NOT LIKE ?`);
+
+        params.push(...rule.exclude.map(containsPattern));
+
+        return `((${matches.join(" OR ")})${excludes.map((part) => ` AND ${part}`).join("")})`;
+    });
+
+    return { clause: `(${options.join(" OR ")})`, params };
 }
 
 const MONTH_NAMES = [

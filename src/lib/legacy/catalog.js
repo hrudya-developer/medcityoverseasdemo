@@ -2,7 +2,7 @@ import "server-only";
 
 import { unstable_cache } from "next/cache";
 
-import { isMonthIntake, levelTerms, normaliseIntake, normaliseLevels } from "@/lib/courseFilterTerms";
+import { isMonthIntake, levelSql, normaliseIntake, normaliseLevels } from "@/lib/courseFilterTerms";
 import { query, queryOne } from "@/lib/db";
 import { imagePath, legacyOffset, likePattern, toId, today } from "./util";
 
@@ -183,13 +183,14 @@ async function queryCoursesByFilters(filters) {
         params.push(likePattern(filters.intake));
     }
 
-    if (filters.levels.length > 0) {
-        // Each option matches the stored levels that mean the same, so
-        // "Undergraduate" also finds "Bachelors".
-        const terms = levelTerms(filters.levels);
+    // Each option matches the stored levels that mean the same, so
+    // "Undergraduate" also finds "Bachelors" and "UG", and Masters
+    // leaves out pre-master's courses (see courseFilterTerms.js).
+    const levels = levelSql(filters.levels);
 
-        where.push(`(${terms.map(() => "c.level LIKE ?").join(" OR ")})`);
-        params.push(...terms.map((term) => likePattern(term)));
+    if (levels) {
+        where.push(levels.clause);
+        params.push(...levels.params);
     }
 
     // tb_courses holds about 110,000 rows with TEXT columns and these
