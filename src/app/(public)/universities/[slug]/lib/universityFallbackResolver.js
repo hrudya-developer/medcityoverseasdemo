@@ -134,7 +134,7 @@ const searchUniversities =
                         error
                 );
 
-                return [];
+                throw error;
             }
         }
     );

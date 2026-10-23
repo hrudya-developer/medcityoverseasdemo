@@ -27,10 +27,23 @@ import PlacementRegistrationSection from "./components/placement-registration-fo
 
 
 export const metadata = {
-  title:
-    "UK Nursing Placement Assistance | Medcity Overseas",
+  title: {
+    absolute: "UK Nursing Placement Assistance for Kerala Nurses | Medcity Overseas",
+  },
   description:
     "Explore the MSc Mental Health Nursing and Leadership pathway in the UK with Medcity Overseas. Get guidance on eligibility, university admissions and nursing registration.",
+  alternates: {
+    canonical: "/placement-assistance-nursing",
+  },
+  openGraph: {
+    type: "website",
+    locale: "en_IN",
+    url: "https://medcityoverseas.com/placement-assistance-nursing",
+    siteName: "Medcity Overseas",
+    title: "UK Nursing Placement Assistance | Medcity Overseas",
+    description:
+      "MSc Mental Health Nursing and Leadership pathway in the UK: eligibility, admissions and nursing registration guidance from Medcity Overseas.",
+  },
 };
 
 const highlights = [

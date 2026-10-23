@@ -281,6 +281,7 @@ function getUniversityImagePath(
 
 export default function CourseDetailsClient({
     slug,
+    initialCourse = null,
 }) {
     const router =
         useRouter();
@@ -417,7 +418,7 @@ export default function CourseDetailsClient({
 
     const {
         data:
-            selectedCourse,
+            fetchedCourse,
 
         isLoading,
         isFetching,
@@ -438,11 +439,19 @@ export default function CourseDetailsClient({
                     "0",
             },
             {
+                // The server already loaded the course for this address,
+                // so the page renders in full on the first response
+                // (which is also what Google reads).
                 skip:
+                    Boolean(initialCourse) ||
                     !slug ||
                     !storageChecked,
             }
         );
+
+    const selectedCourse =
+        fetchedCourse ??
+        initialCourse;
 
     /* =======================================================
        ACTUAL COURSE ID
@@ -508,9 +517,12 @@ export default function CourseDetailsClient({
     ======================================================= */
 
     if (
-        !storageChecked ||
-        isLoading ||
-        isFetching
+        !selectedCourse &&
+        (
+            !storageChecked ||
+            isLoading ||
+            isFetching
+        )
     ) {
         return (
             <CourseDetailsSkeleton />

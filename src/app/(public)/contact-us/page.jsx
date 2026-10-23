@@ -18,7 +18,7 @@ const PAGE_TITLE = "Contact Study Abroad Consultants in Kerala";
 const PAGE_DESCRIPTION =
     "Contact Medcity Overseas for study abroad counselling, overseas university admissions, course selection, scholarship guidance, student visa assistance and language training across Kerala.";
 
-const BUSINESS_PHONE = "+91-9048059999";
+const BUSINESS_PHONE = "+91-9072982555";
 const BUSINESS_EMAIL = "medcitykochi@miak.in";
 
 const SOCIAL_PROFILES = [

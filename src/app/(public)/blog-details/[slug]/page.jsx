@@ -1,873 +1,162 @@
-import { cache } from "react";
+import { notFound, permanentRedirect } from "next/navigation";
 
 import {
-  notFound,
-  redirect,
-} from "next/navigation";
+  absoluteUrl,
+  DEFAULT_AUTHOR,
+  findPostBySlug,
+  SITE_URL,
+} from "@/lib/blogPosts";
 
-import {
-  createBlogSlug,
-} from "@/lib/blogSlug";
-
-import BlogDetailsHero from "./components/BlogDetailsHero";
-import BlogDetailsContent from "./components/BlogDetailsContent";
 import BranchesInfo from "../../branches/components/BranchesInfo";
-import {
-  getBranchInfoForBlogTitle,
-} from "../../branches/data/branchesInfo";
+import { getBranchInfoForBlogTitle } from "../../branches/data/branchesInfo";
 
-import { legacyFetch } from "@/lib/legacy";
+import BlogArticle from "./components/BlogArticle";
 
-/* =========================================================
-   CONFIG
-========================================================= */
+export const dynamic = "force-dynamic";
 
-const SITE_URL =
-  "https://medcityoverseas.com";
+const DEFAULT_OG_IMAGE = `${SITE_URL}/og-images/default.webp`;
 
-const API_BASE_URL =
-  "https://overseas.technocitysolutions.com/public/api";
+export async function generateMetadata({ params }) {
+  const { slug } = await params;
+  const found = await findPostBySlug(slug);
 
-const BLOG_LIST_API_URL =
-  `${API_BASE_URL}/getWebBlogs`;
-
-const BLOG_DETAIL_API_URL =
-  `${API_BASE_URL}/getWebBlogDetail`;
-
-const API_KEY =
-  process.env.OVERSEAS_API_KEY;
-
-export const dynamic =
-  "force-dynamic";
-
-/**
- * decodeURIComponent throws on malformed input such as "%E0".
- * Treat that as "no such blog" (404) instead of a 500.
- */
-function safeDecode(value) {
-  try {
-    return decodeURIComponent(String(value));
-  } catch {
-    return "";
-  }
-}
-
-/* =========================================================
-   FETCH ALL BLOGS
-
-   Used only for:
-   slug -> blog -> internal id
-========================================================= */
-
-async function fetchAllBlogs() {
-  try {
-    if (!API_KEY) {
-      console.error(
-        "OVERSEAS_API_KEY is missing."
-      );
-
-      return [];
-    }
-
-    const formData =
-      new FormData();
-
-    formData.append(
-      "api",
-      API_KEY
-    );
-
-    const response =
-      await legacyFetch(BLOG_LIST_API_URL,
-        {
-          method: "POST",
-
-          body:
-            formData,
-
-          cache:
-            "no-store",
-
-          headers: {
-            Accept:
-              "application/json",
-          },
-        }
-      );
-
-    if (!response.ok) {
-      const errorText =
-        await response
-          .text()
-          .catch(
-            () => ""
-          );
-
-      console.error(
-        "Blog list API failed:",
-        response.status,
-        errorText
-      );
-
-      return [];
-    }
-
-    const result =
-      await response.json();
-
-    if (
-      Array.isArray(
-        result?.blogs
-      )
-    ) {
-      return result.blogs;
-    }
-
-    if (
-      Array.isArray(
-        result?.data
-      )
-    ) {
-      return result.data;
-    }
-
-    if (
-      Array.isArray(
-        result?.blog
-      )
-    ) {
-      return result.blog;
-    }
-
-    return [];
-  } catch (error) {
-    console.error(
-      "Blog list fetch error:",
-      error
-    );
-
-    return [];
-  }
-}
-
-/* =========================================================
-   FIND BLOG FROM CLEAN SLUG
-
-   Public URL:
-   /blog-details/study-abroad-in-germany
-
-   ID remains internal.
-========================================================= */
-
-// Memoised per request: generateMetadata and the page share one
-// set of backend calls instead of fetching everything twice.
-const getAllBlogs = cache(fetchAllBlogs);
-
-async function getBlogBySlug(
-  slug
-) {
-  if (!slug) {
-    return null;
-  }
-
-  const blogs =
-    await getAllBlogs();
-
-  if (
-    !Array.isArray(
-      blogs
-    ) ||
-    blogs.length === 0
-  ) {
-    return null;
-  }
-
-  const normalizedSlug =
-    safeDecode(slug)
-      .toLowerCase()
-      .trim();
-
-  const matchedBlog =
-    blogs.find(
-      (item) => {
-        const itemSlug =
-          createBlogSlug(
-            item?.title
-          );
-
-        return (
-          itemSlug ===
-          normalizedSlug
-        );
-      }
-    );
-
-  return (
-    matchedBlog ||
-    null
-  );
-}
-
-/* =========================================================
-   GET BLOG DETAILS
-
-   Full object returned by getWebBlogDetail.
-
-   Expected fields can include:
-
-   id
-   title
-   blog
-   duration
-   date
-   image_land
-   image_prt
-   status
-   ip
-   created_date
-
-   subheading1
-   subheading2
-   subheading3
-
-   subtext1
-   subtext2
-   subtext3
-
-   alt_text1
-   alt_text2
-
-   link
-========================================================= */
-
-async function fetchBlogDetails(
-  id
-) {
-  try {
-    if (
-      !id ||
-      !API_KEY
-    ) {
-      return null;
-    }
-
-    const formData =
-      new FormData();
-
-    formData.append(
-      "api",
-      API_KEY
-    );
-
-    formData.append(
-      "id",
-      String(id)
-    );
-
-    const response =
-      await legacyFetch(BLOG_DETAIL_API_URL,
-        {
-          method: "POST",
-
-          body:
-            formData,
-
-          cache:
-            "no-store",
-
-          headers: {
-            Accept:
-              "application/json",
-          },
-        }
-      );
-
-    if (!response.ok) {
-      const errorText =
-        await response
-          .text()
-          .catch(
-            () => ""
-          );
-
-      console.error(
-        "Blog detail API failed:",
-        response.status,
-        errorText
-      );
-
-      return null;
-    }
-
-    const result =
-      await response.json();
-
-    /*
-     * Preserve the COMPLETE backend blog object.
-     * Do not map selected fields here.
-     */
-    const blog =
-      Array.isArray(
-        result?.blog
-      )
-        ? result.blog[0] ??
-          null
-        : result?.blog &&
-            typeof result.blog ===
-              "object"
-          ? result.blog
-          : null;
-
-    if (!blog) {
-      return null;
-    }
-
-    const imagePath =
-      typeof result?.blog_image_path ===
-      "string"
-        ? result.blog_image_path
-        : "";
-
+  if (!found?.post) {
     return {
-      blog,
-      imagePath,
-    };
-  } catch (error) {
-    console.error(
-      "Blog detail fetch error:",
-      error
-    );
-
-    return null;
-  }
-}
-
-const getBlogDetails = cache(fetchBlogDetails);
-
-/* =========================================================
-   STRIP HTML
-========================================================= */
-
-function stripHtml(
-  value = ""
-) {
-  return String(
-    value || ""
-  )
-    .replace(
-      /<[^>]*>/g,
-      " "
-    )
-    .replace(
-      /&nbsp;/gi,
-      " "
-    )
-    .replace(
-      /&amp;/gi,
-      "&"
-    )
-    .replace(
-      /&quot;/gi,
-      '"'
-    )
-    .replace(
-      /&#39;/gi,
-      "'"
-    )
-    .replace(
-      /\s+/g,
-      " "
-    )
-    .trim();
-}
-
-/* =========================================================
-   META DESCRIPTION
-
-   Main blog content first.
-
-   Falls back to additional section text when required.
-========================================================= */
-
-function createDescription(
-  blog
-) {
-  const content =
-    blog?.blog ||
-    blog?.subtext1 ||
-    blog?.subtext2 ||
-    blog?.subtext3 ||
-    "";
-
-  const description =
-    stripHtml(
-      content
-    );
-
-  if (description) {
-    return description.slice(
-      0,
-      160
-    );
-  }
-
-  return (
-    blog?.title
-      ? `Read ${blog.title} from Medcity Study Abroad.`
-      : "Read study abroad guides, student visa information and overseas education insights from Medcity Study Abroad."
-  );
-}
-
-/* =========================================================
-   IMAGE URL
-========================================================= */
-
-function createImageUrl(
-  imagePath,
-  imageName
-) {
-  if (!imageName) {
-    return "";
-  }
-
-  const image =
-    String(
-      imageName
-    ).trim();
-
-  // Uploaded through the website admin: served by this site.
-  if (/^\/media\/\d+$/.test(image)) {
-    return `${SITE_URL}${image}`;
-  }
-
-  if (
-    image.startsWith(
-      "http://"
-    ) ||
-    image.startsWith(
-      "https://"
-    )
-  ) {
-    return image;
-  }
-
-  if (!imagePath) {
-    return "";
-  }
-
-  const base =
-    String(
-      imagePath
-    ).replace(
-      /\/+$/,
-      ""
-    );
-
-  const file =
-    image.replace(
-      /^\/+/,
-      ""
-    );
-
-  return `${base}/${file}`;
-}
-
-/* =========================================================
-   METADATA
-========================================================= */
-
-export async function generateMetadata({
-  params,
-}) {
-  const {
-    slug,
-  } = await params;
-
-  if (!slug) {
-    return {
-      title:
-        "Blog Not Found | Medcity Study Abroad",
-
-      robots: {
-        index: false,
-        follow: false,
-      },
+      title: { absolute: "Blog not found | Medcity Overseas" },
+      robots: { index: false, follow: true },
     };
   }
 
-  /* ---------------------------
-     FIND BLOG FROM CLEAN SLUG
-  --------------------------- */
-
-  const listBlog =
-    await getBlogBySlug(
-      slug
-    );
-
-  if (!listBlog?.id) {
-    return {
-      title:
-        "Blog Not Found | Medcity Study Abroad",
-
-      robots: {
-        index: false,
-        follow: false,
-      },
-    };
-  }
-
-  /* ---------------------------
-     GET COMPLETE BLOG
-  --------------------------- */
-
-  const result =
-    await getBlogDetails(
-      listBlog.id
-    );
-
-  const blog =
-    result?.blog;
-
-  if (!blog) {
-    return {
-      title:
-        "Blog Not Found | Medcity Study Abroad",
-
-      robots: {
-        index: false,
-        follow: false,
-      },
-    };
-  }
-
-  const title =
-    blog?.title ||
-    "Study Abroad Blog";
-
-  const description =
-    createDescription(
-      blog
-    );
-
-  const canonicalSlug =
-    createBlogSlug(
-      title
-    );
-
-  const pageUrl =
-    `${SITE_URL}/blog-details/${canonicalSlug}`;
-
-  const imageUrl =
-    createImageUrl(
-      result?.imagePath,
-      blog?.image_land ||
-        blog?.image_prt
-    );
-
-  const imageAlt =
-    blog?.alt_text1 ||
-    blog?.alt_text2 ||
-    title;
+  const { post } = found;
+  const title = post.metaTitle || post.title;
+  const url = `${SITE_URL}/blog-details/${post.slug}`;
+  const image = absoluteUrl(post.cover) || DEFAULT_OG_IMAGE;
 
   return {
-    title:
-      `${title} | Medcity Study Abroad`,
-
-    description,
-
-    alternates: {
-      canonical:
-        `/blog-details/${canonicalSlug}`,
-    },
-
+    title: { absolute: `${title} | Medcity Overseas` },
+    description: post.metaDescription,
+    ...(post.focusKeyword ? { keywords: [post.focusKeyword] } : {}),
+    alternates: { canonical: `/blog-details/${post.slug}` },
+    authors: [{ name: post.author || DEFAULT_AUTHOR }],
     openGraph: {
+      type: "article",
+      locale: "en_IN",
+      url,
+      siteName: "Medcity Overseas",
       title,
-
-      description,
-
-      url:
-        pageUrl,
-
-      siteName:
-        "Medcity Study Abroad",
-
-      type:
-        "article",
-
-      locale:
-        "en_IN",
-
-      images:
-        imageUrl
-          ? [
-              {
-                url:
-                  imageUrl,
-
-                width:
-                  1200,
-
-                height:
-                  630,
-
-                alt:
-                  imageAlt,
-              },
-            ]
-          : [],
+      description: post.metaDescription,
+      publishedTime: post.published,
+      modifiedTime: post.updated || post.published,
+      authors: [post.author || DEFAULT_AUTHOR],
+      images: [{ url: image, width: 1200, height: 630, alt: post.coverAlt }],
     },
-
     twitter: {
-      card:
-        "summary_large_image",
-
+      card: "summary_large_image",
       title,
-
-      description,
-
-      images:
-        imageUrl
-          ? [
-              imageUrl,
-            ]
-          : [],
+      description: post.metaDescription,
+      images: [image],
     },
-
     robots: {
       index: true,
       follow: true,
-
-      googleBot: {
-        index: true,
-        follow: true,
-
-        "max-image-preview":
-          "large",
-
-        "max-snippet":
-          -1,
-
-        "max-video-preview":
-          -1,
-      },
+      googleBot: { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1 },
     },
   };
 }
 
-/* =========================================================
-   JSON-LD
-========================================================= */
-
-function createStructuredData({
-  blog,
-  pageUrl,
-  imageUrl,
-}) {
-  return {
-    "@context":
-      "https://schema.org",
-
-    "@type":
-      "BlogPosting",
-
-    "@id":
-      `${pageUrl}#article`,
-
-    headline:
-      blog?.title ||
-      "Study Abroad Blog",
-
-    description:
-      createDescription(
-        blog
-      ),
-
-    url:
-      pageUrl,
-
-    mainEntityOfPage: {
-      "@type":
-        "WebPage",
-
-      "@id":
-        pageUrl,
-    },
-
-    image:
-      imageUrl
-        ? [
-            imageUrl,
-          ]
-        : undefined,
-
-    publisher: {
-      "@type":
-        "Organization",
-
-      name:
-        "Medcity Study Abroad",
-
-      url:
-        SITE_URL,
-    },
-
-    inLanguage:
-      "en-IN",
+function structuredData(post) {
+  const url = `${SITE_URL}/blog-details/${post.slug}`;
+  const organization = {
+    "@type": "Organization",
+    "@id": `${SITE_URL}/#organization`,
+    name: "Medcity Overseas",
+    url: SITE_URL,
+    logo: { "@type": "ImageObject", url: `${SITE_URL}/logo.png` },
   };
-}
 
-function serializeJsonLd(
-  data
-) {
-  return JSON.stringify(
-    data
-  ).replace(
-    /</g,
-    "\\u003c"
-  );
-}
+  const images = [post.cover, ...post.gallery.map((photo) => photo.src)].map(absoluteUrl).filter(Boolean);
 
-/* =========================================================
-   PAGE
-========================================================= */
+  const graph = [
+    {
+      "@type": "BlogPosting",
+      "@id": `${url}#article`,
+      headline: post.title.slice(0, 110),
+      description: post.metaDescription,
+      ...(post.summary ? { abstract: post.summary } : {}),
+      url,
+      mainEntityOfPage: { "@type": "WebPage", "@id": url },
+      ...(images.length ? { image: images } : {}),
+      datePublished: post.published,
+      dateModified: post.updated || post.published,
+      author: post.author
+        ? { "@type": "Person", name: post.author, worksFor: { "@id": `${SITE_URL}/#organization` } }
+        : organization,
+      ...(post.reviewer ? { reviewedBy: { "@type": "Person", name: post.reviewer } } : {}),
+      publisher: organization,
+      ...(post.focusKeyword ? { keywords: post.focusKeyword } : {}),
+      wordCount: post.wordCount,
+      inLanguage: "en-IN",
+    },
+    {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Home", item: SITE_URL },
+        { "@type": "ListItem", position: 2, name: "Blogs", item: `${SITE_URL}/blogs` },
+        { "@type": "ListItem", position: 3, name: post.title, item: url },
+      ],
+    },
+  ];
 
-export default async function BlogDetailsPage({
-  params,
-}) {
-  const {
-    slug,
-  } = await params;
-
-  if (!slug) {
-    notFound();
-  }
-
-  /* =====================================================
-     1. RESOLVE CLEAN SLUG -> INTERNAL BLOG ID
-  ===================================================== */
-
-  const listBlog =
-    await getBlogBySlug(
-      slug
-    );
-
-  if (!listBlog?.id) {
-    notFound();
-  }
-
-  /* =====================================================
-     2. GET COMPLETE BLOG OBJECT
-  ===================================================== */
-
-  const result =
-    await getBlogDetails(
-      listBlog.id
-    );
-
-  if (
-    !result?.blog
-  ) {
-    notFound();
-  }
-
-  const blog =
-    result.blog;
-
-  const branchInfo =
-    getBranchInfoForBlogTitle(
-      blog?.title
-    );
-
-  /* =====================================================
-     3. CANONICAL CLEAN SLUG
-  ===================================================== */
-
-  const canonicalSlug =
-    createBlogSlug(
-      blog?.title
-    );
-
-  if (!canonicalSlug) {
-    notFound();
-  }
-
-  /* =====================================================
-     4. REDIRECT OLD / WRONG URL
-
-     Correct:
-     /blog-details/study-abroad-in-germany
-
-     Not:
-     /blog-details/study-abroad-in-germany-8
-  ===================================================== */
-
-  const currentSlug =
-    safeDecode(slug)
-      .toLowerCase()
-      .trim();
-
-  if (
-    currentSlug !==
-    canonicalSlug
-  ) {
-    redirect(
-      `/blog-details/${canonicalSlug}`
-    );
-  }
-
-  /* =====================================================
-     5. STRUCTURED DATA
-  ===================================================== */
-
-  const pageUrl =
-    `${SITE_URL}/blog-details/${canonicalSlug}`;
-
-  const imageUrl =
-    createImageUrl(
-      result.imagePath,
-      blog?.image_land ||
-        blog?.image_prt
-    );
-
-  const structuredData =
-    createStructuredData({
-      blog,
-      pageUrl,
-      imageUrl,
+  if (post.faqs.length) {
+    graph.push({
+      "@type": "FAQPage",
+      "@id": `${url}#faq`,
+      mainEntity: post.faqs.map((faq) => ({
+        "@type": "Question",
+        name: faq.question,
+        acceptedAnswer: { "@type": "Answer", text: faq.answer },
+      })),
     });
+  }
 
-  /* =====================================================
-     6. PAGE
-  ===================================================== */
+  return { "@context": "https://schema.org", "@graph": graph };
+}
+
+export default async function BlogDetailsPage({ params }) {
+  const { slug } = await params;
+  const found = await findPostBySlug(slug);
+
+  if (found?.redirect) {
+    permanentRedirect(`/blog-details/${found.redirect}`);
+  }
+
+  if (!found?.post) {
+    notFound();
+  }
+
+  const { post, related } = found;
+
+  // Same post under a differently written address (capitals, encoding).
+  if (slug !== post.slug) {
+    permanentRedirect(`/blog-details/${post.slug}`);
+  }
+
+  const branchInfo = getBranchInfoForBlogTitle(post.title);
 
   return (
     <main className="min-h-screen bg-white">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html:
-            serializeJsonLd(
-              structuredData
-            ),
+          __html: JSON.stringify(structuredData(post)).replace(/</g, "\\u003c"),
         }}
       />
 
-      <BlogDetailsHero
-        blog={blog}
-        imagePath={
-          result.imagePath
-        }
+      <BlogArticle
+        post={post}
+        related={related}
+        replacementBody={branchInfo ? <BranchesInfo branch={branchInfo} /> : null}
       />
-
-      {branchInfo ? (
-        <BranchesInfo
-          branch={branchInfo}
-        />
-      ) : (
-        <BlogDetailsContent
-          blog={blog}
-        />
-      )}
     </main>
   );
 }

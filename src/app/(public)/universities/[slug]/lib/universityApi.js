@@ -40,12 +40,14 @@ export const getDestinations = cache(
 
             return [];
         } catch (error) {
-            console.warn(
+            // A failed lookup must not look like "no such page":
+            // let it reach Next.js as a server error so Google retries.
+            console.error(
                 "Destination loading error:",
                 error?.message ?? error
             );
 
-            return [];
+            throw error;
         }
     }
 );
@@ -84,7 +86,7 @@ export const getUniversityDetails =
                 }
             );
 
-            return null;
+            throw error;
         }
     });
 
@@ -140,7 +142,7 @@ export const getUniversityMainCourses =
 
             return [];
         } catch (error) {
-            console.warn(
+            console.error(
                 "University main course error:",
                 {
                     universityId:
@@ -151,6 +153,6 @@ export const getUniversityMainCourses =
                 }
             );
 
-            return [];
+            throw error;
         }
     });

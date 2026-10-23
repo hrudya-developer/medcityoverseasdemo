@@ -21,8 +21,8 @@ export const offices = [
         locality: "Kochi",
         region: "Kerala",
         postalCode: "682021",
-        phone: "+91 90480 59999",
-        phoneLink: "+919048059999",
+        phone: "+91 90729 82555",
+        phoneLink: "+919072982555",
         email: "medcitykochi@miak.in",
     },
 ];

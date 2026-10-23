@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 import { listBlogs } from "@/lib/blogAdmin";
-import { createBlogSlug } from "@/lib/blogSlug";
+import { blogPublicSlug } from "@/lib/blogSlug";
 
 export const dynamic = "force-dynamic";
 
@@ -64,7 +64,7 @@ export default async function AdminBlogsPage({ searchParams }) {
                                     <td className="whitespace-nowrap px-4 py-3 text-right">
                                         {!isDraft && (
                                             <a
-                                                href={`/blog-details/${createBlogSlug(blog.title)}`}
+                                                href={`/blog-details/${blogPublicSlug(blog)}`}
                                                 target="_blank"
                                                 rel="noreferrer"
                                                 className="mr-4 text-slate-500 hover:text-slate-900"

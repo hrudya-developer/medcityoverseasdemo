@@ -8,21 +8,21 @@ import {
 
 const ITEMS_PER_PAGE = 6;
 
-export default function useBlogs() {
+export default function useBlogs(initial = null) {
   const [
     blogs,
     setBlogs,
-  ] = useState([]);
+  ] = useState(initial?.blogs ?? []);
 
   const [
     imagePath,
     setImagePath,
-  ] = useState("");
+  ] = useState(initial?.imagePath ?? "");
 
   const [
     loading,
     setLoading,
-  ] = useState(true);
+  ] = useState(!initial);
 
   const [
     error,
@@ -39,6 +39,11 @@ export default function useBlogs() {
   ========================================================= */
 
   useEffect(() => {
+    // The server already sent the list with the page.
+    if (initial) {
+      return undefined;
+    }
+
     const controller =
       new AbortController();
 

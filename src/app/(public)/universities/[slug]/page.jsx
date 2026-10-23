@@ -4,8 +4,11 @@ import {
 } from "next/navigation";
 
 import {
+    createUniversityPublicHref,
     createUniversityPublicSlug,
 } from "@/lib/universitySlug";
+
+import { queryOne } from "@/lib/db";
 
 import UniversityDetailsClient from "./components/UniversityDetailsClient";
 
@@ -234,6 +237,31 @@ export default async function UniversityDetailsPage({
         permanentRedirect(
             `/universities-in-${destination.slug}`
         );
+    }
+
+    /* =====================================================
+       OLD NUMERIC URLS
+       /universities/134 -> /universities/<name>
+       Google still has many of these from the old site.
+    ===================================================== */
+
+    if (/^\d+$/.test(slug)) {
+        const byId =
+            await queryOne(
+                "SELECT id, name FROM tb_universities WHERE id = ? AND status = '1'",
+                [slug]
+            );
+
+        const href =
+            byId
+                ? createUniversityPublicHref(byId)
+                : "";
+
+        if (href) {
+            permanentRedirect(href);
+        }
+
+        notFound();
     }
 
     /* =====================================================
