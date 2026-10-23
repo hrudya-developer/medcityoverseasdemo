@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 
 import { guardAdminApi, jsonError } from "@/lib/auth/adminApi";
-import { auditPage } from "@/lib/seoAudit";
+import { auditPage, AuditUnavailableError } from "@/lib/seoAudit";
 
 export const runtime = "nodejs";
 
@@ -18,8 +18,12 @@ export async function POST(request) {
 
         return NextResponse.json({ success: true, ...result });
     } catch (error) {
+        if (error instanceof AuditUnavailableError) {
+            return jsonError(error.message, 503);
+        }
+
         console.error("SEO audit error:", error);
 
-        return jsonError(error?.message || "Could not check this page.", 500);
+        return jsonError("Could not check this page.", 500);
     }
 }

@@ -140,30 +140,79 @@ export function runChecks({ path, status, ms, html, seo }) {
 
 /*
  * Where the server can load its own pages. Behind Hostinger's proxy the
- * request's own origin is an internal address that cannot be fetched,
- * so try, in order: AUDIT_ORIGIN if set, the app's local port, the
- * public address, the request's origin. The first that answers is
- * remembered for the life of the process.
+ * request's own origin is an internal address that cannot be fetched.
+ * Candidates, in order: AUDIT_ORIGIN if set, the app's local port (only
+ * when PORT is known), the public address, the request's origin. An
+ * address is used only after /api/seo-probe on it answers with this
+ * site's token, so another app or an error page is never mistaken for
+ * the website. The verified address is remembered for the process.
  */
 const SITE_ORIGIN = "https://medcityoverseas.com";
+const PROBE_TOKEN = "medcityoverseas-seo-probe-1";
+const CONNECTION_ERRORS = new Set([
+    "ECONNREFUSED",
+    "ENOTFOUND",
+    "EHOSTUNREACH",
+    "ECONNRESET",
+    "EAI_AGAIN",
+    "UND_ERR_CONNECT_TIMEOUT",
+]);
+
+export class AuditUnavailableError extends Error {}
 
 function originCandidates(requestOrigin) {
-    const port = process.env.PORT || "3000";
-
     return [
         process.env.AUDIT_ORIGIN,
-        `http://127.0.0.1:${port}`,
+        process.env.PORT ? `http://127.0.0.1:${process.env.PORT}` : "",
         SITE_ORIGIN,
         requestOrigin,
     ].filter((value, index, list) => value && list.indexOf(value) === index);
 }
 
-async function loadPage(path, requestOrigin) {
-    const remembered = globalThis.__medcityAuditOrigin;
-    const candidates = remembered ? [remembered, ...originCandidates(requestOrigin).filter((o) => o !== remembered)] : originCandidates(requestOrigin);
-    const errors = [];
+async function isThisSite(origin) {
+    try {
+        const response = await fetch(`${origin}/api/seo-probe`, {
+            redirect: "manual",
+            cache: "no-store",
+            signal: AbortSignal.timeout(3000),
+        });
 
-    for (const origin of candidates) {
+        if (response.status !== 200) {
+            await response.body?.cancel();
+            return false;
+        }
+
+        return (await response.text()).trim() === PROBE_TOKEN;
+    } catch {
+        return false;
+    }
+}
+
+async function verifiedOrigin(requestOrigin, { refresh = false } = {}) {
+    if (globalThis.__medcityAuditOrigin && !refresh) {
+        return globalThis.__medcityAuditOrigin;
+    }
+
+    for (const origin of originCandidates(requestOrigin)) {
+        if (await isThisSite(origin)) {
+            globalThis.__medcityAuditOrigin = origin;
+            return origin;
+        }
+    }
+
+    globalThis.__medcityAuditOrigin = null;
+
+    return null;
+}
+
+async function loadPage(path, requestOrigin) {
+    for (const refresh of [false, true]) {
+        const origin = await verifiedOrigin(requestOrigin, { refresh });
+
+        if (!origin) {
+            break;
+        }
+
         const started = Date.now();
 
         try {
@@ -174,20 +223,31 @@ async function loadPage(path, requestOrigin) {
                 signal: AbortSignal.timeout(25000),
             });
 
-            globalThis.__medcityAuditOrigin = origin;
+            const html = response.status === 200 ? await response.text() : "";
 
-            return {
-                status: response.status,
-                html: response.status === 200 ? await response.text() : "",
-                ms: Date.now() - started,
-                origin,
-            };
+            if (response.status !== 200) {
+                await response.body?.cancel();
+            }
+
+            return { status: response.status, html, ms: Date.now() - started };
         } catch (error) {
-            errors.push(`${origin}: ${error?.cause?.code || error?.name || "failed"}`);
+            // The remembered address stopped answering: find another once.
+            if (!refresh && CONNECTION_ERRORS.has(error?.cause?.code)) {
+                continue;
+            }
+
+            console.error(`SEO check could not load ${path}:`, error);
+
+            // A slow page is a result, not a reason to try other addresses.
+            if (error?.name === "TimeoutError") {
+                return { status: 504, html: "", ms: Date.now() - started };
+            }
+
+            break;
         }
     }
 
-    return { status: 0, html: "", ms: 0, origin: "", error: errors.join("; ") };
+    throw new AuditUnavailableError("The site could not be reached to check this page. Please try again in a minute.");
 }
 
 /** Load a page, score it and save the result. */
@@ -195,17 +255,10 @@ export async function auditPage(rawPath, origin) {
     const path = normalisePath(rawPath);
 
     if (!path) {
-        throw new Error("Invalid page address.");
+        throw new AuditUnavailableError("Invalid page address.");
     }
 
     const loaded = await loadPage(path, origin);
-
-    // The page could not be reached at all: report that instead of
-    // storing a misleading 1% score.
-    if (loaded.status === 0) {
-        throw new Error(`Could not load the page to check it (${loaded.error}).`);
-    }
-
     const seo = await getPageSeo(path);
     const result = runChecks({ path, status: loaded.status, ms: loaded.ms, html: loaded.html, seo });
 
@@ -226,7 +279,7 @@ export async function listAudits() {
 }
 
 export async function getAudit(path) {
-    const rows = await query("SELECT * FROM web_page_audit WHERE path = ?", [normalisePath(path)]);
+    const rows = await query("SELECT * FROM web_page_audit WHERE path = ? AND status_code <> 0", [normalisePath(path)]);
     const row = rows[0];
 
     if (!row) {

@@ -54,13 +54,23 @@ export default function SeoPagesTable({ rows: initialRows }) {
         stopRef.current = false;
         setRunning({ done: 0, total: paths.length, failed: 0 });
 
+        let failuresInARow = 0;
+
         for (let index = 0; index < paths.length; index += 1) {
             if (stopRef.current) {
                 break;
             }
 
+            // If the site cannot be reached, stop rather than fail 1,750 times.
+            if (failuresInARow >= 5) {
+                setRunning((current) => ({ ...current, stoppedEarly: true }));
+                break;
+            }
+
             try {
                 const result = await checkPage(paths[index]);
+
+                failuresInARow = 0;
 
                 setRows((current) =>
                     current.map((row) =>
@@ -70,6 +80,7 @@ export default function SeoPagesTable({ rows: initialRows }) {
                     )
                 );
             } catch (error) {
+                failuresInARow += 1;
                 setRunning((current) => ({ ...current, failed: current.failed + 1, lastError: error.message }));
             }
 
@@ -141,6 +152,7 @@ export default function SeoPagesTable({ rows: initialRows }) {
                 <p className="text-sm text-slate-600">
                     {running.finished ? "Finished" : "Checking"} {running.done} of {running.total}
                     {running.failed ? `, ${running.failed} could not be checked` : ""}. One page at a time, so the site stays fast.
+                    {running.stoppedEarly && <span className="block text-red-600">Stopped after 5 failures in a row.</span>}
                     {running.lastError && <span className="block text-red-600">Last problem: {running.lastError}</span>}
                 </p>
             )}

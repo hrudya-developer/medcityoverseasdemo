@@ -98,44 +98,120 @@ export async function getMedia(id) {
  */
 const IMPORT_HOSTS = new Set(["medcityacademy.com", "www.medcityacademy.com"]);
 
-export async function importImageFromUrl(rawUrl, uploadedBy) {
+function checkImportUrl(value) {
     let url;
 
     try {
-        url = new URL(String(rawUrl ?? "").trim());
+        url = new URL(String(value ?? "").trim());
     } catch {
         throw new MediaError("That is not a valid image address.");
     }
 
-    if (url.protocol !== "https:" || !IMPORT_HOSTS.has(url.hostname)) {
-        throw new MediaError("Images can only be imported from medcityacademy.com.");
+    if (
+        url.protocol !== "https:" ||
+        !IMPORT_HOSTS.has(url.hostname) ||
+        url.port !== "" ||
+        url.username ||
+        url.password
+    ) {
+        throw new MediaError("Images can only be imported from https://medcityacademy.com.");
     }
 
-    let response;
+    return url;
+}
 
-    try {
-        response = await fetch(url, {
-            redirect: "error",
-            headers: { Accept: "image/*" },
-            signal: AbortSignal.timeout(20000),
-        });
-    } catch {
+/** Read a response body, stopping as soon as it passes the size limit. */
+async function readCapped(response) {
+    const reader = response.body?.getReader();
+
+    if (!reader) {
         throw new MediaError("The image could not be downloaded.", 502);
     }
 
+    const chunks = [];
+    let total = 0;
+
+    try {
+        for (;;) {
+            const { done, value } = await reader.read();
+
+            if (done) {
+                break;
+            }
+
+            total += value.byteLength;
+
+            if (total > MAX_UPLOAD_BYTES) {
+                await reader.cancel();
+                throw new MediaError("The image is larger than 10 MB.");
+            }
+
+            chunks.push(value);
+        }
+    } catch (error) {
+        if (error instanceof MediaError) {
+            throw error;
+        }
+
+        throw new MediaError("The image could not be downloaded.", 502);
+    }
+
+    return Buffer.concat(chunks.map((chunk) => Buffer.from(chunk)));
+}
+
+export async function importImageFromUrl(rawUrl, uploadedBy) {
+    let url = checkImportUrl(rawUrl);
+    let response = null;
+
+    // Follow up to 3 redirects, checking each one stays on medcityacademy.com.
+    for (let hop = 0; hop < 4; hop += 1) {
+        try {
+            response = await fetch(url, {
+                redirect: "manual",
+                headers: { Accept: "image/*" },
+                signal: AbortSignal.timeout(20000),
+            });
+        } catch {
+            throw new MediaError("The image could not be downloaded.", 502);
+        }
+
+        const location = response.headers.get("location");
+
+        if (response.status >= 300 && response.status < 400 && location) {
+            await response.body?.cancel();
+
+            if (hop === 3) {
+                throw new MediaError("The image address redirects too many times. Use its direct address.");
+            }
+
+            url = checkImportUrl(new URL(location, url).toString());
+            continue;
+        }
+
+        break;
+    }
+
     if (!response.ok) {
+        await response.body?.cancel();
         throw new MediaError(`The image could not be downloaded (${response.status}).`, 502);
     }
 
     const type = String(response.headers.get("content-type") ?? "").split(";")[0].trim();
-    const length = Number(response.headers.get("content-length") ?? 0);
 
-    if (length > MAX_UPLOAD_BYTES) {
+    if (Number(response.headers.get("content-length") ?? 0) > MAX_UPLOAD_BYTES) {
+        await response.body?.cancel();
         throw new MediaError("The image is larger than 10 MB.");
     }
 
-    const bytes = await response.arrayBuffer();
-    const name = decodeURIComponent(url.pathname.split("/").pop() || "imported-image");
+    const bytes = await readCapped(response);
+
+    let name = "imported-image";
+
+    try {
+        name = decodeURIComponent(url.pathname.split("/").pop() || name);
+    } catch {
+        name = url.pathname.split("/").pop() || name;
+    }
 
     return saveUploadedImage(new File([bytes], name, { type }), uploadedBy);
 }
