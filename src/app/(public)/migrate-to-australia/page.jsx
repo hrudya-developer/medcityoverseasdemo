@@ -1,5 +1,30 @@
+import Link from "next/link";
+
 import AustraliaMigrationContent from "./components/AustraliaMigrationContent";
-import { applySeoOverrides } from "@/lib/pageSeo";
+import { australiaFaqs } from "./australiaFaqData";
+import OfficialSources from "@/components/seo/OfficialSources";
+import QuestionAnswer from "@/components/seo/QuestionAnswer";
+import QuickAnswer from "@/components/seo/QuickAnswer";
+import { applySeoOverrides, withPageSeoFaqs } from "@/lib/pageSeo";
+import { faqPageNode, ORG_ID } from "@/lib/seoSchema";
+
+// Update when this page's text or the visa table is reviewed.
+const TEMPLATE_UPDATED = "2026-10-24";
+
+// From the Victorian Government's skilled visa pages (liveinmelbourne.vic.gov.au),
+// which restate the Department of Home Affairs rules; checked on the date above.
+const SKILLED_VISAS = [
+  {
+    name: "Skilled Nominated visa (subclass 190)",
+    type: "Permanent",
+    rules: "State or territory nomination, under 45 years of age when nominated, at least 65 points (including 5 for nomination), Competent English and a skills assessment",
+  },
+  {
+    name: "Skilled Work Regional (Provisional) visa (subclass 491)",
+    type: "Provisional, up to 5 years",
+    rules: "Live, work and study in a designated regional area; under 45 years of age when nominated, at least 65 points (including 15 for nomination); after 3 years holders may be eligible for the permanent subclass 191 visa",
+  },
+];
 
 const SITE_URL = "https://medcityoverseas.com";
 const PAGE_PATH = "/migrate-to-australia";
@@ -12,14 +37,14 @@ const OG_IMAGE_URL =
   `${SITE_URL}${OG_IMAGE_PATH}`;
 
 const PAGE_TITLE =
-  "Migrate to Australia from Kerala | Australia Migration Consultants";
+  "Migrate to Australia from Kerala | Medcity Overseas";
 
 const PAGE_DESCRIPTION =
-  "Explore pathways to migrate to Australia from Kerala, including skilled migration, subclass 189, 190 and 491 visas, employer-sponsored options, eligibility requirements and migration guidance from Medcity Overseas.";
+  "Migrate to Australia from Kerala: skilled visas 189, 190 and 491, employer-sponsored options, eligibility and migration guidance from Medcity Overseas.";
 
 const pageMetadata = {
   title: {
-    absolute: `${PAGE_TITLE} | Medcity Overseas`,
+    absolute: PAGE_TITLE,
   },
 
   description: PAGE_DESCRIPTION,
@@ -109,7 +134,7 @@ const pageMetadata = {
 const migrationPathways = [
   {
     name:
-      "Skilled Independent Visa – Subclass 189",
+      "Skilled Independent Visa (Subclass 189)",
 
     description:
       "A points-tested skilled migration pathway for eligible applicants that generally does not require state, territory or employer nomination.",
@@ -117,7 +142,7 @@ const migrationPathways = [
 
   {
     name:
-      "Skilled Nominated Visa – Subclass 190",
+      "Skilled Nominated Visa (Subclass 190)",
 
     description:
       "A points-tested skilled migration pathway that requires nomination by an Australian state or territory government.",
@@ -125,7 +150,7 @@ const migrationPathways = [
 
   {
     name:
-      "Skilled Work Regional Visa – Subclass 491",
+      "Skilled Work Regional Visa (Subclass 491)",
 
     description:
       "A provisional skilled migration pathway involving state or territory nomination or eligible family sponsorship for designated regional areas of Australia.",
@@ -168,7 +193,7 @@ const structuredData = {
       url: PAGE_URL,
 
       name:
-        "Migrate to Australia from Kerala | Australia Migration Consultants",
+        PAGE_TITLE,
 
       description: PAGE_DESCRIPTION,
 
@@ -181,6 +206,10 @@ const structuredData = {
       publisher: {
         "@id": `${SITE_URL}/#organization`,
       },
+
+      author: { "@id": ORG_ID },
+
+      dateModified: TEMPLATE_UPDATED,
 
       breadcrumb: {
         "@id": `${PAGE_URL}#breadcrumb`,
@@ -309,6 +338,9 @@ const structuredData = {
           })
         ),
     },
+
+    // FAQs added in the SEO manager join it (withPageSeoFaqs).
+    faqPageNode(PAGE_PATH, australiaFaqs),
   ],
 };
 
@@ -319,7 +351,7 @@ function serializeJsonLd(data) {
   );
 }
 
-export default function MigrateToAustraliaPage() {
+export default async function MigrateToAustraliaPage() {
   return (
     <>
       <script
@@ -327,12 +359,103 @@ export default function MigrateToAustraliaPage() {
         dangerouslySetInnerHTML={{
           __html:
             serializeJsonLd(
-              structuredData
+              await withPageSeoFaqs(structuredData)
             ),
         }}
       />
 
-      <AustraliaMigrationContent />
+      <AustraliaMigrationContent
+        intro={
+          <QuickAnswer updated={TEMPLATE_UPDATED} className="py-10">
+            To migrate to Australia from Kerala, skilled workers usually apply through the points tested skilled visas: the Skilled Independent visa (subclass 189), the state nominated Skilled Nominated visa (subclass 190) and the regional Skilled Work Regional visa (subclass 491). Employer sponsored visas are another route. Medcity Overseas helps you check which pathway fits your occupation and profile.
+          </QuickAnswer>
+        }
+        beforeFaq={
+          <>
+            <QuestionAnswer
+              className="py-12"
+              eyebrow="Skilled migration"
+              question="Who can apply for an Australian skilled nominated visa?"
+              answer="For the Skilled Nominated visa (subclass 190) you need a nomination from an Australian state or territory, must be under 45 years of age when nominated, need at least 65 points on the Australian Government's points test, at least Competent English and a skills assessment in an occupation on the eligible skilled occupation list."
+            />
+
+            <section aria-labelledby="skilled-visas-table-heading" className="mx-auto max-w-6xl px-4 pb-12 sm:px-6 lg:px-8">
+              <h2 id="skilled-visas-table-heading" className="text-2xl font-black text-slate-900 sm:text-3xl">
+                State nominated skilled visas compared
+              </h2>
+
+              <p className="mt-3 max-w-3xl leading-7 text-slate-600">
+                The main rules for the two state nominated visas, as the Victorian Government sets them out from the Department of Home Affairs requirements. Each state adds its own nomination criteria.
+              </p>
+
+              <div className="mt-6 overflow-x-auto rounded-2xl border border-slate-200 bg-white">
+                <table className="w-full min-w-[640px] text-left text-sm">
+                  <thead className="bg-slate-50 text-xs font-extrabold uppercase tracking-[0.08em] text-slate-500">
+                    <tr>
+                      <th scope="col" className="px-4 py-3">Visa</th>
+                      <th scope="col" className="px-4 py-3">Type</th>
+                      <th scope="col" className="px-4 py-3">Main requirements</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100 text-slate-700">
+                    {SKILLED_VISAS.map((visa) => (
+                      <tr key={visa.name}>
+                        <th scope="row" className="px-4 py-3 font-bold text-slate-900">{visa.name}</th>
+                        <td className="px-4 py-3">{visa.type}</td>
+                        <td className="px-4 py-3">{visa.rules}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </section>
+          </>
+        }
+        afterFaq={
+          <>
+            <OfficialSources
+              className="pb-12"
+              links={[
+                {
+                  label: "Skilled Nominated visa (subclass 190), Victorian Government",
+                  href: "https://liveinmelbourne.vic.gov.au/migrate/skilled-migration-visas/skilled-nominated-visa-subclass-190",
+                  note: "Nomination, age, points and English requirements.",
+                },
+                {
+                  label: "Skilled Work Regional visa (subclass 491), Victorian Government",
+                  href: "https://liveinmelbourne.vic.gov.au/migrate/skilled-migration-visas/491",
+                  note: "Regional living rules and the pathway to permanent residence.",
+                },
+                {
+                  label: "Skilled Independent visa (subclass 189), Department of Home Affairs",
+                  href: "https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing/skilled-independent-189",
+                  note: "The Australian Government's official visa listing.",
+                },
+              ]}
+            />
+
+            <p className="mx-auto max-w-5xl px-4 pb-16 text-sm leading-7 text-slate-600 sm:px-6 lg:px-8">
+              Planning to study first? Read the{" "}
+              <Link href="/study-in-australia" className="font-bold text-primary hover:underline">
+                study in Australia guide
+              </Link>
+              , see how to{" "}
+              <Link href="/migrate-to-canada" className="font-bold text-primary hover:underline">
+                migrate to Canada
+              </Link>
+              , find your{" "}
+              <Link href="/branches" className="font-bold text-primary hover:underline">
+                nearest Medcity branch
+              </Link>{" "}
+              or{" "}
+              <Link href="/contact-us" className="font-bold text-primary hover:underline">
+                contact Medcity Overseas
+              </Link>
+              .
+            </p>
+          </>
+        }
+      />
     </>
   );
 }

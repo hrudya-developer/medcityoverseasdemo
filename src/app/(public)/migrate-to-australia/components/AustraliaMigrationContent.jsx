@@ -1,5 +1,3 @@
-import FAQ from "@/components/home/FAQ/FAQ";
-
 import AustraliaMigrationBenefits from "./AustraliaMigrationBenefits";
 import AustraliaMigrationHero from "./AustraliaMigrationHero";
 import AustraliaMigrationPrograms from "./AustraliaMigrationPrograms";
@@ -7,11 +5,14 @@ import AustraliaMigrationSteps from "./AustraliaMigrationSteps";
 import AustraliaPostMigration from "./AustraliaPostMigration";
 import AustraliaMigrationFAQ from "./AustraliaMigrationFAQ";
 
-export default function AustraliaMigrationContent() {
+// intro, beforeFaq and afterFaq are server-rendered sections from page.jsx.
+export default function AustraliaMigrationContent({ intro = null, beforeFaq = null, afterFaq = null }) {
     return (
-        <main className="overflow-hidden bg-white">
+        <div className="overflow-hidden bg-white">
 
             <AustraliaMigrationHero />
+
+            {intro}
 
             <AustraliaMigrationBenefits />
 
@@ -20,8 +21,14 @@ export default function AustraliaMigrationContent() {
             <AustraliaMigrationPrograms />
             <AustraliaPostMigration />
 
-           <AustraliaMigrationFAQ />
-        </main>
+            {beforeFaq}
+
+            <MigrationDisclaimer />
+
+            <AustraliaMigrationFAQ />
+
+            {afterFaq}
+        </div>
     );
 }
 
