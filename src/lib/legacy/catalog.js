@@ -1,5 +1,7 @@
 import "server-only";
 
+import { unstable_cache } from "next/cache";
+
 import { query, queryOne } from "@/lib/db";
 import { imagePath, legacyOffset, likePattern, toId, today } from "./util";
 
@@ -131,6 +133,174 @@ export async function getAllUniversityCoursesLatest(input) {
 
     return { ...response, status: false, nextoffset: "0" };
 }
+
+// The study levels the course finder offers. Any other value is ignored,
+// so a crafted URL cannot add unbounded LIKE clauses.
+const FILTER_LEVELS = [
+    "Undergraduate",
+    "Postgraduate",
+    "Masters",
+    "PhD",
+    "Diploma",
+    "Certificate",
+];
+
+// Deeper pages than this are not offered; it keeps OFFSET scans short.
+const MAX_FILTER_OFFSET = 2000;
+
+// One canonical form of the filters, so equal searches share a cache entry.
+function normaliseCourseFilters(input) {
+    return {
+        countryId: toId(input.countryId),
+        universityId: toId(input.universityId),
+        courseId: toId(input.courseId),
+        intake: toId(input.intake).toLowerCase(),
+        levels: String(input.levels ?? "")
+            .split(",")
+            .map((level) =>
+                FILTER_LEVELS.find(
+                    (known) => known.toLowerCase() === level.trim().toLowerCase()
+                )
+            )
+            .filter((level, index, list) => level && list.indexOf(level) === index)
+            .sort(),
+        keyword: String(input.keyword ?? "").trim().replace(/\s+/g, " ").toLowerCase().slice(0, 100),
+        offset: Math.min(legacyOffset(input.offset), MAX_FILTER_OFFSET),
+    };
+}
+
+async function queryCoursesByFilters(filters) {
+    const where = ["c.status = '1'", "u.status = '1'"];
+    const params = [];
+
+    for (const [column, value] of [
+        ["c.d_id", filters.countryId],
+        ["c.u_id", filters.universityId],
+        ["c.c_id", filters.courseId],
+    ]) {
+        if (value) {
+            where.push(`${column} = ?`);
+            params.push(value);
+        }
+    }
+
+    if (filters.keyword) {
+        // The route filters these rows again by keyword in JS; these
+        // columns are among the ones it checks, so it keeps every match.
+        const columns = ["c.course", "m.name", "u.name", "d.country", "c.level", "c.intakes"];
+
+        where.push(`(${columns.map((column) => `${column} LIKE ?`).join(" OR ")})`);
+        params.push(...columns.map(() => likePattern(filters.keyword)));
+    }
+
+    if (filters.intake) {
+        where.push("c.intakes LIKE ?");
+        params.push(likePattern(filters.intake));
+    }
+
+    if (filters.levels.length > 0) {
+        where.push(`(${filters.levels.map(() => "c.level LIKE ?").join(" OR ")})`);
+        params.push(...filters.levels.map((level) => likePattern(level)));
+    }
+
+    // tb_courses holds about 110,000 rows with TEXT columns and these
+    // LIKE filters cannot use an index. Check EXPLAIN for this query on
+    // the production database and add indexes on d_id, u_id, c_id and
+    // status if it scans the whole table.
+    const course = await query(
+        `SELECT c.*, m.name, m.icon, d.country, u.name AS university, u.location
+         ${COURSE_JOIN}
+         WHERE ${where.join(" AND ")}
+         ORDER BY c.id ASC
+         LIMIT 20 OFFSET ?`,
+        [...params, filters.offset]
+    );
+
+    return {
+        maincourse_image_path: imagePath("icons/"),
+        course,
+        nextoffset: course.length === 20 ? filters.offset + 20 : "0",
+    };
+}
+
+// Results are kept for 5 minutes per filter set and offset (the
+// normalised filters are the cache key), so repeated searches do not
+// hit the database. A failed query throws and is not cached.
+const cachedCoursesByFilters = unstable_cache(
+    queryCoursesByFilters,
+    ["course-finder-filters"],
+    { revalidate: 300 }
+);
+
+// Ids of live countries, live universities and study areas, kept for 5
+// minutes. A search is cached only when every id it names is real, so
+// the cache is bounded by the catalogue and random ids from bots go
+// straight to the database.
+const knownFilterIds = unstable_cache(
+    async () => {
+        const [countries, universities, studyAreas] = await Promise.all([
+            query("SELECT id FROM tb_destinations WHERE status = '1'"),
+            query("SELECT id FROM tb_universities WHERE status = '1'"),
+            query("SELECT id FROM tb_main_course"),
+        ]);
+        const ids = (rows) => rows.map((row) => String(row.id));
+
+        return { countries: ids(countries), universities: ids(universities), studyAreas: ids(studyAreas) };
+    },
+    ["course-finder-known-ids"],
+    { revalidate: 300 }
+);
+
+async function idsAreKnown(filters) {
+    if (!filters.countryId && !filters.universityId && !filters.courseId) {
+        return true;
+    }
+
+    const known = await knownFilterIds();
+
+    return (
+        (!filters.countryId || known.countries.includes(filters.countryId)) &&
+        (!filters.universityId || known.universities.includes(filters.universityId)) &&
+        (!filters.courseId || known.studyAreas.includes(filters.courseId))
+    );
+}
+
+/*
+ * Course finder filters (country, university, study area, intake,
+ * level, keyword) in any combination. getAllUniversityCoursesLatest
+ * above needs both a university and a study area, so a country or level
+ * filter on its own found nothing. Same row shape as that endpoint.
+ * Only courses at active universities, so every result opens a live
+ * course page.
+ */
+export async function getCoursesByFilters(input) {
+    const filters = normaliseCourseFilters(input ?? {});
+
+    // Only a bounded set of searches is cached: no free-text keyword,
+    // numeric ids, a month name as intake and an offset on a page
+    // boundary. Anything else (for example a bot sending random
+    // keywords) goes straight to the database, so the cache cannot grow
+    // without limit.
+    const cacheable =
+        !filters.keyword &&
+        [filters.countryId, filters.universityId, filters.courseId].every((id) => !id || /^\d{1,6}$/.test(id)) &&
+        (!filters.intake || CACHEABLE_INTAKES.has(filters.intake)) &&
+        filters.offset % 20 === 0;
+
+    if (!cacheable || !(await idsAreKnown(filters))) {
+        return queryCoursesByFilters(filters);
+    }
+
+    return cachedCoursesByFilters(filters);
+}
+
+const CACHEABLE_INTAKES = new Set(
+    [
+        "january", "february", "march", "april", "may", "june",
+        "july", "august", "september", "october", "november", "december",
+        "jan", "feb", "mar", "apr", "jun", "jul", "aug", "sep", "sept", "oct", "nov", "dec",
+    ]
+);
 
 export async function getCoursebyMainUniversity(input) {
     return {

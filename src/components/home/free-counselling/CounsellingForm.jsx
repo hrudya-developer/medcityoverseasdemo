@@ -22,6 +22,7 @@ import dynamic from "next/dynamic";
 import Swal from "sweetalert2";
 
 import cn from "@/lib/cn";
+import { isValidMobile } from "@/lib/phone";
 
 import {
     useGetAllDestinationsQuery,
@@ -316,17 +317,21 @@ const CounsellingForm = ({ onSuccess, }) => {
                 "Enter a valid email address.";
         }
 
+        // The picker keeps the country code ("+91") in an empty
+        // field, and country codes have at most 3 digits.
         const mobileDigits =
             mobile.replace(/\D/g, "");
 
-        if (!mobile.trim()) {
+        if (mobileDigits.length <= 3) {
             nextErrors.mobile =
                 "Mobile number is required.";
         } else if (
-            mobileDigits.length < 7
+            !isValidMobile(mobile)
         ) {
             nextErrors.mobile =
-                "Enter a valid mobile number.";
+                mobileDigits.startsWith("91")
+                    ? "Indian mobile numbers have 10 digits starting 6 to 9. Outside India? Choose your country from the flag."
+                    : "Enter a valid mobile number.";
         }
 
         if (!formData.destination) {
@@ -387,8 +392,20 @@ const CounsellingForm = ({ onSuccess, }) => {
 
         setSubmitting(true);
 
+        const showError = (text) =>
+            Swal.fire({
+                icon: "error",
+                title: "Submission Failed",
+                text,
+                confirmButtonText: "OK",
+                confirmButtonColor:
+                    "#631A33",
+            });
+
+        let response;
+
         try {
-            const response = await fetch(
+            response = await fetch(
                 "/api/counselling",
                 {
                     method: "POST",
@@ -403,38 +420,8 @@ const CounsellingForm = ({ onSuccess, }) => {
                     }),
                 }
             );
-
-            const result =
-                await response.json();
-
-            if (!response.ok) {
-                throw new Error(
-                    result?.message ||
-                    "Unable to submit your enquiry."
-                );
-            }
-
-            resetForm();
-            setSubmitting(false);
-
-            // This closes the modal.
-            onSuccess?.();
-
-            // Show Swal after the modal closes.
-            window.setTimeout(() => {
-                Swal.fire({
-                    icon: "success",
-                    title:
-                        "Submitted Successfully!",
-                    text:
-                        result?.message ||
-                        "Our team will contact you soon.",
-                    confirmButtonText: "OK",
-                    confirmButtonColor:
-                        "#c01f53",
-                });
-            }, 150);
         } catch (error) {
+            // Only the request itself fails here: the network is down.
             setSubmitting(false);
 
             console.error(
@@ -442,17 +429,57 @@ const CounsellingForm = ({ onSuccess, }) => {
                 error
             );
 
-            await Swal.fire({
-                icon: "error",
-                title: "Submission Failed",
+            await showError(
+                "We could not reach our server. Please check your connection and try again."
+            );
+
+            return;
+        }
+
+        // A proxy or server error page is not JSON.
+        const result = await response
+            .json()
+            .catch(() => null);
+
+        if (!response.ok || !result || result.success === false) {
+            setSubmitting(false);
+
+            await showError(
+                result?.message ||
+                "Unable to submit your enquiry. Please try again."
+            );
+
+            return;
+        }
+
+        // The enquiry is saved from here on, so nothing below may
+        // report a failure to the visitor.
+        resetForm();
+        setSubmitting(false);
+
+        // Show Swal after the modal closes.
+        window.setTimeout(() => {
+            Swal.fire({
+                icon: "success",
+                title:
+                    "Submitted Successfully!",
                 text:
-                    error instanceof Error
-                        ? error.message
-                        : "Please try again.",
+                    result?.message ||
+                    "Our team will contact you soon.",
                 confirmButtonText: "OK",
                 confirmButtonColor:
-                    "#631A33",
+                    "#c01f53",
             });
+        }, 150);
+
+        // This closes the modal.
+        try {
+            onSuccess?.();
+        } catch (error) {
+            console.error(
+                "Counselling form onSuccess error:",
+                error
+            );
         }
     };
     const destinationLoading =
@@ -580,8 +607,13 @@ const CounsellingForm = ({ onSuccess, }) => {
                             onChange={(
                                 phone
                             ) => {
+                                // A leading 0 typed after +91 (as in
+                                // 098765 43210) is dropped, so it does
+                                // not take the place of a digit.
                                 setMobile(
-                                    phone
+                                    phone.startsWith("+910")
+                                        ? `+91${phone.slice(4)}`
+                                        : phone
                                 );
 
                                 clearFieldError(

@@ -3,6 +3,7 @@
 import {
   memo,
   useCallback,
+  useState,
 } from "react";
 
 import Link from "next/link";
@@ -14,16 +15,22 @@ import {
   Send,
 } from "lucide-react";
 
+import CounsellingModal from "@/components/counselling/CounsellingModal";
+
 import FAQRight from "./FAQRight";
 import { faqItems } from "./faqData";
 
+// The counselling form section on the home and contact pages.
 const COUNSELLING_SECTION_ID =
-  "gfc_wrapper";
+  "counselling";
 
 const FAQ = ({
   onCounsellingClick,
   onAppointmentClick,
 }) => {
+  const [isCounsellingOpen, setIsCounsellingOpen] =
+    useState(false);
+
   /* =======================================================
      SCROLL TO COUNSELLING
   ======================================================= */
@@ -43,7 +50,9 @@ const FAQ = ({
             COUNSELLING_SECTION_ID
           );
 
+        // Pages without the form section open it in a popup.
         if (!target) {
+          setIsCounsellingOpen(true);
           return;
         }
 
@@ -586,6 +595,11 @@ const FAQ = ({
           </Link>
         </div>
       </div>
+
+      <CounsellingModal
+        open={isCounsellingOpen}
+        onClose={() => setIsCounsellingOpen(false)}
+      />
     </section>
   );
 };

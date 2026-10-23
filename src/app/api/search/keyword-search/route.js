@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 
 import { legacyFetch } from "@/lib/legacy";
+import { getCoursesByFilters } from "@/lib/legacy/catalog";
 
 const API_KEY =
   process.env.OVERSEAS_API_KEY;
@@ -12,7 +13,11 @@ const COURSE_DETAIL_API =
   "https://overseas.technocitysolutions.com/public/api/getCoursedetails";
 
 function normalize(value) {
+  // Strip accents first, as the database collation ignores them:
+  // "universitat" must still match "Universität".
   return String(value || "")
+    .normalize("NFD")
+    .replace(/\p{Diacritic}/gu, "")
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, " ")
     .trim();
@@ -258,6 +263,21 @@ async function getCoursePage({
   };
 }
 
+async function getFilteredCourses(filters) {
+  const result =
+    await getCoursesByFilters(filters);
+
+  return {
+    courses: result.course,
+    nextOffset:
+      String(result.nextoffset) !== "0"
+        ? result.nextoffset
+        : null,
+    imagePath:
+      result.maincourse_image_path || "",
+  };
+}
+
 export async function GET(request) {
     if (!process.env.OVERSEAS_API_KEY) {
         console.error("OVERSEAS_API_KEY is missing");
@@ -336,14 +356,29 @@ export async function GET(request) {
           ? selectedId
           : universityId;
 
+      // The course page endpoint needs a university and a study
+      // area. Any other filter combination reads the courses directly.
       response =
-        await getCoursePage({
-          uid,
-          universityId:
-            effectiveUniversityId,
-          courseId,
-          offset,
-        });
+        effectiveUniversityId && courseId
+          ? await getCoursePage({
+              uid,
+              universityId:
+                effectiveUniversityId,
+              courseId,
+              offset,
+            })
+          : await getFilteredCourses({
+              countryId,
+              universityId:
+                effectiveUniversityId,
+              courseId,
+              intake,
+              levels,
+              keyword: selectedId
+                ? ""
+                : keyword,
+              offset,
+            });
 
       let courses =
         uniqueCourses(

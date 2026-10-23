@@ -16,6 +16,7 @@ export default function SearchSection({
     return (
         <>
             <section
+                id="course-search"
                 aria-label="Search study abroad courses"
                 className="relative isolate w-full overflow-hidden bg-[#000] py-12 sm:py-14 lg:py-16" data-aos="fade-up"
             >
