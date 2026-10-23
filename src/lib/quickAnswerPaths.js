@@ -21,6 +21,7 @@ const PATTERNS = [
     /^\/study-abroad-for-nurses$/,
     /^\/study-abroad-without-ielts$/,
     /^\/study-abroad-after-12th$/,
+    /^\/student-visa-guidance$/,
 ];
 
 export function templateShowsQuickAnswer(path) {
