@@ -104,6 +104,7 @@ export default function NursingInGermanyPage() {
             <PageSchema
                 path={PATH}
                 type="Article"
+                headline={TITLE}
                 name={`${TITLE} | Medcity Overseas`}
                 description={DESCRIPTION}
                 dateModified={UPDATED}

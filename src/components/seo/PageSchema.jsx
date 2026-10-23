@@ -22,6 +22,7 @@ import { faqsWithPageSeo } from "@/lib/pageSeo";
 export default async function PageSchema({
     path,
     name,
+    headline,
     description,
     breadcrumbs,
     dateModified,
@@ -36,7 +37,7 @@ export default async function PageSchema({
     const faqList = Array.isArray(faqs) ? await faqsWithPageSeo(faqs) : [];
     const graph = [
         ...(includeOrganization ? [organizationNode(), websiteNode()] : []),
-        webPageNode({ path, type, name, description, dateModified, image, about, mainEntity, breadcrumb: Boolean(breadcrumbs?.length) }),
+        webPageNode({ path, type, name, headline, description, dateModified, image, about, mainEntity, breadcrumb: Boolean(breadcrumbs?.length) }),
         ...(breadcrumbs?.length ? [breadcrumbNode(path, breadcrumbs)] : []),
         ...entities.filter(Boolean),
         ...(faqList.length ? [faqPageNode(path, faqList)] : []),

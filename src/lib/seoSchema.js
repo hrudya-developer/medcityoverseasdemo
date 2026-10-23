@@ -110,7 +110,7 @@ export function breadcrumbNode(path, items) {
     };
 }
 
-export function webPageNode({ path, type = "WebPage", name, description, dateModified, image, about, mainEntity, breadcrumb = true }) {
+export function webPageNode({ path, type = "WebPage", name, headline, description, dateModified, image, about, mainEntity, breadcrumb = true }) {
     const url = pageUrl(path);
 
     return {
@@ -118,6 +118,8 @@ export function webPageNode({ path, type = "WebPage", name, description, dateMod
         "@id": `${url}#webpage`,
         url,
         name,
+        // Articles carry a headline (the H1) as well as the page name.
+        ...(headline ? { headline } : {}),
         ...(description ? { description } : {}),
         inLanguage: "en-IN",
         isPartOf: { "@id": WEBSITE_ID },
