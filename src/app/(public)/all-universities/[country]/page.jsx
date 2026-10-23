@@ -647,8 +647,8 @@ export default async function UniversitiesByCountryPage({
                   facts.courses > 0 ? ` with ${facts.courses.toLocaleString("en-IN")} courses between them` : ""
               }${
                   facts.cities.length ? `, in cities such as ${joinList(facts.cities.slice(0, 3).map((city) => city.name))}` : ""
-              }. Compare universities in ${countryName} by location and courses, then book free counselling to shortlist and apply.`
-            : `Explore universities in ${countryName} for Indian students, compare their courses and book free counselling with Medcity Overseas to shortlist and apply.`;
+              }. Compare universities in ${countryName} by location and courses, then book a counselling session to shortlist and apply.`
+            : `Explore universities in ${countryName} for Indian students, compare their courses and book a counselling session with Medcity Overseas to shortlist and apply.`;
 
     /* =====================================================
        COLLECTION PAGE SCHEMA

@@ -94,7 +94,7 @@ export function DestinationLinks({ countryName, destinationSlug }) {
                 </Link>{" "}
                 or{" "}
                 <Link href="/contact-us" className="font-bold text-primary hover:underline">
-                    book free counselling
+                    book a counselling session
                 </Link>
                 .
             </p>

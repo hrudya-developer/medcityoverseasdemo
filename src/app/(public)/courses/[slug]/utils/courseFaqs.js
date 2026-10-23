@@ -78,7 +78,7 @@ export function createCourseFaqs({ course, details }) {
     // 6. Generic Medcity help
     faqs.push({
         question: `How can Medcity Overseas help with my application to ${safeUniversity}?`,
-        answer: `Medcity Overseas helps with your application to ${safeUniversity}${safeCountry ? ` in ${safeCountry}` : ""}: course shortlisting, preparing application documents, reviewing entry and English requirements, and guidance through the student visa process. Call or WhatsApp +91 90729 82555 for free counselling.`,
+        answer: `Medcity Overseas helps with your application to ${safeUniversity}${safeCountry ? ` in ${safeCountry}` : ""}: course shortlisting, preparing application documents, reviewing entry and English requirements, and guidance through the student visa process. Call or WhatsApp +91 90729 82555 to talk to a counsellor.`,
     });
 
     return faqs;

@@ -29,7 +29,7 @@ const OG_IMAGE_URL = `${SITE_URL}${OG_IMAGE_PATH}`;
 const PAGE_TITLE = "Contact Study Abroad Consultants in Kerala";
 
 const PAGE_DESCRIPTION =
-    "Contact Medcity Overseas on +91 90729 82555, also on WhatsApp, for free study abroad counselling, admissions, scholarships and student visa guidance.";
+    "Contact Medcity Overseas on +91 90729 82555, also on WhatsApp, for study abroad counselling, admissions, scholarships and student visa guidance.";
 
 const BUSINESS_PHONE = "+91-9072982555";
 const BUSINESS_EMAIL = "medcitykochi@miak.in";
@@ -232,7 +232,7 @@ export default async function ContactUsPage() {
                 <ContactHero />
 
                 <QuickAnswer updated={TEMPLATE_UPDATED} className="py-10">
-                    {`Call or WhatsApp Medcity Overseas on +91 90729 82555, or email info@mioc.in, for free study abroad counselling. The head office is in ${offices[0].locality} and the corporate office in ${offices[1].locality}, and you can also visit any Medcity branch across Kerala and Mangalore. Book a session with the form below and a counsellor will get back to you.`}
+                    {`Call or WhatsApp Medcity Overseas on +91 90729 82555, or email info@mioc.in, to talk to a study abroad counsellor. The head office is in ${offices[0].locality} and the corporate office in ${offices[1].locality}, and you can also visit any Medcity branch across Kerala and Mangalore. Book a session with the form below and a counsellor will get back to you.`}
                 </QuickAnswer>
 
                 <section

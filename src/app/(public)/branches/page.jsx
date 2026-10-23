@@ -40,7 +40,7 @@ const PAGE_TITLE =
   "Study Abroad Consultants in Kerala & Mangalore | Medcity Overseas";
 
 const PAGE_DESCRIPTION =
-  "Find Medcity Overseas study abroad consultants across Kerala and Mangalore: branch addresses, phone numbers and free counselling at a branch near you.";
+  "Find Medcity Overseas study abroad consultants across Kerala and Mangalore: branch addresses, phone numbers and counselling at a branch near you.";
 
 const pageMetadata = {
   title: {
@@ -947,7 +947,7 @@ export default async function BranchesPage() {
           <QuickAnswer updated={TEMPLATE_UPDATED} className="pb-10 pt-2">
             {`Medcity Overseas has ${centers.length} study abroad branches: ${kerala.length} across Kerala, in ${joinList(keralaTowns)}${
               otherTowns.length ? `, and ${otherTowns.length === 1 ? "one" : otherTowns.length} in ${joinList(otherTowns)}` : ""
-            }. Book free study abroad counselling at the branch nearest to you; each branch page lists its own address and phone numbers.`}
+            }. Book a study abroad counselling session at the branch nearest to you; each branch page lists its own address and phone numbers.`}
           </QuickAnswer>
         }
         beforeFaq={

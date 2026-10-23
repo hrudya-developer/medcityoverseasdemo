@@ -252,7 +252,7 @@ export default async function StudyAbroadBlogPage() {
               <Link href="/contact-us" className="font-bold text-primary hover:underline">
                 contact Medcity Overseas
               </Link>{" "}
-              for free counselling.
+              to book a counselling session.
             </p>
           </>
         }

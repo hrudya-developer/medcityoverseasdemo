@@ -18,6 +18,6 @@ export const coursesFaqs = [
     {
         question: "Can Medcity Overseas help me apply for a course abroad?",
         answer:
-            "Yes. Our counsellors help you shortlist courses, prepare your documents and apply to universities, and guide you through the student visa process. Call or WhatsApp +91 90729 82555 for free counselling.",
+            "Yes. Our counsellors help you shortlist courses, prepare your documents and apply to universities, and guide you through the student visa process. Call or WhatsApp +91 90729 82555 to talk to a counsellor.",
     },
 ];

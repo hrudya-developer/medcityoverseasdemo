@@ -73,7 +73,7 @@ export function universityFaqs(universityName, countryName, facts) {
 
     faqs.push({
         question: `How can Medcity Overseas help me apply to ${universityName}?`,
-        answer: `Medcity Overseas counsellors help you choose a course at ${universityName}, check your eligibility, prepare your documents and application, and guide you through the offer, student visa and pre-departure steps. Call or WhatsApp +91 90729 82555 for free counselling.`,
+        answer: `Medcity Overseas counsellors help you choose a course at ${universityName}, check your eligibility, prepare your documents and application, and guide you through the offer, student visa and pre-departure steps. Call or WhatsApp +91 90729 82555 to talk to a counsellor.`,
     });
 
     return faqs;
@@ -184,7 +184,7 @@ export function UniversityGuide({ universityName, countryName, countrySlug, coun
                 </Link>{" "}
                 or{" "}
                 <Link href="/contact-us" className="font-bold text-primary hover:underline">
-                    book free counselling
+                    book a counselling session
                 </Link>
                 .
             </p>

@@ -100,7 +100,7 @@ export async function CourseLinks({ facts, universityPath, countrySlug }) {
                             href="/contact-us"
                             className="block rounded-2xl border border-slate-200 p-4 font-bold text-slate-900 transition hover:border-primary/30 hover:text-primary"
                         >
-                            Book free counselling
+                            Book a counselling session
                         </Link>
                     </li>
                 </ul>

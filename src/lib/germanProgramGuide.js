@@ -73,7 +73,7 @@ const SOURCES = {
 function helpFaq(name) {
     return {
         question: `How does Medcity Overseas help with ${name}?`,
-        answer: `Medcity Overseas guides students from Kerala through every step of ${name}: a free counselling session to check eligibility, German language training, preparing documents, applications and the German visa. Call or WhatsApp +91 90729 82555 to book a session.`,
+        answer: `Medcity Overseas guides students from Kerala through every step of ${name}: a counselling session to check eligibility, German language training, preparing documents, applications and the German visa. Call or WhatsApp +91 90729 82555 to book a session.`,
     };
 }
 
@@ -398,9 +398,9 @@ export function germanProgramGuide(programName, programWhy = "") {
 
     const start = {
         question: `How do you start ${phrase} in Germany with Medcity Overseas?`,
-        answer: `Start with a free counselling session, where a Medcity Overseas counsellor checks your profile against the ${name} requirements. You then build your German, prepare and translate your documents, send your applications and finally apply for the right German visa. The steps below show the usual order, and your counsellor adapts them to you.`,
+        answer: `Start with a counselling session, where a Medcity Overseas counsellor checks your profile against the ${name} requirements. You then build your German, prepare and translate your documents, send your applications and finally apply for the right German visa. The steps below show the usual order, and your counsellor adapts them to you.`,
         steps: [
-            { title: "Free counselling", text: "check your eligibility and confirm the programme suits your goals." },
+            { title: "Counselling session", text: "check your eligibility and confirm the programme suits your goals." },
             { title: "German language training", text: "reach the level your programme and the visa office ask for." },
             { title: "Documents and applications", text: "prepare, translate and submit what each application needs." },
             { title: "Visa and departure", text: "apply for the right German visa and prepare for your move." },
@@ -422,7 +422,7 @@ export function germanProgramGuide(programName, programWhy = "") {
     return {
         name,
         title: `${name} in Germany for Indian Students`,
-        description: `${name} in Germany: benefits, eligibility, steps and programme details for Indian students, with free counselling and visa guidance from Medcity Overseas.`,
+        description: `${name} in Germany: benefits, eligibility, steps and programme details for Indian students, with counselling and visa guidance from Medcity Overseas.`,
         summary: `${name} is a Germany programme that Medcity Overseas guides students from Kerala through, from the first counselling session to German language training, applications and the visa.`,
         question: `What is ${name} in Germany?`,
         answer: words(why) >= 40 && words(why) <= 60 ? why : fallbackAnswer,

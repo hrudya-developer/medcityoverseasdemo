@@ -188,8 +188,8 @@ export default async function UniversitiesPage() {
   const inShort = universityTotal > 0
     ? `Medcity Overseas lists ${universityTotal.toLocaleString("en-IN")} universities abroad for Indian students in ${listed.length} ${listed.length === 1 ? "country" : "countries"} (${joinList(listed.map((row) => row.country))})${
         courseTotal > 0 ? `, with ${courseTotal.toLocaleString("en-IN")} courses between them` : ""
-      }. Pick a destination to compare its universities and courses, then book free counselling to shortlist and apply.`
-    : "Explore universities abroad for Indian students by destination, compare their courses and book free counselling with Medcity Overseas to shortlist and apply.";
+      }. Pick a destination to compare its universities and courses, then book a counselling session to shortlist and apply.`
+    : "Explore universities abroad for Indian students by destination, compare their courses and book a counselling session with Medcity Overseas to shortlist and apply.";
 
   return (
     <div className="min-h-screen overflow-x-clip bg-[#f8fafc]">
@@ -287,7 +287,7 @@ export default async function UniversitiesPage() {
         <Link href="/contact-us" className="font-bold text-primary hover:underline">
           contact Medcity Overseas
         </Link>{" "}
-        for free counselling.
+        to book a counselling session.
       </p>
     </div>
   );

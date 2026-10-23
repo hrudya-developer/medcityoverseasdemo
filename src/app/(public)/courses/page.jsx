@@ -37,7 +37,7 @@ const PAGE_TITLE =
   "Study Abroad Courses for Indian Students | Medcity Overseas";
 
 const PAGE_DESCRIPTION =
-  "Search study abroad courses for Indian students by country, university, level and intake, compare durations and entry details, and get free counselling.";
+  "Search study abroad courses for Indian students by country, university, level and intake, compare durations and entry details, and talk to a counsellor.";
 
 // Update when this page's text is reviewed.
 const TEMPLATE_UPDATED = "2026-10-24";
@@ -279,8 +279,8 @@ export default async function CoursesPage() {
         {total > 0
           ? `Search ${total.toLocaleString("en-IN")} study abroad courses listed on Medcity Overseas${
               countries > 0 ? ` in ${countries} ${countries === 1 ? "country" : "countries"}` : ""
-            }, by country, university, course, intake and study level. Open a course for its duration, intakes, fees and entry requirements where recorded, then book free counselling to shortlist and apply.`
-          : "Search study abroad courses for Indian students by country, university, course, intake and study level, then book free counselling with Medcity Overseas to shortlist and apply."}
+            }, by country, university, course, intake and study level. Open a course for its duration, intakes, fees and entry requirements where recorded, then book a counselling session to shortlist and apply.`
+          : "Search study abroad courses for Indian students by country, university, course, intake and study level, then book a counselling session with Medcity Overseas to shortlist and apply."}
       </QuickAnswer>
 
       <Suspense
@@ -345,7 +345,7 @@ export default async function CoursesPage() {
         <Link href="/contact-us" className="font-bold text-primary hover:underline">
           contact us
         </Link>{" "}
-        for free counselling.
+        to book a counselling session.
       </p>
     </div>
   );

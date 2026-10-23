@@ -46,9 +46,9 @@ const FAQS = [
             "Medcity Overseas counsellors help students shortlist countries, universities and courses, prepare applications and documents, plan English or German language tests, and follow the student visa and pre-departure steps.",
     },
     {
-        question: "Does Medcity Overseas offer free counselling?",
+        question: "How do I book a counselling session with Medcity Overseas?",
         answer:
-            "Yes. Book a free counselling session by calling or messaging +91 90729 82555 on WhatsApp, or through the contact page. A counsellor reviews your profile and explains suitable countries, courses and next steps.",
+            "Call or message +91 90729 82555 on WhatsApp, or use the contact page. A counsellor reviews your profile and explains suitable countries, courses and next steps.",
     },
     {
         question: "Which countries do Medcity Overseas students study in?",
@@ -502,7 +502,7 @@ export default async function AllTestimonialsPage() {
                     testimonials.length > 0
                         ? `This page shares ${testimonials.length} testimonials from Medcity Overseas students`
                         : "This page shares testimonials from Medcity Overseas students"
-                } about their study abroad journeys: choosing a country and course, university admissions, student visas and preparing to leave. Medcity Overseas is a study abroad consultancy in Kerala offering free counselling.`}
+                } about their study abroad journeys: choosing a country and course, university admissions, student visas and preparing to leave. Medcity Overseas is a study abroad consultancy in Kerala offering study abroad counselling.`}
             </QuickAnswer>
 
             {/* =================================================
@@ -686,7 +686,7 @@ export default async function AllTestimonialsPage() {
                     question="How does Medcity Overseas support students like these?"
                     answer="Medcity Overseas supports students from the first counselling session to departure. Counsellors help shortlist universities and courses, prepare applications and documents, plan English or German language tests, and guide the student visa and pre-departure steps. The testimonials on this page come from students who went through this process."
                     points={[
-                        { title: "Counselling", text: "a free session to review your profile and goals." },
+                        { title: "Counselling", text: "a session to review your profile and goals." },
                         { title: "Applications", text: "shortlisting, documents and university applications." },
                         { title: "Language tests", text: "IELTS, PTE, OET or German language preparation." },
                         { title: "Visa and departure", text: "student visa guidance and pre-departure support." },

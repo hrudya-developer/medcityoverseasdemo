@@ -158,8 +158,8 @@ export default async function CommunityPostsPage() {
                 intro={
                     <QuickAnswer updated={dateModified} className="py-10">
                         {total > 0
-                            ? `The Medcity Overseas study abroad community has ${total} ${total === 1 ? "post" : "posts"} from students: announcements, opportunities and updates on their journeys abroad, newest first. Read them below, or book free counselling to start your own study abroad plan.`
-                            : "Community posts from Medcity Overseas students share announcements, opportunities and updates on their journeys abroad. Book free counselling to start your own study abroad plan."}
+                            ? `The Medcity Overseas study abroad community has ${total} ${total === 1 ? "post" : "posts"} from students: announcements, opportunities and updates on their journeys abroad, newest first. Read them below, or book a counselling session to start your own study abroad plan.`
+                            : "Community posts from Medcity Overseas students share announcements, opportunities and updates on their journeys abroad. Book a counselling session to start your own study abroad plan."}
                     </QuickAnswer>
                 }
                 beforeFaq={
@@ -192,7 +192,7 @@ export default async function CommunityPostsPage() {
                             <Link href="/contact-us" className="font-bold text-primary hover:underline">
                                 contact Medcity Overseas
                             </Link>{" "}
-                            for free counselling.
+                            to book a counselling session.
                         </p>
                     </>
                 }

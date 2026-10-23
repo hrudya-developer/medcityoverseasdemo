@@ -177,7 +177,7 @@ export default async function AddOnServicesPage() {
                         question="What are study abroad add-on services?"
                         answer="Add-on services are extra help around your university application. Medcity Overseas can help you write your statement of purpose, understand education loans, prepare for a visa interview and sort out travel essentials such as a travel card, an international SIM and flight tickets. You choose only the services you need."
                         points={[
-                            { title: "Before you apply", text: "free counselling, course advice and SOP preparation." },
+                            { title: "Before you apply", text: "counselling, course advice and SOP preparation." },
                             { title: "Paying for it", text: "guidance on education loans and documents." },
                             { title: "Your visa", text: "visa interview preparation." },
                             { title: "Before you fly", text: "travel card, international SIM and flight tickets." },
