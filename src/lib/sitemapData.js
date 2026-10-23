@@ -58,6 +58,7 @@ const STATIC_PAGES = [
     ["/nursing-in-germany-for-indian-nurses", "monthly", 0.8],
     ["/study-abroad-for-nurses", "monthly", 0.8],
     ["/study-abroad-without-ielts", "monthly", 0.8],
+    ["/study-abroad-after-12th", "monthly", 0.8],
     ["/migrate-to-canada", "monthly", 0.7],
     ["/migrate-to-australia", "monthly", 0.7],
     ["/add-on-services", "monthly", 0.6],
