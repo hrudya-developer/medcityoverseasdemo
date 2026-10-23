@@ -3,6 +3,13 @@ import TestimonialsGrid from "./TestimonialsGrid";
 import TestimonialsHero from "./TestimonialsHero";
 import TestimonialsSuccessSection from "./TestimonialsSuccessSection";
 import { applySeoOverrides } from "@/lib/pageSeo";
+import Link from "next/link";
+import FaqList from "@/components/seo/FaqList";
+import OfficialSources from "@/components/seo/OfficialSources";
+import QuestionAnswer from "@/components/seo/QuestionAnswer";
+import QuickAnswer from "@/components/seo/QuickAnswer";
+import { STUDY_ABROAD_SOURCES } from "@/lib/officialSources";
+import { organizationNode, websiteNode } from "@/lib/seoSchema";
 
 // Read straight from the database on each request (same server, a few
 // milliseconds). Prerendering at build time cannot reach the database on
@@ -24,18 +31,40 @@ const OG_IMAGE =
     "/og-images/testimonials-og.webp";
 
 const PAGE_TITLE =
-    "Study Abroad Student Testimonials & Success Stories";
+    "Student Testimonials and Success Stories";
 
 const PAGE_DESCRIPTION =
-    "Read study abroad student testimonials and success stories from Medcity Overseas students. Discover experiences with university admissions, course selection, visa guidance and overseas education support.";
+    "Read testimonials and success stories from Medcity Overseas students about university admissions, course choice, visa guidance and studying abroad.";
+
+// Update when the content of this page is reviewed.
+const PAGE_UPDATED = "2026-10-23";
+
+const FAQS = [
+    {
+        question: "How does Medcity Overseas help students study abroad?",
+        answer:
+            "Medcity Overseas counsellors help students shortlist countries, universities and courses, prepare applications and documents, plan English or German language tests, and follow the student visa and pre-departure steps.",
+    },
+    {
+        question: "Does Medcity Overseas offer free counselling?",
+        answer:
+            "Yes. Book a free counselling session by calling or messaging +91 90729 82555 on WhatsApp, or through the contact page. A counsellor reviews your profile and explains suitable countries, courses and next steps.",
+    },
+    {
+        question: "Which countries do Medcity Overseas students study in?",
+        answer:
+            "Medcity Overseas helps students explore destinations such as Germany, the UK, Canada, Australia, Ireland and New Zealand. The destinations page lists each country's universities, courses and visa guidance.",
+    },
+];
 
 /* =========================================================
    SEO METADATA
 ========================================================= */
 
 const pageMetadata = {
-    title:
-        PAGE_TITLE,
+    title: {
+        absolute: `${PAGE_TITLE} | Medcity Overseas`,
+    },
 
     description:
         PAGE_DESCRIPTION,
@@ -207,6 +236,16 @@ export default async function AllTestimonialsPage() {
         "@context":
             "https://schema.org",
 
+        "@graph": [
+            organizationNode(),
+            websiteNode(),
+        ],
+    };
+
+    const collectionJsonLd = {
+        "@context":
+            "https://schema.org",
+
         "@type":
             "CollectionPage",
 
@@ -237,6 +276,14 @@ export default async function AllTestimonialsPage() {
             "@id":
                 `${SITE_URL}/#organization`,
         },
+
+        publisher: {
+            "@id":
+                `${SITE_URL}/#organization`,
+        },
+
+        dateModified:
+            PAGE_UPDATED,
 
         breadcrumb: {
             "@id":
@@ -409,6 +456,16 @@ export default async function AllTestimonialsPage() {
                 dangerouslySetInnerHTML={{
                     __html:
                         serializeJsonLd(
+                            collectionJsonLd
+                        ),
+                }}
+            />
+
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{
+                    __html:
+                        serializeJsonLd(
                             breadcrumbJsonLd
                         ),
                 }}
@@ -436,6 +493,17 @@ export default async function AllTestimonialsPage() {
                     testimonials.length
                 }
             />
+
+            <QuickAnswer
+                updated={PAGE_UPDATED}
+                className="pt-10"
+            >
+                {`${
+                    testimonials.length > 0
+                        ? `This page shares ${testimonials.length} testimonials from Medcity Overseas students`
+                        : "This page shares testimonials from Medcity Overseas students"
+                } about their study abroad journeys: choosing a country and course, university admissions, student visas and preparing to leave. Medcity Overseas is a study abroad consultancy in Kerala offering free counselling.`}
+            </QuickAnswer>
 
             {/* =================================================
                 STUDENT STORIES
@@ -611,6 +679,50 @@ export default async function AllTestimonialsPage() {
                 SEO CONTENT
             ================================================= */}
 <TestimonialsSuccessSection />
+
+            <div className="space-y-14 bg-white py-14 sm:py-16">
+                <QuestionAnswer
+                    eyebrow="How we help"
+                    question="How does Medcity Overseas support students like these?"
+                    answer="Medcity Overseas supports students from the first counselling session to departure. Counsellors help shortlist universities and courses, prepare applications and documents, plan English or German language tests, and guide the student visa and pre-departure steps. The testimonials on this page come from students who went through this process."
+                    points={[
+                        { title: "Counselling", text: "a free session to review your profile and goals." },
+                        { title: "Applications", text: "shortlisting, documents and university applications." },
+                        { title: "Language tests", text: "IELTS, PTE, OET or German language preparation." },
+                        { title: "Visa and departure", text: "student visa guidance and pre-departure support." },
+                    ]}
+                />
+
+                <p className="mx-auto max-w-5xl px-4 text-sm leading-7 text-slate-600 sm:px-6 lg:px-8">
+                    Start with the{" "}
+                    <Link href="/destinations" className="font-bold text-primary hover:underline">
+                        study destinations
+                    </Link>
+                    , compare{" "}
+                    <Link href="/universities" className="font-bold text-primary hover:underline">
+                        universities
+                    </Link>{" "}
+                    and{" "}
+                    <Link href="/popular-courses" className="font-bold text-primary hover:underline">
+                        popular courses
+                    </Link>
+                    , or find your nearest{" "}
+                    <Link href="/branches" className="font-bold text-primary hover:underline">
+                        Medcity branch
+                    </Link>
+                    .
+                </p>
+
+                <FaqList
+                    path={PAGE_PATH}
+                    faqs={FAQS}
+                />
+
+                <OfficialSources
+                    title="Official visa information"
+                    links={STUDY_ABROAD_SOURCES}
+                />
+            </div>
         </>
     );
 }

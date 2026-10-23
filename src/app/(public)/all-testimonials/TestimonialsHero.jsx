@@ -237,7 +237,8 @@ export default function TestimonialsHero({
                         "
                     >
                         Read genuine student testimonials and
-                        success stories from students supported
+                        success stories that inspire study abroad
+                        journeys, from students supported
                         by Medcity Overseas through admissions,
                         course selection, visa guidance and
                         overseas education support.

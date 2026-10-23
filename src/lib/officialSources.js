@@ -1,0 +1,92 @@
+/*
+ * Official websites the public pages link to as sources: government
+ * visa and immigration services and national study portals. Only
+ * home pages or long-standing sections, so the links stay valid.
+ */
+
+export const OFFICIAL_SOURCES = {
+    germany: [
+        {
+            label: "Study in Germany (DAAD)",
+            href: "https://www.study-in-germany.de/en/",
+            note: "The DAAD's official guide to studying in Germany.",
+        },
+        {
+            label: "Make it in Germany",
+            href: "https://www.make-it-in-germany.com/en/",
+            note: "The German Federal Government's portal for students, trainees and skilled workers.",
+        },
+    ],
+    uk: [
+        {
+            label: "UK Student visa (GOV.UK)",
+            href: "https://www.gov.uk/student-visa",
+            note: "The UK government's Student visa rules and application.",
+        },
+        {
+            label: "UKCISA",
+            href: "https://www.ukcisa.org.uk/",
+            note: "The UK Council for International Student Affairs.",
+        },
+    ],
+    canada: [
+        {
+            label: "Immigration, Refugees and Citizenship Canada",
+            href: "https://www.canada.ca/en/immigration-refugees-citizenship.html",
+            note: "Canada's official study permit information.",
+        },
+    ],
+    australia: [
+        {
+            label: "Study Australia",
+            href: "https://www.studyaustralia.gov.au/",
+            note: "The Australian Government's guide for international students.",
+        },
+    ],
+    ireland: [
+        {
+            label: "Irish Immigration Service",
+            href: "https://www.irishimmigration.ie/",
+            note: "Ireland's official study visa information.",
+        },
+        {
+            label: "Education in Ireland",
+            href: "https://www.educationinireland.com/en/",
+            note: "The Irish Government's guide for international students.",
+        },
+    ],
+    "new-zealand": [
+        {
+            label: "Immigration New Zealand",
+            href: "https://www.immigration.govt.nz/",
+            note: "New Zealand's official student visa information.",
+        },
+    ],
+    malta: [
+        {
+            label: "Identità (Malta)",
+            href: "https://identita.gov.mt/",
+            note: "The Maltese government agency for residence permits and visas.",
+        },
+    ],
+    usa: [
+        {
+            label: "EducationUSA",
+            href: "https://educationusa.state.gov/",
+            note: "The U.S. Department of State's network for international students.",
+        },
+    ],
+};
+
+/** The main sources across the countries students ask about most. */
+export const STUDY_ABROAD_SOURCES = [
+    OFFICIAL_SOURCES.germany[0],
+    OFFICIAL_SOURCES.uk[0],
+    OFFICIAL_SOURCES.canada[0],
+    OFFICIAL_SOURCES.australia[0],
+];
+
+/** Sources for a country slug (as in /study-in-uk), or the general list. */
+export function officialSourcesFor(slug) {
+    return OFFICIAL_SOURCES[String(slug ?? "").toLowerCase()] ?? STUDY_ABROAD_SOURCES;
+}
