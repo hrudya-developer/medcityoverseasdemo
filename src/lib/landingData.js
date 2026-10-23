@@ -207,14 +207,20 @@ export const getScholarshipUniversities = cache(async () => {
         ),
         safeQuery(
             "Course deadlines",
-            `SELECT c.u_id, COUNT(*) AS n
+            `SELECT c.u_id, c.deadline
              FROM tb_courses c
-             WHERE c.status = '1' AND TRIM(COALESCE(c.deadline, '')) NOT IN ('', '-', '0')
-             GROUP BY c.u_id`
+             WHERE c.status = '1' AND TRIM(COALESCE(c.deadline, '')) <> ''`
         ),
     ]);
 
-    const withDeadline = new Map(deadlines.map((row) => [String(row.u_id), Number(row.n) || 0]));
+    // Count only real deadlines: placeholders such as "TBA" or "0000-00-00" are not recorded values.
+    const withDeadline = new Map();
+
+    for (const row of deadlines) {
+        if (text(row.deadline)) {
+            withDeadline.set(String(row.u_id), (withDeadline.get(String(row.u_id)) ?? 0) + 1);
+        }
+    }
 
     const all = rows.map((row) => ({
         id: String(row.id),

@@ -60,6 +60,7 @@ const STATIC_PAGES = [
     ["/study-abroad-without-ielts", "monthly", 0.8],
     ["/study-abroad-after-12th", "monthly", 0.8],
     ["/student-visa-guidance", "monthly", 0.8],
+    ["/scholarships-for-indian-students", "monthly", 0.7],
     ["/migrate-to-canada", "monthly", 0.7],
     ["/migrate-to-australia", "monthly", 0.7],
     ["/add-on-services", "monthly", 0.6],
