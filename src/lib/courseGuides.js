@@ -70,6 +70,31 @@ const MBA_NAMES = [
 // A pre-master's course prepares for a master's; it is not one.
 const PRE_MASTERS = ["pre-master", "pre master", "premaster", "pre-masters", "pre masters", "premasters", "pre-mba", "pre mba"];
 
+// Names that are not a master's degree even with "master" or "MSc" in
+// them: preparation and pre-sessional courses, master classes, and the
+// postgraduate certificates and diplomas below a master's.
+const NOT_MASTERS = [
+    ...PRE_MASTERS,
+    "pre-sessional",
+    "pre sessional",
+    "presessional",
+    "preparation",
+    "preparatory",
+    "master class",
+    "master classes",
+    "masterclass",
+    "masterclasses",
+    "graduate certificate",
+    "postgraduate certificate",
+    "pg certificate",
+    "pgcert",
+    "graduate diploma",
+    "postgraduate diploma",
+    "pg diploma",
+    "pgdip",
+    "higher diploma",
+];
+
 // Levels that rule a course out of a master's guide even when its name
 // looks like a master's (an integrated MSci recorded as Bachelors, say).
 const NOT_POSTGRADUATE = ["Undergraduate", "Diploma", "Certificate", "PhD"];
@@ -152,7 +177,7 @@ export const COURSE_GUIDES = [
         country: "uk",
         keyword: "mba in uk for indian students",
         include: MBA_NAMES,
-        exclude: PRE_MASTERS,
+        exclude: NOT_MASTERS,
         levels: ["Postgraduate"],
         levelNames: MBA_NAMES,
         notLevels: NOT_POSTGRADUATE,
@@ -167,7 +192,7 @@ export const COURSE_GUIDES = [
         country: "ireland",
         keyword: "masters in ireland for indian students",
         include: [],
-        exclude: PRE_MASTERS,
+        exclude: NOT_MASTERS,
         levels: ["Masters"],
         levelNames: MASTER_NAMES,
         notLevels: NOT_POSTGRADUATE,
@@ -182,7 +207,7 @@ export const COURSE_GUIDES = [
         country: "uk",
         keyword: "msc data science uk for indian students",
         include: ["data science", "data sciences"],
-        exclude: PRE_MASTERS,
+        exclude: NOT_MASTERS,
         levels: ["Masters"],
         levelNames: MASTER_NAMES,
         notLevels: NOT_POSTGRADUATE,
