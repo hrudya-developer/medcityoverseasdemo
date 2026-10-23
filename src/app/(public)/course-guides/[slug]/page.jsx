@@ -25,7 +25,6 @@ import { getCourseGuide } from "@/lib/courseGuideData";
 import {
     GUIDE_TABLE_LIMIT,
     MIN_GUIDE_COURSES,
-    countedValues,
     fieldCount,
     findCourseGuide,
     guideCountry,
@@ -33,6 +32,7 @@ import {
     guideHeading,
     guidePath,
     guideSummaryText,
+    mostOften,
     passesGuideGate,
     visaPhrase,
 } from "@/lib/courseGuides";
@@ -260,7 +260,7 @@ export default async function CourseGuidePage({ params }) {
                                     Each university sets its own entry requirements. Of the {summary.total} courses we list, an entry requirement is recorded for{" "}
                                     {count(summary.withEntry)}, an IELTS score for {count(summary.english.ielts)}, a PTE score for {count(summary.english.pte)}, a TOEFL score for{" "}
                                     {count(summary.english.toefl)} and a Duolingo score for {count(summary.english.duolingo)}.
-                                    {summary.ielts.length ? ` The IELTS values recorded most often are ${countedValues(summary.ielts)}.` : ""}
+                                    {summary.ielts.length ? ` ${mostOften("IELTS value", summary.ielts)}.` : ""}
                                     {summary.english.lowerScore > 0
                                         ? ` ${count(summary.english.lowerScore)} ${summary.english.lowerScore === 1 ? "course records" : "courses record"} a lower IELTS, PTE or TOEFL score as well.`
                                         : ""}

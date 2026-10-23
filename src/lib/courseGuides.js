@@ -567,7 +567,7 @@ export function countedValues(list, max = 3) {
 }
 
 /** "The values recorded most often are 6.5 (3 courses) and 6.0 (2 courses)", or "The value recorded is ..." for one. */
-function mostOften(noun, list, max = 3) {
+export function mostOften(noun, list, max = 3) {
     return list.length === 1
         ? `The ${noun} recorded is ${countedValues(list, 1)}`
         : `The ${noun}s recorded most often are ${countedValues(list, max)}`;
