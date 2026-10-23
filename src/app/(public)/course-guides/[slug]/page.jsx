@@ -26,6 +26,7 @@ import {
     GUIDE_TABLE_LIMIT,
     MIN_GUIDE_COURSES,
     countedValues,
+    fieldCount,
     findCourseGuide,
     guideCountry,
     guideFaqs,
@@ -108,6 +109,8 @@ export default async function CourseGuidePage({ params }) {
     const summary = data ?? null;
     const rows = summary?.rows ?? [];
     const faqs = indexable ? guideFaqs(guide, summary) : [];
+    // Field counts are "at least" counts when the rows read were capped.
+    const count = (value) => (summary ? fieldCount(summary, value) : String(value));
     const listItems = indexable
         ? rows
               .filter((course) => course.href)
@@ -195,7 +198,7 @@ export default async function CourseGuidePage({ params }) {
                                 minWidth={900}
                                 caption={
                                     summary.total > rows.length
-                                        ? `Showing ${rows.length} of ${summary.truncated ? "more than " : ""}${summary.total} matching courses, spread across universities.`
+                                        ? `Showing ${rows.length} of ${summary.total} matching courses, spread across universities.`
                                         : undefined
                                 }
                             >
@@ -255,11 +258,11 @@ export default async function CourseGuidePage({ params }) {
                             <Prose>
                                 <p>
                                     Each university sets its own entry requirements. Of the {summary.total} courses we list, an entry requirement is recorded for{" "}
-                                    {summary.withEntry}, an IELTS score for {summary.english.ielts}, a PTE score for {summary.english.pte}, a TOEFL score for{" "}
-                                    {summary.english.toefl} and a Duolingo score for {summary.english.duolingo}.
+                                    {count(summary.withEntry)}, an IELTS score for {count(summary.english.ielts)}, a PTE score for {count(summary.english.pte)}, a TOEFL score for{" "}
+                                    {count(summary.english.toefl)} and a Duolingo score for {count(summary.english.duolingo)}.
                                     {summary.ielts.length ? ` The IELTS values recorded most often are ${countedValues(summary.ielts)}.` : ""}
                                     {summary.english.lowerScore > 0
-                                        ? ` ${summary.english.lowerScore} ${summary.english.lowerScore === 1 ? "course records" : "courses record"} a lower IELTS, PTE or TOEFL score as well.`
+                                        ? ` ${count(summary.english.lowerScore)} ${summary.english.lowerScore === 1 ? "course records" : "courses record"} a lower IELTS, PTE or TOEFL score as well.`
                                         : ""}
                                 </p>
                             </Prose>

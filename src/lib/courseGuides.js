@@ -12,11 +12,11 @@ import { intakeList } from "@/lib/recordValue";
  * sitemap and the links from /popular-courses, the country guide and
  * the matching course pages all follow from it.
  *
- * Matching runs in two steps. The SQL in guideCourseWhere() is a broad
- * prefilter (LIKE on the course name, the country and the level), so
- * it can only return too many rows, never too few. courseMatchesGuide()
- * then applies the exact rules (whole words, exclusions), and the page
- * counts only the rows that pass it.
+ * Matching is on whole words of the course name and the recorded
+ * level. guideCourseWhere() states the same rules in SQL as
+ * courseMatchesGuide() does in JS, so the database can count the
+ * matching courses and universities exactly; the page then reads only
+ * the rows it needs.
  */
 
 export const COURSE_GUIDES_PATH = "/course-guides";
@@ -27,8 +27,8 @@ export const MIN_GUIDE_COURSES = 5;
 /** The most course rows a guide's table shows. */
 export const GUIDE_TABLE_LIMIT = 50;
 
-/** The most rows the prefilter reads for one guide. */
-export const GUIDE_READ_LIMIT = 3000;
+/** The most matching rows read (without fees or full entry text) for one guide's summary. */
+export const GUIDE_READ_LIMIT = 20000;
 
 // Course names that mark a master's degree, for courses whose level is
 // not recorded (or is only "Postgraduate").
@@ -251,25 +251,34 @@ export function guidesForCountrySlug(slug) {
 
 /* ---------------------------------------------------------------- */
 
-function escapeRegex(text) {
-    return text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+/*
+ * Word matching that SQL can repeat exactly, so the database counts the
+ * same courses the page lists. A name is lower cased, each of these
+ * characters becomes a space, and a term matches when " term " occurs
+ * in " name ". REGEXP is avoided so the SQL runs on every MySQL and
+ * MariaDB version.
+ */
+export const WORD_SPLIT_CHARS = [
+    "(", ")", "[", "]", "{", "}", ",", ".", "/", "\\", "-", ":", ";", "&", "+", "'", "’", "\"", "!", "?", "*", "|", "_", "#",
+    "\t", "\n", "\r", " ",
+];
+
+const SPLIT_SET = new Set(WORD_SPLIT_CHARS);
+
+function splitWords(text) {
+    return [...String(text ?? "").toLowerCase()].map((char) => (SPLIT_SET.has(char) ? " " : char)).join("");
 }
 
-// A whole word or phrase, in any case: "ma" matches "MA Design" but not "Marketing".
-function wordPattern(terms) {
-    if (!terms.length) {
-        return null;
-    }
-
-    const words = terms.map((term) => escapeRegex(key(term)).replace(/\s+/g, "\\s+"));
-
-    return new RegExp(`(?<![a-z0-9])(?:${words.join("|")})(?![a-z0-9])`, "i");
+/** A term in the form it is searched for: "M.B.A." becomes "m b a". */
+export function normaliseTerm(term) {
+    return splitWords(term).trim();
 }
 
-function hasWord(text, terms) {
-    const pattern = wordPattern(terms);
+/** Whether a name contains one of the terms as whole words. */
+export function hasWord(text, terms) {
+    const words = ` ${splitWords(text)} `;
 
-    return pattern ? pattern.test(String(text ?? "")) : false;
+    return terms.some((term) => words.includes(` ${normaliseTerm(term)} `));
 }
 
 /** Whether a country name as stored (tb_destinations.country) is the guide's country. */
@@ -305,47 +314,81 @@ export function guideForCourse({ name, level, country }) {
     return COURSE_GUIDES.find((guide) => countryMatchesGuide(country, guide) && courseMatchesGuide({ course: name, level }, guide)) ?? null;
 }
 
-function containsPattern(term) {
-    return `%${key(term).replace(/[\\%_]/g, (match) => `\\${match}`)}%`;
+// One character as an SQL literal, by its UTF-8 bytes, so no quoting or
+// backslash rules (NO_BACKSLASH_ESCAPES or not) can change it.
+function sqlChar(char) {
+    const hex = [...new TextEncoder().encode(char)].map((byte) => byte.toString(16).padStart(2, "0")).join("");
+
+    return `CHAR(0x${hex} USING utf8mb4)`;
+}
+
+// " name " with the split characters turned into spaces, as splitWords().
+const SQL_WORDS = `CONCAT(' ', ${WORD_SPLIT_CHARS.reduce(
+    (expression, char) => `REPLACE(${expression}, ${sqlChar(char)}, ' ')`,
+    "LOWER(COALESCE(c.course, ''))"
+)}, ' ')`;
+
+function likeWord(term) {
+    return `% ${escapeLike(normaliseTerm(term))} %`;
+}
+
+function escapeLike(text) {
+    return text.replace(/[\\%_]/g, (match) => `\\${match}`);
+}
+
+function wordsSql(terms) {
+    return { clause: `(${terms.map(() => `${SQL_WORDS} LIKE ?`).join(" OR ")})`, params: terms.map(likeWord) };
+}
+
+// A cheap test the word test implies: the raw name contains the longest
+// word of one of the terms. Put first, it spares most rows the REPLACE
+// chain; it never changes which rows match.
+function quickSql(terms) {
+    const words = terms.map((term) => normaliseTerm(term).split(" ").sort((a, b) => b.length - a.length)[0]);
+
+    return { clause: `(${words.map(() => "c.course LIKE ?").join(" OR ")})`, params: words.map((word) => `%${escapeLike(word)}%`) };
 }
 
 /**
- * The SQL prefilter for a guide's courses, on tb_courses c and
- * tb_destinations d: { clause, params }, to add to a WHERE with AND.
- * It keeps every row courseMatchesGuide() can accept (LIKE is case
- * insensitive under the table's collation), and some it will reject.
+ * The SQL for a guide's courses, on tb_courses c and tb_destinations d:
+ * { clause, params }, to add to a WHERE with AND. It is the same test as
+ * countryMatchesGuide() and courseMatchesGuide(), so COUNT(*) and GROUP
+ * BY on it give the page's totals. (LIKE is case insensitive under the
+ * table's collation; it also ignores accents, so in rare cases SQL can
+ * keep a name the JS test drops, never the other way round.)
  */
 export function guideCourseWhere(guide) {
     const country = guideCountry(guide);
     const parts = [`LOWER(TRIM(d.country)) IN (${country.dbNames.map(() => "?").join(", ")})`];
     const params = [...country.dbNames];
+    const add = (sql, prefix = "") => {
+        parts.push(`${prefix}${sql.clause}`);
+        params.push(...sql.params);
+    };
 
     if (guide.include.length) {
-        parts.push(`(${guide.include.map(() => "c.course LIKE ?").join(" OR ")})`);
-        params.push(...guide.include.map(containsPattern));
+        add(quickSql(guide.include));
+        add(wordsSql(guide.include));
+    }
+
+    if (guide.exclude.length) {
+        add(wordsSql(guide.exclude), "NOT ");
     }
 
     if (guide.levels.length) {
         const level = levelSql(guide.levels, "COALESCE(c.level, '')");
         const options = [level.clause];
-
-        params.push(...level.params);
+        const optionParams = [...level.params];
 
         if (guide.levelNames.length) {
-            const names = `(${guide.levelNames.map(() => "c.course LIKE ?").join(" OR ")})`;
+            const names = wordsSql(guide.levelNames);
             const not = levelSql(guide.notLevels, "COALESCE(c.level, '')");
 
-            params.push(...guide.levelNames.map(containsPattern));
-
-            if (not) {
-                options.push(`(${names} AND NOT ${not.clause})`);
-                params.push(...not.params);
-            } else {
-                options.push(names);
-            }
+            options.push(not ? `(${names.clause} AND NOT ${not.clause})` : names.clause);
+            optionParams.push(...names.params, ...(not ? not.params : []));
         }
 
-        parts.push(`(${options.join(" OR ")})`);
+        add({ clause: `(${options.join(" OR ")})`, params: optionParams });
     }
 
     return { clause: parts.join(" AND "), params };
@@ -404,6 +447,11 @@ export function valueCounts(courses, field) {
     return [...counts.values()].sort((a, b) => b.count - a.count || byText(a.value, b.value));
 }
 
+/** University rows ({ name, href, courses }) with the most courses first. */
+export function sortUniversities(universities) {
+    return [...universities].sort((a, b) => b.courses - a.courses || byText(a.name, b.name));
+}
+
 /** The universities with how many of the courses each offers, most first. */
 export function universityCounts(courses) {
     const counts = new Map();
@@ -415,33 +463,37 @@ export function universityCounts(courses) {
         counts.set(course.university, entry);
     }
 
-    return [...counts.values()].sort((a, b) => b.courses - a.courses || byText(a.name, b.name));
+    return sortUniversities(counts.values());
 }
 
 /**
- * What a guide page shows about its matching courses (already filtered
- * with courseMatchesGuide): the table rows, the universities, and the
- * recorded levels, durations, English scores, entry requirements and
- * intakes. Every value is a recorded one or a count of them.
+ * What a guide page shows about its matching courses. `courses` are the
+ * matching rows as read for the summary (no fees, entry text cut short:
+ * enough to tell whether one is recorded); `universities` and `total`
+ * come from the database's own GROUP BY and so are exact even when
+ * `truncated` says the rows were capped. The table rows and entry
+ * examples are returned as ids, for a second small read of the full
+ * records. Every value is a recorded one or a count of them.
  */
-export function summariseGuideCourses(courses, { truncated = false } = {}) {
-    const entries = [];
+export function summariseGuideCourses(courses, { universities, total, truncated = false } = {}) {
+    const entryIds = [];
     const seenEntries = new Set();
 
     for (const course of [...courses].sort((a, b) => byText(a.university, b.university) || byText(a.course, b.course))) {
-        if (course.entry && !seenEntries.has(course.entry.toLowerCase()) && entries.length < 6) {
+        if (course.entry && !seenEntries.has(course.entry.toLowerCase()) && entryIds.length < 6) {
             seenEntries.add(course.entry.toLowerCase());
-            entries.push({ id: course.id, course: course.course, university: course.university, href: course.href, entry: course.entry });
+            entryIds.push(course.id);
         }
     }
 
     const count = (test) => courses.filter(test).length;
 
     return {
-        total: courses.length,
+        total: total ?? courses.length,
         truncated,
-        rows: selectTableRows(courses),
-        universities: universityCounts(courses),
+        rowIds: selectTableRows(courses).map((course) => course.id),
+        entryIds,
+        universities: universities ? sortUniversities(universities) : universityCounts(courses),
         levels: valueCounts(courses, "level"),
         durations: valueCounts(courses, "duration"),
         ielts: valueCounts(courses, "ielts"),
@@ -453,7 +505,6 @@ export function summariseGuideCourses(courses, { truncated = false } = {}) {
             lowerScore: count((course) => course.ieltsLess || course.pteLess || course.toeflLess),
         },
         withEntry: count((course) => course.entry),
-        entries,
         intakes: intakeList(courses.map((course) => course.intakes)),
     };
 }
@@ -490,8 +541,16 @@ export function visaPhrase(country) {
     return `the Australian ${country.visaName}`;
 }
 
+// The total is the database's own count, so it is exact even when the
+// rows read for the field counts were capped.
 function courseCount(summary) {
-    return `${summary.truncated ? "more than " : ""}${plural(summary.total, "course", "courses")}`;
+    return plural(summary.total, "course", "courses");
+}
+
+// Field counts come from the rows read, which may be capped: then they
+// are "at least" counts and never "all".
+export function fieldCount(summary, count) {
+    return `${summary.truncated ? "at least " : ""}${count}`;
 }
 
 /** The "In short" text, from the recorded values only. */
@@ -536,7 +595,11 @@ export function guideFaqs(guide, summary) {
         {
             question: `What IELTS score do I need for ${topic}?`,
             answer: summary.ielts.length
-                ? `${summary.english.ielts === summary.total ? `All ${courseCount(summary)} we list record` : `${summary.english.ielts} of the ${courseCount(summary)} we list record`} an IELTS requirement. ${mostOften("value", summary.ielts)}. Each university sets its own score, so check the course page for the exact requirement.`
+                ? `${
+                      summary.english.ielts === summary.total && !summary.truncated
+                          ? `All ${courseCount(summary)} we list record`
+                          : `Of the ${courseCount(summary)} we list, ${fieldCount(summary, summary.english.ielts)} ${summary.english.ielts === 1 ? "records" : "record"}`
+                  } an IELTS requirement. ${mostOften("value", summary.ielts)}. Each university sets its own score, so check the course page for the exact requirement.`
                 : "Our records do not hold an IELTS score for these courses. Each university sets its own English requirement, so check the course page or ask a counsellor.",
         },
     ];
