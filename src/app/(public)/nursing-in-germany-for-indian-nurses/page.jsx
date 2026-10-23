@@ -31,17 +31,15 @@ const PATH = "/nursing-in-germany-for-indian-nurses";
 const UPDATED = "2026-10-24";
 const TITLE = "Nursing in Germany for Indian Nurses";
 const DESCRIPTION =
-    "Nursing in Germany for Indian nurses from Kerala: how recognition works, the B2 German level, the knowledge test or adaptation course, and the visa routes.";
+    "Nursing in Germany for Indian nurses from Kerala: how recognition works, the B2 German level, the knowledge test or adaptation course, and official sources.";
 const OG_IMAGE = "/og-images/study-in-germany.webp";
 
 const SRC = {
     makeIt: "https://www.make-it-in-germany.com/en/working-in-germany/professions-in-demand/nursing",
     bremen: "https://www.service.bremen.de/dienstleistungen/applying-for-recognition-as-a-nurse-with-a-professional-qualification-from-a-third-country-197553",
     recognition: "https://www.anerkennung-in-deutschland.de/en/",
-    aufenthg16d: "https://www.gesetze-im-internet.de/aufenthg_2004/__16d.html",
     pflbg1: "https://www.gesetze-im-internet.de/pflbg/__1.html",
     pflbg2: "https://www.gesetze-im-internet.de/pflbg/__2.html",
-    bamf: "https://www.bamf.de/EN/Themen/MigrationAufenthalt/ZuwandererDrittstaaten/Familie/NachzugZuDrittstaatlern/nachzug-zu-drittstaatlern-node.html",
     mission: "https://india.diplo.de/",
 };
 
@@ -55,17 +53,12 @@ const FAQS = [
     {
         question: "How long does nursing recognition in Germany take?",
         answer:
-            "There is no fixed time. The Bremen recognition office says processing time varies from case to case and it tells you if documents are missing. If a knowledge test or adaptation course is needed, add that time: an adaptation course lasts at most three years, and a residence permit for it is first given for up to 24 months.",
+            "There is no fixed time. The Bremen recognition office says processing time varies from case to case and it tells you if documents are missing. If a knowledge test or adaptation course is needed, add that time: an adaptation course lasts at most three years.",
     },
     {
         question: "Do I need B2 German to work as a nurse in Germany?",
         answer:
-            "For recognition, yes: Make it in Germany and the Bremen recognition office both name level B2. For the recognition partnership visa, Make it in Germany names A2 at entry, with B2 still needed for recognition later. You will also need good German every day on the ward.",
-    },
-    {
-        question: "Can my family join me in Germany?",
-        answer:
-            "Family reunion depends on your residence permit. The BAMF's general rules ask for a valid residence title, adequate accommodation and a secure livelihood, and a spouse usually needs simple everyday German. Some skilled worker permits have easier rules, so check your own permit with the German Mission before planning.",
+            "For recognition, yes: Make it in Germany and the Bremen recognition office both name level B2. You will also need good German every day on the ward.",
     },
     {
         question: "Is nursing recognition in Germany free?",
@@ -80,12 +73,11 @@ const FAQS = [
 ];
 
 const SOURCES = [
-    { label: "Make it in Germany: nursing", href: SRC.makeIt, note: "Recognition routes, the German level and visa options for nurses." },
+    { label: "Make it in Germany: nursing", href: SRC.makeIt, note: "Recognition routes and the German level for nurses." },
     { label: "Recognition as a nurse (Bremen)", href: SRC.bremen, note: "A state recognition office's requirements, documents and measures for non EU nurses." },
     { label: "Recognition in Germany", href: SRC.recognition, note: "The federal portal for having a foreign qualification recognised." },
-    { label: "Residence Act, section 16d", href: SRC.aufenthg16d, note: "Residence permits for recognition measures and recognition partnerships." },
     { label: "Nursing Professions Act, section 1", href: SRC.pflbg1, note: "Using the nursing title needs official permission." },
-    { label: "BAMF: family members joining", href: SRC.bamf, note: "General conditions for spouses and children." },
+    { label: "German Missions in India", href: SRC.mission, note: "Visa information for applicants in India." },
 ];
 
 export async function generateMetadata() {
@@ -158,7 +150,7 @@ export default function NursingInGermanyPage() {
                         <p>
                             Both <SourceLink href={SRC.makeIt}>Make it in Germany</SourceLink> and the{" "}
                             <SourceLink href={SRC.bremen}>Bremen recognition office</SourceLink> name level B2 of the Common European Framework for recognition. Section 2 of the{" "}
-                            <SourceLink href={SRC.pflbg2}>Nursing Professions Act</SourceLink> also requires the German needed to practise the profession. For the recognition partnership visa, Make it in Germany names level A2 at entry; you still reach B2 for recognition later.
+                            <SourceLink href={SRC.pflbg2}>Nursing Professions Act</SourceLink> also requires the German needed to practise the profession.
                         </p>
                     </Prose>
                     <AcademyNote subjects="German" />
@@ -191,42 +183,12 @@ export default function NursingInGermanyPage() {
                     </TableWrap>
                 </GuideSection>
 
-                <GuideSection title="What the official guidance says about visas for nurses" intro="A summary of Make it in Germany and section 16d of the Residence Act, not migration advice. The EU Blue Card does not apply to nursing.">
-                    <TableWrap minWidth={640}>
-                        <thead className={theadClass}>
-                            <tr>
-                                <th scope="col" className={th}>Route</th>
-                                <th scope="col" className={th}>When it fits</th>
-                                <th scope="col" className={th}>Key conditions</th>
-                            </tr>
-                        </thead>
-                        <tbody className={tbodyClass}>
-                            <tr>
-                                <th scope="row" className={`${th} font-bold text-slate-900`}>Visa for recognition measures</th>
-                                <td className={th}>Your qualification is only partly recognised and you will take an adaptation course or prepare for the test in Germany</td>
-                                <td className={th}>First issued for up to 24 months, extendable by up to 12 months at a time to a maximum of 3 years; side work up to 20 hours a week</td>
-                            </tr>
-                            <tr>
-                                <th scope="row" className={`${th} font-bold text-slate-900`}>Recognition partnership</th>
-                                <td className={th}>You have a job offer and complete recognition after arrival while working</td>
-                                <td className={th}>A German employment contract, a written partnership with the employer, a recognised Indian qualification of at least 2 years&apos; training or a degree, and A2 German</td>
-                            </tr>
-                            <tr>
-                                <th scope="row" className={`${th} font-bold text-slate-900`}>Opportunity card</th>
-                                <td className={th}>You want to enter and look for work under its conditions</td>
-                                <td className={th}>See the conditions on Make it in Germany</td>
-                            </tr>
-                        </tbody>
-                    </TableWrap>
+                <GuideSection title="How Medcity Overseas can help, and what we do not do">
                     <Prose>
                         <p>
-                            The legal text is in <SourceLink href={SRC.aufenthg16d}>section 16d of the Residence Act</SourceLink>; appointments and checklists are on the{" "}
-                            <SourceLink href={SRC.mission}>German Missions in India</SourceLink> site. For recognition and work visas, rely on these official sources and the free advice of the Service Center for Professional Recognition; Medcity Overseas does not advise on work visas.
+                            Visas for work or recognition are outside what Medcity Overseas does. For those, use the official recognition portal, the Make it in Germany nursing page and the German Missions in India, or the free advice of the Service Center for Professional Recognition.
                         </p>
                     </Prose>
-                </GuideSection>
-
-                <GuideSection title="How Medcity Overseas can help, and what we do not do">
                     <PointList
                         items={[
                             "Guiding applications to study routes for nurses, such as the UK pre-registration MSc on our UK nursing pathway.",

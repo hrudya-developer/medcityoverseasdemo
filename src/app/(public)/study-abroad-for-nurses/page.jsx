@@ -136,7 +136,7 @@ export default async function StudyAbroadForNursesPage() {
         {
             question: "Can nurses study and work at the same time abroad?",
             answer:
-                "Often, within the visa rules. UK Student visa holders on degree courses can usually work up to 20 hours a week in term time. In Germany, nursing Ausbildung trainees are paid a training allowance, and a permit for recognition measures allows side work of up to 20 hours a week.",
+                "Often, within the visa rules. UK Student visa holders on degree courses can usually work up to 20 hours a week in term time. In Germany, nursing Ausbildung trainees are paid a training allowance by their employer.",
         },
         {
             question: "Can I become a nurse abroad straight after Class 12?",
@@ -274,26 +274,10 @@ export default async function StudyAbroadForNursesPage() {
                     </Prose>
                 </GuideSection>
 
-                <GuideSection title="Work routes for qualified nurses">
-                    <PointList
-                        items={[
-                            {
-                                title: "UK",
-                                text: "nurses trained outside the UK apply to the NMC and pass the Test of Competence.",
-                            },
-                            {
-                                title: "Germany",
-                                text: "your GNM or BSc is recognised by a state office, with German at B2 and, if needed, a knowledge test or adaptation course.",
-                            },
-                            {
-                                title: "Ireland, Australia, New Zealand and Malta",
-                                text: "apply to the regulator in the table above and follow its steps for internationally qualified nurses.",
-                            },
-                        ]}
-                    />
+                <GuideSection title="Registration with each regulator">
                     <Prose>
                         <p>
-                            This is a summary of each regulator&apos;s published steps, not migration advice: follow the regulator&apos;s own guidance for registration and work visas. Medcity Overseas guides applications to study routes, such as the MSc on our{" "}
+                            Registering as a nurse in another country is decided by that country&apos;s regulator, listed in the table above; follow its own published steps. Medcity Overseas guides applications to study routes, such as the MSc on our{" "}
                             <TextLink href="/placement-assistance-nursing">UK nursing pathway</TextLink>, and does not offer jobs or placements. See also{" "}
                             <TextLink href="/nursing-in-germany-for-indian-nurses">nursing in Germany for Indian nurses</TextLink>.
                         </p>
