@@ -163,12 +163,9 @@ async function requestGermanProgram(programId, uid) {
     process.env.OVERSEAS_API_KEY;
 
   if (!apiKey) {
-    console.warn(
-      "GERMAN_PROGRAMS_API_KEY or OVERSEAS_API_KEY is not configured. Returning null for program:",
-      programId
+    throw new Error(
+      "GERMAN_PROGRAMS_API_KEY or OVERSEAS_API_KEY is not configured."
     );
-
-    return null;
   }
 
   const body = new FormData();
@@ -177,44 +174,28 @@ async function requestGermanProgram(programId, uid) {
   body.set("uid", String(uid));
   body.set("id", String(programId));
 
-  let response;
-
-  try {
-    response = await fetch(API_URL, {
-      method: "POST",
-      body,
-      cache: "no-store",
-      headers: {
-        Accept: "application/json",
-      },
-      signal: AbortSignal.timeout(10000),
-    });
-  } catch (error) {
-    console.error(
-      "Failed to connect to German programs API:",
-      error
-    );
-
-    return null;
-  }
+  // Failures throw so unstable_cache never stores them; the
+  // exported wrapper turns them into null for callers.
+  const response = await fetch(API_URL, {
+    method: "POST",
+    body,
+    cache: "no-store",
+    headers: {
+      Accept: "application/json",
+    },
+    signal: AbortSignal.timeout(10000),
+  });
 
   const result = await response.json().catch(() => null);
 
   if (!response.ok) {
-    console.error(
-      `German programs API returned ${response.status}:`,
-      result
+    throw new Error(
+      `German programs API returned ${response.status}`
     );
-
-    return null;
   }
 
   if (!result || result?.status === false) {
-    console.error(
-      "German programs API returned an invalid response:",
-      result
-    );
-
+    // A valid "not found" style answer: safe to cache as null.
     return null;
   }
 
@@ -226,7 +207,7 @@ async function requestGermanProgram(programId, uid) {
  */
 const getCachedGermanProgram = unstable_cache(
   requestGermanProgram,
-  ["german-program-details-v1"],
+  ["german-program-details-v2"],
   {
     revalidate: 3600,
     tags: ["german-programs"],
@@ -249,10 +230,20 @@ export async function getGermanProgramDetails(
     return null;
   }
 
-  return getCachedGermanProgram(
-    normalizedId,
-    Number(uid) || 0
-  );
+  try {
+    return await getCachedGermanProgram(
+      normalizedId,
+      Number(uid) || 0
+    );
+  } catch (error) {
+    console.error(
+      "German program details unavailable:",
+      programId,
+      error
+    );
+
+    return null;
+  }
 }
 
 /**
@@ -267,14 +258,9 @@ async function requestGermanProgramsList(uid) {
     process.env.OVERSEAS_API_KEY;
 
   if (!apiKey) {
-    console.warn(
-      "GERMAN_PROGRAMS_API_KEY or OVERSEAS_API_KEY is not configured. Returning empty German programs list."
+    throw new Error(
+      "GERMAN_PROGRAMS_API_KEY or OVERSEAS_API_KEY is not configured."
     );
-
-    return {
-      programs: [],
-      imagePath: DEFAULT_IMAGE_PATH,
-    };
   }
 
   const body = new FormData();
@@ -282,42 +268,24 @@ async function requestGermanProgramsList(uid) {
   body.set("api", apiKey);
   body.set("uid", String(uid));
 
-  let response;
-
-  try {
-    response = await fetch(HOME_API_URL, {
-      method: "POST",
-      body,
-      cache: "no-store",
-      headers: {
-        Accept: "application/json",
-      },
-      signal: AbortSignal.timeout(10000),
-    });
-  } catch (error) {
-    console.error(
-      "Failed to connect to German programs list API:",
-      error
-    );
-
-    return {
-      programs: [],
-      imagePath: DEFAULT_IMAGE_PATH,
-    };
-  }
+  // Failures throw so unstable_cache never stores an empty list
+  // for an hour; getGermanProgramsList decides how to recover.
+  const response = await fetch(HOME_API_URL, {
+    method: "POST",
+    body,
+    cache: "no-store",
+    headers: {
+      Accept: "application/json",
+    },
+    signal: AbortSignal.timeout(10000),
+  });
 
   const result = await response.json().catch(() => null);
 
   if (!response.ok || !result) {
-    console.error(
-      `Home responses API returned ${response.status}:`,
-      result
+    throw new Error(
+      `Home responses API returned ${response.status}`
     );
-
-    return {
-      programs: [],
-      imagePath: DEFAULT_IMAGE_PATH,
-    };
   }
 
   const imagePath =
@@ -350,7 +318,7 @@ async function requestGermanProgramsList(uid) {
  */
 const getCachedGermanProgramsList = unstable_cache(
   requestGermanProgramsList,
-  ["german-program-list-v1"],
+  ["german-program-list-v2"],
   {
     revalidate: 3600,
     tags: ["german-programs-list"],
@@ -359,9 +327,34 @@ const getCachedGermanProgramsList = unstable_cache(
 
 /**
  * Get German programs list.
+ *
+ * By default a failure returns an empty list so static
+ * prerendering at build time does not fail. Pass
+ * { throwOnError: true } where a thrown error is better, for
+ * example during ISR revalidation, where throwing keeps the
+ * last good page instead of replacing it with an empty one.
  */
-export function getGermanProgramsList(uid = 6) {
-  return getCachedGermanProgramsList(
-    Number(uid) || 6
-  );
+export async function getGermanProgramsList(
+  uid = 6,
+  { throwOnError = false } = {}
+) {
+  try {
+    return await getCachedGermanProgramsList(
+      Number(uid) || 6
+    );
+  } catch (error) {
+    if (throwOnError) {
+      throw error;
+    }
+
+    console.error(
+      "German programs list unavailable:",
+      error
+    );
+
+    return {
+      programs: [],
+      imagePath: DEFAULT_IMAGE_PATH,
+    };
+  }
 }

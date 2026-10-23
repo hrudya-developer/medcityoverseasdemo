@@ -4,6 +4,7 @@ import {
   Check,
   Play,
   ArrowRight,
+  GraduationCap,
 } from "lucide-react";
 import { notFound } from "next/navigation";
 import { createSlug } from "@/lib/slug";

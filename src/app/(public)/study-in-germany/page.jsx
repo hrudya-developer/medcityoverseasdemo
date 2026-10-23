@@ -317,7 +317,14 @@ export default async function GermanProgramsPage() {
         imagePath,
     } =
         await getGermanProgramsList(
-            6
+            6,
+            {
+                // At runtime a failed refresh throws, so Next keeps
+                // serving the last good page instead of an empty one.
+                throwOnError:
+                    process.env.NEXT_PHASE !==
+                    "phase-production-build",
+            }
         );
 
     const validPrograms =
