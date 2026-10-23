@@ -1,6 +1,6 @@
 
 export const ukPlacementContent = {
-  badge: "Placement Assistance Programme",
+  badge: "UK Nursing MSc Route",
   eyebrow: "MSc Nursing Pathway · United Kingdom",
 
   title: "UK Nursing MSc Route",

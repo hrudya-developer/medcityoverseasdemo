@@ -87,7 +87,7 @@ const pageMetadata = {
     locale: "en_IN",
     url: "https://medcityoverseas.com/placement-assistance-nursing",
     siteName: "Medcity Overseas",
-    title: "UK Nursing Placement Assistance | Medcity Overseas",
+    title: PAGE_TITLE,
     description:
       "MSc Mental Health Nursing and Leadership pathway in the UK: eligibility, admissions and nursing registration guidance from Medcity Overseas.",
   },
@@ -157,7 +157,7 @@ function HeroSection() {
           <div className="relative z-10 text-center lg:text-left">
             <div className="inline-flex max-w-full items-center gap-3 rounded-full border border-pink-200 bg-gradient-to-r from-pink-50 to-purple-50 px-4 py-3 text-[10px] font-extrabold uppercase tracking-[0.13em] text-[#bb176d] sm:px-6 sm:text-xs">
               <BriefcaseMedical size={18} className="shrink-0" />
-              Placement Assistance Programme
+              UK Nursing MSc Route
             </div>
 
             <p className="mt-8 text-xs font-extrabold uppercase tracking-[0.2em] text-[#d21b79] sm:text-sm">
