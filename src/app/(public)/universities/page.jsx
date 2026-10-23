@@ -192,7 +192,7 @@ export default async function UniversitiesPage() {
     : "Explore universities abroad for Indian students by destination, compare their courses and book free counselling with Medcity Overseas to shortlist and apply.";
 
   return (
-    <div className="min-h-screen bg-[#f8fafc]">
+    <div className="min-h-screen overflow-x-clip bg-[#f8fafc]">
       <PageSchema
         path={PAGE_PATH}
         type="CollectionPage"
