@@ -48,7 +48,15 @@ export default async function EditPageSeo({ searchParams }) {
                 }}
                 audit={
                     audit
-                        ? { score: audit.score, checks: audit.checks, checkedAt: String(audit.checked_at), title: audit.title }
+                        ? {
+                              score: audit.score ?? null,
+                              checks: Array.isArray(audit.checks) ? audit.checks : [],
+                              breakdown: audit.breakdown ?? null,
+                              status: audit.status_code,
+                              timedOut: Boolean(audit.timed_out),
+                              checkedAt: audit.checked_at ? String(audit.checked_at) : "",
+                              title: audit.title || "",
+                          }
                         : null
                 }
                 updated={seo?.updatedAt ? `${seo.updatedAt}${seo.updatedBy ? ` by ${seo.updatedBy}` : ""}` : ""}
