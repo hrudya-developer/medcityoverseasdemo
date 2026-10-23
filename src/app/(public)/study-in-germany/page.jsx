@@ -13,7 +13,7 @@ import OfficialSources from "@/components/seo/OfficialSources";
 import QuestionAnswer from "@/components/seo/QuestionAnswer";
 import QuickAnswer from "@/components/seo/QuickAnswer";
 import { getCountryFacts } from "@/lib/countryFacts";
-import { getDestinationSummaries } from "@/lib/destinationSummary";
+import { getLiveDestination } from "@/lib/destinationSummary";
 import { OFFICIAL_SOURCES } from "@/lib/officialSources";
 import { createSlug } from "@/lib/slug";
 import { faqPageNode, joinList, latestDate, organizationNode, websiteNode } from "@/lib/seoSchema";
@@ -53,7 +53,7 @@ const SITE_NAME =
     "Medcity Overseas";
 
 const PAGE_TITLE =
-    "Study in Germany from Kerala | Ausbildung, Nursing & Courses";
+    "Study in Germany from Kerala: Ausbildung | Medcity Overseas";
 
 const PAGE_DESCRIPTION =
     "Study in Germany from Kerala with Medcity Overseas: university courses, Ausbildung, nursing pathways, eligibility, admissions and student visa guidance.";
@@ -366,9 +366,7 @@ export default async function GermanProgramsPage() {
             : [];
 
     const germany =
-        (await getDestinationSummaries()).find(
-            (row) => row.slug === "germany"
-        );
+        await getLiveDestination("germany");
 
     const facts =
         germany
