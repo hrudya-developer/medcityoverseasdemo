@@ -6,7 +6,7 @@ import {
 } from "react";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
-import Swal from "sweetalert2";
+import { fireSwal } from "@/lib/swal";
 
 import LoginPage from "./components/LoginPage";
 
@@ -177,7 +177,7 @@ export default function LoginRoutePage() {
         })
       );
 
-      await Swal.fire({
+      await fireSwal({
         icon: "success",
         title: "OTP Sent",
         text: `A verification code was sent to ${normalizedEmail}.`,
@@ -193,7 +193,7 @@ export default function LoginRoutePage() {
 
       setFormError(message);
 
-      await Swal.fire({
+      await fireSwal({
         icon: "error",
         title: "Unable to Send OTP",
         text: message,

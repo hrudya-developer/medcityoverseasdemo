@@ -19,7 +19,7 @@ import {
 
 import dynamic from "next/dynamic";
 
-import Swal from "sweetalert2";
+import { fireSwal } from "@/lib/swal";
 
 import cn from "@/lib/cn";
 import { isValidMobile } from "@/lib/phone";
@@ -393,7 +393,7 @@ const CounsellingForm = ({ onSuccess, }) => {
         setSubmitting(true);
 
         const showError = (text) =>
-            Swal.fire({
+            fireSwal({
                 icon: "error",
                 title: "Submission Failed",
                 text,
@@ -459,7 +459,7 @@ const CounsellingForm = ({ onSuccess, }) => {
 
         // Show Swal after the modal closes.
         window.setTimeout(() => {
-            Swal.fire({
+            fireSwal({
                 icon: "success",
                 title:
                     "Submitted Successfully!",

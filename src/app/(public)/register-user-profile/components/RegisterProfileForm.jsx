@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import Swal from "sweetalert2";
+import { fireSwal } from "@/lib/swal";
 
 import ProfileHeader from "./ProfileHeader";
 import AddressField from "./AddressField";
@@ -46,7 +46,7 @@ export default function RegisterProfileForm({
     title,
     text
   ) {
-    await Swal.fire({
+    await fireSwal({
       icon: "warning",
       title,
       text,
@@ -163,7 +163,7 @@ export default function RegisterProfileForm({
         );
       }
 
-      await Swal.fire({
+      await fireSwal({
         icon: "success",
         title: "Profile Created!",
         text: "Your student profile has been saved successfully.",
@@ -203,7 +203,7 @@ export default function RegisterProfileForm({
         error
       );
 
-      await Swal.fire({
+      await fireSwal({
         icon: "error",
         title: "Unable to Continue",
         text:

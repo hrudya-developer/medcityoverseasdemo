@@ -15,7 +15,7 @@ import {
   Send,
 } from "lucide-react";
 
-import CounsellingModal from "@/components/counselling/CounsellingModal";
+import CounsellingModal from "@/components/counselling/LazyCounsellingModal";
 
 import FAQRight from "./FAQRight";
 import { faqItems } from "./faqData";
