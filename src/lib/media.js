@@ -184,7 +184,15 @@ export async function importImageFromUrl(rawUrl, uploadedBy) {
                 throw new MediaError("The image address redirects too many times. Use its direct address.");
             }
 
-            url = checkImportUrl(new URL(location, url).toString());
+            let next;
+
+            try {
+                next = new URL(location, url).toString();
+            } catch {
+                throw new MediaError("The image could not be downloaded.", 502);
+            }
+
+            url = checkImportUrl(next);
             continue;
         }
 

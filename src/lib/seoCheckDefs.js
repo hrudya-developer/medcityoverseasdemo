@@ -71,7 +71,7 @@ export const CHECKS = [
     // AEO / Answer format
     { id: "quick-answer", aspect: "answers", name: "Quick answer near the top", hint: "Add a short summary (In short / Quick answer) at the top." },
     { id: "question-heading", aspect: "answers", name: "Heading written as a question", hint: "Use at least one H2 or H3 phrased as a question." },
-    { id: "direct-answer", aspect: "answers", name: "Short direct answer", hint: "Follow a question heading with a 40 to 60 word answer paragraph." },
+    { id: "direct-answer", aspect: "answers", name: "Short direct answer", hint: "Follow a question heading with a 25 to 80 word answer paragraph (40 to 60 is ideal)." },
     { id: "list-or-table", aspect: "answers", name: "List or table", hint: "Use a bullet list, numbered steps or a table." },
 
     // AEO / Answer markup
