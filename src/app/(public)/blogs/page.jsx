@@ -1,7 +1,17 @@
 import { callLegacy } from "@/lib/legacy";
 
+import Link from "next/link";
+
 import StudyAbroadBlogClient from "./StudyAbroadBlogClient";
-import { applySeoOverrides } from "@/lib/pageSeo";
+import { blogFaqs } from "./blogsFaqData";
+import OfficialSources from "@/components/seo/OfficialSources";
+import PageSchema from "@/components/seo/PageSchema";
+import QuestionAnswer from "@/components/seo/QuestionAnswer";
+import QuickAnswer from "@/components/seo/QuickAnswer";
+import { blogPublicSlug } from "@/lib/blogSlug";
+import { STUDY_ABROAD_SOURCES } from "@/lib/officialSources";
+import { applySeoOverrides, withPageSeoFaqs } from "@/lib/pageSeo";
+import { faqPageNode, jsonLdString, latestDate, ORG_ID } from "@/lib/seoSchema";
 
 export const dynamic = "force-dynamic";
 
@@ -127,54 +137,8 @@ const pageMetadata = {
   },
 };
 
-/* =========================================================
-   STRUCTURED DATA
-========================================================= */
-
-const structuredData = {
-  "@context":
-    "https://schema.org",
-
-  "@type":
-    "Blog",
-
-  "@id":
-    `${PAGE_URL}#blog`,
-
-  name:
-    PAGE_TITLE,
-
-  description:
-    PAGE_DESCRIPTION,
-
-  url:
-    PAGE_URL,
-
-  inLanguage:
-    "en-IN",
-
-  publisher: {
-    "@type":
-      "Organization",
-
-    name:
-      "Medcity Study Abroad",
-
-    url:
-      SITE_URL,
-  },
-};
-
-function serializeJsonLd(
-  data
-) {
-  return JSON.stringify(
-    data
-  ).replace(
-    /</g,
-    "\\u003c"
-  );
-}
+// Update when this page's own text is reviewed.
+const TEMPLATE_UPDATED = "2026-10-24";
 
 /* =========================================================
    PAGE
@@ -196,19 +160,103 @@ export default async function StudyAbroadBlogPage() {
     imagePath: result?.blog_image_path ?? "",
   };
 
+  const published = initialBlogs.blogs;
+  const latest = published[0];
+  const dateModified = latestDate(
+    TEMPLATE_UPDATED,
+    ...published.slice(0, 20).map((blog) => blog.updated_at)
+  );
+
+  const blogNode = {
+    "@type": "Blog",
+    "@id": `${PAGE_URL}#blog`,
+    name: "Medcity Overseas study abroad blog",
+    url: PAGE_URL,
+    inLanguage: "en-IN",
+    publisher: { "@id": ORG_ID },
+    blogPost: published.slice(0, 10).map((blog) => ({
+      "@type": "BlogPosting",
+      headline: blog.title,
+      url: `${SITE_URL}/blog-details/${blogPublicSlug(blog)}`,
+    })),
+  };
+
+  const faqSchema = await withPageSeoFaqs({
+    "@context": "https://schema.org",
+    ...faqPageNode(PAGE_PATH, blogFaqs),
+  });
+
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html:
-            serializeJsonLd(
-              structuredData
-            ),
-        }}
+      <PageSchema
+        path={PAGE_PATH}
+        type="CollectionPage"
+        name={`${PAGE_TITLE} | Medcity Overseas`}
+        description={PAGE_DESCRIPTION}
+        dateModified={dateModified}
+        image={OG_IMAGE}
+        mainEntity={{ "@id": `${PAGE_URL}#blog` }}
+        entities={[blogNode]}
+        breadcrumbs={[
+          { name: "Home", path: "/" },
+          { name: "Blogs", path: PAGE_PATH },
+        ]}
       />
 
-      <StudyAbroadBlogClient initialBlogs={initialBlogs} />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: jsonLdString(faqSchema) }}
+      />
+
+      <StudyAbroadBlogClient
+        initialBlogs={initialBlogs}
+        intro={
+          <QuickAnswer updated={dateModified} className="pb-10 pt-8">
+            {published.length > 0
+              ? `The Medcity Overseas blog has ${published.length} ${published.length === 1 ? "article" : "articles"} for students planning to study abroad, on student visas, scholarships, university admissions, destinations and courses. The latest is "${latest.title}". Rules change, so check the official sources below before you apply.`
+              : "The Medcity Overseas blog publishes guides for students planning to study abroad, on student visas, scholarships, university admissions, destinations and courses."}
+          </QuickAnswer>
+        }
+        beforeFaq={
+          <QuestionAnswer
+            className="pb-6"
+            eyebrow="About the blog"
+            question="What does the Medcity Overseas study abroad blog cover?"
+            answer="The blog explains the steps of studying abroad for students from Kerala and the rest of India: choosing a country and course, university applications, student visas, scholarships, English and German language tests, nursing careers abroad and student life. Rules change often, so check the official sources linked in each article before you apply."
+            points={[
+              { title: "Destinations", text: "studying in Germany, the UK, Ireland, Canada, Australia and more." },
+              { title: "Applications and visas", text: "documents, admission steps and student visa rules." },
+              { title: "Language tests", text: "IELTS, OET and German exams such as Goethe and telc." },
+              { title: "Careers", text: "nursing pathways and work after your studies." },
+            ]}
+          />
+        }
+        afterFaq={
+          <>
+            <OfficialSources className="pb-10" links={STUDY_ABROAD_SOURCES} />
+
+            <p className="mx-auto max-w-5xl px-4 pb-16 text-sm leading-7 text-slate-600 sm:px-6 lg:px-8">
+              Ready to plan your move? Compare{" "}
+              <Link href="/destinations" className="font-bold text-primary hover:underline">
+                study destinations
+              </Link>
+              , search the{" "}
+              <Link href="/courses" className="font-bold text-primary hover:underline">
+                course finder
+              </Link>
+              , browse{" "}
+              <Link href="/universities" className="font-bold text-primary hover:underline">
+                universities abroad
+              </Link>{" "}
+              or{" "}
+              <Link href="/contact-us" className="font-bold text-primary hover:underline">
+                contact Medcity Overseas
+              </Link>{" "}
+              for free counselling.
+            </p>
+          </>
+        }
+      />
     </>
   );
 }

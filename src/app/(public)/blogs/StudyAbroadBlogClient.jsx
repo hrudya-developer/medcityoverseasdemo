@@ -7,8 +7,12 @@ import BlogPagination from "./components/BlogPagination";
 
 import useBlogs from "./hooks/useBlogs";
 
+// intro, beforeFaq and afterFaq are server-rendered sections from page.jsx.
 export default function StudyAbroadBlogClient({
   initialBlogs = null,
+  intro = null,
+  beforeFaq = null,
+  afterFaq = null,
 }) {
   const {
     blogs,
@@ -27,12 +31,14 @@ export default function StudyAbroadBlogClient({
   } = useBlogs(initialBlogs);
 
   return (
-    <main className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white">
       {/* HEADER */}
 
       <section className="px-4 pt-5 sm:px-6 lg:px-8">
         <BlogHeader />
       </section>
+
+      {intro}
 
       {/* BLOGS */}
 
@@ -125,7 +131,11 @@ export default function StudyAbroadBlogClient({
           )}
       </section>
 
+      {beforeFaq}
+
       <BlogFAQ />
-    </main>
+
+      {afterFaq}
+    </div>
   );
 }
