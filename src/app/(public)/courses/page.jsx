@@ -7,6 +7,18 @@ import SearchSection from "@/components/home/searchSection/SearchSection";
 import CoursesHero from "./components/CoursesHero";
 
 import CourseFinder from "./components/CourseFinder";
+import LatestCoursesTable from "./components/LatestCoursesTable";
+import { coursesFaqs } from "./coursesFaqData";
+import Link from "next/link";
+import CourseAreasTable from "@/components/seo/CourseAreasTable";
+import FaqList from "@/components/seo/FaqList";
+import OfficialSources from "@/components/seo/OfficialSources";
+import PageSchema from "@/components/seo/PageSchema";
+import QuestionAnswer from "@/components/seo/QuestionAnswer";
+import QuickAnswer from "@/components/seo/QuickAnswer";
+import { getLatestCourses } from "@/lib/courseListing";
+import { getDestinationSummaries } from "@/lib/destinationSummary";
+import { STUDY_ABROAD_SOURCES } from "@/lib/officialSources";
 import { applySeoOverrides } from "@/lib/pageSeo";
 
 const SITE_URL =
@@ -22,10 +34,13 @@ const OG_IMAGE =
   `${SITE_URL}/images/courses/course-search-og.webp`;
 
 const PAGE_TITLE =
-  "Study Abroad Courses & Universities for Indian Students";
+  "Study Abroad Courses for Indian Students | Medcity Overseas";
 
 const PAGE_DESCRIPTION =
-  "Explore study abroad courses and universities for Indian students. Search programs by destination, university and subject area, compare study options, and get expert guidance from Medcity Overseas.";
+  "Search study abroad courses for Indian students by country, university, level and intake, compare durations and entry details, and get free counselling.";
+
+// Update when this page's text is reviewed.
+const TEMPLATE_UPDATED = "2026-10-24";
 
 /* =========================================================
    ISR
@@ -44,8 +59,10 @@ export const dynamic = "force-dynamic";
 ========================================================= */
 
 const pageMetadata = {
-  title:
-    PAGE_TITLE,
+  title: {
+    absolute:
+      PAGE_TITLE,
+  },
 
   description:
     PAGE_DESCRIPTION,
@@ -69,7 +86,7 @@ const pageMetadata = {
       "Medcity Overseas",
 
     title:
-      `${PAGE_TITLE} | Medcity Overseas`,
+      PAGE_TITLE,
 
     description:
       PAGE_DESCRIPTION,
@@ -96,7 +113,7 @@ const pageMetadata = {
       "summary_large_image",
 
     title:
-      `${PAGE_TITLE} | Medcity Overseas`,
+      PAGE_TITLE,
 
     description:
       PAGE_DESCRIPTION,
@@ -131,136 +148,6 @@ const pageMetadata = {
     },
   },
 };
-
-/* =========================================================
-   STRUCTURED DATA
-========================================================= */
-
-const structuredData = {
-  "@context":
-    "https://schema.org",
-
-  "@graph": [
-    {
-      "@type":
-        "CollectionPage",
-
-      "@id":
-        `${PAGE_URL}#webpage`,
-
-      url:
-        PAGE_URL,
-
-      name:
-        PAGE_TITLE,
-
-      description:
-        PAGE_DESCRIPTION,
-
-      inLanguage:
-        "en-IN",
-
-      isPartOf: {
-        "@id":
-          `${SITE_URL}/#website`,
-      },
-
-      publisher: {
-        "@id":
-          `${SITE_URL}/#organization`,
-      },
-
-      breadcrumb: {
-        "@id":
-          `${PAGE_URL}#breadcrumb`,
-      },
-
-      about: [
-        {
-          "@type":
-            "Thing",
-          name:
-            "Study abroad courses",
-        },
-        {
-          "@type":
-            "Thing",
-          name:
-            "International universities",
-        },
-        {
-          "@type":
-            "Thing",
-          name:
-            "Overseas education",
-        },
-      ],
-
-      primaryImageOfPage: {
-        "@type":
-          "ImageObject",
-
-        url:
-          OG_IMAGE,
-
-        width:
-          1200,
-
-        height:
-          630,
-      },
-    },
-
-    {
-      "@type":
-        "BreadcrumbList",
-
-      "@id":
-        `${PAGE_URL}#breadcrumb`,
-
-      itemListElement: [
-        {
-          "@type":
-            "ListItem",
-
-          position:
-            1,
-
-          name:
-            "Home",
-
-          item:
-            SITE_URL,
-        },
-
-        {
-          "@type":
-            "ListItem",
-
-          position:
-            2,
-
-          name:
-            "Courses",
-
-          item:
-            PAGE_URL,
-        },
-      ],
-    },
-  ],
-};
-
-function serializeJsonLd(
-  value
-) {
-  return JSON.stringify(
-    value
-  ).replace(
-    /</g,
-    "\\u003c"
-  );
-}
 
 /* =========================================================
    FALLBACKS
@@ -360,22 +247,41 @@ function CourseFinderFallback() {
    PAGE
 ========================================================= */
 
-export default function CoursesPage() {
+export default async function CoursesPage() {
+  const [{ total }, destinations] = await Promise.all([
+    getLatestCourses(24),
+    getDestinationSummaries(),
+  ]);
+  const countries = destinations.filter((row) => row.courses > 0).length;
+
   return (
-    <main className="min-h-screen bg-white">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html:
-            serializeJsonLd(
-              structuredData
-            ),
-        }}
+    <div className="min-h-screen bg-white">
+      <PageSchema
+        path={PAGE_PATH}
+        type="CollectionPage"
+        name={PAGE_TITLE}
+        description={PAGE_DESCRIPTION}
+        dateModified={TEMPLATE_UPDATED}
+        image={OG_IMAGE}
+        about={[
+          { "@type": "Thing", name: "Study abroad courses" },
+          { "@type": "Thing", name: "International universities" },
+        ]}
+        breadcrumbs={[
+          { name: "Home", path: "/" },
+          { name: "Courses", path: PAGE_PATH },
+        ]}
       />
 
       <CoursesHero />
 
-      {/* <CoursesSeoIntro /> */}
+      <QuickAnswer updated={TEMPLATE_UPDATED} className="pt-4 sm:pt-6">
+        {total > 0
+          ? `Search ${total.toLocaleString("en-IN")} study abroad courses listed on Medcity Overseas${
+              countries > 0 ? ` in ${countries} ${countries === 1 ? "country" : "countries"}` : ""
+            }, by country, university, course, intake and study level. Open a course for its duration, intakes, fees and entry requirements where recorded, then book free counselling to shortlist and apply.`
+          : "Search study abroad courses for Indian students by country, university, course, intake and study level, then book free counselling with Medcity Overseas to shortlist and apply."}
+      </QuickAnswer>
 
       <Suspense
         fallback={
@@ -392,7 +298,56 @@ export default function CoursesPage() {
       >
         <CourseFinder />
       </Suspense>
-    </main>
+
+      <LatestCoursesTable className="pb-14" />
+
+      <QuestionAnswer
+        className="pb-14"
+        eyebrow="Choosing a course"
+        question="How do you choose the right study abroad course?"
+        answer="Start from what you studied and the career you want, then compare courses on the same points: what they teach, how long they take, the intakes, entry requirements, English test scores, tuition fees and living costs. Shortlist a few that fit your marks and budget, and confirm every detail on the university's website."
+        points={[
+          { title: "Study level", text: "undergraduate, postgraduate, masters, PhD, diploma or certificate." },
+          { title: "Duration and intakes", text: "how long the course runs and when it starts." },
+          { title: "Entry requirements", text: "academic marks and English test scores." },
+          { title: "Costs", text: "tuition fees and living costs in that city." },
+        ]}
+      />
+
+      <CourseAreasTable className="pb-14" />
+
+      <FaqList
+        className="pb-14"
+        path={PAGE_PATH}
+        faqs={coursesFaqs}
+        title="Study abroad course questions"
+      />
+
+      <OfficialSources
+        className="pb-14"
+        links={STUDY_ABROAD_SOURCES}
+      />
+
+      <p className="mx-auto max-w-5xl px-4 pb-16 text-sm leading-7 text-slate-600 sm:px-6 lg:px-8">
+        Compare{" "}
+        <Link href="/universities" className="font-bold text-primary hover:underline">
+          universities abroad
+        </Link>
+        , see{" "}
+        <Link href="/popular-courses" className="font-bold text-primary hover:underline">
+          popular courses
+        </Link>
+        , explore{" "}
+        <Link href="/destinations" className="font-bold text-primary hover:underline">
+          study destinations
+        </Link>{" "}
+        or{" "}
+        <Link href="/contact-us" className="font-bold text-primary hover:underline">
+          contact us
+        </Link>{" "}
+        for free counselling.
+      </p>
+    </div>
   );
 }
 
