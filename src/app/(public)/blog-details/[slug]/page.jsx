@@ -435,6 +435,11 @@ function createImageUrl(
       imageName
     ).trim();
 
+  // Uploaded through the website admin: served by this site.
+  if (/^\/media\/\d+$/.test(image)) {
+    return `${SITE_URL}${image}`;
+  }
+
   if (
     image.startsWith(
       "http://"

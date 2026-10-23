@@ -312,14 +312,20 @@ export async function getTestimonial() {
 export async function getWebBlogs() {
     return {
         blog_image_path: imagePath("blog/"),
-        blog: await query("SELECT * FROM tb_blog_web"),
+        // Drafts ('0') saved in the website admin stay hidden; newest first.
+        blog: await query(
+            "SELECT * FROM tb_blog_web WHERE status IS NULL OR status <> '0' ORDER BY id DESC"
+        ),
     };
 }
 
 export async function getWebBlogDetail(input) {
     return {
         blog_image_path: imagePath("blog/"),
-        blog: await query("SELECT * FROM tb_blog_web WHERE id = ?", [toId(input.id)]),
+        blog: await query(
+            "SELECT * FROM tb_blog_web WHERE id = ? AND (status IS NULL OR status <> '0')",
+            [toId(input.id)]
+        ),
     };
 }
 

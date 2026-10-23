@@ -59,15 +59,17 @@ function generateCode() {
     return String(crypto.randomInt(0, 10 ** CODE_LENGTH)).padStart(CODE_LENGTH, "0");
 }
 
-async function deliverCode(email, code) {
+async function deliverCode(email, code, purpose) {
+    const label = purpose === "admin" ? "Medcity website admin" : "Medcity Study Abroad";
+
     const text =
-        `${code} is your Medcity Study Abroad sign-in code.\n\n` +
+        `${code} is your ${label} sign-in code.\n\n` +
         `It expires in ${CODE_TTL_MINUTES} minutes. If you did not ask for it, ignore this email.`;
 
     if (!isMailConfigured()) {
         if (process.env.NODE_ENV !== "production") {
             // Local development only: no mailbox configured.
-            console.info(`[dev] Sign-in code for ${email}: ${code}`);
+            console.info(`[dev] ${label} sign-in code for ${email}: ${code}`);
             return;
         }
 
@@ -76,25 +78,35 @@ async function deliverCode(email, code) {
 
     await sendMail({
         to: email,
-        subject: `${code} is your Medcity sign-in code`,
+        subject: `${code} is your ${label} sign-in code`,
         text,
     });
 }
 
-/**
- * Create and email a new sign-in code.
+/*
+ * Codes are kept per "key": the plain email for students, "admin:<email>"
+ * for website admins, so the two sign-ins never use up each other's codes.
  */
-export async function requestLoginCode(rawEmail, ip = "") {
+function codeKey(email, purpose) {
+    return purpose === "admin" ? `admin:${email}` : email;
+}
+
+/**
+ * Create and email a new code. `purpose` is "student" or "admin".
+ */
+export async function issueCode(rawEmail, ip = "", purpose = "student") {
     const email = normaliseEmail(rawEmail);
 
     if (!isValidEmail(email)) {
         throw new LoginCodeError("Enter a valid email address.");
     }
 
+    const key = codeKey(email, purpose);
+
     const [emailCount, ipCount] = await Promise.all([
         queryOne(
             "SELECT COUNT(*) AS n FROM web_login_codes WHERE email = ? AND created_at > UTC_TIMESTAMP() - INTERVAL 10 MINUTE",
-            [email]
+            [key]
         ),
         ip
             ? queryOne(
@@ -113,12 +125,63 @@ export async function requestLoginCode(rawEmail, ip = "") {
     await query(
         `INSERT INTO web_login_codes (email, code_hash, attempts, expires_at, created_at, ip)
          VALUES (?, ?, 0, UTC_TIMESTAMP() + INTERVAL ${CODE_TTL_MINUTES} MINUTE, UTC_TIMESTAMP(), ?)`,
-        [email, hashCode(email, code), String(ip).slice(0, 64)]
+        [key, hashCode(key, code), String(ip).slice(0, 64)]
     );
 
-    await deliverCode(email, code);
+    await deliverCode(email, code, purpose);
 
     return { status: true, msg: "A sign-in code has been sent to your email." };
+}
+
+/**
+ * Check a code and use it up. Returns the normalised email; throws
+ * LoginCodeError when the code is wrong or expired.
+ */
+export async function consumeCode(rawEmail, rawCode, purpose = "student") {
+    const email = normaliseEmail(rawEmail);
+    const code = String(rawCode ?? "").trim();
+
+    if (!isValidEmail(email)) {
+        throw new LoginCodeError("Enter a valid email address.");
+    }
+
+    if (!new RegExp(`^\\d{${CODE_LENGTH}}$`).test(code)) {
+        throw new LoginCodeError(`Enter the ${CODE_LENGTH}-digit code from your email.`);
+    }
+
+    const key = codeKey(email, purpose);
+
+    const row = await queryOne(
+        `SELECT id, code_hash, attempts FROM web_login_codes
+         WHERE email = ? AND expires_at > UTC_TIMESTAMP()
+         ORDER BY id DESC LIMIT 1`,
+        [key]
+    );
+
+    if (!row || row.attempts >= MAX_ATTEMPTS) {
+        throw new LoginCodeError("This code has expired. Please request a new one.", 401);
+    }
+
+    const expected = Buffer.from(row.code_hash, "hex");
+    const actual = Buffer.from(hashCode(key, code), "hex");
+
+    if (expected.length !== actual.length || !crypto.timingSafeEqual(expected, actual)) {
+        await query("UPDATE web_login_codes SET attempts = attempts + 1 WHERE id = ?", [row.id]);
+
+        throw new LoginCodeError("Invalid code. Please check and try again.", 401);
+    }
+
+    // Used up: remove every code for this key.
+    await query("DELETE FROM web_login_codes WHERE email = ?", [key]);
+
+    return email;
+}
+
+/**
+ * Create and email a new student sign-in code.
+ */
+export function requestLoginCode(rawEmail, ip = "") {
+    return issueCode(rawEmail, ip, "student");
 }
 
 async function findOrCreateStudent(email) {
@@ -154,42 +217,10 @@ async function findOrCreateStudent(email) {
 }
 
 /**
- * Check a code. On success returns the student; the code is used up.
+ * Check a student code. On success returns the student; the code is used up.
  */
 export async function verifyLoginCode(rawEmail, rawCode) {
-    const email = normaliseEmail(rawEmail);
-    const code = String(rawCode ?? "").trim();
-
-    if (!isValidEmail(email)) {
-        throw new LoginCodeError("Enter a valid email address.");
-    }
-
-    if (!new RegExp(`^\\d{${CODE_LENGTH}}$`).test(code)) {
-        throw new LoginCodeError(`Enter the ${CODE_LENGTH}-digit code from your email.`);
-    }
-
-    const row = await queryOne(
-        `SELECT id, code_hash, attempts FROM web_login_codes
-         WHERE email = ? AND expires_at > UTC_TIMESTAMP()
-         ORDER BY id DESC LIMIT 1`,
-        [email]
-    );
-
-    if (!row || row.attempts >= MAX_ATTEMPTS) {
-        throw new LoginCodeError("This code has expired. Please request a new one.", 401);
-    }
-
-    const expected = Buffer.from(row.code_hash, "hex");
-    const actual = Buffer.from(hashCode(email, code), "hex");
-
-    if (expected.length !== actual.length || !crypto.timingSafeEqual(expected, actual)) {
-        await query("UPDATE web_login_codes SET attempts = attempts + 1 WHERE id = ?", [row.id]);
-
-        throw new LoginCodeError("Invalid code. Please check and try again.", 401);
-    }
-
-    // Used up: remove every code for this email.
-    await query("DELETE FROM web_login_codes WHERE email = ?", [email]);
+    const email = await consumeCode(rawEmail, rawCode, "student");
 
     const student = await findOrCreateStudent(email);
 
