@@ -137,11 +137,33 @@ export const getCourseGuide = cache(async (slug) => {
     }
 });
 
-/** Whether a guide passes the quality gate: false when thin or when it could not be read. */
-export async function courseGuideIndexable(slug) {
-    const { data, error } = await getCourseGuide(slug);
+// After a failed read, links skip that guide for a minute without
+// asking the database again, so an outage does not re-run the guide
+// query on every course page view. Only this server process remembers
+// it, and only for FAILURE_PAUSE_MS: a failure is never kept as "no
+// guide", and the guide page itself always tries the database.
+const FAILURE_PAUSE_MS = 60 * 1000;
+const lastFailure = new Map();
 
-    return !error && Boolean(data) && passesGuideGate(data.total);
+/** Whether a guide passes the quality gate, for links: false when thin or when it could not be read. */
+export async function courseGuideIndexable(slug) {
+    const key = String(slug ?? "").trim().toLowerCase();
+
+    if (Date.now() - (lastFailure.get(key) ?? 0) < FAILURE_PAUSE_MS) {
+        return false;
+    }
+
+    const { data, error } = await getCourseGuide(key);
+
+    if (error) {
+        lastFailure.set(key, Date.now());
+
+        return false;
+    }
+
+    lastFailure.delete(key);
+
+    return Boolean(data) && passesGuideGate(data.total);
 }
 
 function linkFor(guide) {
