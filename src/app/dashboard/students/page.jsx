@@ -211,7 +211,7 @@ function DashboardHero({
             "
         >
             <Image
-                src="/assets/study-abroad-student.png"
+                src="/assets/study-abroad-student.webp"
                 alt="Student exploring study abroad opportunities"
                 fill
                 priority
