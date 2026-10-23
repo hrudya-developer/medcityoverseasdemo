@@ -102,6 +102,9 @@ export const getUniversityFacts = cache(async (universityId) => {
             ieltsMax: ielts.length ? Math.max(...ielts) : null,
             location: clean(university?.location) || null,
             website: website || null,
+            // Recorded yes or no flags, used to link the matching guides.
+            withoutIelts: ["yes", "1", "true"].includes(clean(university?.without_ielts).toLowerCase()),
+            scholarship: ["yes", "1", "true"].includes(clean(university?.scholarship).toLowerCase()),
             latest: dates.length ? new Date(Math.max(...dates.map((date) => date.getTime()))) : null,
         };
     } catch (error) {

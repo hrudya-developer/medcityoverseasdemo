@@ -43,6 +43,15 @@ export function CourseInShort({ facts, updated }) {
 }
 
 export function CourseLinks({ facts, universityPath, countrySlug }) {
+    // Nursing courses link to the nursing guides: UK masters courses to
+    // the MSc Nursing list, the rest to the nursing hub.
+    const name = String(facts.name ?? "");
+    const nursingGuide = /nursing/i.test(name)
+        ? countrySlug === "uk" && /\b(msc|ma|mres|masters?|postgraduate|pg)\b/i.test(name)
+            ? { href: "/msc-nursing-in-uk", label: "More MSc Nursing courses in the UK" }
+            : { href: "/study-abroad-for-nurses", label: "Study abroad for nurses" }
+        : null;
+
     return (
         <div className="space-y-12 bg-white py-14">
             <section className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
@@ -87,6 +96,16 @@ export function CourseLinks({ facts, universityPath, countrySlug }) {
                             Search all courses
                         </Link>
                     </li>
+                    {nursingGuide && (
+                        <li>
+                            <Link
+                                href={nursingGuide.href}
+                                className="block rounded-2xl border border-slate-200 p-4 font-bold text-slate-900 transition hover:border-primary/30 hover:text-primary"
+                            >
+                                {nursingGuide.label}
+                            </Link>
+                        </li>
+                    )}
                     <li>
                         <Link
                             href="/contact-us"

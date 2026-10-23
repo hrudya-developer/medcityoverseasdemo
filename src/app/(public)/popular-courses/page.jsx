@@ -6,6 +6,7 @@ import Link from "next/link";
 import { faqs } from "./popularCoursesFaqData";
 import CourseAreasTable from "@/components/seo/CourseAreasTable";
 import OfficialSources from "@/components/seo/OfficialSources";
+import GuideLinks, { GUIDES } from "@/components/landing/GuideLinks";
 import QuestionAnswer from "@/components/seo/QuestionAnswer";
 import QuickAnswer from "@/components/seo/QuickAnswer";
 import { getCourseAreaSummaries } from "@/lib/courseAreaSummary";
@@ -343,6 +344,12 @@ export default async function PopularCoursesPage() {
 
                     <PopularCoursesFAQ />
                 </section>
+
+                <GuideLinks
+                    className="pb-12"
+                    title="Nursing and other guides"
+                    links={[GUIDES.nurses, GUIDES.mscNursingUk, GUIDES.nursingAusbildung, GUIDES.after12th]}
+                />
 
                 <OfficialSources className="pb-16" links={OFFICIAL_SOURCES} />
             </div>

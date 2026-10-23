@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import FaqList from "@/components/seo/FaqList";
+import GuideLinks, { GUIDES } from "@/components/landing/GuideLinks";
 import OfficialSources from "@/components/seo/OfficialSources";
 import QuestionAnswer from "@/components/seo/QuestionAnswer";
 import QuickAnswer from "@/components/seo/QuickAnswer";
@@ -181,6 +182,14 @@ export function UniversityGuide({ universityName, countryName, countrySlug, fact
                 </Link>
                 .
             </p>
+
+            <GuideLinks
+                links={[
+                    facts?.scholarship && GUIDES.scholarships,
+                    facts?.withoutIelts && GUIDES.withoutIelts,
+                    GUIDES.visa,
+                ].filter(Boolean)}
+            />
 
             <FaqList path={path} faqs={faqs} title={`${universityName}: frequently asked questions`} />
 

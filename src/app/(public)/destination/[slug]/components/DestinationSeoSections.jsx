@@ -1,4 +1,5 @@
 import Link from "next/link";
+import GuideLinks, { GUIDES } from "@/components/landing/GuideLinks";
 
 import OfficialSources from "@/components/seo/OfficialSources";
 import QuestionAnswer from "@/components/seo/QuestionAnswer";
@@ -99,7 +100,22 @@ export function DestinationLinks({ countryName, destinationSlug }) {
                 .
             </p>
 
+            <GuideLinks title={`Guides for studying in ${countryName}`} links={destinationGuides(destinationSlug)} />
+
             <OfficialSources title={`Official sources for studying in ${countryName}`} links={officialSourcesFor(destinationSlug)} />
         </div>
     );
+}
+
+// The keyword guides that fit each country, then the general ones.
+function destinationGuides(slug) {
+    const byCountry = {
+        uk: [GUIDES.mscNursingUk, GUIDES.nurses],
+        germany: [GUIDES.nursingAusbildung, GUIDES.nursingGermany],
+        ireland: [GUIDES.nurses],
+        australia: [GUIDES.nurses],
+        malta: [GUIDES.nurses],
+    };
+
+    return [...(byCountry[slug] ?? []), GUIDES.visa, GUIDES.withoutIelts, GUIDES.scholarships];
 }

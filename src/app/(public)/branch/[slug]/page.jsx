@@ -20,6 +20,7 @@ import {
 import BranchSchema from "./seo/BranchSchema";
 import BranchFAQ from "./components/BranchFAQ";
 import { withSeoOverrides } from "@/lib/pageSeo";
+import GuideLinks, { GUIDES } from "@/components/landing/GuideLinks";
 import OfficialSources from "@/components/seo/OfficialSources";
 import QuestionAnswer from "@/components/seo/QuestionAnswer";
 import QuickAnswer from "@/components/seo/QuickAnswer";
@@ -155,6 +156,12 @@ export default async function BranchPage({
                     center={center}
                 />
                <BranchFAQ center={center} />
+
+                <GuideLinks
+                    className="pt-12"
+                    title="Guides for students and parents"
+                    links={[GUIDES.visa, GUIDES.after12th, GUIDES.nurses, GUIDES.nursingAusbildung, GUIDES.scholarships]}
+                />
 
                 <OfficialSources
                     className="pb-16"

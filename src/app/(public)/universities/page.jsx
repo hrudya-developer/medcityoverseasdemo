@@ -3,6 +3,7 @@ import UniversitiesDestinations from "./components/UniversitiesDestinations";
 import UniversitiesSeoContent from "./components/UniversitiesSeoContent";
 import UniversitiesBenefits from "./components/UniversitiesBenefits";
 import UniversitiesFAQ from "./components/UniversitiesFAQ";
+import GuideLinks, { GUIDES } from "@/components/landing/GuideLinks";
 
 import { postOverseasForm } from "@/lib/overseasApi";
 import { createSlug } from "@/lib/slug";
@@ -224,6 +225,11 @@ export default async function UniversitiesPage() {
       <UniversitiesSeoContent />
 
       <UniversitiesBenefits />
+
+      <GuideLinks
+        className="py-10"
+        links={[GUIDES.withoutIelts, GUIDES.scholarships, GUIDES.visa, GUIDES.after12th]}
+      />
 
       <UniversitiesFAQ
         faqs={faqs}

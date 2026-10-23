@@ -1,4 +1,5 @@
 import AddOnServicesClient from "./AddOnServicesClient";
+import GuideLinks, { GUIDES } from "@/components/landing/GuideLinks";
 import { applySeoOverrides } from "@/lib/pageSeo";
 
 const SITE_URL = "https://medcityoverseas.com";
@@ -207,6 +208,11 @@ export default function AddOnServicesPage() {
             />
 
             <AddOnServicesClient />
+
+            <GuideLinks
+                className="py-12"
+                links={[GUIDES.scholarships, GUIDES.visa, GUIDES.withoutIelts]}
+            />
         </>
     );
 }

@@ -15,6 +15,7 @@ import { callLegacy } from "@/lib/legacy";
 import { withSeoOverrides } from "@/lib/pageSeo";
 import { germanProgramGuide, GUIDE_UPDATED } from "@/lib/germanProgramGuide";
 import FaqList from "@/components/seo/FaqList";
+import GuideLinks, { GUIDES } from "@/components/landing/GuideLinks";
 import OfficialSources from "@/components/seo/OfficialSources";
 import PageSchema from "@/components/seo/PageSchema";
 import QuestionAnswer from "@/components/seo/QuestionAnswer";
@@ -1117,6 +1118,11 @@ export default async function GermanProgramPage({
           path={pagePath}
           faqs={guide.faqs}
           title={`${guide.name} in Germany: frequently asked questions`}
+        />
+
+        <GuideLinks
+          title="More Germany guides"
+          links={[GUIDES.nursingAusbildung, GUIDES.nursingGermany, GUIDES.after12th, GUIDES.visa]}
         />
 
         <OfficialSources links={guide.sources} />

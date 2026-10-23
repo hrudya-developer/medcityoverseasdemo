@@ -10,6 +10,7 @@ import { applySeoOverrides } from "@/lib/pageSeo";
 import Link from "next/link";
 import { faqs } from "./components/studyInGermanyFaqData";
 import OfficialSources from "@/components/seo/OfficialSources";
+import GuideLinks, { GUIDES } from "@/components/landing/GuideLinks";
 import QuestionAnswer from "@/components/seo/QuestionAnswer";
 import QuickAnswer from "@/components/seo/QuickAnswer";
 import { getCountryFacts } from "@/lib/countryFacts";
@@ -709,6 +710,12 @@ export default async function GermanProgramsPage() {
                 </section>
 
                 <StudyInGermanyFAQ />
+
+                <GuideLinks
+                    className="pt-12"
+                    title="Guides for Germany"
+                    links={[GUIDES.nursingAusbildung, GUIDES.nursingGermany, GUIDES.after12th, GUIDES.visa]}
+                />
 
                 <OfficialSources
                     className="py-14"

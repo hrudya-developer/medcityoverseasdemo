@@ -23,6 +23,7 @@ import UniversityPartners from "@/components/home/university-partners/University
 import VisaAchievers from "@/components/home/visa-achievers/VisaAchievers";
 import { applySeoOverrides } from "@/lib/pageSeo";
 import { centers } from "@/app/(public)/branches/data/centersData";
+import GuideLinks, { GUIDES } from "@/components/landing/GuideLinks";
 import OfficialSources from "@/components/seo/OfficialSources";
 import QuickAnswer from "@/components/seo/QuickAnswer";
 import { STUDY_ABROAD_SOURCES } from "@/lib/officialSources";
@@ -555,6 +556,12 @@ export default function Home() {
       <MobileApp />
 
       <GermanCoursesLayout />
+
+      <GuideLinks
+        className="py-8"
+        title="Germany and nursing guides"
+        links={[GUIDES.nursingAusbildung, GUIDES.nurses, GUIDES.after12th, GUIDES.visa]}
+      />
 
       <EssentialServices />
 

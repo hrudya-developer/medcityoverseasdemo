@@ -5,6 +5,7 @@ import { applySeoOverrides } from "@/lib/pageSeo";
 import { faqs } from "./components/destinationsFaqData";
 import DestinationsTable from "@/components/seo/DestinationsTable";
 import OfficialSources from "@/components/seo/OfficialSources";
+import GuideLinks, { GUIDES } from "@/components/landing/GuideLinks";
 import QuestionAnswer from "@/components/seo/QuestionAnswer";
 import QuickAnswer from "@/components/seo/QuickAnswer";
 import { faqPageNode, jsonLdString, organizationNode, websiteNode } from "@/lib/seoSchema";
@@ -510,6 +511,11 @@ export default function DestinationsPage() {
         <DestinationsTable className="py-12 sm:py-14" />
 
         <DestinationsFAQ />
+
+        <GuideLinks
+          className="pt-12"
+          links={[GUIDES.after12th, GUIDES.visa, GUIDES.withoutIelts, GUIDES.scholarships, GUIDES.nurses]}
+        />
 
         <OfficialSources
           className="py-12 sm:py-14"

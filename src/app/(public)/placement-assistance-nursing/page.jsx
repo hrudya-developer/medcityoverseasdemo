@@ -25,6 +25,7 @@ import PlacementBrochure from "./components/placement-brochure/PlacementBrochure
 import PlacementContactDetails from "./components/placement-contact-details/PlacementContactDetails";
 import PlacementRegistrationSection from "./components/placement-registration-form/PlacementRegistrationSection";
 import { applySeoOverrides } from "@/lib/pageSeo";
+import GuideLinks, { GUIDES } from "@/components/landing/GuideLinks";
 
 
 const pageMetadata = {
@@ -251,6 +252,11 @@ export default function PlacementAssistanceNursingPage() {
      <RegistrationPathway />
      <PaymentPlanSection />
      <MedcityServicesSection />
+     <GuideLinks
+        className="py-10"
+        title="More nursing guides"
+        links={[GUIDES.mscNursingUk, GUIDES.nurses, GUIDES.nursingAusbildung, GUIDES.nursingGermany]}
+      />
      <EligibilitySection />
       <PlacementBrochure />
       <PlacementContactDetails />
