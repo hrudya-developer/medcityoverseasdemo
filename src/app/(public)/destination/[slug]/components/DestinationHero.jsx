@@ -137,7 +137,7 @@ export default function DestinationHero({
                             >
                                 {countryName}
                             </span>
-                        </span>
+                        </span>{" "}
 
                         <span className="mt-2 block">
                             from Kerala
