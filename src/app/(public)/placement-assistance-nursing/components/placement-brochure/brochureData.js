@@ -9,7 +9,7 @@ export const brochureFeatures = [
     id: 1,
     title: "Course details and pathway",
     description:
-      "Understand the complete journey from eligibility to NHS registration.",
+      "Understand the complete journey from eligibility to NMC registration.",
     icon: BookOpen,
     variant: "pink",
   },
