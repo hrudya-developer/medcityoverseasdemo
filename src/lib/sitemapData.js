@@ -2,6 +2,8 @@ import "server-only";
 
 import { centers, getCenterUrl } from "@/app/(public)/branches/data/centersData";
 import { blogPublicSlug } from "@/lib/blogSlug";
+import { COURSE_GUIDES, guidePath, passesGuideGate } from "@/lib/courseGuides";
+import { loadCourseGuide } from "@/lib/courseGuideData";
 import { listCourses } from "@/lib/courseIndex";
 import { query } from "@/lib/db";
 import { loadDestinationSummaries } from "@/lib/destinationSummary";
@@ -72,9 +74,11 @@ export async function pageEntries() {
     // universitiesPageIndexable). They throw here rather than return an
     // empty list, so a database failure never serves a sitemap without
     // the country pages.
-    const [destinations, germanPrograms] = await Promise.all([
+    // The course guides are read the same way: a failed read throws.
+    const [destinations, germanPrograms, courseGuides] = await Promise.all([
         loadDestinationSummaries(),
         getGermanProgramsList(6, { throwOnError: true }),
+        Promise.all(COURSE_GUIDES.map(async (guide) => ({ guide, summary: await loadCourseGuide(guide.slug) }))),
     ]);
 
     const entries = STATIC_PAGES.map(([path, changeFrequency, priority]) => ({
@@ -110,6 +114,17 @@ export async function pageEntries() {
             entries.push({
                 url: `${SITE_URL}/study-in-germany/${slug}`,
                 changeFrequency: "monthly",
+                priority: 0.8,
+            });
+        }
+    }
+
+    // A guide with fewer than MIN_GUIDE_COURSES courses is noindex, so it is left out.
+    for (const { guide, summary } of courseGuides) {
+        if (summary && passesGuideGate(summary.total)) {
+            entries.push({
+                url: `${SITE_URL}${guidePath(guide)}`,
+                changeFrequency: "weekly",
                 priority: 0.8,
             });
         }

@@ -6,7 +6,7 @@ import { cache } from "react";
 import { createPublicCourseHref } from "@/lib/courseSlug";
 import { query } from "@/lib/db";
 import { isNo, isYes, recordedValue, YES_VALUES } from "@/lib/recordValue";
-import { countrySlug } from "@/lib/sitemapData";
+import { countrySlug } from "@/lib/slug";
 import { createUniversityPublicHref } from "@/lib/universitySlug";
 
 /*
@@ -53,19 +53,20 @@ export function recordedFee(fees, currency) {
     return unit ? `${unit} ${amount}` : `${amount} (currency not recorded)`;
 }
 
-const COURSE_COLUMNS = `
+// Shared with lib/courseGuideData.js, which reads the same course rows.
+export const COURSE_COLUMNS = `
     c.id, c.course, c.level, c.duration, c.intakes, c.deadline, c.entryrequirement,
     c.fees, c.currency, c.ielts, c.ieltsless, c.pte, c.pteless, c.toefl, c.toeflless, c.duolingo,
     u.id AS university_id, u.name AS university, u.location, u.without_ielts, u.scholarship,
     u.applicationfeewaiver, d.id AS country_id, d.country`;
 
-const LIVE_COURSE_FROM = `
+export const LIVE_COURSE_FROM = `
     FROM tb_courses c
     JOIN tb_universities u ON u.id = c.u_id
     LEFT JOIN tb_destinations d ON d.id = u.d_id
     WHERE c.status = '1' AND u.status = '1' AND (d.id IS NULL OR d.status = '1')`;
 
-function courseRow(row) {
+export function courseRow(row) {
     return {
         id: String(row.id),
         course: text(row.course) ?? "Course",
@@ -109,7 +110,7 @@ function universityRow(row) {
 }
 
 /** Run a cached read; a database error gives { error: true } and is logged, not cached. */
-async function guarded(label, read, empty) {
+export async function guarded(label, read, empty) {
     try {
         return { ...(await read()), error: false };
     } catch (error) {

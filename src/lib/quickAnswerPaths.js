@@ -23,6 +23,7 @@ const PATTERNS = [
     /^\/study-abroad-after-12th$/,
     /^\/student-visa-guidance$/,
     /^\/scholarships-for-indian-students$/,
+    /^\/course-guides\/[^/]+$/,
     /^\/courses$/,
     /^\/universities$/,
     /^\/blogs$/,
