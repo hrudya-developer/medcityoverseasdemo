@@ -158,8 +158,9 @@ export default function AcademyCentersHeader({
                 study abroad counselling
               </strong>
               , university applications, course
-              selection, student visa guidance and
-              language training.
+              selection and student visa guidance.
+              Language classes are available at
+              Medcity International Academy.
             </p>
 
             {/* Highlights */}
