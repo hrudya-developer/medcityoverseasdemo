@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 
+import { levelMatches, normaliseLevels } from "@/lib/courseFilterTerms";
 import { legacyFetch } from "@/lib/legacy";
 import { getCoursesByFilters } from "@/lib/legacy/catalog";
 
@@ -124,20 +125,13 @@ function matchesFilters({
         )
     : true;
 
-  const levelList = String(levels || "")
-    .split(",")
-    .map((item) => item.trim())
-    .filter(Boolean);
+  // Same mapping as the SQL filter: "Undergraduate" also keeps a
+  // stored "Bachelors". Unknown options are ignored there too.
+  const levelList = normaliseLevels(levels);
 
   const levelMatch =
     levelList.length > 0
-      ? levelList.some((level) =>
-          String(item?.level || "")
-            .toLowerCase()
-            .includes(
-              level.toLowerCase()
-            )
-        )
+      ? levelMatches(item?.level, levelList)
       : true;
 
   return (

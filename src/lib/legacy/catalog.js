@@ -2,6 +2,7 @@ import "server-only";
 
 import { unstable_cache } from "next/cache";
 
+import { levelTerms, normaliseLevels } from "@/lib/courseFilterTerms";
 import { query, queryOne } from "@/lib/db";
 import { imagePath, legacyOffset, likePattern, toId, today } from "./util";
 
@@ -134,17 +135,6 @@ export async function getAllUniversityCoursesLatest(input) {
     return { ...response, status: false, nextoffset: "0" };
 }
 
-// The study levels the course finder offers. Any other value is ignored,
-// so a crafted URL cannot add unbounded LIKE clauses.
-const FILTER_LEVELS = [
-    "Undergraduate",
-    "Postgraduate",
-    "Masters",
-    "PhD",
-    "Diploma",
-    "Certificate",
-];
-
 // Deeper pages than this are not offered; it keeps OFFSET scans short.
 const MAX_FILTER_OFFSET = 2000;
 
@@ -155,15 +145,8 @@ function normaliseCourseFilters(input) {
         universityId: toId(input.universityId),
         courseId: toId(input.courseId),
         intake: toId(input.intake).toLowerCase(),
-        levels: String(input.levels ?? "")
-            .split(",")
-            .map((level) =>
-                FILTER_LEVELS.find(
-                    (known) => known.toLowerCase() === level.trim().toLowerCase()
-                )
-            )
-            .filter((level, index, list) => level && list.indexOf(level) === index)
-            .sort(),
+        // Known options only (FILTER_LEVELS), so the cache key stays bounded.
+        levels: normaliseLevels(input.levels),
         keyword: String(input.keyword ?? "").trim().replace(/\s+/g, " ").toLowerCase().slice(0, 100),
         offset: Math.min(legacyOffset(input.offset), MAX_FILTER_OFFSET),
     };
@@ -199,8 +182,12 @@ async function queryCoursesByFilters(filters) {
     }
 
     if (filters.levels.length > 0) {
-        where.push(`(${filters.levels.map(() => "c.level LIKE ?").join(" OR ")})`);
-        params.push(...filters.levels.map((level) => likePattern(level)));
+        // Each option matches the stored levels that mean the same, so
+        // "Undergraduate" also finds "Bachelors".
+        const terms = levelTerms(filters.levels);
+
+        where.push(`(${terms.map(() => "c.level LIKE ?").join(" OR ")})`);
+        params.push(...terms.map((term) => likePattern(term)));
     }
 
     // tb_courses holds about 110,000 rows with TEXT columns and these
