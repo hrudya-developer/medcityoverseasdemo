@@ -17,7 +17,7 @@ export const mastersRouteData = [
   },
   {
     id: 2,
-    title: "Faster Integration",
+    title: "Shorter Route",
     description:
       "A 1-year pre-registration route, shorter than a full nursing degree.",
     icon: Rocket,
