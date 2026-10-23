@@ -350,9 +350,7 @@ export default async function GermanProgramsPage() {
             programs,
             imagePath,
         },
-        // /universities-in-germany is noindex while it lists no
-        // universities, so it is linked only when it is indexable.
-        linkGermanUniversities,
+        germanUniversitiesIndexable,
     ] = await Promise.all([
         getGermanProgramsList(
             6,
@@ -366,6 +364,12 @@ export default async function GermanProgramsPage() {
         ),
         universitiesPageIndexable("germany"),
     ]);
+
+    // /universities-in-germany is noindex while it lists no universities,
+    // so it is not linked when it is known to list none. Unknown (null,
+    // the summaries could not be loaded) keeps the link.
+    const linkGermanUniversities =
+        germanUniversitiesIndexable !== false;
 
     const validPrograms =
         Array.isArray(

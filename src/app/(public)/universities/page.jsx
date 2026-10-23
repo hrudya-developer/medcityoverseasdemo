@@ -17,7 +17,7 @@ import OfficialSources from "@/components/seo/OfficialSources";
 import PageSchema from "@/components/seo/PageSchema";
 import QuestionAnswer from "@/components/seo/QuestionAnswer";
 import QuickAnswer from "@/components/seo/QuickAnswer";
-import { getDestinationSummaries, universitiesPageIndexableLookup } from "@/lib/destinationSummary";
+import { destinationStatusLookup, getDestinationSummaries } from "@/lib/destinationSummary";
 import { STUDY_ABROAD_SOURCES } from "@/lib/officialSources";
 import { joinList } from "@/lib/seoSchema";
 
@@ -131,22 +131,28 @@ async function getDestinations() {
 }
 
 export default async function UniversitiesPage() {
-  const [destinations, isIndexable] = await Promise.all([
+  const [destinations, destinationStatus] = await Promise.all([
     getDestinations(),
-    universitiesPageIndexableLookup(),
+    destinationStatusLookup(),
   ]);
 
   // universitiesIndexable: whether /universities-in-<country> lists any
   // universities. It is noindex otherwise, so its card is not a link and
-  // it is left out of the ItemList.
+  // it is left out of the ItemList. studyGuideLive: /study-in-<country>
+  // exists. Both are null when the summaries cannot be loaded, and the
+  // cards and the ItemList then stay as they were.
   const validDestinations = destinations
     .map((destination) => {
       const destinationName = getDestinationName(destination);
+      const status = destinationStatus
+        ? destinationStatus(createSlug(destinationName))
+        : null;
 
       return {
         ...destination,
         destinationName,
-        universitiesIndexable: isIndexable(createSlug(destinationName)),
+        universitiesIndexable: status ? status.universitiesIndexable : null,
+        studyGuideLive: status ? status.live : null,
       };
     })
     .filter(
@@ -155,7 +161,7 @@ export default async function UniversitiesPage() {
     );
 
   const linkedDestinations = validDestinations.filter(
-    (destination) => destination.universitiesIndexable
+    (destination) => destination.universitiesIndexable !== false
   );
 
   const itemListJsonLd = {

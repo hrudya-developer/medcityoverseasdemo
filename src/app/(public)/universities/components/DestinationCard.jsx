@@ -15,8 +15,9 @@ export default function DestinationCard({
   const name = destination.destinationName;
   const slug = createSlug(name);
   // /universities-in-<country> is noindex while it lists no
-  // universities, so the card only links to it when it is indexable.
-  const linked = destination.universitiesIndexable === true;
+  // universities, so the card does not link to it when it is known to
+  // list none. Unknown (null) keeps the link.
+  const linked = destination.universitiesIndexable !== false;
   const Card = linked ? Link : "div";
   const linkProps = linked
     ? {

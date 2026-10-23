@@ -273,9 +273,12 @@ export default async function CourseDetailsPage({ params }) {
     const facts = courseFacts(loaded.course);
     const universitySlug = createUniversityPublicSlug({ name: facts.university });
     const countrySlug = facts.country ? toCountrySlug(facts.country) : "";
-    const [countryLive, universitiesIndexable] = countrySlug
+    const [countryLive, indexable] = countrySlug
         ? await Promise.all([getLiveDestination(countrySlug).then(Boolean), universitiesPageIndexable(countrySlug)])
         : [false, false];
+    // Unknown (null) when the summaries cannot be loaded: link as before,
+    // whenever the country is live.
+    const universitiesIndexable = indexable ?? countryLive;
 
     return (
         <>

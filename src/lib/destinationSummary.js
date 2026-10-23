@@ -95,34 +95,66 @@ function matchesSlug(row, key) {
     return row.slug === key || createSlug(row.country) === key;
 }
 
+// The summaries, or null when they cannot be loaded, so callers can tell
+// "unknown" apart from "no universities".
+const summariesOrNull = cache(async () => {
+    try {
+        return await loadDestinationSummaries();
+    } catch (error) {
+        console.error("Destination summaries could not be loaded:", error);
+
+        return null;
+    }
+});
+
+function slugKey(slug) {
+    return String(slug ?? "").trim().toLowerCase();
+}
+
 /**
  * Whether /universities-in-<slug> is indexable, from the summaries the
  * sitemap uses: the page is noindex when the country has no live
  * universities (tb_universities rows with its d_id and status 1), so
- * that is the test. False when the summaries cannot be loaded, so a
- * failure hides the link rather than pointing at a noindex page.
+ * that is the test. Null when the summaries cannot be loaded: callers
+ * then keep their previous behaviour rather than hiding every link.
  */
 export async function universitiesPageIndexable(slug) {
-    const key = String(slug ?? "").trim().toLowerCase();
+    const lookup = await universitiesPageIndexableLookup();
 
-    if (!key) {
-        return false;
-    }
-
-    return (await getDestinationSummaries()).some((row) => matchesSlug(row, key) && row.universities > 0);
+    return lookup ? lookup(slug) : null;
 }
 
 /**
  * The same test for many countries at once: a function that answers it
- * for one slug, built from a single (cached) summaries load.
+ * for one slug, built from a single (cached) summaries load, or null
+ * when the summaries cannot be loaded.
  */
 export async function universitiesPageIndexableLookup() {
-    const rows = (await getDestinationSummaries()).filter((row) => row.universities > 0);
+    const status = await destinationStatusLookup();
+
+    return status ? (slug) => status(slug).universitiesIndexable : null;
+}
+
+/**
+ * For many countries at once: a function giving { live, universitiesIndexable }
+ * for one slug (live: /study-in-<slug> exists), or null when the summaries
+ * cannot be loaded.
+ */
+export async function destinationStatusLookup() {
+    const rows = await summariesOrNull();
+
+    if (!rows) {
+        return null;
+    }
 
     return (slug) => {
-        const key = String(slug ?? "").trim().toLowerCase();
+        const key = slugKey(slug);
+        const row = key ? rows.find((item) => matchesSlug(item, key)) : undefined;
 
-        return Boolean(key) && rows.some((row) => matchesSlug(row, key));
+        return {
+            live: Boolean(row),
+            universitiesIndexable: Boolean(row) && row.universities > 0,
+        };
     };
 }
 

@@ -290,8 +290,9 @@ function HeroSection() {
 
 export default async function PlacementAssistanceNursingPage() {
   // /universities-in-uk is noindex while it lists no universities, so it
-  // is linked only when it is indexable.
-  const linkUkUniversities = await universitiesPageIndexable("uk");
+  // is not linked when it is known to list none. Unknown (null, the
+  // summaries could not be loaded) keeps the link.
+  const linkUkUniversities = (await universitiesPageIndexable("uk")) !== false;
 
   return (
     <div>

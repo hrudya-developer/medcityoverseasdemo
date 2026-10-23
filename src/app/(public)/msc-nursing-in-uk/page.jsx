@@ -80,12 +80,14 @@ export async function generateMetadata() {
 }
 
 export default async function MscNursingUkPage() {
-    // /universities-in-uk is noindex while it lists no universities, so
-    // it is linked only when it is indexable.
-    const [{ courses, error }, linkUkUniversities] = await Promise.all([
+    const [{ courses, error }, ukUniversitiesIndexable] = await Promise.all([
         getUkNursingMasters(),
         universitiesPageIndexable("uk"),
     ]);
+    // /universities-in-uk is noindex while it lists no universities, so it
+    // is not linked when it is known to list none. Unknown (null, the
+    // summaries could not be loaded) keeps the link.
+    const linkUkUniversities = ukUniversitiesIndexable !== false;
     const universities = [...new Set(courses.map((course) => course.university))];
     const withEntry = courses.filter((course) => course.entry || course.ielts || course.pte);
     const intakes = [...new Set(courses.flatMap((course) => String(course.intakes ?? "").split(/[,/]/).map((item) => item.trim()).filter(Boolean)))];

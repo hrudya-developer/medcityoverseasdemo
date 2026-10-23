@@ -1007,8 +1007,9 @@ export default async function GermanProgramPage({
   const pagePath = `/study-in-germany/${programSlug}`;
 
   // /universities-in-germany is noindex while it lists no universities,
-  // so it is linked only when it is indexable.
-  const linkGermanUniversities = await universitiesPageIndexable("germany");
+  // so it is not linked when it is known to list none. Unknown (null,
+  // the summaries could not be loaded) keeps the link.
+  const linkGermanUniversities = (await universitiesPageIndexable("germany")) !== false;
 
   return (
     <div className="bg-slate-50">
