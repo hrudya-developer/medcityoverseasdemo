@@ -98,7 +98,7 @@ function ProgramsHeader() {
 
             <p className="mx-auto mt-4 max-w-3xl text-base font-bold text-gray-900">
                 Your trusted gateway to international education, university admissions,
-                student visa assistance, and immigration support.
+                student visa assistance, and migration information.
             </p>
 
             <p

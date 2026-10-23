@@ -47,7 +47,7 @@ const PAGE_TITLE =
   "Migrate to Canada from Kerala | Medcity Overseas";
 
 const PAGE_DESCRIPTION =
-  "Migrate to Canada from Kerala: Express Entry, Provincial Nominee Programs, work permits, family sponsorship and PR guidance from Medcity Overseas.";
+  "Migrate to Canada from Kerala: general information on Express Entry, Provincial Nominee Programs, work permits, family sponsorship and PR, and who can advise on your case.";
 
 const pageMetadata = {
   title: { absolute: PAGE_TITLE },
@@ -56,27 +56,11 @@ const pageMetadata = {
 
   keywords: [
     "migrate to Canada from Kerala",
-    "Canada migration consultants in Kerala",
-    "Canada immigration consultants Kerala",
-    "Canada PR consultants Kerala",
     "Canada immigration from Kerala",
     "Canada migration from Kerala",
     "Canada PR from Kerala",
     "Canada skilled migration Kerala",
     "Canada permanent residence Kerala",
-    "Canada Express Entry consultants Kerala",
-    "Canada PNP consultants Kerala",
-    "Canada work permit consultants Kerala",
-    "Canada family sponsorship consultants Kerala",
-    "Canada immigration consultants Kannur",
-    "Canada immigration consultants Kozhikode",
-    "Canada immigration consultants Kochi",
-    "Canada immigration consultants Ernakulam",
-    "Canada immigration consultants Thrissur",
-    "Canada immigration consultants Malappuram",
-    "Canada immigration consultants Palakkad",
-    "Canada immigration consultants Kottayam",
-    "Canada immigration consultants Thiruvananthapuram",
     "Express Entry Canada",
     "Provincial Nominee Program Canada",
     "Canada permanent residence pathways",
@@ -94,7 +78,7 @@ const pageMetadata = {
     siteName: "Medcity Overseas",
 
     title:
-      "Migrate to Canada from Kerala | Canada Immigration Consultants",
+      "Migrate to Canada from Kerala | Medcity Overseas",
 
     description:
       "Explore Express Entry, Provincial Nominee Programs, work permits, family sponsorship and permanent residence pathways for migrating to Canada.",
@@ -105,7 +89,7 @@ const pageMetadata = {
         width: 1200,
         height: 630,
         alt:
-          "Canada migration and permanent residence guidance from Kerala",
+          "Canada migration and permanent residence pathways from Kerala",
       },
     ],
   },
@@ -346,7 +330,7 @@ export default async function MigrateToCanadaPage() {
       <CanadaMigrationContent
         intro={
           <QuickAnswer updated={TEMPLATE_UPDATED} className="py-10">
-            To migrate to Canada from Kerala, most skilled workers apply for permanent residence through Express Entry, which manages 3 programs: the Federal Skilled Worker Program, the Canadian Experience Class and the Federal Skilled Trades Program. Provincial Nominee Programs, work permits and family sponsorship are other routes. Medcity Overseas can explain these routes in general terms; for advice on your own case, speak to an authorised immigration representative.
+            To migrate to Canada from Kerala, most skilled workers apply for permanent residence through Express Entry, which manages 3 programs: the Federal Skilled Worker Program, the Canadian Experience Class and the Federal Skilled Trades Program. Provincial Nominee Programs, work permits and family sponsorship are other routes. Medcity Overseas can explain these routes in general terms; for advice on your own case, speak to an authorised immigration representative, such as a licensed immigration consultant (RCIC) or a Canadian lawyer.
           </QuickAnswer>
         }
         beforeFaq={

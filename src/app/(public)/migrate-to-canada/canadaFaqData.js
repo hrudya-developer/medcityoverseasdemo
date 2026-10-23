@@ -68,8 +68,8 @@ export const canadaFaqs = [
   },
   {
     question:
-      "How can Canada immigration consultants in Kerala help?",
+      "Who can give advice on my Canada immigration case?",
     answer:
-      "Canada immigration consultants can help applicants understand available immigration pathways, assess general eligibility, organize documentation and understand the application process. For regulated Canadian immigration advice or representation, applicants should ensure that the professional they work with is appropriately authorized under Canadian law.",
+      "The information on this page is general and is not advice on your case. Under Canadian law, only authorised representatives may charge for immigration advice or represent you: licensed immigration consultants (RCICs) who are members of the College of Immigration and Citizenship Consultants, lawyers and paralegals who are members of a Canadian provincial or territorial law society, and notaries who are members of the Chambre des notaires du Québec. Check that anyone you pay is on the relevant public register.",
   },
 ];

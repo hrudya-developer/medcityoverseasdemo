@@ -51,23 +51,9 @@ export default function CanadaFamilySponsorship() {
             id="canada-family-sponsorship"
             aria-labelledby="canada-family-sponsorship-title"
             itemScope
-            itemType="https://schema.org/Service"
+            itemType="https://schema.org/Thing"
             className="group relative flex min-w-0 flex-col overflow-hidden rounded-[28px] border border-orange-200/80 bg-white p-4 shadow-[0_14px_42px_rgba(234,88,12,0.08)] transition-all duration-500 hover:-translate-y-1.5 hover:border-orange-300 hover:shadow-[0_26px_65px_rgba(234,88,12,0.14)] sm:p-5 lg:p-6"
         >
-            <meta
-                itemProp="provider"
-                content="Medcity Study Abroad"
-            />
-
-            <meta
-                itemProp="areaServed"
-                content="Canada"
-            />
-
-            <meta
-                itemProp="serviceType"
-                content="Canada family sponsorship guidance"
-            />
 
             <div
                 aria-hidden="true"

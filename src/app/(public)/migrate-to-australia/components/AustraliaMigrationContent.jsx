@@ -45,9 +45,9 @@ function MigrationDisclaimer() {
                 invitation criteria, fees and processing
                 arrangements can change. Confirm current
                 requirements with the Australian
-                Department of Home Affairs or an
-                appropriately authorised professional
-                before applying.
+                Department of Home Affairs, a registered
+                migration agent (MARA) or an Australian
+                legal practitioner before applying.
             </div>
         </aside>
     );

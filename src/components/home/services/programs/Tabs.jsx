@@ -33,7 +33,7 @@ const tabs = [
     {
         id: "migrate",
         label: "Migrate",
-        description: "Learn about migration pathways, permanent residency and immigration support services.",
+        description: "Learn about migration pathways and permanent residency options.",
         icon: Globe,
         activeColor: "bg-yellow-500",
         textColor: "text-yellow-600",
@@ -87,18 +87,18 @@ export default function Tabs() {
         >
             <header className="sr-only">
                 <h2 id="international-opportunities-title">
-                    Study Abroad, International Work and Migration Services
+                    Study Abroad, International Work and Migration Information
                 </h2>
 
                 <p id="international-opportunities-description">
-                    Explore overseas education, international career opportunities and migration support services for students and professionals.
+                    Explore overseas education, international career opportunities and migration pathways for students and professionals.
                 </p>
             </header>
 
             <div className="mx-auto max-w-5xl overflow-x-auto px-4 pb-2">
                 <div
                     role="tablist"
-                    aria-label="International education and migration services"
+                    aria-label="International education and migration topics"
                     className="flex min-w-max justify-center gap-3 sm:grid sm:min-w-0 sm:grid-cols-3"
                 >
                     {tabs.map((tab, index) => {
@@ -186,7 +186,7 @@ export default function Tabs() {
                     className="outline-none focus-visible:ring-2 focus-visible:ring-yellow-500 focus-visible:ring-offset-2"
                 >
                     <h3 className="sr-only">
-                        Migration and Immigration Support Services
+                        Migration and Immigration Pathways
                     </h3>
 
                     <MigrateTabContent />

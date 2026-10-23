@@ -365,10 +365,11 @@ export default function MigrateTabContent() {
                 </div>
 
                 <p className="sr-only">
-                    Medcity provides skilled immigration guidance for Canada
-                    and Australia, including eligibility support, documentation
-                    guidance, career pathway information, permanent residency
-                    options and settlement preparation.
+                    General information on skilled immigration to Canada and
+                    Australia, including eligibility, documents, career pathways
+                    and permanent residency options. For advice on your own case,
+                    speak to a licensed immigration consultant (RCIC) or lawyer
+                    in Canada, or a registered migration agent in Australia.
                 </p>
             </div>
         </section>

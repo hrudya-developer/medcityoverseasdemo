@@ -36,24 +36,10 @@ export default function CanadaPNPOverview() {
         <article
             id="canada-pnp-overview"
             itemScope
-            itemType="https://schema.org/Service"
+            itemType="https://schema.org/Thing"
             aria-labelledby="canada-pnp-title"
             className="group relative flex min-w-0 flex-col overflow-hidden rounded-[28px] border border-purple-200/80 bg-white p-4 shadow-[0_14px_42px_rgba(126,34,206,0.08)] transition-all duration-500 hover:-translate-y-1.5 hover:border-purple-300 hover:shadow-[0_26px_65px_rgba(126,34,206,0.14)] sm:p-5 lg:p-6"
         >
-            <meta
-                itemProp="provider"
-                content="Medcity Study Abroad"
-            />
-
-            <meta
-                itemProp="areaServed"
-                content="Canada"
-            />
-
-            <meta
-                itemProp="serviceType"
-                content="Canada Provincial Nominee Program guidance"
-            />
 
             <div
                 aria-hidden="true"

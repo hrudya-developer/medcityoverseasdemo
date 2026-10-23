@@ -16,19 +16,19 @@ const supportItems = [
         icon: Compass,
         title: "Orientation Programs",
         description:
-            "Assistance with understanding Australian culture, communities and essential systems.",
+            "Community and settlement services help new arrivals understand Australian culture and essential systems.",
     },
     {
         icon: BriefcaseBusiness,
-        title: "Employment Services",
+        title: "Finding Work",
         description:
-            "Guidance with job searching, career preparation and professional development.",
+            "Job searching, career preparation and professional development are part of settling in.",
     },
     {
         icon: Languages,
         title: "Language Support",
         description:
-            "English-language support to improve communication and workplace confidence.",
+            "English-language classes help many new arrivals build communication and workplace confidence.",
     },
 ];
 
@@ -86,14 +86,14 @@ function SupportCard() {
                                 <p
                                     className="text-[10px] font-black uppercase tracking-[0.15em] text-white/70"
                                 >
-                                    Settlement Assistance
+                                    After You Arrive
                                 </p>
 
                                 <h2
                                     id="post-migration-support-heading"
                                     className="mt-1 text-lg font-black leading-tight sm:text-xl"
                                 >
-                                    Post-Migration Support
+                                    Settling in Australia
                                 </h2>
                             </div>
                         </div>
@@ -275,16 +275,16 @@ function ContactBar() {
                             <h2
                                 className="text-base font-black sm:text-lg"
                             >
-                                Need help settling in Australia?
+                                Planning a move to Australia?
                             </h2>
 
                             <p
                                 className="mt-1 max-w-3xl text-sm leading-6 text-white/80"
                             >
-                                Contact Medcity Study Abroad
-                                for personalised guidance on
-                                migration and post-arrival
-                                support.
+                                For advice on your own visa
+                                case, speak to a registered
+                                migration agent. Contact Medcity
+                                Study Abroad about study options.
                             </p>
                         </div>
                     </div>

@@ -43,24 +43,10 @@ export default function CanadaExpressEntry() {
         <article
             id="canada-express-entry"
             itemScope
-            itemType="https://schema.org/Service"
+            itemType="https://schema.org/Thing"
             aria-labelledby="canada-express-entry-title"
             className="group relative flex min-w-0 flex-col overflow-hidden rounded-[28px] border border-primary/15 bg-white p-4 shadow-[0_14px_42px_rgba(99,26,51,0.08)] transition-all duration-500 hover:-translate-y-1.5 hover:border-primary/25 hover:shadow-[0_26px_65px_rgba(99,26,51,0.14)] sm:p-5 lg:p-6"
         >
-            <meta
-                itemProp="provider"
-                content="Medcity Study Abroad"
-            />
-
-            <meta
-                itemProp="areaServed"
-                content="Canada"
-            />
-
-            <meta
-                itemProp="serviceType"
-                content="Canada Express Entry immigration guidance"
-            />
 
             <div
                 aria-hidden="true"

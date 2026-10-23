@@ -86,8 +86,8 @@ export const australiaFaqs = [
   },
   {
     question:
-      "How can Australia migration consultants in Kerala help?",
+      "Who can give advice on my Australian visa case?",
     answer:
-      "Migration consultants can help applicants understand potential pathways, organize information, assess general eligibility and understand the steps involved in the migration process. Where Australian immigration assistance or representation is regulated, applicants should ensure that the person providing those services is appropriately authorized.",
+      "The information on this page is general and is not advice on your case. In Australia, immigration assistance must be given by a registered migration agent, registered with the Office of the Migration Agents Registration Authority (OMARA), or by an Australian legal practitioner, unless an exemption applies. Check that anyone you pay is on the OMARA register of migration agents.",
   },
 ];

@@ -57,8 +57,9 @@ function MigrationDisclaimer() {
         <p className="mt-3">
           Applicants should verify the latest requirements through
           Immigration, Refugees and Citizenship Canada (IRCC) or seek
-          advice from an appropriately authorized Canadian immigration
-          professional before submitting an application or making
+          advice from an authorised Canadian immigration representative,
+          such as a licensed immigration consultant (RCIC) or a lawyer,
+          before submitting an application or making
           financial decisions.
         </p>
       </div>

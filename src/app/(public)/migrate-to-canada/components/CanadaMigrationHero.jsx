@@ -62,7 +62,7 @@ function HeroContent() {
     <div className="relative z-20 mx-auto w-full max-w-[680px] text-center lg:mx-0 lg:text-left">
       {/* SEO eyebrow */}
       <p className="text-xs font-black uppercase tracking-[0.18em] text-primary sm:text-sm">
-        Canada Immigration Consultants in Kerala
+        Canada Immigration Information for Kerala
       </p>
 
       {/* Badge */}
@@ -93,10 +93,12 @@ function HeroContent() {
 
       {/* SEO-rich intro */}
       <p className="mx-auto mt-6 max-w-2xl text-sm leading-7 text-slate-600 sm:text-base sm:leading-8 lg:mx-0 lg:text-lg">
-        Explore pathways to migrate to Canada from Kerala with
-        guidance from Medcity Overseas. Understand Express
-        Entry, Provincial Nominee Programs, work permits,
-        family sponsorship and permanent residence pathways.
+        General information on pathways to migrate to Canada
+        from Kerala. Understand Express Entry, Provincial
+        Nominee Programs, work permits, family sponsorship
+        and permanent residence. For advice on your own case,
+        speak to a licensed immigration consultant (RCIC) or a
+        Canadian lawyer.
       </p>
 
       <p className="mx-auto mt-3 max-w-2xl text-sm leading-7 text-slate-500 sm:text-base lg:mx-0">
@@ -108,7 +110,7 @@ function HeroContent() {
       {/* Highlights */}
       <div
         className="mt-7 flex items-center justify-center gap-3 lg:justify-start"
-        aria-label="Canada migration services"
+        aria-label="Canada migration highlights"
       >
         {highlights.map(({ icon: Icon }, index) => (
           <div

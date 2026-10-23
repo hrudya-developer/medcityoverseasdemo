@@ -216,10 +216,10 @@ export default function AustraliaMigrationPrograms() {
 
                 <div className="mt-12 text-center">
                     <Link
-                        href="/contact-us"
+                        href="/study-in-australia"
                         className="group inline-flex min-h-13 items-center justify-center gap-3 rounded-2xl bg-gradient-to-r from-darkPrimary to-primary px-7 text-sm font-black text-white shadow-[0_16px_38px_rgba(192,31,83,0.25)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_22px_48px_rgba(192,31,83,0.34)]"
                     >
-                        Get Australia Migration Guidance
+                        Explore Studying in Australia
 
                         <ArrowUpRight
                             size={18}

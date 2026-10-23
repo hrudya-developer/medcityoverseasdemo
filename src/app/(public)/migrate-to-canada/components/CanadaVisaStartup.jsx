@@ -50,24 +50,10 @@ export default function CanadaVisaStartup() {
         <article
             id="canada-startup-visa"
             itemScope
-            itemType="https://schema.org/Service"
+            itemType="https://schema.org/Thing"
             aria-labelledby="canada-startup-visa-title"
             className="group relative flex min-w-0 flex-col overflow-hidden rounded-[28px] border border-secondary/15 bg-white p-4 shadow-[0_14px_42px_rgba(4,102,175,0.08)] transition-all duration-500 hover:-translate-y-1.5 hover:border-secondary/25 hover:shadow-[0_26px_65px_rgba(4,102,175,0.14)] sm:p-5 lg:p-6"
         >
-            <meta
-                itemProp="provider"
-                content="Medcity Study Abroad"
-            />
-
-            <meta
-                itemProp="areaServed"
-                content="Canada"
-            />
-
-            <meta
-                itemProp="serviceType"
-                content="Canada Start-Up Visa guidance"
-            />
 
             <div
                 aria-hidden="true"
