@@ -4,8 +4,7 @@ import { unstable_cache } from "next/cache";
 import { cache } from "react";
 
 import { query } from "@/lib/db";
-import { countrySlug } from "@/lib/sitemapData";
-import { createSlug } from "@/lib/slug";
+import { countrySlug, createSlug } from "@/lib/slug";
 
 /*
  * One row per live study destination, straight from the database:
@@ -79,15 +78,53 @@ const cachedSummaries = unstable_cache(
     { revalidate: REVALIDATE_SECONDS }
 );
 
+/** The summaries, throwing when the database fails (for the sitemap and llms.txt, which must not drop pages). */
+export const loadDestinationSummaries = cache(() => cachedSummaries());
+
 export const getDestinationSummaries = cache(async () => {
     try {
-        return await cachedSummaries();
+        return await loadDestinationSummaries();
     } catch (error) {
         console.error("Destination summaries could not be loaded:", error);
 
         return [];
     }
 });
+
+function matchesSlug(row, key) {
+    return row.slug === key || createSlug(row.country) === key;
+}
+
+/**
+ * Whether /universities-in-<slug> is indexable, from the summaries the
+ * sitemap uses: the page is noindex when the country has no live
+ * universities (tb_universities rows with its d_id and status 1), so
+ * that is the test. False when the summaries cannot be loaded, so a
+ * failure hides the link rather than pointing at a noindex page.
+ */
+export async function universitiesPageIndexable(slug) {
+    const key = String(slug ?? "").trim().toLowerCase();
+
+    if (!key) {
+        return false;
+    }
+
+    return (await getDestinationSummaries()).some((row) => matchesSlug(row, key) && row.universities > 0);
+}
+
+/**
+ * The same test for many countries at once: a function that answers it
+ * for one slug, built from a single (cached) summaries load.
+ */
+export async function universitiesPageIndexableLookup() {
+    const rows = (await getDestinationSummaries()).filter((row) => row.universities > 0);
+
+    return (slug) => {
+        const key = String(slug ?? "").trim().toLowerCase();
+
+        return Boolean(key) && rows.some((row) => matchesSlug(row, key));
+    };
+}
 
 const cachedLiveDestinations = unstable_cache(liveDestinations, ["live-destinations-v1"], {
     revalidate: REVALIDATE_SECONDS,
@@ -103,7 +140,7 @@ export const getLiveDestination = cache(async (slug) => {
 
     try {
         // Either the short slug ("uk") or the plain one ("united-kingdom").
-        return (await cachedLiveDestinations()).find((row) => row.slug === key || createSlug(row.country) === key) ?? null;
+        return (await cachedLiveDestinations()).find((row) => matchesSlug(row, key)) ?? null;
     } catch (error) {
         console.error("Live destinations could not be loaded:", error);
 

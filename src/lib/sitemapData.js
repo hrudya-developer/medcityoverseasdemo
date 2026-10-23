@@ -4,8 +4,9 @@ import { centers, getCenterUrl } from "@/app/(public)/branches/data/centersData"
 import { blogPublicSlug } from "@/lib/blogSlug";
 import { listCourses } from "@/lib/courseIndex";
 import { query } from "@/lib/db";
+import { loadDestinationSummaries } from "@/lib/destinationSummary";
 import { getGermanProgramsList } from "@/lib/germanPrograms";
-import { createSlug } from "@/lib/slug";
+import { countrySlug, createSlug } from "@/lib/slug";
 import { createUniversityPublicSlug } from "@/lib/universitySlug";
 
 /*
@@ -21,17 +22,8 @@ export const SITE_URL = "https://medcityoverseas.com";
 
 export const COURSES_PER_SITEMAP = 40000;
 
-const COUNTRY_SLUG_ALIASES = {
-    "United Kingdom": "uk",
-    "United States": "usa",
-    "United States of America": "usa",
-};
-
-export function countrySlug(name) {
-    const text = String(name ?? "").trim();
-
-    return COUNTRY_SLUG_ALIASES[text] || createSlug(text);
-}
+// Kept here for the modules that import it from the sitemap data.
+export { countrySlug };
 
 function isoDate(value) {
     const text = String(value ?? "").trim();
@@ -74,14 +66,14 @@ const STATIC_PAGES = [
 ];
 
 export async function pageEntries() {
+    // The destination summaries are the shared source for the country
+    // pages: the same rows and university counts decide which
+    // /universities-in-<country> links the site shows (see
+    // universitiesPageIndexable). They throw here rather than return an
+    // empty list, so a database failure never serves a sitemap without
+    // the country pages.
     const [destinations, germanPrograms] = await Promise.all([
-        query(
-            `SELECT d.id, d.country,
-                    (SELECT COUNT(*) FROM tb_universities u WHERE u.d_id = d.id AND u.status = '1') AS universities
-             FROM tb_destinations d
-             WHERE d.status = '1'
-             ORDER BY d.order ASC`
-        ),
+        loadDestinationSummaries(),
         getGermanProgramsList(6, { throwOnError: true }),
     ]);
 
@@ -92,11 +84,7 @@ export async function pageEntries() {
     }));
 
     for (const destination of destinations) {
-        const slug = countrySlug(destination.country);
-
-        if (!slug) {
-            continue;
-        }
+        const slug = destination.slug;
 
         entries.push({
             url: `${SITE_URL}/study-in-${slug}`,
@@ -104,7 +92,9 @@ export async function pageEntries() {
             priority: 0.9,
         });
 
-        if (Number(destination.universities) > 0) {
+        // The page is noindex when the country has no live universities,
+        // so only countries with at least one are listed.
+        if (destination.universities > 0) {
             entries.push({
                 url: `${SITE_URL}/universities-in-${slug}`,
                 changeFrequency: "weekly",
