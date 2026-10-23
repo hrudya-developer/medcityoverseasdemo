@@ -31,6 +31,13 @@ const PATTERNS = [
     /^\/placement-assistance-nursing$/,
     /^\/migrate-to-canada$/,
     /^\/migrate-to-australia$/,
+    /^\/msc-nursing-in-uk$/,
+    /^\/nursing-in-germany-for-indian-nurses$/,
+    /^\/study-abroad-for-nurses$/,
+    /^\/study-abroad-without-ielts$/,
+    /^\/study-abroad-after-12th$/,
+    /^\/student-visa-guidance$/,
+    /^\/scholarships-for-indian-students$/,
 ];
 
 export function templateOutputsFaqSchema(path) {

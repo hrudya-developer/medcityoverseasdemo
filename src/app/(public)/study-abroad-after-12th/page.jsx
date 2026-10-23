@@ -311,7 +311,7 @@ export default async function AfterTwelfthPage() {
                     links={[
                         ...DEGREE_ROUTES.map((row) => ({ label: `${row.label} (${row.country})`, href: row.source, note: "How students apply after school." })),
                         { label: "University of Bath: UCAS dates for 2027 entry", href: SRC.ucasDates, note: "The 15 October and January UCAS deadlines." },
-        { label: "GOV.UK: knowledge of English", href: SRC.ukEnglish, note: "The English level for UK degree study." },
+                        { label: "GOV.UK: knowledge of English", href: SRC.ukEnglish, note: "The English level for UK degree study." },
                         { label: "Make it in Germany: training visa", href: SRC.training, note: "The visa for vocational training." },
                     ]}
                     intro="Admission and visa rules change. These are the official pages behind this guide, checked on 24 October 2026."

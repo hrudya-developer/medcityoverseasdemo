@@ -268,7 +268,7 @@ const cachedUndergraduate = unstable_cache(
                AND (c.level LIKE '%bachelor%' OR c.level LIKE '%undergrad%' OR c.level LIKE '%diploma%'
                  OR c.level LIKE '%foundation%' OR c.course LIKE 'BSc%' OR c.course LIKE 'B.Sc%' OR c.course LIKE 'BA %'
                  OR c.course LIKE 'Bachelor%')
-               AND c.level NOT LIKE '%post%' AND c.level NOT LIKE '%graduate diploma%' AND c.level NOT LIKE '%master%'
+               AND COALESCE(c.level, '') NOT LIKE '%post%' AND COALESCE(c.level, '') NOT LIKE '%graduate diploma%' AND COALESCE(c.level, '') NOT LIKE '%master%'
              GROUP BY d.id, d.country, d.order
              ORDER BY d.order ASC`
         );
