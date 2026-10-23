@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import {
   Building2,
@@ -13,7 +13,6 @@ import {
 
 export default function CoursesHero() {
   const router = useRouter();
-  const countrySelectRef = useRef(null);
 
   const [filters, setFilters] = useState({
     country: "",
@@ -31,13 +30,19 @@ export default function CoursesHero() {
   };
 
   const handleExploreCourses = () => {
-    document.getElementById("course-search")?.scrollIntoView({
+    const searchSection =
+      document.getElementById("course-search");
+
+    searchSection?.scrollIntoView({
       behavior: "smooth",
       block: "center",
     });
 
+    // Put the cursor in the first search box (the country).
     window.setTimeout(() => {
-      countrySelectRef.current?.focus();
+      searchSection
+        ?.querySelector("input:not([type=hidden])")
+        ?.focus({ preventScroll: true });
     }, 500);
   };
 
