@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-import { levelMatches, normaliseLevels } from "@/lib/courseFilterTerms";
+import { intakeMatches, levelMatches, normaliseLevels } from "@/lib/courseFilterTerms";
 import { legacyFetch } from "@/lib/legacy";
 import { getCoursesByFilters } from "@/lib/legacy/catalog";
 
@@ -113,16 +113,14 @@ function matchesFilters({
       ) === String(courseId)
     : true;
 
+  // "January" matches a stored "Jan, Sep", as in the SQL filter.
   const intakeMatch = intake
-    ? String(
+    ? intakeMatches(
         item?.intakes ||
           item?.intake ||
-          ""
+          "",
+        intake
       )
-        .toLowerCase()
-        .includes(
-          String(intake).toLowerCase()
-        )
     : true;
 
   // Same mapping as the SQL filter: "Undergraduate" also keeps a

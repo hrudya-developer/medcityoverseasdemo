@@ -47,3 +47,33 @@ export function levelMatches(storedLevel, levels) {
 
     return levelTerms(levels).some((term) => level.includes(term));
 }
+
+const MONTH_NAMES = [
+    "january", "february", "march", "april", "may", "june",
+    "july", "august", "september", "october", "november", "december",
+];
+
+/**
+ * An intake as the 3 letter month prefix the database stores ("January"
+ * and "Jan" give "jan"; "September" and "Sept" give "sep", which also
+ * matches a stored "Sept"). A value that is not a month is returned
+ * trimmed and lower case, and isMonthIntake reports false for it.
+ */
+export function normaliseIntake(value) {
+    const intake = String(value ?? "").trim().toLowerCase();
+    const month = intake.length >= 3 && MONTH_NAMES.find((name) => name.startsWith(intake));
+
+    return month ? month.slice(0, 3) : intake;
+}
+
+/** Whether a normalised intake is one of the 12 month prefixes. */
+export function isMonthIntake(intake) {
+    return MONTH_NAMES.some((name) => name.slice(0, 3) === intake);
+}
+
+/** Whether a stored intakes value includes this intake (any form). */
+export function intakeMatches(storedIntakes, intake) {
+    const term = normaliseIntake(intake);
+
+    return !term || String(storedIntakes ?? "").toLowerCase().includes(term);
+}

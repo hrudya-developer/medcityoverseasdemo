@@ -2,7 +2,7 @@ import "server-only";
 
 import { unstable_cache } from "next/cache";
 
-import { levelTerms, normaliseLevels } from "@/lib/courseFilterTerms";
+import { isMonthIntake, levelTerms, normaliseIntake, normaliseLevels } from "@/lib/courseFilterTerms";
 import { query, queryOne } from "@/lib/db";
 import { imagePath, legacyOffset, likePattern, toId, today } from "./util";
 
@@ -144,7 +144,9 @@ function normaliseCourseFilters(input) {
         countryId: toId(input.countryId),
         universityId: toId(input.universityId),
         courseId: toId(input.courseId),
-        intake: toId(input.intake).toLowerCase(),
+        // A month in any form ("January", "Jan", "Sept") becomes the 3
+        // letter prefix the database stores ("Jan, Sep").
+        intake: normaliseIntake(input.intake),
         // Known options only (FILTER_LEVELS), so the cache key stays bounded.
         levels: normaliseLevels(input.levels),
         keyword: String(input.keyword ?? "").trim().replace(/\s+/g, " ").toLowerCase().slice(0, 100),
@@ -264,14 +266,14 @@ export async function getCoursesByFilters(input) {
     const filters = normaliseCourseFilters(input ?? {});
 
     // Only a bounded set of searches is cached: no free-text keyword,
-    // numeric ids, a month name as intake and an offset on a page
-    // boundary. Anything else (for example a bot sending random
+    // numeric ids, one of the 12 month prefixes as intake and an offset
+    // on a page boundary. Anything else (for example a bot sending random
     // keywords) goes straight to the database, so the cache cannot grow
     // without limit.
     const cacheable =
         !filters.keyword &&
         [filters.countryId, filters.universityId, filters.courseId].every((id) => !id || /^\d{1,6}$/.test(id)) &&
-        (!filters.intake || CACHEABLE_INTAKES.has(filters.intake)) &&
+        (!filters.intake || isMonthIntake(filters.intake)) &&
         filters.offset % 20 === 0;
 
     if (!cacheable || !(await idsAreKnown(filters))) {
@@ -280,14 +282,6 @@ export async function getCoursesByFilters(input) {
 
     return cachedCoursesByFilters(filters);
 }
-
-const CACHEABLE_INTAKES = new Set(
-    [
-        "january", "february", "march", "april", "may", "june",
-        "july", "august", "september", "october", "november", "december",
-        "jan", "feb", "mar", "apr", "jun", "jul", "aug", "sep", "sept", "oct", "nov", "dec",
-    ]
-);
 
 export async function getCoursebyMainUniversity(input) {
     return {
