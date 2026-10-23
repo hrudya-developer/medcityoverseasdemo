@@ -197,10 +197,10 @@ export const COURSE_GUIDES = [
         country: "australia",
         keyword: "nursing in australia for indian students",
         include: ["nursing"],
-        exclude: [],
+        exclude: ["nursing assistant", "assistant in nursing", "assistants in nursing", "pre-nursing", "pre nursing", "prenursing"],
         levels: [],
         levelNames: [],
-        notLevels: [],
+        notLevels: ["Certificate"],
         search: "nursing",
         description:
             "Nursing in Australia for Indian students: nursing courses we can help you apply to, entry and English rules as recorded, intakes and the subclass 500 visa.",
