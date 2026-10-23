@@ -44,7 +44,7 @@ const SRC = {
     ieFunds: "https://www.irishimmigration.ie/coming-to-study-in-ireland/information-on-student-finances/",
     ieEnglish: "https://www.irishimmigration.ie/coming-to-study-in-ireland/english-language-requirements-for-study-visas/",
     deStudy: "https://india.diplo.de/in-en/service/-/2552164",
-    auEmbassy: "https://russia.embassy.gov.au/mscw/visa_student.html",
+    auHomeAffairs: "https://immi.homeaffairs.gov.au/visas/getting-a-visa/visa-listing/student-500",
     auTests: "https://www.studyaustralia.gov.au/en/plan-your-move/language-testing-organisations",
     mtUni: "https://www.um.edu.mt/int-eu/international/visa",
     mtIdentita: "https://identita.gov.mt/frequently-asked-questions/expatriates/non-eu-non-employment/study/",
@@ -60,7 +60,7 @@ const SUMMARY = [
     { country: "United Kingdom", slug: "uk", visa: "Student visa", authority: "UK Visas and Immigration (GOV.UK)", href: SRC.ukMoney, money: "1,529 pounds a month in London or 1,171 pounds a month elsewhere, for up to 9 months" },
     { country: "Ireland", slug: "ireland", visa: "Study visa (degree programme)", authority: "Irish Immigration Service", href: SRC.ieFunds, money: "Immediate access to at least 10,000 euros for the first year, plus fees" },
     { country: "Germany", slug: "germany", visa: "National visa for university studies", authority: "German Missions in India", href: SRC.deStudy, money: "A blocked account of 11,904 euros for the first year, on the checklist dated 30 August 2024" },
-    { country: "Australia", slug: "australia", visa: "Student visa (subclass 500)", authority: "Department of Home Affairs", href: SRC.auEmbassy, money: "Not recorded here: check the Home Affairs Student visa page" },
+    { country: "Australia", slug: "australia", visa: "Student visa (subclass 500)", authority: "Department of Home Affairs", href: SRC.auHomeAffairs, money: "Not recorded here: check the Home Affairs Student visa page" },
     { country: "Malta", slug: "malta", visa: "Long stay (D) visa, then an e-Residence Permit", authority: "Identità, with the university", href: SRC.mtUni, money: "At least 950 euros per month of stay, excluding tuition, for the permit (University of Malta)" },
 ];
 
@@ -208,7 +208,7 @@ export default async function StudentVisaGuidancePage() {
                     <PointList
                         items={[
                             { title: "Admission", text: "proof of admission to the course or a preparatory college, stating the language of instruction." },
-                            { title: "Funds", text: "a blocked account (11,904 euros for the first year on the checklist dated 30 August 2024), a scholarship, or a formal obligation letter from a sponsor in Germany." },
+                            { title: "Funds", text: "a blocked account (11,904 euros for the first year on the checklist dated 30 August 2024), a scholarship, or a formal obligation letter from a sponsor in Germany. Check the current amount before you open the account." },
                             { title: "APS certificate", text: "from the Academic Evaluation Centre (APS) in India." },
                             { title: "Language", text: "at least B2 in the language of instruction unless the admission letter confirms it; exemption letters and medium of instruction certificates are not accepted." },
                             { title: "Fee and insurance", text: "a visa fee of 75 euros, paid in rupees, and travel health insurance until enrolment." },
@@ -227,14 +227,14 @@ export default async function StudentVisaGuidancePage() {
                     <PointList
                         items={[
                             { title: "One visa", text: "the Student visa (subclass 500), usually applied for online through ImmiAccount." },
-                            { title: "Confirmation of Enrolment", text: "a CoE for each course; a letter of offer is not accepted instead." },
-                            { title: "Health", text: "all student visa applicants need a medical examination." },
+                            { title: "Confirmation of Enrolment", text: "a CoE from your education provider for each course." },
+                            { title: "Health", text: "you may need health examinations; Home Affairs tells you which ones after you apply." },
                             { title: "English", text: "a test from the accepted list, taken at a secure test centre." },
                         ]}
                     />
                     <Prose>
                         <p>
-                            Sources: the <SourceLink href={SRC.auEmbassy}>Australian Embassy student visa page</SourceLink> and{" "}
+                            Sources: <SourceLink href={SRC.auHomeAffairs}>Department of Home Affairs: Student visa</SourceLink> and{" "}
                             <SourceLink href={SRC.auTests}>Study Australia</SourceLink>. Read our <TextLink href="/study-in-australia">study in Australia guide</TextLink>.
                         </p>
                     </Prose>
@@ -263,8 +263,6 @@ export default async function StudentVisaGuidancePage() {
                             "Incomplete documents or a missed appointment: the German Missions in India say this may lead to rejection.",
                             "Funds not held long enough: the UK needs 28 days in a row, ending within 31 days of your application.",
                             "Unexplained deposits: Ireland asks you to explain large or irregular amounts in your statements.",
-                            "The wrong document: Australia does not accept a letter of offer in place of a Confirmation of Enrolment.",
-                            "False or misleading information: the Australian Embassy warns this can lead to refusal and a 3 year entry ban.",
                         ]}
                     />
                 </GuideSection>
@@ -294,7 +292,7 @@ export default async function StudentVisaGuidancePage() {
                         { label: "GOV.UK: Student visa fees", href: SRC.ukFees, note: "The visa fee and healthcare surcharge." },
                         { label: "Irish Immigration Service: student finances", href: SRC.ieFunds, note: "Funds and bank statements for Ireland." },
                         { label: "German Missions in India: study visa checklist", href: SRC.deStudy, note: "Documents, blocked account and APS for Germany." },
-                        { label: "Australian Embassy: student visa", href: SRC.auEmbassy, note: "The subclass 500 visa, CoE and medical examination." },
+                        { label: "Department of Home Affairs: Student visa", href: SRC.auHomeAffairs, note: "The Australian Student visa (subclass 500)." },
                         { label: "University of Malta: visas", href: SRC.mtUni, note: "The study visa and e-Residence Permit for Malta." },
                     ]}
                     intro="Visa rules and amounts change. These are the official pages behind this guide, checked on 24 October 2026."
