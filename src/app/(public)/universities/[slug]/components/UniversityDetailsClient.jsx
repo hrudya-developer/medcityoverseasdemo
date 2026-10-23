@@ -48,6 +48,8 @@ export default function UniversityDetailsClient({
     id,
     initialData,
     initialTab = "about",
+    summary = null,
+    children = null,
 }) {
     const router =
         useRouter();
@@ -314,7 +316,7 @@ export default function UniversityDetailsClient({
         !university
     ) {
         return (
-            <main className="grid min-h-[600px] place-items-center bg-[#f7f9fd] px-5">
+            <div className="grid min-h-[600px] place-items-center bg-[#f7f9fd] px-5">
                 <section className="w-full max-w-lg rounded-[28px] border border-slate-200 bg-white p-8 text-center shadow-[0_20px_60px_rgba(15,23,42,0.08)] sm:p-10">
                     <div className="mx-auto grid size-16 place-items-center rounded-2xl bg-primary/10 text-2xl font-black text-primary">
                         !
@@ -340,7 +342,7 @@ export default function UniversityDetailsClient({
                         Back to Universities
                     </button>
                 </section>
-            </main>
+            </div>
         );
     }
 
@@ -349,7 +351,7 @@ export default function UniversityDetailsClient({
     ========================================================= */
 
     return (
-        <main className="min-h-screen bg-[#f7f9fd] text-[#081c47]">
+        <div className="min-h-screen bg-[#f7f9fd] text-[#081c47]">
             <UniversityHero
                 data={
                     data
@@ -363,6 +365,9 @@ export default function UniversityDetailsClient({
                     )
                 }
             />
+
+            {/* Server-rendered "In short" box */}
+            {summary}
 
             <div
                 ref={
@@ -417,6 +422,9 @@ export default function UniversityDetailsClient({
                     }
                 />
             )}
-        </main>
+
+            {/* Server-rendered facts, answers and FAQs */}
+            {children}
+        </div>
     );
 }

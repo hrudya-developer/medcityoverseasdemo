@@ -145,3 +145,10 @@ export function faqPageNode(path, faqs, id = "faq") {
 export function jsonLdString(data) {
     return JSON.stringify(data).replace(/</g, "\\u003c");
 }
+
+/** "a, b and c" for readable sentences built from data. */
+export function joinList(items) {
+    const list = (items ?? []).filter(Boolean);
+
+    return list.length <= 1 ? list.join("") : `${list.slice(0, -1).join(", ")} and ${list.at(-1)}`;
+}

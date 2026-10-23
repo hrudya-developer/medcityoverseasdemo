@@ -66,15 +66,29 @@ export const getYesNoValue = (
             value
         );
 
+    // Only a recorded yes or no is shown as one; an empty value is
+    // unknown, not "no".
+    if (
+        [
+            "yes",
+            "1",
+            "true",
+        ].includes(
+            normalized
+        )
+    ) {
+        return positiveLabel;
+    }
+
     return [
-        "yes",
-        "1",
-        "true",
+        "no",
+        "0",
+        "false",
     ].includes(
         normalized
     )
-        ? positiveLabel
-        : negativeLabel;
+        ? negativeLabel
+        : "Not recorded";
 };
 
 function getUniversity(
@@ -314,7 +328,7 @@ export function normalizeUniversityData(
     const ranking =
         university?.rank ||
         university?.ranking ||
-        "N/A";
+        "Not recorded";
 
     const universityType =
         university?.type ||

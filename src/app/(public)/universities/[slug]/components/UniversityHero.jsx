@@ -97,11 +97,13 @@ export default function UniversityHero({
                         </p>
 
                         <div className="mt-7 flex flex-wrap justify-center gap-3 lg:justify-start">
-                            <HeroBadge
-                                icon={Trophy}
-                                text={`Ranking ${ranking}`}
-                                solid
-                            />
+                            {ranking && ranking !== "Not recorded" && (
+                                <HeroBadge
+                                    icon={Trophy}
+                                    text={`Ranking ${ranking}`}
+                                    solid
+                                />
+                            )}
 
                             <HeroBadge
                                 icon={Landmark}

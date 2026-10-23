@@ -20,7 +20,9 @@ export default function UniversityInfoBadge({
             <p
                 className={cn(`mt-1 font-black ${positive
                         ? "text-emerald-600"
-                        : "text-primary"
+                        : value === "Not recorded"
+                          ? "text-slate-500"
+                          : "text-primary"
                     }`)}
             >
                 {value}

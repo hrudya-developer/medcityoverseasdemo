@@ -38,6 +38,14 @@ import {
     buildUniversityMetadata,
 } from "./lib/universityMetadata";
 import { withSeoOverrides } from "@/lib/pageSeo";
+import { getUniversityFacts } from "@/lib/universityFacts";
+import { latestDate, organizationNode, websiteNode } from "@/lib/seoSchema";
+import {
+    UNIVERSITY_TEMPLATE_UPDATED,
+    UniversityGuide,
+    UniversityInShort,
+    universityFaqs,
+} from "./components/UniversitySeoSections";
 
 /* =========================================================
    CONFIG
@@ -435,9 +443,20 @@ export default async function UniversityDetailsPage({
        Exact backend university ID is used internally.
     ===================================================== */
 
-    const mainCourses =
-        await getUniversityMainCourses(
-            universityId
+    const [mainCourses, facts] =
+        await Promise.all([
+            getUniversityMainCourses(
+                universityId
+            ),
+            getUniversityFacts(
+                universityId
+            ),
+        ]);
+
+    const dateModified =
+        latestDate(
+            facts?.latest,
+            UNIVERSITY_TEMPLATE_UPDATED
         );
 
     /* =====================================================
@@ -491,7 +510,9 @@ export default async function UniversityDetailsPage({
         getUniversityWebsite(
             university,
             detailsResult
-        );
+        ) ||
+        facts?.website ||
+        "";
 
     const universityLogo =
         makeAbsoluteUrl(
@@ -685,6 +706,20 @@ export default async function UniversityDetailsPage({
                 `${canonicalUrl}#university`,
         },
 
+        publisher: {
+            "@id":
+                `${SITE_URL}/#organization`,
+        },
+
+        author: {
+            "@id":
+                `${SITE_URL}/#organization`,
+        },
+
+        ...(dateModified && {
+            dateModified,
+        }),
+
         breadcrumb: {
             "@id":
                 `${canonicalUrl}#breadcrumb`,
@@ -827,8 +862,37 @@ export default async function UniversityDetailsPage({
        RENDER
     ===================================================== */
 
+    const pageFacts = facts
+        ? {
+              ...facts,
+              website:
+                  facts.website ||
+                  (/^https?:\/\//i.test(universityWebsite)
+                      ? universityWebsite
+                      : null),
+          }
+        : null;
+
+    const faqs =
+        universityFaqs(
+            universityName,
+            resolvedCountryName,
+            pageFacts
+        );
+
     return (
         <>
+            <JsonLd
+                data={{
+                    "@context":
+                        "https://schema.org",
+                    "@graph": [
+                        organizationNode(),
+                        websiteNode(),
+                    ],
+                }}
+            />
+
             <JsonLd
                 data={
                     breadcrumbJsonLd
@@ -863,7 +927,24 @@ export default async function UniversityDetailsPage({
                 initialTab={
                     initialTab
                 }
-            />
+                summary={
+                    <UniversityInShort
+                        universityName={universityName}
+                        countryName={resolvedCountryName}
+                        facts={pageFacts}
+                        updated={dateModified}
+                    />
+                }
+            >
+                <UniversityGuide
+                    universityName={universityName}
+                    countryName={resolvedCountryName}
+                    countrySlug={countrySlug}
+                    facts={pageFacts}
+                    faqs={faqs}
+                    path={`/universities/${canonicalSlug}`}
+                />
+            </UniversityDetailsClient>
         </>
     );
 }
