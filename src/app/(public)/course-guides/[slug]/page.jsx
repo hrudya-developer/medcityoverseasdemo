@@ -254,9 +254,9 @@ export default async function CourseGuidePage({ params }) {
                         <GuideSection title={`Entry requirements and English tests for ${guide.subject} in ${country.fullName}`}>
                             <Prose>
                                 <p>
-                                    Each university sets its own entry requirements. Of the {summary.total} courses we list, {summary.withEntry} record an entry requirement,{" "}
-                                    {summary.english.ielts} an IELTS score, {summary.english.pte} a PTE score, {summary.english.toefl} a TOEFL score and{" "}
-                                    {summary.english.duolingo} a Duolingo score.
+                                    Each university sets its own entry requirements. Of the {summary.total} courses we list, an entry requirement is recorded for{" "}
+                                    {summary.withEntry}, an IELTS score for {summary.english.ielts}, a PTE score for {summary.english.pte}, a TOEFL score for{" "}
+                                    {summary.english.toefl} and a Duolingo score for {summary.english.duolingo}.
                                     {summary.ielts.length ? ` The IELTS values recorded most often are ${countedValues(summary.ielts)}.` : ""}
                                     {summary.english.lowerScore > 0
                                         ? ` ${summary.english.lowerScore} ${summary.english.lowerScore === 1 ? "course records" : "courses record"} a lower IELTS, PTE or TOEFL score as well.`
