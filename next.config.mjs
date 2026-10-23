@@ -125,31 +125,45 @@ const nextConfig = {
        BROWSER CACHING FOR PUBLIC FILES
        Next.js sends "max-age=0" for files in public/, so every
        visit revalidates every image. These names carry no content
-       hash, so they are cached for a week (then refreshed in the
-       background for up to 30 days) rather than for a year: a file
-       replaced under the same name reaches visitors within a week.
+       hash, and /_next/image reuses this max-age for its own cache,
+       so images are fresh for one day (then refreshed in the
+       background for up to a week): a file replaced under the same
+       name reaches visitors within a day. Videos are large and
+       rarely replaced, so they keep a week.
     ===================================================== */
 
     async headers() {
-        const publicFileCache = [
+        const cacheFor = (value) => [
             {
                 key: "Cache-Control",
-                value:
-                    "public, max-age=604800, stale-while-revalidate=2592000",
+                value,
             },
         ];
 
+        const imageCache = cacheFor(
+            "public, max-age=86400, stale-while-revalidate=604800"
+        );
+
+        const videoCache = cacheFor(
+            "public, max-age=604800, stale-while-revalidate=2592000"
+        );
+
         return [
-            "/assets/:path*",
-            "/images/:path*",
-            "/og-images/:path*",
-            "/videos/:path*",
-            "/logo.png",
-            "/apple-touch-icon.png",
-        ].map((source) => ({
-            source,
-            headers: publicFileCache,
-        }));
+            ...[
+                "/assets/:path*",
+                "/images/:path*",
+                "/og-images/:path*",
+                "/logo.png",
+                "/apple-touch-icon.png",
+            ].map((source) => ({
+                source,
+                headers: imageCache,
+            })),
+            {
+                source: "/videos/:path*",
+                headers: videoCache,
+            },
+        ];
     },
 
     /* =====================================================
