@@ -129,29 +129,31 @@ export default function DestinationHero({
                         id="destination-hero-heading"
                         className="mt-7 max-w-[650px] text-3xl font-extrabold leading-[1.08] tracking-[-0.04em] text-slate-950 sm:text-4xl lg:text-5xl xl:text-5xl"
                     >
+                        {/* Keyword first: "Study in UK from Kerala". */}
                         <span className="block">
-                            Build Your Future by
-                        </span>
-
-                        <span className="mt-2 block">
-                            Studying in{" "}
+                            Study in{" "}
                             <span
                                 className="inline-block rounded-2xl bg-secondary px-3 py-1 text-white shadow-[0_10px_25px_rgba(4,102,175,0.2)]"
                             >
                                 {countryName}
                             </span>
                         </span>
+
+                        <span className="mt-2 block">
+                            from Kerala
+                        </span>
                     </h1>
 
                     <p
                         className="mt-6 max-w-[520px] text-base font-medium leading-7 text-slate-600 sm:text-lg sm:leading-8"
                     >
-                        Discover quality education and global
-                        career opportunities in{" "}
+                        Build your future by studying in{" "}
                         <strong className="font-bold text-slate-900">
                             {countryName}
                         </strong>
-                        .
+                        : Medcity Overseas guides students from
+                        Kerala to quality education and global
+                        career opportunities there.
                     </p>
 
                     <div
