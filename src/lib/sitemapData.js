@@ -74,11 +74,22 @@ export async function pageEntries() {
     // universitiesPageIndexable). They throw here rather than return an
     // empty list, so a database failure never serves a sitemap without
     // the country pages.
-    // The course guides are read the same way: a failed read throws.
+    // A course guide that cannot be read is only left out (it is noindex
+    // while its courses cannot be read), so one failed guide never takes
+    // the whole sitemap down.
     const [destinations, germanPrograms, courseGuides] = await Promise.all([
         loadDestinationSummaries(),
         getGermanProgramsList(6, { throwOnError: true }),
-        Promise.all(COURSE_GUIDES.map(async (guide) => ({ guide, summary: await loadCourseGuide(guide.slug) }))),
+        Promise.all(
+            COURSE_GUIDES.map(async (guide) => ({
+                guide,
+                summary: await loadCourseGuide(guide.slug).catch((error) => {
+                    console.error(`Sitemap: course guide ${guide.slug} could not be loaded:`, error);
+
+                    return null;
+                }),
+            }))
+        ),
     ]);
 
     const entries = STATIC_PAGES.map(([path, changeFrequency, priority]) => ({
