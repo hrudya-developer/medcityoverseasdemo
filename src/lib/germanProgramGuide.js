@@ -73,7 +73,7 @@ const SOURCES = {
 function helpFaq(name) {
     return {
         question: `How does Medcity Overseas help with ${name}?`,
-        answer: `Medcity Overseas guides students from Kerala through every step of ${name}: a counselling session to check eligibility, German language training, preparing documents, applications and the German visa. Call or WhatsApp +91 90729 82555 to book a session.`,
+        answer: `Medcity Overseas guides students from Kerala through every step of ${name}: a counselling session to check eligibility, preparing documents, applications and the German visa. German classes are available at Medcity International Academy. Call or WhatsApp +91 90729 82555 to book a session.`,
     };
 }
 
@@ -85,7 +85,7 @@ const GUIDES = {
         description:
             "Ausbildung in Germany explained: paid vocational training at a school and a company, who can apply, German language needs and how Medcity Overseas helps.",
         summary:
-            "Ausbildung is Germany's dual vocational training system. Trainees learn at a vocational school (Berufsschule) and work at a company at the same time, and receive a monthly training allowance. Medcity Overseas helps students from Kerala with German language training, applications and the visa.",
+            "Ausbildung is Germany's dual vocational training system. Trainees learn at a vocational school (Berufsschule) and work at a company at the same time, and receive a monthly training allowance. Medcity Overseas helps students from Kerala with applications and the visa. German classes are available at Medcity International Academy.",
         question: "What is Ausbildung in Germany?",
         answer:
             "Ausbildung is a state-recognised vocational training programme in Germany that combines classes at a vocational school with practical work at a company. Most programmes last 2 to 3.5 years, trainees receive a monthly training allowance, and graduates earn a German qualification employers recognise. Fields include nursing, hospitality, trades and technical jobs.",
@@ -113,9 +113,9 @@ const GUIDES = {
         name: "Au Pair",
         title: "Au Pair in Germany: Eligibility and Visa",
         description:
-            "Au pair in Germany explained: living with a host family, childcare duties, pocket money, who can apply and how Medcity Overseas helps with German and the visa.",
+            "Au pair in Germany explained: living with a host family, childcare duties, pocket money, who can apply and how Medcity Overseas helps with documents and the visa.",
         summary:
-            "An au pair in Germany lives with a host family, helps with childcare and light housework, and receives free board, lodging and pocket money in return. It is a cultural exchange that helps young people improve their German. Medcity Overseas helps with German training, documents and the visa.",
+            "An au pair in Germany lives with a host family, helps with childcare and light housework, and receives free board, lodging and pocket money in return. It is a cultural exchange that helps young people improve their German. Medcity Overseas helps with documents and the visa. German classes are available at Medcity International Academy.",
         question: "What is an au pair in Germany?",
         answer:
             "An au pair is a young person who lives with a German host family for up to 12 months, helps with childcare and light household tasks, and receives free accommodation, meals and monthly pocket money. It is a cultural exchange, so au pairs also attend a German language course and get to know everyday life in Germany.",
@@ -145,7 +145,7 @@ const GUIDES = {
         description:
             "FSJ (Freiwilliges Soziales Jahr) in Germany explained: a voluntary social year in care, health and social work, who can apply and how Medcity Overseas helps.",
         summary:
-            "FSJ, the Freiwilliges Soziales Jahr, is a voluntary social year in Germany for young people. Volunteers work in hospitals, care homes, kindergartens and social projects, and receive pocket money and seminars. Medcity Overseas helps with German training, placements, documents and the visa.",
+            "FSJ, the Freiwilliges Soziales Jahr, is a voluntary social year in Germany for young people. Volunteers work in hospitals, care homes, kindergartens and social projects, and receive pocket money and seminars. Medcity Overseas gives guidance on finding a placement and helps with documents and the visa. German classes are available at Medcity International Academy.",
         question: "What is FSJ in Germany?",
         answer:
             "FSJ (Freiwilliges Soziales Jahr) is a voluntary social year in Germany for young people under 27. Volunteers work in places such as hospitals, care homes, kindergartens and social projects, usually for 12 months, and receive pocket money and educational seminars. It is a common way to gain German experience before Ausbildung or study.",
@@ -175,7 +175,7 @@ const GUIDES = {
         description:
             "BFD (Bundesfreiwilligendienst) in Germany explained: the federal volunteer service, who can join, what volunteers receive and how Medcity Overseas helps.",
         summary:
-            "BFD, the Bundesfreiwilligendienst, is Germany's federal volunteer service. Volunteers work in social, environmental, cultural or sports organisations and receive pocket money, social insurance and seminars. Medcity Overseas helps with German training, placements, documents and the visa.",
+            "BFD, the Bundesfreiwilligendienst, is Germany's federal volunteer service. Volunteers work in social, environmental, cultural or sports organisations and receive pocket money, social insurance and seminars. Medcity Overseas gives guidance on finding a placement and helps with documents and the visa. German classes are available at Medcity International Academy.",
         question: "What is BFD in Germany?",
         answer:
             "BFD, or Bundesfreiwilligendienst, is Germany's federal volunteer service. Volunteers of any age who have finished compulsory schooling work in social, environmental, cultural or sports organisations, usually for 12 months. They receive monthly pocket money, social insurance cover and seminars, and gain German work experience and language practice.",
@@ -205,7 +205,7 @@ const GUIDES = {
         description:
             "Study a bachelor's degree in Germany: entry rules for Indian students, Studienkolleg, German language needs, tuition at public universities and how to apply.",
         summary:
-            "A bachelor's degree in Germany is an undergraduate degree from a German university or university of applied sciences. Indian students usually need a recognised entrance qualification and German language skills. Medcity Overseas helps with eligibility checks, German training, applications and the visa.",
+            "A bachelor's degree in Germany is an undergraduate degree from a German university or university of applied sciences. Indian students usually need a recognised entrance qualification and German language skills. Medcity Overseas helps with eligibility checks, applications and the visa. German classes are available at Medcity International Academy.",
         question: "How can Indian students study a bachelor's in Germany?",
         answer:
             "To study a bachelor's degree in Germany, you need a school-leaving certificate that German universities accept as a university entrance qualification. Indian students with a Class 12 certificate often need to complete a Studienkolleg or some university study in India first. Most bachelor's programmes take 3 to 4 years and are taught in German, so language skills matter.",
@@ -235,7 +235,7 @@ const GUIDES = {
         description:
             "Study a master's degree in Germany: entry requirements, English and German taught programmes, tuition at public universities, part-time work and next steps.",
         summary:
-            "A master's degree in Germany is a postgraduate degree for students who already hold a recognised bachelor's degree. Many programmes are taught in English. Medcity Overseas helps Indian students choose programmes, prepare applications, learn German and apply for the student visa.",
+            "A master's degree in Germany is a postgraduate degree for students who already hold a recognised bachelor's degree. Many programmes are taught in English. Medcity Overseas helps Indian students choose programmes, prepare applications and apply for the student visa. German classes are available at Medcity International Academy.",
         question: "What do you need to study a master's in Germany?",
         answer:
             "To study a master's in Germany, usually a 1 to 2 year degree, you need a recognised bachelor's degree in a related subject, proof of English or German language skills depending on the programme, and the documents each university asks for. Many master's programmes are taught in English, and many public universities charge no tuition fees for them.",
@@ -265,7 +265,7 @@ const GUIDES = {
         description:
             "Studienkolleg in Germany explained: the university preparation course, who needs it, course types, the Feststellungsprüfung and how Medcity Overseas helps.",
         summary:
-            "A Studienkolleg is a university preparation course in Germany for international students whose school certificate does not give direct university entry. It is taught in German and ends with the Feststellungsprüfung. Medcity Overseas helps with German training, applications and the visa.",
+            "A Studienkolleg is a university preparation course in Germany for international students whose school certificate does not give direct university entry. It is taught in German and ends with the Feststellungsprüfung. Medcity Overseas helps with applications and the visa. German classes are available at Medcity International Academy.",
         question: "What is a Studienkolleg in Germany?",
         answer:
             "A Studienkolleg is a preparatory course in Germany for international students whose school-leaving certificate does not give direct entry to a German university. It usually lasts 2 semesters, is taught in German and ends with the Feststellungsprüfung assessment test. Passing it lets you apply for bachelor's programmes in the matching subject area.",
@@ -295,7 +295,7 @@ const GUIDES = {
         description:
             "Weiterbildung in Germany explained: further training for people with a qualification, recognition of foreign qualifications and how Medcity Overseas can help.",
         summary:
-            "Weiterbildung means further or continuing training in Germany for people who already have a qualification or work experience. It can add a specialisation or help close gaps during recognition of a foreign qualification. Medcity Overseas helps with German training, documents and the visa.",
+            "Weiterbildung means further or continuing training in Germany for people who already have a qualification or work experience. It can add a specialisation or help close gaps during recognition of a foreign qualification. Medcity Overseas helps with documents and the visa. German classes are available at Medcity International Academy.",
         question: "What is Weiterbildung in Germany?",
         answer:
             "Weiterbildung is further or continuing education in Germany for people who already hold a qualification or work experience. It can update skills, add a specialisation or help close gaps when a foreign qualification is being recognised. Courses range from short programmes to longer training that leads to a recognised certificate.",
@@ -313,7 +313,7 @@ const GUIDES = {
             {
                 question: "Do I need German for Weiterbildung?",
                 answer:
-                    "Most further training in Germany is taught in German, and many regulated professions also require proof of German for recognition. Medcity Overseas offers German language training to help you prepare.",
+                    "Most further training in Germany is taught in German, and many regulated professions also require proof of German for recognition. German classes are available at Medcity International Academy to help you prepare.",
             },
         ],
         sources: ["recognition", "makeIt", "agency"],
@@ -325,7 +325,7 @@ const GUIDES = {
         description:
             "Duales Studium in Germany explained: a degree combined with paid work at a partner company, entry requirements, German language needs and how Medcity helps.",
         summary:
-            "Duales Studium is a dual study programme in Germany that combines a degree with paid work at a partner company. Students graduate with a degree and work experience. Medcity Overseas helps with German training, applications and the visa.",
+            "Duales Studium is a dual study programme in Germany that combines a degree with paid work at a partner company. Students graduate with a degree and work experience. Medcity Overseas helps with applications and the visa. German classes are available at Medcity International Academy.",
         question: "What is Duales Studium in Germany?",
         answer:
             "Duales Studium is a dual study programme in Germany that combines a bachelor's degree at a university or university of applied sciences with practical phases at a partner company. Students switch between study and work, usually earn a monthly salary from the company and graduate with both a degree and work experience.",
@@ -401,7 +401,7 @@ export function germanProgramGuide(programName, programWhy = "") {
         answer: `Start with a counselling session, where a Medcity Overseas counsellor checks your profile against the ${name} requirements. You then build your German, prepare and translate your documents, send your applications and finally apply for the right German visa. The steps below show the usual order, and your counsellor adapts them to you.`,
         steps: [
             { title: "Counselling session", text: "check your eligibility and confirm the programme suits your goals." },
-            { title: "German language training", text: "reach the level your programme and the visa office ask for." },
+            { title: "German language", text: "reach the level your programme and the visa office ask for; German classes are available at Medcity International Academy." },
             { title: "Documents and applications", text: "prepare, translate and submit what each application needs." },
             { title: "Visa and departure", text: "apply for the right German visa and prepare for your move." },
         ],
@@ -423,7 +423,7 @@ export function germanProgramGuide(programName, programWhy = "") {
         name,
         title: `${name} in Germany for Indian Students`,
         description: `${name} in Germany: benefits, eligibility, steps and programme details for Indian students, with counselling and visa guidance from Medcity Overseas.`,
-        summary: `${name} is a Germany programme that Medcity Overseas guides students from Kerala through, from the first counselling session to German language training, applications and the visa.`,
+        summary: `${name} is a Germany programme that Medcity Overseas guides students from Kerala through, from the first counselling session to applications and the visa.`,
         question: `What is ${name} in Germany?`,
         answer: words(why) >= 40 && words(why) <= 60 ? why : fallbackAnswer,
         start,

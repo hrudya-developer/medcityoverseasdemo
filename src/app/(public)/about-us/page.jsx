@@ -24,7 +24,7 @@ const PAGE_TITLE =
   "About Medcity Overseas | Study Abroad Consultants in Kerala";
 
 const PAGE_DESCRIPTION =
-  "Medcity Overseas is a study abroad consultancy in Kerala guiding students on universities, courses, scholarships, student visas and language training.";
+  "Medcity Overseas is a study abroad consultancy in Kerala guiding students on universities, courses, scholarships, student visas and pre-departure plans.";
 
 // Update when this page's text is reviewed.
 const TEMPLATE_UPDATED = "2026-10-24";
@@ -119,7 +119,7 @@ export default async function AboutUsPage() {
         <AboutStats />
 
         <QuickAnswer updated={TEMPLATE_UPDATED} className="pt-12">
-          {`Medcity Overseas (Medcity International Overseas Corporation) is a study abroad consultancy in Kerala. Its counsellors help students choose a country, course and university, apply, prepare for language tests and student visas, and get ready to leave, from ${centers.length} Medcity branches in ${branchCities.length} towns across Kerala and Mangalore.`}
+          {`Medcity Overseas (Medcity International Overseas Corporation) is a study abroad consultancy in Kerala. Its counsellors help students choose a country, course and university, apply, prepare for student visas and get ready to leave, from ${centers.length} Medcity branches in ${branchCities.length} towns across Kerala and Mangalore.`}
         </QuickAnswer>
 
         <StorySection />
@@ -128,11 +128,12 @@ export default async function AboutUsPage() {
           className="py-14"
           eyebrow="What we do"
           question="What does Medcity Overseas do for students?"
-          answer="Medcity Overseas guides students from the first counselling session to departure. Counsellors help you compare countries, courses and universities, prepare and submit applications, find scholarships, prepare for English or German language tests and apply for a student visa. Visa decisions are made by each country's embassy or immigration authority, not by Medcity."
+          answer="Medcity Overseas guides students from the first counselling session to departure. Counsellors help you compare countries, courses and universities, prepare and submit applications, find scholarships and apply for a student visa. German classes are available at Medcity International Academy. Visa decisions are made by each country's embassy or immigration authority, not by Medcity."
           points={[
             <><Link href="/destinations" className="font-bold text-slate-900 hover:text-primary hover:underline">Choosing a country</Link>: compare study destinations.</>,
             <><Link href="/courses" className="font-bold text-slate-900 hover:text-primary hover:underline">Courses and universities</Link>: shortlist options that fit your profile.</>,
-            <><Link href="/study-in-germany" className="font-bold text-slate-900 hover:text-primary hover:underline">German language and Ausbildung</Link>: training and programmes in Germany.</>,
+            <><Link href="/study-in-germany" className="font-bold text-slate-900 hover:text-primary hover:underline">Ausbildung and study in Germany</Link>: programmes and routes to Germany.</>,
+            <><a href="https://medcityacademy.com/" target="_blank" rel="noopener" className="font-bold text-slate-900 hover:text-primary hover:underline">German classes</a>: available at Medcity International Academy.</>,
             <><Link href="/add-on-services" className="font-bold text-slate-900 hover:text-primary hover:underline">Add-on services</Link>: help with loans, travel and more.</>,
           ]}
         />

@@ -16,7 +16,7 @@ export const branchFaqs = [
     question:
       "What services are available at Medcity Overseas branches?",
     answer:
-      "Services may include study abroad counselling, course and university selection, overseas university application support, documentation guidance, student visa guidance and language or test preparation support. Available services can vary by branch, so contact your preferred center for current details.",
+      "Services may include study abroad counselling, course and university selection, overseas university application support, documentation guidance, student visa guidance. Language and test preparation is offered at Medcity International Academy centres. Available services can vary by branch, so contact your preferred center for current details.",
   },
   {
     question:
@@ -44,9 +44,9 @@ export const branchFaqs = [
   },
   {
     question:
-      "Do Medcity Overseas branches provide IELTS, PTE, OET and German language training?",
+      "Do Medcity branches offer IELTS, PTE, OET and German classes?",
     answer:
-      "Selected Medcity centers provide language and test preparation services such as IELTS, PTE, OET and German language training. Course availability may differ between locations, so contact the nearest branch to confirm the programs currently offered.",
+      "IELTS, PTE, OET and German classes are offered by Medcity International Academy at selected Medcity International Academy centres. Course availability may differ between locations, so contact the nearest centre to confirm the classes currently offered.",
   },
   {
     question:

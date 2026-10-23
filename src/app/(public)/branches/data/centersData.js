@@ -367,7 +367,7 @@ const rawCenters = [
       "Study Abroad Consultants in Thiruvalla",
 
     seoDescription:
-      "Visit Medcity Overseas Thiruvalla KSRTC for study abroad counselling, university applications, course selection, student visa guidance and language training.",
+      "Visit Medcity Overseas Thiruvalla KSRTC for study abroad counselling, university applications, course selection and student visa guidance.",
 
     image:
       thiruvallaKsrtcImage,
@@ -491,7 +491,7 @@ const rawCenters = [
       "Study Abroad Consultants in Kannur",
 
     seoDescription:
-      "Visit Medcity Overseas Kannur for expert study abroad counselling, university admissions, course selection, student visa guidance and language training.",
+      "Visit Medcity Overseas Kannur for expert study abroad counselling, university admissions, course selection and student visa guidance.",
 
     image:
       kannurImage,
