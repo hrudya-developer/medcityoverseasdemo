@@ -26,7 +26,6 @@ import {
 } from "./lib/destinationSchema";
 import { withPageSeoFaqs, withSeoOverrides } from "@/lib/pageSeo";
 import { getCountryFacts } from "@/lib/countryFacts";
-import { countryUniversitiesIndexable } from "@/lib/countryUniversities";
 import { latestDate } from "@/lib/seoSchema";
 import { createDestinationFaqs } from "./lib/destinationFaqs";
 import {
@@ -308,18 +307,18 @@ export default async function DestinationDetailsPage({
       image,
     });
 
-  const [facts, linkUniversities] =
-    await Promise.all([
-      getCountryFacts(
-        destinationId
-      ),
-      // Link /universities-in-<country> only when that page is
-      // indexable (it lists at least one university), the rule the
-      // page itself uses for noindex.
-      countryUniversitiesIndexable(
-        destinationId
-      ),
-    ]);
+  const facts =
+    await getCountryFacts(
+      destinationId
+    );
+
+  // Link /universities-in-<country> only when that page is indexable:
+  // it is noindex when it lists no universities. getDestinationDetails
+  // loaded the same list (the country's live universities), so its
+  // length is the page's rule without another query.
+  const linkUniversities =
+    Array.isArray(universities) &&
+    universities.length > 0;
 
   const dateModified =
     latestDate(

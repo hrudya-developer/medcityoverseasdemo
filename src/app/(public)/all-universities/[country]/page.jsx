@@ -247,8 +247,6 @@ async function loadUniversities(
             batch < MAX_UNIVERSITY_BATCHES;
             batch += 1
         ) {
-            // Shared with countryUniversitiesIndexable, which other
-            // pages use to link here only when this list is not empty.
             const result =
                 await fetchUniversityBatch(
                     countryId,
