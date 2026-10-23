@@ -42,7 +42,7 @@ const INTRO = `# Medcity Overseas (Medcity Study Abroad)
 - Phone and WhatsApp: +91 90729 82555
 - Email: info@mioc.in
 - Head office: Chettipeedika, Kannur, Kerala 670004, India
-- Free counselling: ${SITE_URL}/contact-us
+- Book a counselling session: ${SITE_URL}/contact-us
 `;
 
 function line(title, url, note = "") {
@@ -84,7 +84,7 @@ export async function GET() {
             line("Study abroad guides", `${SITE_URL}/blogs`),
             line("Branches", `${SITE_URL}/branches`),
             line("About us", `${SITE_URL}/about-us`),
-            line("Contact and free counselling", `${SITE_URL}/contact-us`),
+            line("Contact and counselling", `${SITE_URL}/contact-us`),
             "",
         ].join("\n")
     );

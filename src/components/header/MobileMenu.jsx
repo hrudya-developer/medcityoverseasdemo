@@ -631,8 +631,7 @@ export default function MobileMenu({
                             aria-hidden="true"
                         />
 
-                        Get Free
-                        Counselling
+                        Get Counselling
                     </button>
 
                     <Link

@@ -161,7 +161,7 @@ export default function MobileAppRightSection({
                         <span
                             className="block text-base font-extrabold leading-none"
                         >
-                            Get Free Counselling
+                            Get Counselling
                         </span>
 
                         <span

@@ -123,7 +123,7 @@ export default function BranchCTA({
                             hover:bg-darkPrimary
                         "
                     >
-                        Book Free Counselling
+                        Book a Counselling Session
 
                         <ArrowRight
                             size={18}

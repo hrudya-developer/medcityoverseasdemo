@@ -85,7 +85,7 @@ export default function CountryFacts({ countryName, countrySlug, facts, faqs }) 
                         href="/contact-us"
                         className="inline-flex items-center gap-1.5 rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-bold text-slate-800 hover:border-primary hover:text-primary"
                     >
-                        Free counselling
+                        Talk to a counsellor
                     </Link>
                 </div>
 

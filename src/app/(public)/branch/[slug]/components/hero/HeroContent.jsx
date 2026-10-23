@@ -238,7 +238,7 @@ export default function HeroContent({
             hover:shadow-[0_20px_42px_rgba(99,26,51,0.24)]
           "
         >
-          Book Free Counselling
+          Book a Counselling Session
 
           <ArrowRight
             className="

@@ -528,17 +528,17 @@ const CounsellingForm = ({ onSuccess, }) => {
                 >
                     <Headphones className="h-4 w-4" />
 
-                    Free consultation
+                    Counselling session
                 </span>
 
                 <h3
                     className="mt-4 font-nunito text-2xl font-extrabold text-darkPrimary sm:text-3xl"
                 >
-                    Get{" "}
+                    Talk to a{" "}
                     <span className="text-primary">
-                        free
+                        counsellor
                     </span>{" "}
-                    counselling today
+                    today
                 </h3>
 
                 <p
@@ -843,7 +843,7 @@ const CounsellingForm = ({ onSuccess, }) => {
                 >
                     {submitting
                         ? "Submitting..."
-                        : "Request Free Counselling"}
+                        : "Book a Counselling Session"}
 
                     {!submitting && (
                         <Send

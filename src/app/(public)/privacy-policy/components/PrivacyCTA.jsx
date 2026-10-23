@@ -111,7 +111,7 @@ export default function PrivacyCTA() {
                         hover:bg-darkPrimary
                     "
                 >
-                    Get Free Counselling
+                    Get Counselling
 
                     <ArrowRight
                         size={16}

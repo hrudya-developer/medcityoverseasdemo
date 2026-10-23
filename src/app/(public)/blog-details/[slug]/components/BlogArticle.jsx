@@ -215,7 +215,7 @@ function Faqs({ faqs }) {
 function CounsellingCard({ compact = false }) {
   return (
     <div className="overflow-hidden rounded-2xl bg-gradient-to-br from-darkPrimary via-primary to-primary p-6 text-white shadow-lg">
-      <p className="text-xs font-bold uppercase tracking-[0.14em] text-white/70">Free counselling</p>
+      <p className="text-xs font-bold uppercase tracking-[0.14em] text-white/70">Talk to a counsellor</p>
       <p className={`mt-2 font-black leading-snug ${compact ? "text-lg" : "text-xl"}`}>
         Planning to study abroad? Talk to a Medcity counsellor.
       </p>
@@ -243,7 +243,7 @@ function CounsellingCard({ compact = false }) {
           href="/contact-us"
           className="flex items-center justify-center gap-1.5 text-sm font-semibold text-white/90 hover:text-white"
         >
-          Book a free session <ArrowRight size={15} aria-hidden="true" />
+          Book a counselling session <ArrowRight size={15} aria-hidden="true" />
         </Link>
       </div>
     </div>

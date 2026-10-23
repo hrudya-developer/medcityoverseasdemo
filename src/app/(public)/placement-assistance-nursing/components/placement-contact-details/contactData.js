@@ -17,9 +17,9 @@ export const contactActions = [
   },
   {
     id: "consultation",
-    title: "Book a Free Consultation",
+    title: "Book a Consultation",
     description: "Get personalised guidance from our counsellors.",
-    buttonText: "Book a Free Consultation",
+    buttonText: "Book a Consultation",
     icon: CalendarDays,
     theme: "green",
     href: "#registration-form",

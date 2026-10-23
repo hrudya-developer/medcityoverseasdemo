@@ -449,7 +449,7 @@ function DestinationCTA({
             href="/contact-us"
             className="group inline-flex min-h-13 shrink-0 items-center justify-center gap-3 rounded-xl bg-white px-6 py-3 text-sm font-bold text-darkPrimary shadow-lg transition hover:-translate-y-1 hover:bg-logoYellow"
           >
-            Get Free Counselling
+            Get Counselling
 
             <ArrowRight
               size={17}

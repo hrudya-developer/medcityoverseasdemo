@@ -396,7 +396,7 @@ const FAQ = ({
             onClick={
               scrollToCounselling
             }
-            aria-label="Go to the free study abroad counselling form"
+            aria-label="Go to the study abroad counselling form"
             className="
               flex
               items-center
@@ -448,7 +448,7 @@ const FAQ = ({
                   text-slate-900
                 "
               >
-                Free 1:1 Counselling
+                Talk to a Counsellor
               </span>
 
               <span

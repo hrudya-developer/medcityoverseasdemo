@@ -86,7 +86,7 @@ export default function CounsellingModal({
                         id={titleId}
                         className="sr-only"
                     >
-                        Request free counselling
+                        Request a counselling session
                     </h2>
 
                     <CustomScrollbar

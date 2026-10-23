@@ -237,7 +237,7 @@ export default async function ContactUsPage() {
 
                 <section
                     id="contact-form"
-                    aria-label="Book a free study abroad counselling session"
+                    aria-label="Book a study abroad counselling session"
                 >
                     <CounsellingSection />
                 </section>

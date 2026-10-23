@@ -48,7 +48,7 @@ export default function NavbarActions({
         />
 
         <span>
-          Get Free Counselling
+          Get Counselling
         </span>
       </button>
 

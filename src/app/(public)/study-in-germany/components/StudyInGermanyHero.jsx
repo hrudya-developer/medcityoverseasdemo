@@ -119,7 +119,7 @@ export default function StudyInGermanyHero() {
                 href="/contact-us"
                 className="inline-flex min-h-12 items-center justify-center rounded-xl border border-primary/20 bg-white px-7 py-3 text-sm font-bold text-darkPrimary shadow-sm transition-all duration-300 hover:border-primary/40 hover:bg-primary/5"
               >
-                Get Free Counselling
+                Get Counselling
               </Link>
             </div>
 

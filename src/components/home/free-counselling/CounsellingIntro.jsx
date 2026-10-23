@@ -112,7 +112,7 @@ const CounsellingIntro = () => {
                         />
 
                         <p className="mt-3 text-sm font-bold text-white">
-                            Free consultation
+                            One-to-one consultation
                         </p>
                     </div>
 
