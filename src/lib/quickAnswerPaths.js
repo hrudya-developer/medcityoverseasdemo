@@ -16,6 +16,7 @@ const PATTERNS = [
     /^\/universities\/[^/]+$/,
     /^\/courses\/[^/]+$/,
     /^\/branch\/[^/]+$/,
+    /^\/msc-nursing-in-uk$/,
 ];
 
 export function templateShowsQuickAnswer(path) {

@@ -54,6 +54,7 @@ const STATIC_PAGES = [
     ["/study-in-germany", "weekly", 0.9],
     ["/study-in-germany/nursing-ausbildung", "monthly", 0.8],
     ["/placement-assistance-nursing", "monthly", 0.8],
+    ["/msc-nursing-in-uk", "monthly", 0.8],
     ["/migrate-to-canada", "monthly", 0.7],
     ["/migrate-to-australia", "monthly", 0.7],
     ["/add-on-services", "monthly", 0.6],
