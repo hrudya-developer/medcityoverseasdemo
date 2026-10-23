@@ -4,7 +4,7 @@ export const addOnFaqs = [
     question:
       "What add-on services does Medcity Study Abroad provide?",
     answer:
-      "Medcity Study Abroad offers additional support services for students, including SOP preparation, education loan assistance, visa interview preparation, travel card assistance, international SIM assistance, flight ticket booking, free counselling and course advice.",
+      "Medcity Study Abroad offers additional support services for students, including SOP preparation, education loan assistance, visa interview preparation, travel card assistance, international SIM assistance, flight ticket booking, counselling and course advice.",
   },
   {
     question:

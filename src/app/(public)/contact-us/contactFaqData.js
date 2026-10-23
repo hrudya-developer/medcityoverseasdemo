@@ -8,7 +8,7 @@ export const contactFaqs = [
   },
   {
     question:
-      "Can I contact Medcity Study Abroad for free counselling?",
+      "Can I contact Medcity Study Abroad for a counselling session?",
     answer:
       "Yes. You can contact our team to discuss your study abroad plans and get guidance on suitable courses, universities and destinations based on your academic profile and preferences.",
   },
