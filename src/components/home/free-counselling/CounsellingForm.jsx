@@ -17,9 +17,7 @@ import {
     WalletCards,
 } from "lucide-react";
 
-import {
-    PhoneInput,
-} from "react-international-phone";
+import dynamic from "next/dynamic";
 
 import Swal from "sweetalert2";
 
@@ -33,6 +31,30 @@ import InputField from "./InputField";
 import SelectField from "./SelectField";
 
 import "react-international-phone/style.css";
+
+/*
+ * The phone field loads in the browser only: its country list renders
+ * about 240 flag images without alt text, which crawlers would read as
+ * part of every page that shows this form.
+ */
+const PhoneInput = dynamic(
+    () =>
+        import("react-international-phone").then(
+            (module) => module.PhoneInput
+        ),
+    {
+        ssr: false,
+        loading: () => (
+            <input
+                type="tel"
+                disabled
+                aria-label="Mobile number"
+                placeholder="+91"
+                className="h-12 w-full rounded-xl border-0 bg-transparent px-3 text-sm text-slate-800 outline-none"
+            />
+        ),
+    }
+);
 
 const INITIAL_FORM_DATA = {
     firstname: "",

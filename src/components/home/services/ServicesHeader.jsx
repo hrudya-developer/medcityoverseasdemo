@@ -33,8 +33,8 @@ import {
           id="essential-services-description"
           className="mx-auto mt-5 max-w-3xl text-pretty text-sm leading-7 text-slate-600 sm:text-base lg:text-lg"
         >
-          Medcity Overseas provides expert study abroad counselling in Kerala,
-          helping students choose international universities and courses with
+          Medcity Overseas, study abroad consultants in Kerala, provides expert
+          counselling that helps students choose international universities and courses, with
           support for admissions, scholarships, student visas and
           pre-departure preparation.
         </p>

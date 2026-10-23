@@ -22,6 +22,13 @@ import TestimonialSection from "@/components/home/testimonials/TestimonialSectio
 import UniversityPartners from "@/components/home/university-partners/UniversityPartners";
 import VisaAchievers from "@/components/home/visa-achievers/VisaAchievers";
 import { applySeoOverrides } from "@/lib/pageSeo";
+import { centers } from "@/app/(public)/branches/data/centersData";
+import OfficialSources from "@/components/seo/OfficialSources";
+import QuickAnswer from "@/components/seo/QuickAnswer";
+import { STUDY_ABROAD_SOURCES } from "@/lib/officialSources";
+
+// Update when the home page content is reviewed.
+const HOME_UPDATED = "2026-10-23";
 
 
 /* =========================================================
@@ -50,7 +57,7 @@ const HOME_TITLE =
   "Study Abroad Consultants in Kerala | Medcity Overseas";
 
 const HOME_DESCRIPTION =
-  "Medcity Overseas is a study abroad consultancy in Kerala offering expert counselling, university admission support, student visa assistance, scholarship guidance, German language training and Ausbildung guidance.";
+  "Medcity Overseas is a study abroad consultancy in Kerala for university admissions, student visas, scholarships, German language training and Ausbildung.";
 
 /* =========================================================
    PAGE METADATA
@@ -391,6 +398,16 @@ const webPageJsonLd = {
 
   "@id": `${SITE_URL}/#webpage`,
 
+  dateModified: HOME_UPDATED,
+
+  author: {
+    "@id": `${SITE_URL}/#organization`,
+  },
+
+  breadcrumb: {
+    "@id": `${SITE_URL}/#breadcrumb`,
+  },
+
   url: SITE_URL,
 
   name: HOME_TITLE,
@@ -479,6 +496,25 @@ export default function Home() {
         }}
       />
 
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: serializeJsonLd({
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "@id": `${SITE_URL}/#breadcrumb`,
+            itemListElement: [
+              {
+                "@type": "ListItem",
+                position: 1,
+                name: "Home",
+                item: SITE_URL,
+              },
+            ],
+          }),
+        }}
+      />
+
       {/* ===================================================
           FAQ SCHEMA
       =================================================== */}
@@ -501,6 +537,10 @@ export default function Home() {
       <SearchSection />
 
       <ServicesSection />
+
+      <QuickAnswer updated={HOME_UPDATED} className="pb-12">
+        {`Medcity Overseas (Medcity International Overseas Corporation) is a study abroad consultancy in Kerala with ${centers.length} branches across Kerala and in Mangalore. It helps students choose countries, universities and courses, and supports admissions, scholarships, student visas, German language training, Ausbildung and pre-departure preparation.`}
+      </QuickAnswer>
 
       <ProgramsSection />
 
@@ -531,6 +571,12 @@ export default function Home() {
       
       <MigrationCTA />
       <FAQ />
+
+      <OfficialSources
+        className="py-14"
+        title="Official visa information"
+        links={STUDY_ABROAD_SOURCES}
+      />
     </>
   );
 }
