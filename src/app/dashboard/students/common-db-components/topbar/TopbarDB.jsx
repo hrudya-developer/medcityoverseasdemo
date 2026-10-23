@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+
 import { sidebarItems } from "../sidebar/sidebarData";
 
 import {
@@ -308,8 +310,9 @@ function ProfileButton() {
             : "S";
 
     return (
-        <button
-            type="button"
+        <Link
+            href="/dashboard/students/profile"
+            aria-label="Open my profile"
             className="
                 group
 
@@ -413,6 +416,6 @@ function ProfileButton() {
                     </p>
                 </div>
             </div>
-        </button>
+        </Link>
     );
 }
