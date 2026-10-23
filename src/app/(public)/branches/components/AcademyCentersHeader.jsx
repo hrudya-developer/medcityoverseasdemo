@@ -151,8 +151,9 @@ export default function AcademyCentersHeader({
                 lg:text-[17px]
               "
             >
-              Find a Medcity Overseas branch near you
-              for expert{" "}
+              Find a Medcity Overseas branch near you:
+              our consultants across Kerala and Mangalore
+              offer expert{" "}
               <strong className="font-semibold text-slate-800">
                 study abroad counselling
               </strong>

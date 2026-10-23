@@ -14,8 +14,12 @@ import BranchesFAQ from "./components/BranchesFAQ";
 const INITIAL_VISIBLE = 6;
 const LOAD_COUNT = 3;
 
+// intro, beforeFaq and afterFaq are server-rendered sections from page.jsx.
 export default function AcademyCentersClient({
   centers = [],
+  intro = null,
+  beforeFaq = null,
+  afterFaq = null,
 }) {
   const safeCenters = useMemo(
     () =>
@@ -109,6 +113,8 @@ export default function AcademyCentersClient({
             }
           />
 
+          {intro}
+
           <BranchGrid
             centers={
               displayedCenters
@@ -148,7 +154,11 @@ export default function AcademyCentersClient({
         </div>
       </section>
 
+      {beforeFaq}
+
       <BranchesFAQ />
+
+      {afterFaq}
     </>
   );
 }
