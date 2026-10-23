@@ -3,43 +3,50 @@ import "server-only";
 import { cache } from "react";
 
 import { listCourses } from "@/lib/courseIndex";
-import { query } from "@/lib/db";
+import { query, queryOne } from "@/lib/db";
+import { intakeList, recordedValue } from "@/lib/recordValue";
 
 /*
  * The most recently added courses, with the fields the course finder
- * page shows in its server-rendered list. Addresses come from the
- * course index, so every link opens a live course page. Empty fields
- * stay null so the page can show "Not recorded".
+ * page shows in its server-rendered list. Only live courses at live
+ * universities in live destinations are counted, the same rule as the
+ * destination summaries, so the totals on the page agree. Addresses
+ * come from the course index, so every link opens a live course page.
+ * Placeholders ("0", "-", "N/A") become null so the page shows
+ * "Not recorded".
  */
+const LIVE_COURSES = `FROM tb_courses c
+     JOIN tb_universities u ON u.id = c.u_id
+     JOIN tb_destinations d ON d.id = u.d_id
+     WHERE c.status = '1' AND u.status = '1' AND d.status = '1'`;
+
 export const getLatestCourses = cache(async (limit = 24) => {
     try {
-        const all = await listCourses();
-        const latest = all.slice(-limit).reverse();
+        const [index, totals, rows] = await Promise.all([
+            listCourses(),
+            queryOne(`SELECT COUNT(*) AS n ${LIVE_COURSES}`),
+            query(
+                `SELECT c.id, c.level, c.duration, c.intakes, d.country
+                 ${LIVE_COURSES}
+                 ORDER BY c.id DESC
+                 LIMIT ?`,
+                // Extra rows cover courses that share an address with another.
+                [limit * 2]
+            ),
+        ]);
 
-        if (!latest.length) {
-            return { total: 0, courses: [] };
-        }
+        const byId = new Map(index.map((course) => [course.id, course]));
+        const text = (value) => recordedValue(value) || null;
 
-        const rows = await query(
-            `SELECT c.id, c.level, c.duration, c.intakes, d.country
-             FROM tb_courses c
-             JOIN tb_universities u ON u.id = c.u_id
-             LEFT JOIN tb_destinations d ON d.id = u.d_id
-             WHERE c.id IN (?)`,
-            [latest.map((course) => course.id)]
-        );
+        const courses = rows
+            .map((row) => {
+                const course = byId.get(String(row.id));
 
-        const byId = new Map(rows.map((row) => [String(row.id), row]));
-        const text = (value) => {
-            const clean = String(value ?? "").replace(/\s+/g, " ").trim();
+                if (!course) {
+                    return null;
+                }
 
-            return clean || null;
-        };
-
-        return {
-            total: all.length,
-            courses: latest.map((course) => {
-                const row = byId.get(course.id) ?? {};
+                const intakes = intakeList(row.intakes);
 
                 return {
                     id: course.id,
@@ -49,10 +56,13 @@ export const getLatestCourses = cache(async (limit = 24) => {
                     country: text(row.country),
                     level: text(row.level),
                     duration: text(row.duration),
-                    intakes: text(row.intakes),
+                    intakes: intakes.length ? intakes.join(", ") : null,
                 };
-            }),
-        };
+            })
+            .filter(Boolean)
+            .slice(0, limit);
+
+        return { total: Number(totals?.n) || 0, courses };
     } catch (error) {
         console.error("Latest courses could not be loaded:", error);
 
