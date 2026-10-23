@@ -128,3 +128,19 @@ export function intakeSentence(values, joinList) {
 
     return `Intakes are in ${joinList(months)}${allYear ? ", and all year round" : ""}.`;
 }
+
+/*
+ * Yes or no flags in the records (without_ielts, scholarship,
+ * applicationfeewaiver). One list, used by the pages and in SQL as
+ * LOWER(TRIM(field)) IN (...). Anything else is unknown, not "no".
+ */
+export const YES_VALUES = ["yes", "y", "1", "true"];
+export const NO_VALUES = ["no", "n", "0", "false"];
+
+export function isYes(value) {
+    return YES_VALUES.includes(String(value ?? "").trim().toLowerCase());
+}
+
+export function isNo(value) {
+    return NO_VALUES.includes(String(value ?? "").trim().toLowerCase());
+}

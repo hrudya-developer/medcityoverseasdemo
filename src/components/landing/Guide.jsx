@@ -14,6 +14,19 @@ import { CONTACT_PHONE, CONTACT_PHONE_DISPLAY, CONTACT_WHATSAPP } from "@/lib/se
 
 export const NOT_RECORDED = "Not recorded";
 
+/** Shown in place of a database list when the database could not be read. */
+export function LoadError() {
+    return (
+        <p className="mt-6 rounded-2xl border border-amber-200 bg-amber-50 p-4 leading-7 text-slate-700">
+            We could not load this list right now. Please call{" "}
+            <a href={`tel:${CONTACT_PHONE}`} className="font-bold text-primary hover:underline">
+                {CONTACT_PHONE_DISPLAY}
+            </a>
+            .
+        </p>
+    );
+}
+
 export function GuideHero({ eyebrow, title, intro, breadcrumbs = [], children }) {
     return (
         <section className="relative isolate overflow-hidden bg-darkPrimary text-white">

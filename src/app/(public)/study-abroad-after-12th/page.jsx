@@ -10,6 +10,7 @@ import {
     ContactBand,
     GuideHero,
     GuideSection,
+    LoadError,
     PointList,
     Prose,
     RelatedLinks,
@@ -21,7 +22,7 @@ import {
     theadClass,
 } from "@/components/landing/Guide";
 import { guideMetadata } from "@/lib/guideMeta";
-import { getLiveDestinations, getUndergraduateByCountry } from "@/lib/landingData";
+import { getLiveSlugs, getUndergraduateByCountry } from "@/lib/landingData";
 
 /*
  * Study abroad after Class 12 (plus two) for Kerala students and
@@ -99,8 +100,7 @@ export async function generateMetadata() {
 }
 
 export default async function AfterTwelfthPage() {
-    const [byCountry, destinations] = await Promise.all([getUndergraduateByCountry(), getLiveDestinations()]);
-    const liveSlugs = new Set(destinations.map((item) => item.slug));
+    const [{ countries: byCountry, error }, liveSlugs] = await Promise.all([getUndergraduateByCountry(), getLiveSlugs()]);
     const totalCourses = byCountry.reduce((sum, row) => sum + row.courses, 0);
 
     const faqs = [
@@ -227,6 +227,8 @@ export default async function AfterTwelfthPage() {
                                 ))}
                             </tbody>
                         </TableWrap>
+                    ) : error ? (
+                        <LoadError />
                     ) : (
                         <Prose>
                             <p>Our undergraduate course list is being updated. Ask a counsellor for current options.</p>

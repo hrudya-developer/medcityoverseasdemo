@@ -10,6 +10,7 @@ import {
     ContactBand,
     GuideHero,
     GuideSection,
+    LoadError,
     PointList,
     Prose,
     RelatedLinks,
@@ -21,7 +22,7 @@ import {
     theadClass,
 } from "@/components/landing/Guide";
 import { guideMetadata } from "@/lib/guideMeta";
-import { getLiveDestinations, getNursingCourses, groupByCountry } from "@/lib/landingData";
+import { getLiveSlugs, getNursingCourses, groupByCountry } from "@/lib/landingData";
 
 /*
  * Hub for nurses and nursing students from Kerala: the regulator and
@@ -112,9 +113,8 @@ export async function generateMetadata() {
 }
 
 export default async function StudyAbroadForNursesPage() {
-    const [courses, destinations] = await Promise.all([getNursingCourses(), getLiveDestinations()]);
+    const [{ courses, error }, liveSlugs] = await Promise.all([getNursingCourses(), getLiveSlugs()]);
     const groups = groupByCountry(courses);
-    const liveSlugs = new Set(destinations.map((item) => item.slug));
     const guideHref = (route) => {
         if (!route.guide) return null;
         const match = route.guide.match(/^\/study-in-(.+)$/);
@@ -256,6 +256,8 @@ export default async function StudyAbroadForNursesPage() {
                                 ))}
                             </tbody>
                         </TableWrap>
+                    ) : error ? (
+                        <LoadError />
                     ) : (
                         <Prose>
                             <p>Our nursing course list is being updated. Talk to a counsellor for the current options.</p>

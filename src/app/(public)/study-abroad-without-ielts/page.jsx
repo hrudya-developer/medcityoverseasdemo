@@ -10,6 +10,7 @@ import {
     ContactBand,
     GuideHero,
     GuideSection,
+    LoadError,
     NOT_RECORDED,
     PointList,
     Prose,
@@ -22,7 +23,7 @@ import {
     theadClass,
 } from "@/components/landing/Guide";
 import { guideMetadata } from "@/lib/guideMeta";
-import { getLiveDestinations, getWithoutIeltsOptions } from "@/lib/landingData";
+import { getLiveSlugs, getWithoutIeltsOptions } from "@/lib/landingData";
 
 /*
  * Study abroad without IELTS: what each country's visa rules accept
@@ -106,8 +107,7 @@ export async function generateMetadata() {
 }
 
 export default async function WithoutIeltsPage() {
-    const [{ universities, courses }, destinations] = await Promise.all([getWithoutIeltsOptions(), getLiveDestinations()]);
-    const liveSlugs = new Set(destinations.map((item) => item.slug));
+    const [{ universities, courses, error }, liveSlugs] = await Promise.all([getWithoutIeltsOptions(), getLiveSlugs()]);
 
     const faqs = [
         {
@@ -229,6 +229,8 @@ export default async function WithoutIeltsPage() {
                                 ))}
                             </tbody>
                         </TableWrap>
+                    ) : error ? (
+                        <LoadError />
                     ) : (
                         <Prose>
                             <p>
@@ -275,6 +277,8 @@ export default async function WithoutIeltsPage() {
                                 ))}
                             </tbody>
                         </TableWrap>
+                    ) : error ? (
+                        <LoadError />
                     ) : (
                         <Prose>
                             <p>

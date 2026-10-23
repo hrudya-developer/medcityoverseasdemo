@@ -9,6 +9,7 @@ import {
     ContactBand,
     GuideHero,
     GuideSection,
+    LoadError,
     NOT_RECORDED,
     PointList,
     Prose,
@@ -21,7 +22,7 @@ import {
     theadClass,
 } from "@/components/landing/Guide";
 import { guideMetadata } from "@/lib/guideMeta";
-import { getLiveDestinations, getScholarshipUniversities } from "@/lib/landingData";
+import { getLiveSlugs, getScholarshipUniversities } from "@/lib/landingData";
 
 /*
  * Scholarships for Indian students. The university list is read from
@@ -119,8 +120,7 @@ export async function generateMetadata() {
 }
 
 export default async function ScholarshipsPage() {
-    const [{ universities }, destinations] = await Promise.all([getScholarshipUniversities(), getLiveDestinations()]);
-    const liveSlugs = new Set(destinations.map((item) => item.slug));
+    const [{ universities, error }, liveSlugs] = await Promise.all([getScholarshipUniversities(), getLiveSlugs()]);
     const withScholarship = universities.filter((row) => row.scholarship === "Yes").length;
 
     return (
@@ -220,6 +220,8 @@ export default async function ScholarshipsPage() {
                                 ))}
                             </tbody>
                         </TableWrap>
+                    ) : error ? (
+                        <LoadError />
                     ) : (
                         <Prose>
                             <p>

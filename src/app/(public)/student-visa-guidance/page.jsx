@@ -20,7 +20,7 @@ import {
     theadClass,
 } from "@/components/landing/Guide";
 import { guideMetadata } from "@/lib/guideMeta";
-import { getLiveDestinations } from "@/lib/landingData";
+import { getLiveSlugs } from "@/lib/landingData";
 
 /*
  * Student visa guidance for Kerala students, one section per country
@@ -107,8 +107,7 @@ function CountryLink({ row, liveSlugs }) {
 }
 
 export default async function StudentVisaGuidancePage() {
-    const destinations = await getLiveDestinations();
-    const liveSlugs = new Set(destinations.map((item) => item.slug));
+    const liveSlugs = await getLiveSlugs();
 
     return (
         <div className="bg-white">

@@ -3,7 +3,7 @@ import "server-only";
 import { cache } from "react";
 
 import { query, queryOne } from "@/lib/db";
-import { intakeList, recordedValue } from "@/lib/recordValue";
+import { intakeList, isYes, recordedValue } from "@/lib/recordValue";
 
 /*
  * Facts for a university page, read from the courses and info we hold
@@ -96,8 +96,8 @@ export const getUniversityFacts = cache(async (universityId) => {
             location: clean(university?.location) || null,
             website: website || null,
             // Recorded yes or no flags, used to link the matching guides.
-            withoutIelts: ["yes", "1", "true"].includes(clean(university?.without_ielts).toLowerCase()),
-            scholarship: ["yes", "1", "true"].includes(clean(university?.scholarship).toLowerCase()),
+            withoutIelts: isYes(university?.without_ielts),
+            scholarship: isYes(university?.scholarship),
             latest: dates.length ? new Date(Math.max(...dates.map((date) => date.getTime()))) : null,
         };
     } catch (error) {

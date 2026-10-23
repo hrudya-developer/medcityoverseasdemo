@@ -10,6 +10,7 @@ import {
     ContactBand,
     GuideHero,
     GuideSection,
+    LoadError,
     NOT_RECORDED,
     PointList,
     Prose,
@@ -78,7 +79,7 @@ export async function generateMetadata() {
 }
 
 export default async function MscNursingUkPage() {
-    const courses = await getUkNursingMasters();
+    const { courses, error } = await getUkNursingMasters();
     const universities = [...new Set(courses.map((course) => course.university))];
     const withEntry = courses.filter((course) => course.entry || course.ielts || course.pte);
     const intakes = [...new Set(courses.flatMap((course) => String(course.intakes ?? "").split(/[,/]/).map((item) => item.trim()).filter(Boolean)))];
@@ -155,7 +156,7 @@ export default async function MscNursingUkPage() {
                     {`MSc Nursing in the UK is a postgraduate degree for nurses. ${
                         courses.length
                             ? `We currently list ${courses.length} MSc Nursing ${courses.length === 1 ? "course" : "courses"} at ${universities.length} UK ${universities.length === 1 ? "university" : "universities"}.`
-                            : "Our course list is being updated."
+                            : error ? "Our course list could not be loaded just now." : "Our course list is being updated."
                     } A taught MSc does not by itself make you a UK registered nurse; that needs an NMC approved pre-registration course or the NMC route for nurses trained abroad. The Student visa asks for English at CEFR B2 and proof of living cost funds.`}
                 </QuickAnswer>
 
@@ -208,6 +209,8 @@ export default async function MscNursingUkPage() {
                                 ))}
                             </tbody>
                         </TableWrap>
+                    ) : error ? (
+                        <LoadError />
                     ) : (
                         <Prose>
                             <p>

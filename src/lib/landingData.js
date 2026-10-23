@@ -1,41 +1,43 @@
 import "server-only";
 
+import { unstable_cache } from "next/cache";
 import { cache } from "react";
 
 import { createPublicCourseHref } from "@/lib/courseSlug";
 import { query } from "@/lib/db";
+import { isNo, isYes, recordedValue, YES_VALUES } from "@/lib/recordValue";
 import { countrySlug } from "@/lib/sitemapData";
 import { createUniversityPublicHref } from "@/lib/universitySlug";
 
 /*
  * Database reads for the keyword landing pages (nursing, without IELTS,
  * after 12th, scholarships). Every value is shown as recorded: an empty
- * field becomes null so the page prints "Not recorded", a fee of 0 is a
- * missing value, and nothing is converted (no yearly fees from course
- * fees, no percentages from grades).
+ * or placeholder field becomes null so the page prints "Not recorded",
+ * and nothing is converted (no yearly fees from course fees, no
+ * percentages from grades).
+ *
+ * Each read is cached for an hour with unstable_cache, like
+ * lib/germanPrograms.js. The cached function throws on a database
+ * error, so a failure is never cached; the exported getter then
+ * returns { error: true } and the page shows a "could not load" line.
  */
 
 export const NOT_RECORDED = "Not recorded";
 
-// Placeholder values that mean "nothing recorded" and must never show.
-const PLACEHOLDER = /^(-+|\.|0+(\.0+)?|0000-00-00( 00:00:00)?|null|undefined|none|nil|n\/?a|tba|tbc|not available|not applicable)$/i;
+const REVALIDATE = 3600;
+const TAGS = ["landing-pages"];
+
+// "yes", "y", "1", "true" in any case, for SQL: LOWER(TRIM(field)) IN (...)
+const YES_SQL = YES_VALUES.map(() => "?").join(", ");
 
 function text(value) {
-    const clean = String(value ?? "")
-        .replace(/<[^>]*>/g, " ")
-        .replace(/&nbsp;/gi, " ")
-        .replace(/\s+/g, " ")
-        .trim();
-
-    return clean && !PLACEHOLDER.test(clean) ? clean : null;
+    return recordedValue(String(value ?? "").replace(/<[^>]*>/g, " ").replace(/&nbsp;/gi, " ")) || null;
 }
 
 /** "Yes", "No" or null (unknown) from a recorded yes or no field. */
 export function yesNo(value) {
-    const clean = String(value ?? "").trim().toLowerCase();
-
-    if (["yes", "1", "true", "y"].includes(clean)) return "Yes";
-    if (["no", "0", "false", "n"].includes(clean)) return "No";
+    if (isYes(value)) return "Yes";
+    if (isNo(value)) return "No";
 
     return null;
 }
@@ -54,10 +56,14 @@ export function recordedFee(fees, currency) {
 const COURSE_COLUMNS = `
     c.id, c.course, c.level, c.duration, c.intakes, c.deadline, c.entryrequirement,
     c.fees, c.currency, c.ielts, c.ieltsless, c.pte, c.pteless, c.toefl, c.toeflless, c.duolingo,
-    c.created_at AS course_created,
     u.id AS university_id, u.name AS university, u.location, u.without_ielts, u.scholarship,
-    u.applicationfeewaiver, u.created_at AS university_created,
-    d.id AS country_id, d.country`;
+    u.applicationfeewaiver, d.id AS country_id, d.country`;
+
+const LIVE_COURSE_FROM = `
+    FROM tb_courses c
+    JOIN tb_universities u ON u.id = c.u_id
+    LEFT JOIN tb_destinations d ON d.id = u.d_id
+    WHERE c.status = '1' AND u.status = '1' AND (d.id IS NULL OR d.status = '1')`;
 
 function courseRow(row) {
     return {
@@ -85,47 +91,77 @@ function courseRow(row) {
         feeWaiver: yesNo(row.applicationfeewaiver),
         country: text(row.country),
         countrySlug: row.country ? countrySlug(row.country) : "",
-        updated: row.course_created || row.university_created || null,
     };
 }
 
-async function safeQuery(label, sql, params = []) {
+function universityRow(row) {
+    return {
+        id: String(row.id),
+        name: text(row.name) ?? "University",
+        href: createUniversityPublicHref({ name: row.name }),
+        location: text(row.location),
+        country: text(row.country),
+        countrySlug: row.country ? countrySlug(row.country) : "",
+        scholarship: yesNo(row.scholarship),
+        feeWaiver: yesNo(row.applicationfeewaiver),
+        courses: Number(row.courses) || 0,
+    };
+}
+
+/** Run a cached read; a database error gives { error: true } and is logged, not cached. */
+async function guarded(label, read, empty) {
     try {
-        return await query(sql, params);
+        return { ...(await read()), error: false };
     } catch (error) {
         console.error(`${label} could not be loaded:`, error);
 
-        return [];
+        return { ...empty, error: true };
     }
 }
 
-/** Live courses whose name mentions nursing, with their university and country. */
-export const getNursingCourses = cache(async () => {
-    const rows = await safeQuery(
-        "Nursing courses",
-        `SELECT ${COURSE_COLUMNS}
-         FROM tb_courses c
-         JOIN tb_universities u ON u.id = c.u_id
-         LEFT JOIN tb_destinations d ON d.id = u.d_id
-         WHERE c.status = '1' AND u.status = '1' AND (d.id IS NULL OR d.status = '1')
-           AND c.course LIKE '%nursing%'
-         ORDER BY d.order ASC, u.name ASC, c.course ASC
-         LIMIT 400`
-    );
+/* ---------------------------------------------------------------- */
 
-    return rows.map(courseRow);
-});
+const cachedNursingCourses = unstable_cache(
+    async () => {
+        const rows = await query(
+            `SELECT ${COURSE_COLUMNS} ${LIVE_COURSE_FROM}
+               AND c.course LIKE '%nursing%'
+             ORDER BY d.order ASC, u.name ASC, c.course ASC
+             LIMIT 400`
+        );
 
-/** Masters level nursing courses at UK universities. */
-export const getUkNursingMasters = cache(async () => {
-    const courses = await getNursingCourses();
+        return { courses: rows.map(courseRow) };
+    },
+    ["landing-nursing-courses-v1"],
+    { revalidate: REVALIDATE, tags: TAGS }
+);
 
-    return courses.filter(
-        (row) =>
-            row.countrySlug === "uk" &&
-            (/\b(msc|ma|mres|masters?|postgraduate|pg)\b/i.test(row.course) || /master|postgraduate|\bpg\b/i.test(row.level ?? ""))
-    );
-});
+/** Live courses whose name mentions nursing: { courses, error }. */
+export const getNursingCourses = cache(() => guarded("Nursing courses", cachedNursingCourses, { courses: [] }));
+
+const cachedUkNursingMasters = unstable_cache(
+    async () => {
+        // Country and level are filtered here, not after a LIMIT, so no
+        // UK course is dropped and the count is right.
+        const rows = await query(
+            `SELECT ${COURSE_COLUMNS} ${LIVE_COURSE_FROM}
+               AND c.course LIKE '%nursing%'
+               AND LOWER(TRIM(d.country)) IN ('uk', 'united kingdom')
+               AND (c.level LIKE '%master%' OR c.level LIKE '%postgrad%' OR LOWER(TRIM(c.level)) IN ('pg', 'pgt')
+                 OR c.course LIKE 'MSc%' OR c.course LIKE '% MSc%' OR c.course LIKE 'MA %' OR c.course LIKE 'MRes%'
+                 OR c.course LIKE '%Master%' OR c.course LIKE '%Postgraduate%')
+             ORDER BY u.name ASC, c.course ASC
+             LIMIT 400`
+        );
+
+        return { courses: rows.map(courseRow) };
+    },
+    ["landing-uk-nursing-masters-v1"],
+    { revalidate: REVALIDATE, tags: TAGS }
+);
+
+/** Masters level nursing courses at UK universities: { courses, error }. */
+export const getUkNursingMasters = cache(() => guarded("UK nursing masters courses", cachedUkNursingMasters, { courses: [] }));
 
 /** Nursing courses grouped by country: [{ country, slug, courses: [...] }]. */
 export function groupByCountry(courses) {
@@ -142,151 +178,147 @@ export function groupByCountry(courses) {
     return [...groups.values()];
 }
 
+/* ---------------------------------------------------------------- */
+
+const cachedWithoutIelts = unstable_cache(
+    async () => {
+        const [universities, courses] = await Promise.all([
+            query(
+                `SELECT u.id, u.name, u.location, u.scholarship, u.applicationfeewaiver, d.country,
+                        (SELECT COUNT(*) FROM tb_courses c WHERE c.u_id = u.id AND c.status = '1') AS courses
+                 FROM tb_universities u
+                 LEFT JOIN tb_destinations d ON d.id = u.d_id
+                 WHERE u.status = '1' AND (d.id IS NULL OR d.status = '1')
+                   AND LOWER(TRIM(COALESCE(u.without_ielts, ''))) IN (${YES_SQL})
+                 ORDER BY d.order ASC, u.name ASC
+                 LIMIT 300`,
+                YES_VALUES
+            ),
+            query(
+                `SELECT ${COURSE_COLUMNS} ${LIVE_COURSE_FROM}
+                   AND (TRIM(COALESCE(c.ieltsless, '')) NOT IN ('', '-', '0')
+                     OR TRIM(COALESCE(c.pteless, '')) NOT IN ('', '-', '0')
+                     OR TRIM(COALESCE(c.toeflless, '')) NOT IN ('', '-', '0')
+                     OR TRIM(COALESCE(c.duolingo, '')) NOT IN ('', '-', '0'))
+                 ORDER BY d.order ASC, u.name ASC, c.course ASC
+                 LIMIT 200`
+            ),
+        ]);
+
+        return {
+            universities: universities.map(universityRow),
+            // Placeholders such as "N/A" are dropped, so keep only rows with a real option left.
+            courses: courses.map(courseRow).filter((row) => row.ieltsLess || row.pteLess || row.toeflLess || row.duolingo),
+        };
+    },
+    ["landing-without-ielts-v1"],
+    { revalidate: REVALIDATE, tags: TAGS }
+);
+
 /*
  * Universities recorded as accepting students without IELTS, and
  * courses that record a lower IELTS, PTE or TOEFL score or a Duolingo
- * score, so a reader can see the options and check each course page.
+ * score: { universities, courses, error }.
  */
-export const getWithoutIeltsOptions = cache(async () => {
-    const [universities, courses] = await Promise.all([
-        safeQuery(
-            "Universities without IELTS",
-            `SELECT u.id, u.name, u.location, u.without_ielts, u.created_at, d.country,
+export const getWithoutIeltsOptions = cache(() =>
+    guarded("Without IELTS options", cachedWithoutIelts, { universities: [], courses: [] })
+);
+
+/* ---------------------------------------------------------------- */
+
+const cachedScholarships = unstable_cache(
+    async () => {
+        const rows = await query(
+            `SELECT u.id, u.name, u.location, u.scholarship, u.applicationfeewaiver, d.country,
                     (SELECT COUNT(*) FROM tb_courses c WHERE c.u_id = u.id AND c.status = '1') AS courses
              FROM tb_universities u
              LEFT JOIN tb_destinations d ON d.id = u.d_id
              WHERE u.status = '1' AND (d.id IS NULL OR d.status = '1')
-             ORDER BY d.order ASC, u.name ASC`
-        ),
-        safeQuery(
-            "Courses with other English options",
-            `SELECT ${COURSE_COLUMNS}
+               AND (LOWER(TRIM(COALESCE(u.scholarship, ''))) IN (${YES_SQL})
+                 OR LOWER(TRIM(COALESCE(u.applicationfeewaiver, ''))) IN (${YES_SQL}))
+             ORDER BY d.order ASC, u.name ASC
+             LIMIT 300`,
+            [...YES_VALUES, ...YES_VALUES]
+        );
+
+        return { universities: rows.map(universityRow) };
+    },
+    ["landing-scholarships-v1"],
+    { revalidate: REVALIDATE, tags: TAGS }
+);
+
+/** Universities marked with a scholarship or an application fee waiver: { universities, error }. */
+export const getScholarshipUniversities = cache(() =>
+    guarded("Scholarship universities", cachedScholarships, { universities: [] })
+);
+
+/* ---------------------------------------------------------------- */
+
+const cachedUndergraduate = unstable_cache(
+    async () => {
+        const rows = await query(
+            `SELECT d.id, d.country,
+                    COUNT(c.id) AS courses,
+                    COUNT(DISTINCT u.id) AS universities,
+                    GROUP_CONCAT(DISTINCT c.level ORDER BY c.level SEPARATOR '|') AS levels
              FROM tb_courses c
              JOIN tb_universities u ON u.id = c.u_id
-             LEFT JOIN tb_destinations d ON d.id = u.d_id
-             WHERE c.status = '1' AND u.status = '1' AND (d.id IS NULL OR d.status = '1')
-               AND (TRIM(COALESCE(c.ieltsless, '')) NOT IN ('', '-', '0')
-                 OR TRIM(COALESCE(c.pteless, '')) NOT IN ('', '-', '0')
-                 OR TRIM(COALESCE(c.toeflless, '')) NOT IN ('', '-', '0')
-                 OR TRIM(COALESCE(c.duolingo, '')) NOT IN ('', '-', '0'))
-             ORDER BY d.order ASC, u.name ASC, c.course ASC
-             LIMIT 200`
-        ),
-    ]);
+             JOIN tb_destinations d ON d.id = u.d_id
+             WHERE c.status = '1' AND u.status = '1' AND d.status = '1'
+               AND (c.level LIKE '%bachelor%' OR c.level LIKE '%undergrad%' OR c.level LIKE '%diploma%'
+                 OR c.level LIKE '%foundation%' OR c.course LIKE 'BSc%' OR c.course LIKE 'B.Sc%' OR c.course LIKE 'BA %'
+                 OR c.course LIKE 'Bachelor%')
+               AND c.level NOT LIKE '%post%' AND c.level NOT LIKE '%graduate diploma%' AND c.level NOT LIKE '%master%'
+             GROUP BY d.id, d.country, d.order
+             ORDER BY d.order ASC`
+        );
 
-    const flagged = universities
-        .filter((row) => yesNo(row.without_ielts) === "Yes")
-        .map((row) => ({
-            id: String(row.id),
-            name: text(row.name) ?? "University",
-            href: createUniversityPublicHref({ name: row.name }),
-            location: text(row.location),
-            country: text(row.country),
-            countrySlug: row.country ? countrySlug(row.country) : "",
-            courses: Number(row.courses) || 0,
-        }));
-
-    return {
-        universities: flagged,
-        universitiesChecked: universities.length,
-        courses: courses.map(courseRow).filter((row) => row.ieltsLess || row.pteLess || row.toeflLess || row.duolingo),
-    };
-});
-
-/** Universities with the scholarship and application fee waiver flags as recorded. */
-export const getScholarshipUniversities = cache(async () => {
-    const [rows, deadlines] = await Promise.all([
-        safeQuery(
-            "Scholarship universities",
-            `SELECT u.id, u.name, u.location, u.scholarship, u.applicationfeewaiver, u.created_at, d.country,
-                    (SELECT COUNT(*) FROM tb_courses c WHERE c.u_id = u.id AND c.status = '1') AS courses
-             FROM tb_universities u
-             LEFT JOIN tb_destinations d ON d.id = u.d_id
-             WHERE u.status = '1' AND (d.id IS NULL OR d.status = '1')
-             ORDER BY d.order ASC, u.name ASC`
-        ),
-        safeQuery(
-            "Course deadlines",
-            `SELECT c.u_id, c.deadline
-             FROM tb_courses c
-             WHERE c.status = '1' AND TRIM(COALESCE(c.deadline, '')) <> ''`
-        ),
-    ]);
-
-    // Count only real deadlines: placeholders such as "TBA" or "0000-00-00" are not recorded values.
-    const withDeadline = new Map();
-
-    for (const row of deadlines) {
-        if (text(row.deadline)) {
-            withDeadline.set(String(row.u_id), (withDeadline.get(String(row.u_id)) ?? 0) + 1);
-        }
-    }
-
-    const all = rows.map((row) => ({
-        id: String(row.id),
-        name: text(row.name) ?? "University",
-        href: createUniversityPublicHref({ name: row.name }),
-        location: text(row.location),
-        country: text(row.country),
-        countrySlug: row.country ? countrySlug(row.country) : "",
-        scholarship: yesNo(row.scholarship),
-        feeWaiver: yesNo(row.applicationfeewaiver),
-        courses: Number(row.courses) || 0,
-        deadlines: withDeadline.get(String(row.id)) ?? 0,
-    }));
-
-    return {
-        universities: all.filter((row) => row.scholarship === "Yes" || row.feeWaiver === "Yes"),
-        universitiesChecked: all.length,
-    };
-});
+        return {
+            countries: rows.map((row) => ({
+                id: String(row.id),
+                country: text(row.country) ?? NOT_RECORDED,
+                slug: countrySlug(row.country),
+                courses: Number(row.courses) || 0,
+                universities: Number(row.universities) || 0,
+                levels: String(row.levels ?? "")
+                    .split("|")
+                    .map(text)
+                    .filter(Boolean)
+                    .slice(0, 4),
+            })),
+        };
+    },
+    ["landing-undergraduate-v1"],
+    { revalidate: REVALIDATE, tags: TAGS }
+);
 
 /*
  * Undergraduate (bachelor, diploma, foundation) courses we list, counted
- * by country, for the after 12th page.
+ * by country, for the after 12th page: { countries, error }.
  */
-export const getUndergraduateByCountry = cache(async () => {
-    const rows = await safeQuery(
-        "Undergraduate courses",
-        `SELECT d.id, d.country,
-                COUNT(c.id) AS courses,
-                COUNT(DISTINCT u.id) AS universities,
-                GROUP_CONCAT(DISTINCT c.level ORDER BY c.level SEPARATOR '|') AS levels
-         FROM tb_courses c
-         JOIN tb_universities u ON u.id = c.u_id
-         JOIN tb_destinations d ON d.id = u.d_id
-         WHERE c.status = '1' AND u.status = '1' AND d.status = '1'
-           AND (c.level LIKE '%bachelor%' OR c.level LIKE '%undergrad%' OR c.level LIKE '%diploma%'
-             OR c.level LIKE '%foundation%' OR c.course LIKE 'BSc%' OR c.course LIKE 'B.Sc%' OR c.course LIKE 'BA %'
-             OR c.course LIKE 'Bachelor%')
-         GROUP BY d.id, d.country, d.order
-         ORDER BY d.order ASC`
-    );
+export const getUndergraduateByCountry = cache(() =>
+    guarded("Undergraduate courses", cachedUndergraduate, { countries: [] })
+);
 
-    return rows.map((row) => ({
-        id: String(row.id),
-        country: text(row.country) ?? NOT_RECORDED,
-        slug: countrySlug(row.country),
-        courses: Number(row.courses) || 0,
-        universities: Number(row.universities) || 0,
-        levels: String(row.levels ?? "")
-            .split("|")
-            .map(text)
-            .filter(Boolean)
-            .slice(0, 4),
-    }));
-});
+/* ---------------------------------------------------------------- */
 
-/** The live destinations (id, country, slug) for country links. */
-export const getLiveDestinations = cache(async () => {
-    const rows = await safeQuery(
-        "Destinations",
-        `SELECT d.id, d.country,
-                (SELECT COUNT(*) FROM tb_universities u WHERE u.d_id = d.id AND u.status = '1') AS universities
-         FROM tb_destinations d WHERE d.status = '1' ORDER BY d.order ASC`
-    );
+const cachedDestinations = unstable_cache(
+    async () => {
+        const rows = await query(`SELECT d.id, d.country FROM tb_destinations d WHERE d.status = '1' ORDER BY d.order ASC`);
 
-    return rows
-        .map((row) => ({ id: String(row.id), country: text(row.country), slug: countrySlug(row.country), universities: Number(row.universities) || 0 }))
-        .filter((row) => row.country && row.slug);
+        return {
+            destinations: rows
+                .map((row) => ({ id: String(row.id), country: text(row.country), slug: countrySlug(row.country) }))
+                .filter((row) => row.country && row.slug),
+        };
+    },
+    ["landing-destinations-v1"],
+    { revalidate: REVALIDATE, tags: TAGS }
+);
+
+/** The live destinations' slugs, for country links (empty on a database error, so no link can 404). */
+export const getLiveSlugs = cache(async () => {
+    const { destinations } = await guarded("Destinations", cachedDestinations, { destinations: [] });
+
+    return new Set(destinations.map((item) => item.slug));
 });
