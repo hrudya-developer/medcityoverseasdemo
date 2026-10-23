@@ -2,9 +2,18 @@ import {
     GraduationCap,
 } from "lucide-react";
 
+import { recordedValue } from "@/lib/recordValue";
+
+import { NOT_RECORDED } from "../../utils/courseDetailsHelpers";
+
 export default function CourseHeroActions({
     level,
 }) {
+    // No badge when the level is not recorded ("Not recorded Program").
+    if (!recordedValue(level) || level === NOT_RECORDED) {
+        return null;
+    }
+
     return (
         <div
             className="

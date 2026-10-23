@@ -216,11 +216,12 @@ export default function CourseQuickFacts({
                                         "Not Available"}
                                 </p>
 
+                                {/* The month list, only when it was summed up as all year. */}
                                 {item.key ===
                                     "intakes" &&
                                     intakesRaw &&
-                                    intakesRaw !==
-                                        intakes && (
+                                    intakes ===
+                                        "All Year Round" && (
                                         <p
                                             title={
                                                 intakesRaw
