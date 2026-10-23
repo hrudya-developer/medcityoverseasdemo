@@ -102,12 +102,46 @@ function absolute(url) {
     return url && url.startsWith("/") ? `${SITE_URL}${url}` : url;
 }
 
+export const DEFAULT_OG_IMAGE = {
+    url: "/og-images/default.webp",
+    width: 1200,
+    height: 630,
+    alt: "Medcity Overseas study abroad consultants in Kerala",
+};
+
+const BRAND_SUFFIX = /\s*\|\s*Medcity Overseas\s*$/i;
+
+/*
+ * Fixes every page gets, with or without admin edits:
+ * - A page that sets openGraph without images replaces the layout's
+ *   share image (metadata merges shallowly), so the default is put back.
+ * - A plain string title that already ends in the brand would get the
+ *   layout's "%s | Medcity Overseas" template a second time.
+ */
+function withSiteDefaults(metadata) {
+    const next = { ...metadata };
+
+    if (typeof next.title === "string" && BRAND_SUFFIX.test(next.title)) {
+        next.title = { absolute: next.title };
+    }
+
+    if (next.openGraph && !next.openGraph.images) {
+        next.openGraph = { ...next.openGraph, images: [DEFAULT_OG_IMAGE] };
+    }
+
+    if (next.twitter && !next.twitter.images) {
+        next.twitter = { ...next.twitter, images: [DEFAULT_OG_IMAGE.url] };
+    }
+
+    return next;
+}
+
 /**
  * Merge the admin's edits into a page's own metadata. Pages call this
  * from generateMetadata; fields left empty in the admin change nothing.
  */
 export async function applySeoOverrides(metadata) {
-    const base = metadata ?? {};
+    const base = withSiteDefaults(metadata ?? {});
     const seo = await getPageSeo(await currentPagePath());
 
     if (!seo) {
@@ -117,7 +151,7 @@ export async function applySeoOverrides(metadata) {
     const next = { ...base };
 
     if (seo.metaTitle) {
-        next.title = { absolute: `${seo.metaTitle} | Medcity Overseas` };
+        next.title = { absolute: `${seo.metaTitle.replace(BRAND_SUFFIX, "")} | Medcity Overseas` };
     }
 
     if (seo.metaDescription) {
