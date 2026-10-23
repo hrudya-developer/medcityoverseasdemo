@@ -52,6 +52,7 @@ const STATIC_PAGES = [
     ["/courses", "weekly", 0.9],
     ["/popular-courses", "weekly", 0.8],
     ["/study-in-germany", "weekly", 0.9],
+    ["/study-in-germany/nursing-ausbildung", "monthly", 0.8],
     ["/placement-assistance-nursing", "monthly", 0.8],
     ["/migrate-to-canada", "monthly", 0.7],
     ["/migrate-to-australia", "monthly", 0.7],
