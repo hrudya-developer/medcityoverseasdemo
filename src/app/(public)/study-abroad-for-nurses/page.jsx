@@ -44,10 +44,10 @@ const BREADCRUMBS = [
 
 const REG = {
     nmc: "https://www.nmc.org.uk/registration/joining-the-register/register-nurse-midwife/trained-outside-uk/",
-    nmbi: "https://www.nmbi.ie/Registration/Qualified-outside-the-EU/Application-Process/Outcomes-of-Assessment/Compensation-Measures/Glossary",
+    nmbi: "https://www.nmbi.ie/Registration/Qualified-outside-the-EU",
     germany: "https://www.make-it-in-germany.com/en/working-in-germany/professions-in-demand/nursing",
-    nmba: "https://www.nursingmidwiferyboard.gov.au/Accreditation/IQNM/Self-check-and-Portfolio",
-    ncnz: "https://www.nursingcouncil.org.nz/NCNZ/nursing-section/Register_as_a_nurse.aspx",
+    nmba: "https://nursingmidwiferyboard.gov.au/Registration-and-Endorsement/International/Completing-the-Self-check.aspx",
+    ncnz: "https://nursingcouncil.org.nz/IQN/",
     malta: "https://nursesandmidwivescouncil.gov.mt/en/?p=6107",
     ukWork: "https://www.gold.ac.uk/immigration/during/working-while-studying/",
 };
@@ -66,7 +66,7 @@ const ROUTES = [
         guide: "/study-in-ireland",
         regulator: "Nursing and Midwifery Board of Ireland (NMBI)",
         href: REG.nmbi,
-        steps: "Prepare documents, application assessment, then any compensation measure such as a supervised adaptation and assessment placement",
+        steps: "Prepare your application, recognition of your qualification (with an adaptation period or aptitude test if needed), then registration",
         language: "English, at the level the NMBI sets",
     },
     {
@@ -82,7 +82,7 @@ const ROUTES = [
         guide: "/study-in-australia",
         regulator: "Nursing and Midwifery Board of Australia (NMBA) with Ahpra",
         href: REG.nmba,
-        steps: "Self-check, assignment to a stream, a portfolio with documents, and orientation part 1 before registration",
+        steps: "A Self-check places you in stream A, B or C, each with its own assessment stages; see Ahpra's current process",
         language: "English, at the level the NMBA sets",
     },
     {
@@ -90,8 +90,8 @@ const ROUTES = [
         guide: null,
         regulator: "Nursing Council of New Zealand",
         href: REG.ncnz,
-        steps: "Show you are fit for registration, hold the prescribed qualification and are competent, through the internationally qualified nurse pathway",
-        language: "English, well enough to protect public safety",
+        steps: "Verify your documents with TruMerit, apply to the Council, complete two cultural safety courses and a criminal history check, and for some nurses a competence assessment (theory exam and OSCE)",
+        language: "English, shown as part of document verification",
     },
     {
         country: "Malta",
