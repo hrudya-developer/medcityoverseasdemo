@@ -16,9 +16,12 @@ function buildPhoneValue(
         mobile || ""
     ).replace(/\D/g, "");
 
-    // Prevent duplicated country code
+    // Strip a duplicated country code only when the number is
+    // longer than a local number. A 10-digit Indian mobile that
+    // happens to start with "91" must be kept whole.
     if (
         dialCode &&
+        number.length > 10 &&
         number.startsWith(dialCode)
     ) {
         number = number.slice(

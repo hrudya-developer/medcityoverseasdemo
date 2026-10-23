@@ -285,6 +285,11 @@ export default function WishlistCard({
                         course={
                             course
                         }
+                        courseId={
+                            course?.c_id ??
+                            course?.course_id ??
+                            undefined
+                        }
                     />
                 </div>
             </div>

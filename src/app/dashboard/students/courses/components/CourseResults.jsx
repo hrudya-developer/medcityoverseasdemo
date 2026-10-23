@@ -57,12 +57,17 @@ function getCourseId(course) {
    WISHLIST COURSE ID
    ========================================================= */
 
+/*
+ * getPrefereList returns id = wishlist record id and
+ * c_id = the course id. Hearts compare against course ids,
+ * so the course id must win over the record id.
+ */
 function extractWishlistCourseId(item) {
     return (
-        item?.id ??
+        item?.c_id ??
         item?.course_id ??
         item?.uc_id ??
-        item?.c_id ??
+        item?.id ??
         item?.course?.id ??
         item?.course?.course_id ??
         item?.course?.uc_id ??
@@ -98,6 +103,10 @@ export default function CourseResults({
     ] = useState(
         () => new Set()
     );
+
+    // course id -> wishlist record id, which removePreferlist expects.
+    const wishlistRecordIdsRef =
+        useRef(new Map());
 
     const [
         wishlistLoadingId,
@@ -217,6 +226,35 @@ export default function CourseResults({
                     )
                 );
 
+
+                const recordIds =
+                    new Map();
+
+                (
+                    Array.isArray(data)
+                        ? data
+                        : []
+                ).forEach((item) => {
+                    const courseKey =
+                        extractWishlistCourseId(
+                            item
+                        );
+
+                    if (
+                        courseKey !== null &&
+                        courseKey !== undefined &&
+                        item?.id !== undefined &&
+                        item?.id !== null
+                    ) {
+                        recordIds.set(
+                            String(courseKey),
+                            item.id
+                        );
+                    }
+                });
+
+                wishlistRecordIdsRef.current =
+                    recordIds;
 
                 setWishlistedIds(
                     ids
@@ -475,7 +513,9 @@ export default function CourseResults({
 
                 const result =
                     await removeCourseFromWishlist(
-                        courseId
+                        wishlistRecordIdsRef.current.get(
+                            key
+                        ) ?? courseId
                     );
 
 

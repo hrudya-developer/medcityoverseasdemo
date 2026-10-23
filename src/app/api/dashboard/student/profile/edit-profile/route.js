@@ -111,8 +111,11 @@ function normalizeMobile(
      * mobile = 9874521022
      * code   = +91
      */
+    // Only strip when the number is longer than a local number,
+    // so a 10-digit mobile starting with "91" is not cut short.
     if (
         codeDigits &&
+        mobile.length > 10 &&
         mobile.startsWith(
             codeDigits
         )

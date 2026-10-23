@@ -20,6 +20,7 @@ import QualificationGateModal from "../../qualification-update/components/Qualif
 
 export default function ApplyCourseButton({
     course,
+    courseId,
     initiallyApplied = false,
 }) {
     const [
@@ -56,7 +57,10 @@ export default function ApplyCourseButton({
     |--------------------------------------------------------------------------
     */
 
+    // On a wishlist card course.id is the wishlist record id, so
+    // the card passes the real course id explicitly.
     const applicationCourseId =
+        courseId ??
         course?.id ??
         course?.course_id ??
         course?.uc_id ??
@@ -87,6 +91,19 @@ export default function ApplyCourseButton({
             setApplied(
                 true
             );
+
+            // The pending course from the public site is handled now;
+            // stop showing it on the courses page.
+            try {
+                sessionStorage.removeItem(
+                    "pendingApplyCourse"
+                );
+                sessionStorage.removeItem(
+                    "loginRedirectType"
+                );
+            } catch {
+                // Storage can be unavailable; ignore.
+            }
         }
     }, [initiallyApplied]);
 

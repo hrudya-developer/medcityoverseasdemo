@@ -1,5 +1,7 @@
 "use client";
 
+import { sidebarItems } from "../sidebar/sidebarData";
+
 import {
     Bell,
     Search,
@@ -12,23 +14,23 @@ import {
 function getPageTitle(
     pathname
 ) {
-    if (
-        pathname?.startsWith(
-            "/dashboard/students/profile"
+    // Longest matching sidebar link wins, so every dashboard page
+    // shows its own title instead of falling back to "Dashboard".
+    const match = sidebarItems
+        .filter(
+            (item) =>
+                pathname === item.href ||
+                pathname?.startsWith(
+                    `${item.href}/`
+                )
         )
-    ) {
-        return "My Profile";
-    }
+        .sort(
+            (first, second) =>
+                second.href.length -
+                first.href.length
+        )[0];
 
-    if (
-        pathname?.startsWith(
-            "/dashboard/students/courses"
-        )
-    ) {
-        return "Find a Course";
-    }
-
-    return "Dashboard";
+    return match?.label || "Dashboard";
 }
 
 export default function TopbarDB({

@@ -3,11 +3,15 @@
 import { useState } from "react";
 import { Trash2 } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useDispatch } from "react-redux";
 import Swal from "sweetalert2";
+
+import { logout } from "@/lib/redux/slices/authSlice";
 
 export default function RemoveProfileButton({ uid }) {
     const [loading, setLoading] = useState(false);
     const router = useRouter();
+    const dispatch = useDispatch();
 
     const handleDelete = async () => {
         if (!uid) {
@@ -70,7 +74,14 @@ export default function RemoveProfileButton({ uid }) {
                 );
             }
 
-            if (data?.status !== true) {
+            if (
+                !(
+                    data?.status === true ||
+                    data?.status === 1 ||
+                    data?.status === "1" ||
+                    data?.status === "true"
+                )
+            ) {
                 throw new Error(
                     data?.msg ||
                         "Unable to delete account."
@@ -86,8 +97,31 @@ export default function RemoveProfileButton({ uid }) {
                 confirmButtonText: "OK",
             });
 
-            localStorage.removeItem("token");
-            localStorage.removeItem("user");
+            // The account is gone: end the session too, otherwise the
+            // session cookie keeps the dashboard open for a deleted user.
+            try {
+                await fetch("/api/auth/logout", {
+                    method: "POST",
+                    credentials: "include",
+                    cache: "no-store",
+                });
+            } catch (logoutError) {
+                console.warn(
+                    "Logout after delete failed:",
+                    logoutError
+                );
+            }
+
+            dispatch(logout());
+
+            try {
+                localStorage.removeItem("medcity-auth");
+                sessionStorage.removeItem("medcity-otp-session");
+                sessionStorage.removeItem("pendingApplyCourse");
+                sessionStorage.removeItem("loginRedirectType");
+            } catch {
+                // Storage can be unavailable (private mode); ignore.
+            }
 
             router.replace("/login");
             router.refresh();

@@ -652,7 +652,19 @@ export default function useOtpVerification() {
         "Preparing your account..."
       );
 
-      await redirectAfterOtpVerification();
+      // The OTP is verified and used up at this point. If only the
+      // profile check fails, do not reset the OTP form (re-entering
+      // the same code would fail); continue to the dashboard instead.
+      try {
+        await redirectAfterOtpVerification();
+      } catch (redirectError) {
+        console.error(
+          "Post-login redirect failed:",
+          redirectError
+        );
+
+        router.replace("/dashboard/students");
+      }
 
     } catch (requestError) {
       console.error(

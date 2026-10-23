@@ -298,6 +298,13 @@ export default function QualificationUpdateForm({
             setSaving(false);
 
 
+            // The profile page listens for this to refresh its data.
+            window.dispatchEvent(
+                new CustomEvent(
+                    "studentQualificationUpdated"
+                )
+            );
+
             /*
              * Show success alert.
              */
