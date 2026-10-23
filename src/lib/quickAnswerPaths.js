@@ -23,6 +23,17 @@ const PATTERNS = [
     /^\/study-abroad-after-12th$/,
     /^\/student-visa-guidance$/,
     /^\/scholarships-for-indian-students$/,
+    /^\/courses$/,
+    /^\/universities$/,
+    /^\/blogs$/,
+    /^\/about-us$/,
+    /^\/contact-us$/,
+    /^\/add-on-services$/,
+    /^\/branches$/,
+    /^\/community-posts$/,
+    /^\/placement-assistance-nursing$/,
+    /^\/migrate-to-canada$/,
+    /^\/migrate-to-australia$/,
 ];
 
 export function templateShowsQuickAnswer(path) {

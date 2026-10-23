@@ -127,7 +127,7 @@ export default function CanadaOpportunityCard() {
                                 Canada
                             </span>
 
-                            {" — "}A Land of Opportunities
+                            {": "}A Land of Opportunities
                         </h3>
 
                         <div

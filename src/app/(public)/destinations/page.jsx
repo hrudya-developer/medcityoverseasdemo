@@ -1,7 +1,7 @@
 import DestinationsSection from "@/components/home/destinations/DestinationsSection";
 import DestinationsFAQ from "./components/DestinationsFAQ";
 import Link from "next/link";
-import { applySeoOverrides } from "@/lib/pageSeo";
+import { applySeoOverrides, withPageSeoFaqs } from "@/lib/pageSeo";
 import { faqs } from "./components/destinationsFaqData";
 import DestinationsTable from "@/components/seo/DestinationsTable";
 import OfficialSources from "@/components/seo/OfficialSources";
@@ -262,16 +262,14 @@ const destinationsSchema = {
 
 const serializeJsonLd = jsonLdString;
 
-export default function DestinationsPage() {
+export default async function DestinationsPage() {
   return (
     <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html:
-            serializeJsonLd(
-              destinationsSchema
-            ),
+            serializeJsonLd(await withPageSeoFaqs(destinationsSchema)),
         }}
       />
 

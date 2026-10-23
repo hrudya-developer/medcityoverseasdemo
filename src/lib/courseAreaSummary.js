@@ -1,18 +1,21 @@
 import "server-only";
 
+import { unstable_cache } from "next/cache";
 import { cache } from "react";
 
 import { query } from "@/lib/db";
+import { recordedValue } from "@/lib/recordValue";
 
 /*
  * Course areas (tb_main_course) with what we list in each, counted from
  * the database: live courses, the universities and countries offering
  * them (courses at hidden universities are not counted), and the most
  * common course duration as written in the course records. Nothing is
- * estimated; missing values stay null.
+ * estimated; missing values stay null. Cached for 15 minutes.
  */
-export const getCourseAreaSummaries = cache(async () => {
-    try {
+// Errors are thrown so unstable_cache never stores a failed result.
+const cachedCourseAreas = unstable_cache(
+    async () => {
         const [areas, durations] = await Promise.all([
             query(
                 `SELECT m.id, m.name, m.popular,
@@ -41,8 +44,11 @@ export const getCourseAreaSummaries = cache(async () => {
         for (const row of durations) {
             const key = String(row.c_id);
 
-            if (!commonDuration.has(key)) {
-                commonDuration.set(key, String(row.duration));
+            const duration = recordedValue(row.duration);
+
+            // "0", "-" and "N/A" are not durations.
+            if (duration && !commonDuration.has(key)) {
+                commonDuration.set(key, duration);
             }
         }
 
@@ -57,6 +63,14 @@ export const getCourseAreaSummaries = cache(async () => {
                 duration: commonDuration.get(String(row.id)) ?? null,
             }))
             .filter((row) => row.name);
+    },
+    ["course-area-summaries-v1"],
+    { revalidate: 15 * 60 }
+);
+
+export const getCourseAreaSummaries = cache(async () => {
+    try {
+        return await cachedCourseAreas();
     } catch (error) {
         console.error("Course area summaries could not be loaded:", error);
 

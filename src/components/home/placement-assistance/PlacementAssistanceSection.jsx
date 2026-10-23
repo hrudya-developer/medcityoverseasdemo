@@ -2,8 +2,8 @@ import PlacementIntro from "./PlacementIntro";
 import PlacementGrid from "./PlacementGrid";
 
 export default function PlacementAssistanceSection({
-  eligibilityHref = "/contact",
-  brochureHref = "/contact",
+  eligibilityHref = "/contact-us",
+  brochureHref = "/contact-us",
 }) {
   return (
     <section

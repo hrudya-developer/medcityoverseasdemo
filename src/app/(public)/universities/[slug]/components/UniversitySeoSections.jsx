@@ -6,6 +6,7 @@ import OfficialSources from "@/components/seo/OfficialSources";
 import QuestionAnswer from "@/components/seo/QuestionAnswer";
 import QuickAnswer from "@/components/seo/QuickAnswer";
 import { officialSourcesFor } from "@/lib/officialSources";
+import { intakeParts } from "@/lib/recordValue";
 import { joinList } from "@/lib/seoSchema";
 
 /*
@@ -38,7 +39,7 @@ export function universityFaqs(universityName, countryName, facts) {
     if (where) {
         faqs.push({
             question: `Where is ${universityName} located?`,
-            answer: `${universityName} is in ${where}. The map on this page shows its location.`,
+            answer: `${universityName} is in ${where}.`,
         });
     }
 
@@ -51,10 +52,16 @@ export function universityFaqs(universityName, countryName, facts) {
         });
     }
 
-    if (facts?.intakes.length) {
+    const { months, allYear } = intakeParts(facts?.intakes ?? []);
+
+    if (months.length || allYear) {
+        const when = months.length
+            ? `start in ${joinList(months)}${allYear ? ", and some take students all year round" : ""}`
+            : "take students all year round";
+
         faqs.push({
             question: `When are the intakes at ${universityName}?`,
-            answer: `The courses we list at ${universityName} start in ${joinList(facts.intakes)}. Intakes differ from course to course, so check the course page before you plan your application.`,
+            answer: `The courses we list at ${universityName} ${when}. Intakes differ from course to course, so check the course page before you plan your application.`,
         });
     }
 
@@ -67,7 +74,7 @@ export function universityFaqs(universityName, countryName, facts) {
 
     faqs.push({
         question: `How can Medcity Overseas help me apply to ${universityName}?`,
-        answer: `Medcity Overseas counsellors help you choose a course at ${universityName}, check your eligibility, prepare your documents and application, and guide you through the offer, student visa and pre-departure steps. Call or WhatsApp +91 90729 82555 for free counselling.`,
+        answer: `Medcity Overseas counsellors help you choose a course at ${universityName}, check your eligibility, prepare your documents and application, and guide you through the offer, student visa and pre-departure steps. Call or WhatsApp +91 90729 82555 to talk to a counsellor.`,
     });
 
     return faqs;
@@ -78,9 +85,9 @@ export function UniversityInShort({ universityName, countryName, facts, updated 
 
     return (
         <QuickAnswer updated={updated} className="py-8">
-            {`${universityName} is a university${where ? ` in ${where}` : ""}. ${
+            {`${universityName}${where ? `, in ${where},` : ""} is listed on Medcity Overseas. ${
                 facts?.courses > 0
-                    ? `Medcity Overseas lists ${facts.courses} ${facts.courses === 1 ? "course" : "courses"} here${
+                    ? `We list ${facts.courses} ${facts.courses === 1 ? "course" : "courses"} there${
                           facts.levels.length ? ` at ${joinList(facts.levels)} level` : ""
                       }. `
                     : ""
@@ -89,10 +96,10 @@ export function UniversityInShort({ universityName, countryName, facts, updated 
     );
 }
 
-export function UniversityGuide({ universityName, countryName, countrySlug, facts, faqs, path }) {
+export function UniversityGuide({ universityName, countryName, countrySlug, countryLive = false, facts, faqs, path }) {
     const rows = [
         ["Location", place(facts, countryName) || NOT_RECORDED],
-        ["Courses listed on Medcity Overseas", facts?.courses > 0 ? String(facts.courses) : NOT_RECORDED],
+        ["Courses listed on Medcity Overseas", facts ? String(facts.courses ?? 0) : NOT_RECORDED],
         ["Study levels", facts?.levels.length ? joinList(facts.levels) : NOT_RECORDED],
         ["Common course durations", facts?.durations.length ? joinList(facts.durations) : NOT_RECORDED],
         ["Intakes", facts?.intakes.length ? joinList(facts.intakes) : NOT_RECORDED],
@@ -158,7 +165,7 @@ export function UniversityGuide({ universityName, countryName, countrySlug, fact
             />
 
             <p className="mx-auto max-w-5xl px-4 text-sm leading-7 text-slate-600 sm:px-6 lg:px-8">
-                {countrySlug ? (
+                {countrySlug && countryLive ? (
                     <>
                         Compare other{" "}
                         <Link href={`/universities-in-${countrySlug}`} className="font-bold text-primary hover:underline">
@@ -178,7 +185,7 @@ export function UniversityGuide({ universityName, countryName, countrySlug, fact
                 </Link>{" "}
                 or{" "}
                 <Link href="/contact-us" className="font-bold text-primary hover:underline">
-                    book free counselling
+                    book a counselling session
                 </Link>
                 .
             </p>

@@ -14,23 +14,29 @@ import {
 } from "lucide-react";
 
 import AddOnServiceCard from "./components/AddOnServiceCard";
-import FAQ from "@/components/home/FAQ/FAQ";
 import AddOnServicesFAQ from "./components/AddOnServicesFAQ";
 
 const INITIAL_VISIBLE_COUNT = 3;
 const LOAD_COUNT = 3;
 
-export default function AddOnServicesClient() {
+// initial: the services read on the server, so the list is in the first
+// HTML. intro, beforeFaq and afterFaq are server-rendered sections.
+export default function AddOnServicesClient({
+    initial = null,
+    intro = null,
+    beforeFaq = null,
+    afterFaq = null,
+}) {
     const [
         imageBaseUrl,
         setImageBaseUrl,
-    ] = useState("");
+    ] = useState(initial?.imageBaseUrl ?? "");
 
     const [services, setServices] =
-        useState([]);
+        useState(initial?.services ?? []);
 
     const [loading, setLoading] =
-        useState(true);
+        useState(!initial);
 
     const [error, setError] =
         useState("");
@@ -43,6 +49,11 @@ export default function AddOnServicesClient() {
     );
 
     useEffect(() => {
+        // The server already sent the services with the page.
+        if (initial) {
+            return undefined;
+        }
+
         const controller =
             new AbortController();
 
@@ -118,13 +129,7 @@ export default function AddOnServicesClient() {
 
         return () =>
             controller.abort();
-    }, []);
-
-    useEffect(() => {
-        setVisibleCount(
-            INITIAL_VISIBLE_COUNT
-        );
-    }, []);
+    }, [initial]);
 
     const featuredServices =
         useMemo(
@@ -246,7 +251,7 @@ export default function AddOnServicesClient() {
     };
 
     return (
-        <main className="overflow-hidden bg-slate-50">
+        <div className="overflow-hidden bg-slate-50">
             <FeaturedServicesSection
                 loading={loading}
                 error={error}
@@ -260,6 +265,8 @@ export default function AddOnServicesClient() {
                     getImageUrl
                 }
             />
+
+            {intro}
 
             <section
                 aria-labelledby="all-services-heading"
@@ -430,12 +437,16 @@ export default function AddOnServicesClient() {
 
             <ServicesCTA />
 
+            {beforeFaq}
+
             <div
                 className="mx-auto max-w-7xl px-4 pb-16 lg:px-8 lg:pb-20"
             >
                 <AddOnServicesFAQ />
             </div>
-        </main>
+
+            {afterFaq}
+        </div>
     );
 }
 
@@ -485,7 +496,8 @@ function FeaturedServicesSection({
                     <p
                         className="mx-auto mt-5 max-w-2xl text-base leading-7 text-slate-600 md:text-lg"
                     >
-                        Get expert assistance
+                        Add-on services from Medcity
+                        Overseas give you expert assistance
                         with admissions, visas,
                         finance, accommodation,
                         travel and every important

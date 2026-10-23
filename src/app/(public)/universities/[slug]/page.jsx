@@ -9,6 +9,7 @@ import {
 } from "@/lib/universitySlug";
 
 import { queryOne } from "@/lib/db";
+import { getLiveDestination } from "@/lib/destinationSummary";
 
 import UniversityDetailsClient from "./components/UniversityDetailsClient";
 
@@ -527,8 +528,14 @@ export default async function UniversityDetailsPage({
             resolvedCountryName
         );
 
-    const countryUniversitiesUrl =
+    // Hidden destinations have no country pages (they 404), so no links.
+    const countryLive =
         countrySlug
+            ? Boolean(await getLiveDestination(countrySlug))
+            : false;
+
+    const countryUniversitiesUrl =
+        countryLive
             ? `${SITE_URL}/universities-in-${countrySlug}`
             : "";
 
@@ -940,6 +947,7 @@ export default async function UniversityDetailsPage({
                     universityName={universityName}
                     countryName={resolvedCountryName}
                     countrySlug={countrySlug}
+                    countryLive={countryLive}
                     facts={pageFacts}
                     faqs={faqs}
                     path={`/universities/${canonicalSlug}`}

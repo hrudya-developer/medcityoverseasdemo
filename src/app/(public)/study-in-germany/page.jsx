@@ -6,7 +6,7 @@ import GermanProgramsClient from "./GermanProgramsClient";
 import WhyStudyGermany from "./components/WhyStudyGermany";
 import StudyInGermanyHero from "./components/StudyInGermanyHero";
 import StudyInGermanyFAQ from "./components/StudyInGermanyFAQ";
-import { applySeoOverrides } from "@/lib/pageSeo";
+import { applySeoOverrides, withPageSeoFaqs } from "@/lib/pageSeo";
 import Link from "next/link";
 import { faqs } from "./components/studyInGermanyFaqData";
 import OfficialSources from "@/components/seo/OfficialSources";
@@ -14,7 +14,7 @@ import GuideLinks, { GUIDES } from "@/components/landing/GuideLinks";
 import QuestionAnswer from "@/components/seo/QuestionAnswer";
 import QuickAnswer from "@/components/seo/QuickAnswer";
 import { getCountryFacts } from "@/lib/countryFacts";
-import { getDestinationSummaries } from "@/lib/destinationSummary";
+import { getLiveDestination } from "@/lib/destinationSummary";
 import { OFFICIAL_SOURCES } from "@/lib/officialSources";
 import { createSlug } from "@/lib/slug";
 import { faqPageNode, joinList, latestDate, organizationNode, websiteNode } from "@/lib/seoSchema";
@@ -54,7 +54,7 @@ const SITE_NAME =
     "Medcity Overseas";
 
 const PAGE_TITLE =
-    "Study in Germany from Kerala | Ausbildung, Nursing & Courses";
+    "Study in Germany from Kerala: Ausbildung | Medcity Overseas";
 
 const PAGE_DESCRIPTION =
     "Study in Germany from Kerala with Medcity Overseas: university courses, Ausbildung, nursing pathways, eligibility, admissions and student visa guidance.";
@@ -367,9 +367,7 @@ export default async function GermanProgramsPage() {
             : [];
 
     const germany =
-        (await getDestinationSummaries()).find(
-            (row) => row.slug === "germany"
-        );
+        await getLiveDestination("germany");
 
     const facts =
         germany
@@ -457,14 +455,16 @@ export default async function GermanProgramsPage() {
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{
                     __html:
-                        serializeJsonLd({
-                            "@context": "https://schema.org",
-                            "@graph": [
-                                organizationNode(),
-                                websiteNode(),
-                                faqPageNode(PAGE_PATH, faqs),
-                            ],
-                        }),
+                        serializeJsonLd(
+                            await withPageSeoFaqs({
+                                "@context": "https://schema.org",
+                                "@graph": [
+                                    organizationNode(),
+                                    websiteNode(),
+                                    faqPageNode(PAGE_PATH, faqs),
+                                ],
+                            })
+                        ),
                 }}
             />
 
@@ -560,7 +560,7 @@ export default async function GermanProgramsPage() {
                         </Link>{" "}
                         or{" "}
                         <Link href="/contact-us" className="font-bold text-primary hover:underline">
-                            book free counselling
+                            book a counselling session
                         </Link>
                         .
                     </p>

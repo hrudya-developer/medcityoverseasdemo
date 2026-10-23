@@ -75,7 +75,7 @@ export default function BlogHeader() {
                 </div>
 
                 <p className="mx-auto mt-8 max-w-3xl text-lg leading-8 text-slate-600">
-                    Discover expert insights on
+                    Read our latest blogs and student guides on
                     <span className="font-semibold text-secondary"> student visas</span>,
                     <span className="font-semibold text-secondary"> scholarships</span>,
                     <span className="font-semibold text-secondary"> university admissions</span>,

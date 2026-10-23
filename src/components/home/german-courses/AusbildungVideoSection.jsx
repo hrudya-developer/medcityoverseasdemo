@@ -158,7 +158,7 @@ export default function AusbildungVideoSection({
                             sm:text-3xl
                         "
                     >
-                        Ausbildung — Germany&apos;s
+                        Ausbildung: Germany&apos;s
                         Most In-Demand Career Path
                     </h3>
 

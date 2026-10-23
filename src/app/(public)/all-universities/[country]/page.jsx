@@ -2,6 +2,7 @@ import { cache } from "react";
 
 import {
     notFound,
+    permanentRedirect,
 } from "next/navigation";
 
 import {
@@ -24,7 +25,8 @@ import { joinList, latestDate, organizationNode, websiteNode } from "@/lib/seoSc
 // The date the page blocks were last changed; a page shows this or its
 // newest university or course record, whichever is later.
 const TEMPLATE_UPDATED = "2026-10-23";
-import { withSeoOverrides } from "@/lib/pageSeo";
+import { faqsWithPageSeo, withSeoOverrides } from "@/lib/pageSeo";
+import { findDestinationSlugById } from "../../destination/[slug]/lib/destinationApi";
 
 /* =========================================================
    SITE CONFIG
@@ -521,6 +523,22 @@ export default async function UniversitiesByCountryPage({
             countrySlug,
     } = await params;
 
+    // Old numeric addresses (/universities-in-17) move to the slug page.
+    if (/^\d+$/.test(String(countrySlug ?? "").trim())) {
+        const destinationSlug =
+            await findDestinationSlugById(
+                countrySlug
+            );
+
+        if (destinationSlug) {
+            permanentRedirect(
+                `/universities-in-${destinationSlug}`
+            );
+        }
+
+        notFound();
+    }
+
     /* =====================================================
        DESTINATION
     ===================================================== */
@@ -623,10 +641,16 @@ export default async function UniversitiesByCountryPage({
     const facts =
         await getCountryFacts(countryId);
 
+    // Only FAQs that are shown: CountryFacts hides them when there
+    // are no universities.
     const faqs =
-        facts
+        facts && facts.universities > 0
             ? countryFaqs(countryName, facts)
             : [];
+
+    // FAQs added in the SEO manager join this page's FAQPage.
+    const schemaFaqs =
+        await faqsWithPageSeo(faqs);
 
     const pageUrl =
         `${SITE_URL}/universities-in-${countrySlug}`;
@@ -643,8 +667,8 @@ export default async function UniversitiesByCountryPage({
                   facts.courses > 0 ? ` with ${facts.courses.toLocaleString("en-IN")} courses between them` : ""
               }${
                   facts.cities.length ? `, in cities such as ${joinList(facts.cities.slice(0, 3).map((city) => city.name))}` : ""
-              }. Compare universities in ${countryName} by location and courses, then book free counselling to shortlist and apply.`
-            : `Explore universities in ${countryName} for Indian students, compare their courses and book free counselling with Medcity Overseas to shortlist and apply.`;
+              }. Compare universities in ${countryName} by location and courses, then book a counselling session to shortlist and apply.`
+            : `Explore universities in ${countryName} for Indian students, compare their courses and book a counselling session with Medcity Overseas to shortlist and apply.`;
 
     /* =====================================================
        COLLECTION PAGE SCHEMA
@@ -915,7 +939,7 @@ export default async function UniversitiesByCountryPage({
                 }}
             />
 
-            {faqs.length > 0 && (
+            {schemaFaqs.length > 0 && (
                 <script
                     type="application/ld+json"
                     dangerouslySetInnerHTML={{
@@ -923,7 +947,7 @@ export default async function UniversitiesByCountryPage({
                             "@context": "https://schema.org",
                             "@type": "FAQPage",
                             "@id": `${pageUrl}#faq`,
-                            mainEntity: faqs.map((faq) => ({
+                            mainEntity: schemaFaqs.map((faq) => ({
                                 "@type": "Question",
                                 name: faq.question,
                                 acceptedAnswer: { "@type": "Answer", text: faq.answer },

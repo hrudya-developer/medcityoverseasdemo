@@ -21,7 +21,7 @@ import SASteps from "@/components/home/study-abroad-steps/SASteps";
 import TestimonialSection from "@/components/home/testimonials/TestimonialSection";
 import UniversityPartners from "@/components/home/university-partners/UniversityPartners";
 import VisaAchievers from "@/components/home/visa-achievers/VisaAchievers";
-import { applySeoOverrides } from "@/lib/pageSeo";
+import { applySeoOverrides, withPageSeoFaqs } from "@/lib/pageSeo";
 import { centers } from "@/app/(public)/branches/data/centersData";
 import GuideLinks, { GUIDES } from "@/components/landing/GuideLinks";
 import OfficialSources from "@/components/seo/OfficialSources";
@@ -58,7 +58,7 @@ const HOME_TITLE =
   "Study Abroad Consultants in Kerala | Medcity Overseas";
 
 const HOME_DESCRIPTION =
-  "Medcity Overseas is a study abroad consultancy in Kerala for university admissions, student visas, scholarships, German language training and Ausbildung.";
+  "Medcity Overseas is a study abroad consultancy in Kerala for university admissions, student visas, scholarships, Ausbildung and other routes to Germany.";
 
 /* =========================================================
    PAGE METADATA
@@ -164,12 +164,11 @@ const organizationJsonLd = {
 
   "@id": `${SITE_URL}/#organization`,
 
-  name: LEGAL_NAME,
+  name: SITE_NAME,
 
-  alternateName: [
-    "Medcity Overseas",
-    "Medcity Study Abroad",
-  ],
+  legalName: LEGAL_NAME,
+
+  alternateName: "Medcity Study Abroad",
 
   url: SITE_URL,
 
@@ -186,9 +185,9 @@ const organizationJsonLd = {
 
     contentUrl: `${SITE_URL}/logo.png`,
 
-    width: 512,
+    width: 7344,
 
-    height: 512,
+    height: 2080,
 
     caption: SITE_NAME,
   },
@@ -204,7 +203,7 @@ const organizationJsonLd = {
   },
 
   description:
-    "Medcity International Overseas Corporation, operating as Medcity Overseas, provides study abroad counselling, university admissions guidance, scholarship guidance, student visa assistance, German language training and overseas education support.",
+    "Medcity International Overseas Corporation, operating as Medcity Overseas, provides study abroad counselling, university admissions guidance, scholarship guidance, student visa assistance and overseas education support.",
 
   areaServed: {
     "@type": "Country",
@@ -312,25 +311,6 @@ const organizationJsonLd = {
 
           serviceType:
             "Study Abroad Scholarship Guidance",
-
-          provider: {
-            "@id":
-              `${SITE_URL}/#organization`,
-          },
-        },
-      },
-
-      {
-        "@type": "Offer",
-
-        itemOffered: {
-          "@type": "Service",
-
-          name:
-            "German Language Training",
-
-          serviceType:
-            "German Language Training",
 
           provider: {
             "@id":
@@ -455,7 +435,10 @@ function serializeJsonLd(data) {
    HOMEPAGE
 ========================================================= */
 
-export default function Home() {
+export default async function Home() {
+  // FAQs added to the home page in the SEO manager join its FAQPage.
+  const homeFaqSchema = await withPageSeoFaqs(faqSchema);
+
   return (
     <>
       {/* ===================================================
@@ -524,7 +507,7 @@ export default function Home() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html: serializeJsonLd(
-            faqSchema
+            homeFaqSchema
           ),
         }}
       />
@@ -540,7 +523,13 @@ export default function Home() {
       <ServicesSection />
 
       <QuickAnswer updated={HOME_UPDATED} className="pb-12">
-        {`Medcity Overseas (Medcity International Overseas Corporation) is a study abroad consultancy in Kerala with ${centers.length} branches across Kerala and in Mangalore. It helps students choose countries, universities and courses, and supports admissions, scholarships, student visas, German language training, Ausbildung and pre-departure preparation.`}
+        <p>
+          {`Medcity Overseas (Medcity International Overseas Corporation) is a study abroad consultancy in Kerala with ${centers.length} branches across Kerala and in Mangalore. It helps students choose countries, universities and courses, and supports admissions, scholarships, student visas, Ausbildung and pre-departure preparation. German classes are available at `}
+          <a href="https://medcityacademy.com/" target="_blank" rel="noopener" className="font-bold text-primary hover:underline">
+            Medcity International Academy
+          </a>
+          .
+        </p>
       </QuickAnswer>
 
       <ProgramsSection />

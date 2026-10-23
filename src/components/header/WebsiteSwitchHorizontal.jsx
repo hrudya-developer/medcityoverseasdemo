@@ -15,7 +15,7 @@ import germanFlag from "@/assets/germanFlag.png";
 
 const ACADEMY_URL = "https://medcityacademy.com/";
 const BRANCHES_URL =
-    "https://medcityacademy.com/branches/";
+    "https://medcityacademy.com/centers/";
 const LANGUAGE_PROGRAM_URL =
     "https://medcityacademy.com/courses/";
 const MOBILE_APP_URL =
@@ -120,7 +120,7 @@ const HorizontalExternalLink = ({
             href={href}
             target="_blank"
             rel="noopener noreferrer"
-            aria-label={`${label} — opens in a new tab`}
+            aria-label={`${label}, opens in a new tab`}
             title={label}
             onClick={() => onNavigate?.()}
             className={getLinkClasses(active)}

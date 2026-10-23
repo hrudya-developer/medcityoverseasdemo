@@ -226,7 +226,7 @@ const ActionCard = ({
                 href={href}
                 target="_blank"
                 rel="noopener noreferrer"
-                aria-label={`${title} — opens in a new tab`}
+                aria-label={`${title}, opens in a new tab`}
                 className={className}
             >
                 {content}

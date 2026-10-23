@@ -18,8 +18,6 @@ import {
   ImageOff,
 } from "lucide-react";
 
-import FAQ from "@/components/home/FAQ/FAQ";
-
 import CommunityHero from "./components/CommunityHero";
 import CommunityPostsFAQ from "./components/CommunityPostsFAQ";
 
@@ -183,20 +181,41 @@ function parseNextOffset(value) {
     : null;
 }
 
-export default function CommunityPostsClient() {
+// initial: the first page of posts read on the server, so they are in
+// the first HTML. intro, beforeFaq and afterFaq are server-rendered sections.
+export default function CommunityPostsClient({
+  initial = null,
+  intro = null,
+  beforeFaq = null,
+  afterFaq = null,
+}) {
+  const initialPosts =
+    Array.isArray(initial?.posts)
+      ? initial.posts
+      : [];
+
+  const initialNextOffset =
+    parseNextOffset(
+      initial?.nextOffset
+    );
+
   const [posts, setPosts] =
-    useState([]);
+    useState(initialPosts);
 
   const [
     imagePath,
     setImagePath,
-  ] = useState("");
+  ] = useState(initial?.imagePath ?? "");
 
   const [loading, setLoading] =
-    useState(true);
+    useState(!initial);
 
   const [error, setError] =
-    useState("");
+    useState(
+      initial && !initialPosts.length
+        ? "No community posts are available on this page."
+        : ""
+    );
 
   const [
     currentPage,
@@ -204,12 +223,20 @@ export default function CommunityPostsClient() {
   ] = useState(1);
 
   const [offsets, setOffsets] =
-    useState([0]);
+    useState(
+      initial && initialNextOffset !== null
+        ? [0, initialNextOffset]
+        : [0]
+    );
 
   const [
     nextOffset,
     setNextOffset,
-  ] = useState(null);
+  ] = useState(initialNextOffset);
+
+  // The first page came with the HTML, so it is not fetched again.
+  const skipInitialFetchRef =
+    useRef(Boolean(initial));
 
   const postsSectionRef =
     useRef(null);
@@ -265,6 +292,17 @@ export default function CommunityPostsClient() {
     }
 
     previousOffsetRef.current = offset;
+
+    if (
+      skipInitialFetchRef.current &&
+      offset === 0
+    ) {
+      skipInitialFetchRef.current = false;
+
+      return undefined;
+    }
+
+    skipInitialFetchRef.current = false;
 
     const controller =
       new AbortController();
@@ -524,8 +562,10 @@ export default function CommunityPostsClient() {
   };
 
   return (
-    <main className="bg-[#f7f9fc]">
+    <div className="bg-[#f7f9fc]">
       <CommunityHero />
+
+      {intro}
 
       <section
         ref={postsSectionRef}
@@ -539,7 +579,7 @@ export default function CommunityPostsClient() {
               Updates
             </p>
 
-            <h1
+            <h2
               id="community-list-heading"
               className="mt-3 text-3xl font-extrabold text-secondary md:text-4xl"
             >
@@ -548,7 +588,7 @@ export default function CommunityPostsClient() {
               <span className="text-primary">
                 Opportunities
               </span>
-            </h1>
+            </h2>
 
             <p className="mx-auto mt-4 max-w-2xl text-base leading-7 text-slate-600">
               Read
@@ -641,8 +681,12 @@ export default function CommunityPostsClient() {
         </div>
       </section>
 
+      {beforeFaq}
+
       <CommunityPostsFAQ />
-    </main>
+
+      {afterFaq}
+    </div>
   );
 }
 

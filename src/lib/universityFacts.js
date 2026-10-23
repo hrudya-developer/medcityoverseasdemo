@@ -3,6 +3,7 @@ import "server-only";
 import { cache } from "react";
 
 import { query, queryOne } from "@/lib/db";
+import { intakeList, recordedValue } from "@/lib/recordValue";
 
 /*
  * Facts for a university page, read from the courses and info we hold
@@ -13,16 +14,8 @@ import { query, queryOne } from "@/lib/db";
  * the course pages, where their basis is shown.
  */
 
-const MONTHS = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"];
-
 function clean(value) {
     return String(value ?? "").replace(/\s+/g, " ").trim();
-}
-
-function monthIndex(value) {
-    const index = MONTHS.indexOf(clean(value).slice(0, 3).toLowerCase());
-
-    return index === -1 ? 99 : index;
 }
 
 function websiteFrom(value) {
@@ -62,7 +55,8 @@ export const getUniversityFacts = cache(async (universityId) => {
         const tally = (values) => {
             const counts = new Map();
 
-            for (const value of values.map(clean).filter(Boolean)) {
+            // Placeholders ("-", "0", "N/A", "none") are not values.
+            for (const value of values.map(recordedValue).filter(Boolean)) {
                 const key = value.toLowerCase();
                 const entry = counts.get(key) ?? { value, n: 0 };
 
@@ -73,9 +67,8 @@ export const getUniversityFacts = cache(async (universityId) => {
             return [...counts.values()].sort((a, b) => b.n - a.n).map((entry) => entry.value);
         };
 
-        const intakes = tally(courses.flatMap((course) => clean(course.intakes).split(/[,/;&]|\band\b/i)))
-            .filter((value) => value.length <= 20)
-            .sort((a, b) => monthIndex(a) - monthIndex(b));
+        // One entry per month in calendar order, placeholders dropped.
+        const intakes = intakeList(courses.map((course) => course.intakes)).filter((value) => value.length <= 20);
 
         const ielts = courses
             .map((course) => Number.parseFloat(clean(course.ielts)))

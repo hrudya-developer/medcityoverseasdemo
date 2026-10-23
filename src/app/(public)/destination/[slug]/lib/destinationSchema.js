@@ -20,9 +20,8 @@ export function createDestinationSchema({
 
       websiteNode(),
 
-      ...(faqs.length
-        ? [faqPageNode(seo.pagePath, faqs)]
-        : []),
+      // Dropped by withPageSeoFaqs when it has no questions.
+      faqPageNode(seo.pagePath, faqs),
 
       {
         "@type":

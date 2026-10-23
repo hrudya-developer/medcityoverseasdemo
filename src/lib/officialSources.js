@@ -86,9 +86,21 @@ export const STUDY_ABROAD_SOURCES = [
     OFFICIAL_SOURCES.australia[0],
 ];
 
-/** Sources for a country slug (as in /study-in-uk), or the general list. */
+const SLUG_ALIASES = {
+    "united-kingdom": "uk",
+    "united-states": "usa",
+    "united-states-of-america": "usa",
+};
+
+/**
+ * Sources for a country slug (as in /study-in-uk). A country we have no
+ * sources for gets none, so its page hides the section rather than
+ * showing other countries' sites under its name.
+ */
 export function officialSourcesFor(slug) {
-    return OFFICIAL_SOURCES[String(slug ?? "").toLowerCase()] ?? STUDY_ABROAD_SOURCES;
+    const key = String(slug ?? "").toLowerCase();
+
+    return OFFICIAL_SOURCES[SLUG_ALIASES[key] ?? key] ?? [];
 }
 
 const COUNTRY_WORDS = [

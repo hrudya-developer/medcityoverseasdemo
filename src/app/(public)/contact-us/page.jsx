@@ -5,7 +5,19 @@ import CounsellingSection from "@/components/home/free-counselling/CounsellingSe
 import ContactHero from "./ContactHero";
 import ContactInfo from "./ContactInfo";
 import ContactFAQ from "./ContactFAQ";
-import { applySeoOverrides } from "@/lib/pageSeo";
+import Link from "next/link";
+
+import { contactFaqs } from "./contactFaqData";
+import { offices } from "./data/offices";
+import OfficialSources from "@/components/seo/OfficialSources";
+import QuestionAnswer from "@/components/seo/QuestionAnswer";
+import QuickAnswer from "@/components/seo/QuickAnswer";
+import { STUDY_ABROAD_SOURCES } from "@/lib/officialSources";
+import { applySeoOverrides, withPageSeoFaqs } from "@/lib/pageSeo";
+import { faqPageNode, ORG_ID } from "@/lib/seoSchema";
+
+// Update when this page's text or contact details are reviewed.
+const TEMPLATE_UPDATED = "2026-10-24";
 
 const SITE_URL = "https://medcityoverseas.com";
 const PAGE_PATH = "/contact-us";
@@ -17,7 +29,7 @@ const OG_IMAGE_URL = `${SITE_URL}${OG_IMAGE_PATH}`;
 const PAGE_TITLE = "Contact Study Abroad Consultants in Kerala";
 
 const PAGE_DESCRIPTION =
-    "Contact Medcity Overseas for study abroad counselling, overseas university admissions, course selection, scholarship guidance, student visa assistance and language training across Kerala.";
+    "Contact Medcity Overseas on +91 90729 82555, also on WhatsApp, for study abroad counselling, admissions, scholarships and student visa guidance.";
 
 const BUSINESS_PHONE = "+91-9072982555";
 const BUSINESS_EMAIL = "medcitykochi@miak.in";
@@ -115,6 +127,8 @@ const contactPageSchema = {
             publisher: {
                 "@id": `${SITE_URL}/#organization`,
             },
+            author: { "@id": ORG_ID },
+            dateModified: TEMPLATE_UPDATED,
 
             breadcrumb: {
                 "@id": `${PAGE_URL}/#breadcrumb`,
@@ -187,6 +201,9 @@ const contactPageSchema = {
                 },
             ],
         },
+
+        // FAQs added in the SEO manager join it (withPageSeoFaqs).
+        faqPageNode(PAGE_PATH, contactFaqs),
     ],
 };
 
@@ -194,13 +211,13 @@ function serializeJsonLd(data) {
     return JSON.stringify(data).replace(/</g, "\\u003c");
 }
 
-export default function ContactUsPage() {
+export default async function ContactUsPage() {
     return (
         <>
             <script
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{
-                    __html: serializeJsonLd(contactPageSchema),
+                    __html: serializeJsonLd(await withPageSeoFaqs(contactPageSchema)),
                 }}
             />
 
@@ -213,6 +230,10 @@ export default function ContactUsPage() {
        */}
             <div className="overflow-hidden bg-white">
                 <ContactHero />
+
+                <QuickAnswer updated={TEMPLATE_UPDATED} className="py-10">
+                    {`Call or WhatsApp Medcity Overseas on +91 90729 82555, or email info@mioc.in, to talk to a study abroad counsellor. The head office is in ${offices[0].locality} and the corporate office in ${offices[1].locality}, and you can also visit any Medcity branch across Kerala and Mangalore. Book a session with the form below and a counsellor will get back to you.`}
+                </QuickAnswer>
 
                 <section
                     id="contact-form"
@@ -262,6 +283,41 @@ export default function ContactUsPage() {
 
                     <ContactFAQ />
                 </section>
+
+                <QuestionAnswer
+                    className="py-12"
+                    eyebrow="Before you call"
+                    question="What should you have ready for your first counselling session?"
+                    answer="Keep your mark sheets, passport and any English or German test results to hand, and think about the countries, courses and budget you have in mind. With these, a Medcity Overseas counsellor can check your eligibility, suggest suitable courses and universities and explain the application and student visa steps in one session."
+                    points={[
+                        "Mark sheets and certificates",
+                        "Passport, if you have one",
+                        "IELTS, OET, PTE or German test results",
+                        "Your preferred countries, courses and budget",
+                    ]}
+                />
+
+                <OfficialSources className="pb-12" links={STUDY_ABROAD_SOURCES} />
+
+                <p className="mx-auto max-w-5xl px-4 pb-16 text-sm leading-7 text-slate-600 sm:px-6 lg:px-8">
+                    Prefer to visit? See all{" "}
+                    <Link href="/branches" className="font-bold text-primary hover:underline">
+                        Medcity branches
+                    </Link>
+                    . You can also compare{" "}
+                    <Link href="/destinations" className="font-bold text-primary hover:underline">
+                        study destinations
+                    </Link>{" "}
+                    or search the{" "}
+                    <Link href="/courses" className="font-bold text-primary hover:underline">
+                        course finder
+                    </Link>{" "}
+                    before your session, or read{" "}
+                    <Link href="/about-us" className="font-bold text-primary hover:underline">
+                        about Medcity Overseas
+                    </Link>
+                    .
+                </p>
             </div>
         </>
     );

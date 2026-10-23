@@ -42,7 +42,7 @@ export default async function QuickAnswer({
                     <div className="mt-4 flex flex-col gap-2 border-t border-secondary/10 pt-4 text-sm text-slate-600 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
                         {showContact && (
                             <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
-                                <span className="font-semibold text-slate-700">Free counselling:</span>
+                                <span className="font-semibold text-slate-700">Talk to a counsellor:</span>
                                 <a
                                     href={`tel:${phone}`}
                                     className="inline-flex items-center gap-1.5 font-bold text-primary hover:underline"

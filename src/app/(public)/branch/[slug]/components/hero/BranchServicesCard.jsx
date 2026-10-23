@@ -24,8 +24,8 @@ import {
     },
     {
       icon: Languages,
-      title: "Language Training",
-      subtitle: "Build global confidence",
+      title: "Language Classes",
+      subtitle: "At Medcity International Academy",
       rowClass:
         "bg-gradient-to-r from-[#fff9d7] via-white to-[#fffdf0]",
       iconClass:

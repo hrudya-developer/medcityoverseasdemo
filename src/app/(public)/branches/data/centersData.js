@@ -70,7 +70,7 @@ function buildSeoDescription(
   }
 
   return cleanText(
-    `Visit Medcity Overseas ${location} for expert study abroad counselling, overseas university admissions, course and university selection, application support, student visa guidance, language training and pre-departure assistance.`
+    `Visit Medcity Overseas ${location} for expert study abroad counselling, overseas university admissions, course and university selection, application support, student visa guidance and pre-departure assistance.`
   );
 }
 
@@ -262,7 +262,7 @@ function buildBranchFaqs(center) {
         `Which study abroad consultancy can I visit in ${location}?`,
 
       answer:
-        `${branchName} provides personalised study abroad counselling for students in ${location}${district && district !== location ? ` and nearby areas of ${district}` : ""}. Students can get support with course selection, university shortlisting, overseas applications, student visa guidance, language preparation and pre-departure planning.`,
+        `${branchName} provides personalised study abroad counselling for students in ${location}${district && district !== location ? ` and nearby areas of ${district}` : ""}. Students can get support with course selection, university shortlisting, overseas applications, student visa guidance and pre-departure planning. IELTS, OET and German classes are available at Medcity International Academy.`,
     },
 
     {
@@ -270,7 +270,7 @@ function buildBranchFaqs(center) {
         `What study abroad services are available at Medcity Overseas ${location}?`,
 
       answer:
-        `Medcity Overseas ${location} supports students with study abroad counselling, course and university selection, application assistance, admission guidance, student visa support, language training and pre-departure guidance based on the student's academic profile and overseas education goals.`,
+        `Medcity Overseas ${location} supports students with study abroad counselling, course and university selection, application assistance, admission guidance, student visa support and pre-departure guidance based on the student's academic profile and overseas education goals. IELTS, OET and German classes are available at Medcity International Academy.`,
     },
 
     {
@@ -367,7 +367,7 @@ const rawCenters = [
       "Study Abroad Consultants in Thiruvalla",
 
     seoDescription:
-      "Visit Medcity Overseas Thiruvalla KSRTC for study abroad counselling, university applications, course selection, student visa guidance and language training.",
+      "Visit Medcity Overseas Thiruvalla KSRTC for study abroad counselling, university applications, course selection and student visa guidance.",
 
     image:
       thiruvallaKsrtcImage,
@@ -491,7 +491,7 @@ const rawCenters = [
       "Study Abroad Consultants in Kannur",
 
     seoDescription:
-      "Visit Medcity Overseas Kannur for expert study abroad counselling, university admissions, course selection, student visa guidance and language training.",
+      "Visit Medcity Overseas Kannur for expert study abroad counselling, university admissions, course selection and student visa guidance.",
 
     image:
       kannurImage,

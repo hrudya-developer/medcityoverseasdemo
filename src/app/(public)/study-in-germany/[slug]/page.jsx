@@ -1056,6 +1056,10 @@ export default async function GermanProgramPage({
           <Link href="/contact-us" className="font-bold text-primary hover:underline">
             contact a Medcity Overseas counsellor
           </Link>
+          . German classes are available at{" "}
+          <a href="https://medcityacademy.com/" target="_blank" rel="noopener" className="font-bold text-primary hover:underline">
+            Medcity International Academy
+          </a>
           .
         </p>
       </div>

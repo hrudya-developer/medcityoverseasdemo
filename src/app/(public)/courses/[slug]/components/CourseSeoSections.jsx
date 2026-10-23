@@ -2,7 +2,10 @@ import Link from "next/link";
 
 import OfficialSources from "@/components/seo/OfficialSources";
 import QuickAnswer from "@/components/seo/QuickAnswer";
+import { getLiveDestination } from "@/lib/destinationSummary";
 import { officialSourcesFor } from "@/lib/officialSources";
+import { intakeSentence } from "@/lib/recordValue";
+import { joinList } from "@/lib/seoSchema";
 
 /*
  * Server-rendered blocks for a course page, built only from the course
@@ -14,19 +17,21 @@ import { officialSourcesFor } from "@/lib/officialSources";
 // date its course record was added, whichever is later.
 export const COURSE_TEMPLATE_UPDATED = "2026-10-23";
 
-/** "MSc Nursing is a Masters course at X in Newcastle, UK. It lasts 1 year and starts in Sep." */
+/** "MSc Nursing is a Masters course at X in Newcastle, UK. It lasts 1 year. Intakes are in Sep." */
 export function courseSummary(facts) {
     const where = [facts.location, facts.country].filter(Boolean).join(", ");
     const sentences = [
         `${facts.name} is ${facts.level ? `${/^[aeiou]/i.test(facts.level) ? "an" : "a"} ${facts.level} course` : "a course"} at ${facts.university}${where ? ` in ${where}` : ""}.`,
     ];
 
-    if (facts.duration && facts.intakes) {
-        sentences.push(`It lasts ${facts.duration} and starts in ${facts.intakes}.`);
-    } else if (facts.duration) {
+    if (facts.duration) {
         sentences.push(`It lasts ${facts.duration}.`);
-    } else if (facts.intakes) {
-        sentences.push(`It starts in ${facts.intakes}.`);
+    }
+
+    const intakes = intakeSentence(facts.intakes, joinList);
+
+    if (intakes) {
+        sentences.push(intakes);
     }
 
     sentences.push("Medcity Overseas helps Indian students check the entry requirements, prepare the application and apply for the student visa.");
@@ -42,7 +47,9 @@ export function CourseInShort({ facts, updated }) {
     );
 }
 
-export function CourseLinks({ facts, universityPath, countrySlug }) {
+export async function CourseLinks({ facts, universityPath, countrySlug }) {
+    // Country pages exist only for live destinations; hidden ones 404.
+    const countryLive = countrySlug ? Boolean(await getLiveDestination(countrySlug)) : false;
     // Nursing courses link to the nursing guides: UK masters courses to
     // the MSc Nursing list, the rest to the nursing hub.
     const name = String(facts.name ?? "");
@@ -68,7 +75,7 @@ export function CourseLinks({ facts, universityPath, countrySlug }) {
                             </Link>
                         </li>
                     )}
-                    {countrySlug && (
+                    {countryLive && (
                         <>
                             <li>
                                 <Link
@@ -111,7 +118,7 @@ export function CourseLinks({ facts, universityPath, countrySlug }) {
                             href="/contact-us"
                             className="block rounded-2xl border border-slate-200 p-4 font-bold text-slate-900 transition hover:border-primary/30 hover:text-primary"
                         >
-                            Book free counselling
+                            Book a counselling session
                         </Link>
                     </li>
                 </ul>

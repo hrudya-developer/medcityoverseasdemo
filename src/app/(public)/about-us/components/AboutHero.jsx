@@ -94,7 +94,7 @@ const HeroContent = () => {
   id="about-page-heading"
   className="mt-4 max-w-3xl font-nunito text-3xl font-extrabold leading-[1.08] tracking-[-0.04em] text-darkPrimary sm:text-4xl lg:text-5xl"
 >
-  About Medcity Overseas –{" "} <br />
+  About Medcity Overseas:{" "} <br />
   <span className="bg-gradient-to-r from-primary via-[#d72d62] to-secondary bg-clip-text text-transparent">
     Study Abroad Consultants in Kerala
   </span>
@@ -110,9 +110,9 @@ const HeroContent = () => {
             </div>
 
             <p className="mt-4 max-w-2xl text-sm leading-6 text-slate-600 sm:text-[15px] sm:leading-7 lg:text-base">
-  Medcity Overseas is a study abroad consultancy in Kerala helping
-  students pursue higher education at universities worldwide. Our
-  experienced counsellors provide personalised guidance for course and
+  Medcity Overseas is a study abroad consultancy in Kerala. Our
+  consultants help students pursue higher education at universities
+  worldwide, with personalised guidance for course and
   university selection, admissions, scholarships, language preparation,
   student visas and pre-departure planning.
 </p>

@@ -3,8 +3,9 @@ import { cache } from "react";
 import { notFound } from "next/navigation";
 
 import { findCourseBySlug } from "@/lib/courseIndex";
+import { getLiveDestination } from "@/lib/destinationSummary";
 import { callLegacy } from "@/lib/legacy";
-import { createSlug } from "@/lib/slug";
+import { intakeList, recordedValue } from "@/lib/recordValue";
 import { countrySlug as toCountrySlug } from "@/lib/sitemapData";
 import { createUniversityPublicSlug } from "@/lib/universitySlug";
 
@@ -12,7 +13,7 @@ import CourseDetailsClient from "./CourseDetailsClient";
 import { COURSE_TEMPLATE_UPDATED, CourseInShort, CourseLinks } from "./components/CourseSeoSections";
 import { formatCourseDetails } from "./utils/courseDetailsHelpers";
 import { createCourseFaqs } from "./utils/courseFaqs";
-import { withSeoOverrides } from "@/lib/pageSeo";
+import { withPageSeoFaqs, withSeoOverrides } from "@/lib/pageSeo";
 import { faqPageNode, latestDate, organizationNode, websiteNode } from "@/lib/seoSchema";
 
 const SITE_URL = "https://medcityoverseas.com";
@@ -31,10 +32,9 @@ function clean(value) {
     return String(value ?? "").replace(/\s+/g, " ").trim();
 }
 
+// "0", "-", "N/A" and empty dates are not values.
 function present(value) {
-    const text = clean(value);
-
-    return text && text !== "0" && text.toLowerCase() !== "null" ? text : "";
+    return recordedValue(value);
 }
 
 const loadCourse = cache(async (rawSlug) => {
@@ -71,7 +71,7 @@ function courseFacts(course) {
         location: present(course.location),
         level: present(course.level),
         duration: present(course.duration),
-        intakes: present(course.intakes),
+        intakes: intakeList(course.intakes).join(", "),
         deadline: present(course.deadline),
         category: present(course.name),
     };
@@ -170,12 +170,12 @@ async function pageGenerateMetadata({ params }) {
     };
 }
 
-function structuredData(loaded) {
+function structuredData(loaded, countryLive) {
     const facts = courseFacts(loaded.course);
     const url = `${SITE_URL}/courses/${loaded.slug}`;
     const universitySlug = createUniversityPublicSlug({ name: facts.university });
     const universityUrl = universitySlug ? `${SITE_URL}/universities/${universitySlug}` : undefined;
-    const countrySlug = facts.country ? createSlug(facts.country) : "";
+    const countrySlug = countryLive && facts.country ? toCountrySlug(facts.country) : "";
 
     const course = {
         "@type": "Course",
@@ -241,7 +241,7 @@ function structuredData(loaded) {
                 breadcrumb: { "@id": `${url}#breadcrumb` },
             },
             course,
-            ...(faqs.length ? [faqPageNode(`/courses/${loaded.slug}`, faqs)] : []),
+            faqPageNode(`/courses/${loaded.slug}`, faqs),
             {
                 "@type": "BreadcrumbList",
                 "@id": `${url}#breadcrumb`,
@@ -270,13 +270,14 @@ export default async function CourseDetailsPage({ params }) {
 
     const facts = courseFacts(loaded.course);
     const universitySlug = createUniversityPublicSlug({ name: facts.university });
+    const countryLive = facts.country ? Boolean(await getLiveDestination(toCountrySlug(facts.country))) : false;
 
     return (
         <>
             <script
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{
-                    __html: JSON.stringify(structuredData(loaded)).replace(/</g, "\\u003c"),
+                    __html: JSON.stringify(await withPageSeoFaqs(structuredData(loaded, countryLive))).replace(/</g, "\\u003c"),
                 }}
             />
 

@@ -6,6 +6,8 @@ import {
     Sparkles,
 } from "lucide-react";
 
+import { intakeList } from "@/lib/recordValue";
+
 const items = [
     {
         key: "duration",
@@ -73,6 +75,9 @@ export default function CourseQuickFacts({
         level,
         intakes,
     };
+
+    // The months behind "All Year Round", cleaned (no N/A or repeats).
+    const intakeMonths = intakeList(intakesRaw).join(", ");
 
     return (
         <aside
@@ -216,14 +221,15 @@ export default function CourseQuickFacts({
                                         "Not Available"}
                                 </p>
 
+                                {/* The month list, only when it was summed up as all year. */}
                                 {item.key ===
                                     "intakes" &&
-                                    intakesRaw &&
-                                    intakesRaw !==
-                                        intakes && (
+                                    intakeMonths &&
+                                    intakes ===
+                                        "All Year Round" && (
                                         <p
                                             title={
-                                                intakesRaw
+                                                intakeMonths
                                             }
                                             className="
                                                 mt-1
@@ -235,7 +241,7 @@ export default function CourseQuickFacts({
                                             "
                                         >
                                             {
-                                                intakesRaw
+                                                intakeMonths
                                             }
                                         </p>
                                     )}

@@ -1,7 +1,6 @@
 "use client";
 
 import {
-    useEffect,
     useMemo,
     useState,
 } from "react";
@@ -26,26 +25,12 @@ export default function UniversityCoursesGrid({
     categoryId = "",
 }) {
     const [
-        currentPage,
-        setCurrentPage,
-    ] = useState(
-        1
-    );
-
-    /* =========================================================
-       RESET PAGE ON CATEGORY CHANGE
-    ========================================================= */
-
-    useEffect(
-        () => {
-            setCurrentPage(
-                1
-            );
-        },
-        [
-            categoryId,
-        ]
-    );
+        pageState,
+        setPageState,
+    ] = useState({
+        page: 1,
+        categoryId,
+    });
 
     /* =========================================================
        TOTAL PAGES
@@ -61,25 +46,26 @@ export default function UniversityCoursesGrid({
         );
 
     /* =========================================================
-       KEEP PAGE VALID
+       CURRENT PAGE
+
+       A new category starts again at page 1, and the page never
+       passes the end. Worked out while rendering, not in effects.
     ========================================================= */
 
-    useEffect(
-        () => {
-            if (
-                currentPage >
-                totalPages
-            ) {
-                setCurrentPage(
-                    totalPages
-                );
-            }
-        },
-        [
-            currentPage,
-            totalPages,
-        ]
-    );
+    const currentPage =
+        Math.min(
+            pageState.categoryId === categoryId
+                ? pageState.page
+                : 1,
+            totalPages
+        );
+
+    const setCurrentPage =
+        (page) =>
+            setPageState({
+                page,
+                categoryId,
+            });
 
     /* =========================================================
        VISIBLE COURSES
@@ -252,7 +238,7 @@ export default function UniversityCoursesGrid({
                             firstVisible
                         }
                     </strong>
-                    {" – "}
+                    {" to "}
                     <strong className="text-darkPrimary">
                         {
                             lastVisible

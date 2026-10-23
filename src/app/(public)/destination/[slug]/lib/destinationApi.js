@@ -17,8 +17,10 @@ export async function resolveDestinationId(
     return "";
   }
 
+  // A numeric id is not a page of its own: the page redirects it to
+  // the slug address (see findDestinationSlugById).
   if (/^\d+$/.test(normalizedSlug)) {
-    return normalizedSlug;
+    return "";
   }
 
   const result =
@@ -67,6 +69,57 @@ export async function resolveDestinationId(
       destination?.destination_id ||
       ""
   );
+}
+
+/*
+ * Old addresses carry the numeric destination id (/study-in-39).
+ * Returns the slug of that destination (for example "azerbaijan"),
+ * or "" when no listed destination has that id.
+ */
+export async function findDestinationSlugById(
+  id = ""
+) {
+  const wanted = String(id).trim();
+
+  if (!/^\d+$/.test(wanted)) {
+    return "";
+  }
+
+  const result =
+    await postOverseasForm(
+      "getDestinations",
+      {
+        uid: 0,
+      }
+    );
+
+  const destinations =
+    Array.isArray(result?.destinations)
+      ? result.destinations
+      : Array.isArray(result?.data)
+        ? result.data
+        : [];
+
+  const destination =
+    destinations.find(
+      (item) =>
+        String(
+          item?.id ??
+            item?.d_id ??
+            item?.destination_id ??
+            ""
+        ) === wanted
+    );
+
+  const countryName =
+    destination?.country ||
+    destination?.name ||
+    destination?.destination ||
+    "";
+
+  return countryName
+    ? createSlug(countryName)
+    : "";
 }
 
 export async function getDestinationDetails(

@@ -1,3 +1,5 @@
+import { recordedValue } from "@/lib/recordValue";
+
 import { NOT_RECORDED } from "./courseDetailsHelpers";
 
 /*
@@ -53,13 +55,18 @@ export function createCourseFaqs({ course, details }) {
     }
 
     // 5. English language requirements
-    const testScores = [];
-    if (course?.ielts && course?.ielts !== "-") testScores.push(`IELTS: ${course.ielts}`);
-    if (course?.toefl && course?.toefl !== "-") testScores.push(`TOEFL: ${course.toefl}`);
-    if (course?.pte && course?.pte !== "-") testScores.push(`PTE: ${course.pte}`);
-    if (course?.duolingo && course?.duolingo !== "-") testScores.push(`Duolingo: ${course.duolingo}`);
-    if (course?.gre && course?.gre !== "-") testScores.push(`GRE: ${course.gre}`);
-    if (course?.gmat && course?.gmat !== "-") testScores.push(`GMAT: ${course.gmat}`);
+    // A score of 0 or "-" means none is recorded, so it is left out.
+    const testScores = [
+        ["IELTS", course?.ielts],
+        ["TOEFL", course?.toefl],
+        ["PTE", course?.pte],
+        ["Duolingo", course?.duolingo],
+        ["GRE", course?.gre],
+        ["GMAT", course?.gmat],
+    ]
+        .map(([test, score]) => [test, recordedValue(score)])
+        .filter(([, score]) => score)
+        .map(([test, score]) => `${test}: ${score}`);
 
     if (testScores.length > 0) {
         faqs.push({
@@ -71,7 +78,7 @@ export function createCourseFaqs({ course, details }) {
     // 6. Generic Medcity help
     faqs.push({
         question: `How can Medcity Overseas help with my application to ${safeUniversity}?`,
-        answer: `Medcity Overseas helps with your application to ${safeUniversity}${safeCountry ? ` in ${safeCountry}` : ""}: course shortlisting, preparing application documents, reviewing entry and English requirements, and guidance through the student visa process. Call or WhatsApp +91 90729 82555 for free counselling.`,
+        answer: `Medcity Overseas helps with your application to ${safeUniversity}${safeCountry ? ` in ${safeCountry}` : ""}: course shortlisting, preparing application documents, reviewing entry and English requirements, and guidance through the student visa process. Call or WhatsApp +91 90729 82555 to talk to a counsellor.`,
     });
 
     return faqs;

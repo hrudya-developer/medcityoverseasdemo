@@ -1,11 +1,13 @@
 import {
   notFound,
+  permanentRedirect,
 } from "next/navigation";
 
 import DestinationDetailsClient
   from "./components/DestinationDetailsClient";
 
 import {
+  findDestinationSlugById,
   getDestinationDetails,
   resolveDestinationId,
 } from "./lib/destinationApi";
@@ -22,7 +24,7 @@ import {
   createDestinationSchema,
   serializeJsonLd,
 } from "./lib/destinationSchema";
-import { withSeoOverrides } from "@/lib/pageSeo";
+import { withPageSeoFaqs, withSeoOverrides } from "@/lib/pageSeo";
 import { getCountryFacts } from "@/lib/countryFacts";
 import { latestDate } from "@/lib/seoSchema";
 import { createDestinationFaqs } from "./lib/destinationFaqs";
@@ -247,6 +249,18 @@ export default async function DestinationDetailsPage({
   const { slug } =
     await params;
 
+  // Old numeric addresses (/study-in-39) move to the slug page.
+  if (/^\d+$/.test(String(slug ?? "").trim())) {
+    const destinationSlug =
+      await findDestinationSlugById(slug);
+
+    if (destinationSlug) {
+      permanentRedirect(`/study-in-${destinationSlug}`);
+    }
+
+    notFound();
+  }
+
   let destination;
 
   try {
@@ -305,7 +319,7 @@ export default async function DestinationDetailsPage({
     );
 
   const structuredData =
-    createDestinationSchema({
+    await withPageSeoFaqs(createDestinationSchema({
       seo,
       country,
       universities,
@@ -313,7 +327,7 @@ export default async function DestinationDetailsPage({
       faqs: createDestinationFaqs(
         seo.countryName
       ),
-    });
+    }));
 
   return (
     <>

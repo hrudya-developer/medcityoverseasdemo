@@ -1,3 +1,4 @@
+import { withPageSeoFaqs } from "@/lib/pageSeo";
 import { faqPageNode, organizationNode, websiteNode } from "@/lib/seoSchema";
 
 import {
@@ -11,7 +12,7 @@ import {
     SITE_URL,
   } from "./branchSeo";
   
-  export default function BranchSchema({
+  export default async function BranchSchema({
     center,
   }) {
     if (!center) {
@@ -297,7 +298,7 @@ import {
           )
         : [];
 
-    const schema = {
+    const schema = await withPageSeoFaqs({
       "@context":
         "https://schema.org",
   
@@ -307,11 +308,9 @@ import {
         organization,
         webpage,
         breadcrumb,
-        ...(faqs.length
-          ? [faqPageNode(`/branch/${center.slug}`, faqs)]
-          : []),
+        faqPageNode(`/branch/${center.slug}`, faqs),
       ],
-    };
+    });
   
     return (
       <script

@@ -4,6 +4,8 @@ import {
     Clock,
 } from "lucide-react";
 
+import { intakeList } from "@/lib/recordValue";
+
 /* =========================================================
    FACT CONFIG
 ========================================================= */
@@ -95,6 +97,9 @@ export default function CourseQuickFactsPanel({
         level,
         intakes,
     };
+
+    // The months behind "All Year Round", cleaned (no N/A or repeats).
+    const intakeMonths = intakeList(intakesRaw).join(", ");
 
     return (
         <aside
@@ -550,14 +555,15 @@ export default function CourseQuickFactsPanel({
                                                 }
                                             </p>
 
+                                            {/* The month list, only when it was summed up as all year. */}
                                             {fact.key ===
                                                 "intakes" &&
-                                                intakesRaw &&
-                                                intakesRaw !==
-                                                    intakes && (
+                                                intakeMonths &&
+                                                intakes ===
+                                                    "All Year Round" && (
                                                     <p
                                                         title={
-                                                            intakesRaw
+                                                            intakeMonths
                                                         }
                                                         className="
                                                             mt-1
@@ -570,7 +576,7 @@ export default function CourseQuickFactsPanel({
                                                         "
                                                     >
                                                         {
-                                                            intakesRaw
+                                                            intakeMonths
                                                         }
                                                     </p>
                                                 )}

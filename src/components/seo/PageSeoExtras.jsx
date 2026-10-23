@@ -3,13 +3,15 @@ import Image from "next/image";
 import { ChevronRight, Sparkles } from "lucide-react";
 
 import { currentPagePath, getPageSeo, SITE_URL } from "@/lib/pageSeo";
+import { templateOutputsFaqSchema } from "@/lib/faqSchemaPaths";
 import { templateShowsQuickAnswer } from "@/lib/quickAnswerPaths";
 
 /*
  * The quick answer, photos and FAQs added to a page in the admin's SEO
  * manager. Rendered by the public layout after the page's own content,
  * with FAQ structured data, so any page can get them without code
- * changes. Shows nothing when the page has none.
+ * changes. Shows nothing when the page has none. On templates with
+ * their own FAQPage the FAQs join that block instead.
  */
 export default async function PageSeoExtras() {
     const path = await currentPagePath();
@@ -30,9 +32,13 @@ export default async function PageSeoExtras() {
 
     const url = `${SITE_URL}${path === "/" ? "" : path}`;
 
+    // Templates with their own FAQPage add these FAQs to it (faqsWithPageSeo),
+    // so the page keeps a single FAQPage block.
+    const faqSchema = seo.faqs.length > 0 && !templateOutputsFaqSchema(path);
+
     return (
         <section className="border-t border-slate-100 bg-white py-14 sm:py-16" aria-label="More about this page">
-            {seo.faqs.length > 0 && (
+            {faqSchema && (
                 <script
                     type="application/ld+json"
                     dangerouslySetInnerHTML={{

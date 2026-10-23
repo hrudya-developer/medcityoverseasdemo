@@ -3,16 +3,16 @@ export const ukPlacementContent = {
   badge: "Placement Assistance Programme",
   eyebrow: "MSc Nursing Pathway · United Kingdom",
 
-  title: "Work as a Nurse",
-  highlightedTitle: "in the UK",
+  title: "UK Nursing MSc Route",
+  highlightedTitle: "for Kerala Nurses",
 
   description:
-    "Fast-track your nursing career through an MSc in Mental Health Nursing & Leadership, a streamlined pathway to UK nursing registration and practice.",
+    "Study an MSc in Mental Health Nursing & Leadership in the UK, a pre-registration route towards UK nursing registration.",
 
   image:
     "/assets/nurse-placement.png",
 
-  eligibilityHref: "/contact",
+  eligibilityHref: "/contact-us",
   brochureHref: "/assets/Medcity-UK-Nursing-MSc-Brochure_9.pdf",
 };
 

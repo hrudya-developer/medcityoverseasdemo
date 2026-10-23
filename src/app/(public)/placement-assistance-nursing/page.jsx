@@ -24,16 +24,61 @@ import EligibilitySection from "./components/eligibility/EligibilitySection";
 import PlacementBrochure from "./components/placement-brochure/PlacementBrochure";
 import PlacementContactDetails from "./components/placement-contact-details/PlacementContactDetails";
 import PlacementRegistrationSection from "./components/placement-registration-form/PlacementRegistrationSection";
+import FaqList from "@/components/seo/FaqList";
+import OfficialSources from "@/components/seo/OfficialSources";
+import PageSchema from "@/components/seo/PageSchema";
+import QuestionAnswer from "@/components/seo/QuestionAnswer";
+import QuickAnswer from "@/components/seo/QuickAnswer";
 import { applySeoOverrides } from "@/lib/pageSeo";
 import GuideLinks, { GUIDES } from "@/components/landing/GuideLinks";
+
+const PAGE_PATH = "/placement-assistance-nursing";
+
+const PAGE_TITLE = "UK Nursing MSc Route for Kerala Nurses | Medcity Overseas";
+
+const PAGE_DESCRIPTION =
+  "MSc Mental Health Nursing and Leadership route to the UK for Kerala nurses: eligibility, admission and NMC registration guidance from Medcity Overseas.";
+
+// Update when this page's text is reviewed.
+const TEMPLATE_UPDATED = "2026-10-24";
+
+// The NMC's English test scores, checked on nmc.org.uk (accepted tests).
+const NMC_ENGLISH = [
+  { title: "IELTS Academic", text: "score 7 in listening, reading and speaking, and 6.5 in writing." },
+  { title: "OET", text: "grade B (350 or above) in listening, reading and speaking, and C+ (300 or above) in writing." },
+  { title: "Validity", text: "test results count for 2 years before your application is assessed." },
+];
+
+// Built from this page's own eligibility, programme and pathway details.
+const FAQS = [
+  {
+    question: "Who can apply for the UK MSc Mental Health Nursing and Leadership route?",
+    answer:
+      "Nurses with a BSc, Post Basic BSc or MSc in Nursing with at least 55% marks can apply. No previous nursing experience is needed, so fresh graduates are welcome. You need a valid OET score, or at least 75% in English subjects and an OET or IELTS result before the visa application.",
+  },
+  {
+    question: "How long is the MSc and what does it include?",
+    answer:
+      "It is a 1-year pre-registration MSc. The first 6 months cover the theory of mental health nursing and leadership, and the next 6 months are supervised clinical placements in healthcare settings.",
+  },
+  {
+    question: "What are the steps on the UK MSc nursing route?",
+    answer:
+      "Apply for the master's, attend the university interview, meet the NMC requirements, clear the CBT exam, receive confirmation, secure your visa and begin your studies. Medcity Overseas guides you up to the start of the course; finding work after you register is between you and employers.",
+  },
+  {
+    question: "Does Medcity Overseas guarantee admission, registration or a visa?",
+    answer:
+      "No. Admission decisions are made by the university, registration by the Nursing and Midwifery Council and visas by UK Visas and Immigration. Medcity Overseas helps you meet their requirements and prepare a strong application. Call or WhatsApp +91 90729 82555 to check your eligibility.",
+  },
+];
 
 
 const pageMetadata = {
   title: {
-    absolute: "UK Nursing Placement Assistance for Kerala Nurses | Medcity Overseas",
+    absolute: PAGE_TITLE,
   },
-  description:
-    "Explore the MSc Mental Health Nursing and Leadership pathway in the UK with Medcity Overseas. Get guidance on eligibility, university admissions and nursing registration.",
+  description: PAGE_DESCRIPTION,
   alternates: {
     canonical: "/placement-assistance-nursing",
   },
@@ -120,18 +165,18 @@ function HeroSection() {
             </p>
 
             <h1 className="mt-5 text-3xl sm:text-4xl md:text-5xl font-black leading-[1.08] tracking-[-0.055em] text-[#101638]">
-              Work as a Nurse
+              UK Nursing MSc Route{" "}
               <span className="block bg-gradient-to-r from-[#f01473] via-[#cf148d] to-[#9a14b5] bg-clip-text text-transparent">
-                in the UK
+                for Kerala Nurses
               </span>
             </h1>
 
             <p className="mx-auto mt-7 max-w-[620px] text-sm leading-7 text-[#5b6b86] sm:text-base sm:leading-8 lg:mx-0 lg:text-lg">
-              Explore the MSc in Mental Health Nursing
-              &amp; Leadership and receive guidance on
-              university admissions, eligibility and
-              the steps towards UK nursing registration
-              and career opportunities.
+              Study the MSc in Mental Health Nursing
+              &amp; Leadership in the UK, a route Kerala
+              nurses take towards UK nursing registration,
+              with guidance on university admissions,
+              eligibility and the NMC steps.
             </p>
 
             <div className="mt-9 flex flex-wrap justify-center gap-3 lg:justify-start">
@@ -244,9 +289,33 @@ function HeroSection() {
 
 export default function PlacementAssistanceNursingPage() {
   return (
-    <main>
-      
+    <div>
+      <PageSchema
+        path={PAGE_PATH}
+        name={PAGE_TITLE}
+        description={PAGE_DESCRIPTION}
+        dateModified={TEMPLATE_UPDATED}
+        image="/assets/placement-assistance-nurse.webp"
+        about={{
+          "@type": "EducationalOccupationalProgram",
+          name: "MSc Mental Health Nursing and Leadership (UK pre-registration route)",
+          timeToComplete: "P1Y",
+          educationalCredentialAwarded: "MSc",
+          provider: { "@id": "https://medcityoverseas.com/#organization" },
+        }}
+        faqs={FAQS}
+        breadcrumbs={[
+          { name: "Home", path: "/" },
+          { name: "UK Nursing MSc Route", path: PAGE_PATH },
+        ]}
+      />
+
       <HeroSection />
+
+      <QuickAnswer updated={TEMPLATE_UPDATED} className="pt-12">
+        Medcity Overseas guides Kerala nurses applying to a UK pre-registration MSc in Mental Health Nursing and Leadership, a 1-year course that leads towards UK nursing registration. BSc, Post Basic BSc and MSc Nursing graduates with at least 55% marks can apply, freshers included, and Medcity guides you through admission, the English test, the NMC registration steps and the student visa.
+      </QuickAnswer>
+
       <MastersRouteSection />
       <MScRouteSection />
      <RegistrationPathway />
@@ -259,9 +328,66 @@ export default function PlacementAssistanceNursingPage() {
       />
      <EligibilitySection />
       <PlacementBrochure />
+      <QuestionAnswer
+        className="py-14"
+        eyebrow="English for UK nursing"
+        question="What English test scores does the NMC accept for nurses?"
+        answer="To join the UK register, the Nursing and Midwifery Council (NMC) accepts IELTS Academic or OET. With IELTS you need 7 in listening, reading and speaking and 6.5 in writing; with OET you need grade B in listening, reading and speaking and C+ in writing. Check the NMC website before you book, as rules can change."
+        points={NMC_ENGLISH}
+      />
+
       <PlacementContactDetails />
        <PlacementRegistrationSection />
-    </main>
+
+      <FaqList
+        className="py-14"
+        path={PAGE_PATH}
+        faqs={FAQS}
+        schema={false}
+        title="UK nursing route: frequently asked questions"
+      />
+
+      <OfficialSources
+        className="pb-12"
+        links={[
+          {
+            label: "NMC: accepted English language tests",
+            href: "https://www.nmc.org.uk/registration/joining-the-register/english-language-requirements/accepted-tests/",
+            note: "The Nursing and Midwifery Council's IELTS and OET scores.",
+          },
+          {
+            label: "Health and Care Worker visa (GOV.UK)",
+            href: "https://www.gov.uk/health-care-worker-visa",
+            note: "The UK government's visa for health and care workers, nurses included, with a job offer.",
+          },
+          {
+            label: "UK Student visa (GOV.UK)",
+            href: "https://www.gov.uk/student-visa",
+            note: "The UK government's visa for studying a master's.",
+          },
+        ]}
+      />
+
+      <p className="mx-auto max-w-5xl px-4 pb-16 text-sm leading-7 text-slate-600 sm:px-6 lg:px-8">
+        Compare other routes: read the{" "}
+        <Link href="/study-in-uk" className="font-bold text-primary hover:underline">
+          study in UK guide
+        </Link>
+        , see{" "}
+        <Link href="/universities-in-uk" className="font-bold text-primary hover:underline">
+          universities in the UK
+        </Link>
+        , explore{" "}
+        <Link href="/study-in-germany" className="font-bold text-primary hover:underline">
+          nursing in Germany
+        </Link>{" "}
+        or{" "}
+        <Link href="/contact-us" className="font-bold text-primary hover:underline">
+          contact Medcity Overseas
+        </Link>
+        .
+      </p>
+    </div>
   );
 }
 

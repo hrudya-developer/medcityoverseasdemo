@@ -4,11 +4,14 @@ import CanadaMigrationHero from "./CanadaMigrationHero";
 import CanadaPRSteps from "./CanadaPRSteps";
 import StudyInCanadaFAQ from "./CanadaMigrationFAQ";
 
-export default function CanadaMigrationContent() {
+// intro, beforeFaq and afterFaq are server-rendered sections from page.jsx.
+export default function CanadaMigrationContent({ intro = null, beforeFaq = null, afterFaq = null }) {
   return (
-    <main className="overflow-hidden bg-white">
+    <div className="overflow-hidden bg-white">
       {/* h2 should be inside CanadaMigrationHero */}
       <CanadaMigrationHero />
+
+      {intro}
 
       {/* Supporting sections should use H2 headings internally */}
       <CanadaMigrationBenefits />
@@ -17,11 +20,15 @@ export default function CanadaMigrationContent() {
 
       <CanadaImmigrationPrograms />
 
+      {beforeFaq}
+
       <MigrationDisclaimer />
 
       {/* This component already contains its own section + H2 */}
       <StudyInCanadaFAQ />
-    </main>
+
+      {afterFaq}
+    </div>
   );
 }
 

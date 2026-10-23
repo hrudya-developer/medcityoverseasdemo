@@ -1,6 +1,19 @@
+import Link from "next/link";
+
 import AddOnServicesClient from "./AddOnServicesClient";
 import GuideLinks, { GUIDES } from "@/components/landing/GuideLinks";
-import { applySeoOverrides } from "@/lib/pageSeo";
+import { addOnFaqs } from "./addOnServicesFaqData";
+import OfficialSources from "@/components/seo/OfficialSources";
+import PageSchema from "@/components/seo/PageSchema";
+import QuestionAnswer from "@/components/seo/QuestionAnswer";
+import QuickAnswer from "@/components/seo/QuickAnswer";
+import { callLegacy } from "@/lib/legacy";
+import { STUDY_ABROAD_SOURCES } from "@/lib/officialSources";
+import { applySeoOverrides, withPageSeoFaqs } from "@/lib/pageSeo";
+import { faqPageNode, joinList, jsonLdString, ORG_ID } from "@/lib/seoSchema";
+
+// Read from the database on each request, like the services API.
+export const dynamic = "force-dynamic";
 
 const SITE_URL = "https://medcityoverseas.com";
 const PAGE_PATH = "/add-on-services";
@@ -11,7 +24,10 @@ const OG_IMAGE_URL = `${SITE_URL}${OG_IMAGE_PATH}`;
 const PAGE_TITLE = "Study Abroad Add-On Services";
 
 const PAGE_DESCRIPTION =
-    "Explore Medcity Overseas add-on services for university admissions, student visas, education finance, accommodation, travel, pre-departure preparation and complete study abroad support.";
+    "Add-on services from Medcity Overseas for students going abroad: SOP help, education loan guidance, visa interview preparation, travel card, SIM and flights.";
+
+// Update when this page's text is reviewed.
+const TEMPLATE_UPDATED = "2026-10-24";
 
 const pageMetadata = {
     /*
@@ -69,149 +85,146 @@ const pageMetadata = {
     },
 };
 
-const services = [
-    {
-        name: "University Admission Assistance",
-        description:
-            "Application guidance and admission support for international universities and colleges.",
-    },
-    {
-        name: "Student Visa Assistance",
-        description:
-            "Guidance for student visa documentation, applications and interview preparation.",
-    },
-    {
-        name: "Education Finance Guidance",
-        description:
-            "Support for understanding education loans and other study abroad funding options.",
-    },
-    {
-        name: "Student Accommodation Assistance",
-        description:
-            "Guidance for finding suitable accommodation near the student's institution.",
-    },
-    {
-        name: "Study Abroad Travel Assistance",
-        description:
-            "Support for travel planning and preparation before departure.",
-    },
-    {
-        name: "Pre-Departure Support",
-        description:
-            "Practical preparation and guidance for students before beginning their overseas education.",
-    },
-];
-
-const pageJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "CollectionPage",
-    "@id": `${PAGE_URL}/#webpage`,
-    url: PAGE_URL,
-    name: `${PAGE_TITLE} | Medcity Overseas`,
-    description: PAGE_DESCRIPTION,
-    image: {
-        "@type": "ImageObject",
-        url: OG_IMAGE_URL,
-        width: 1200,
-        height: 630,
-    },
-    isPartOf: {
-        "@id": `${SITE_URL}/#website`,
-    },
-    about: {
-        "@id": `${SITE_URL}/#organization`,
-    },
-    breadcrumb: {
-        "@id": `${PAGE_URL}/#breadcrumb`,
-    },
-    mainEntity: {
-        "@id": `${PAGE_URL}/#service-list`,
-    },
-    inLanguage: "en-IN",
-};
-
-const serviceListJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "ItemList",
-    "@id": `${PAGE_URL}/#service-list`,
-    name: "Medcity Overseas Study Abroad Add-On Services",
-    numberOfItems: services.length,
-    itemListOrder: "https://schema.org/ItemListOrderAscending",
-
-    itemListElement: services.map((service, index) => ({
-        "@type": "ListItem",
-        position: index + 1,
-        item: {
-            "@type": "Service",
-            "@id": `${PAGE_URL}/#service-${index + 1}`,
-            name: service.name,
-            description: service.description,
-            url: PAGE_URL,
-            provider: {
-                "@id": `${SITE_URL}/#organization`,
-            },
-            areaServed: {
-                "@type": "Country",
-                name: "India",
-            },
-        },
-    })),
-};
-
-const breadcrumbJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    "@id": `${PAGE_URL}/#breadcrumb`,
-
-    itemListElement: [
-        {
-            "@type": "ListItem",
-            position: 1,
-            name: "Home",
-            item: SITE_URL,
-        },
-        {
-            "@type": "ListItem",
-            position: 2,
-            name: "Add-On Services",
-            item: PAGE_URL,
-        },
-    ],
-};
-
-function serializeJsonLd(data) {
-    return JSON.stringify(data).replace(/</g, "\\u003c");
+function clean(value) {
+    return String(value ?? "").replace(/\s+/g, " ").trim();
 }
 
-export default function AddOnServicesPage() {
+async function loadServices() {
+    try {
+        const result = await callLegacy("getServices", {});
+
+        return {
+            services: Array.isArray(result?.services) ? result.services : [],
+            imageBaseUrl: result?.services_image_path ?? "",
+        };
+    } catch (error) {
+        // The page still loads; the list then loads in the browser.
+        console.error("Add-on services could not be loaded:", error);
+
+        return null;
+    }
+}
+
+export default async function AddOnServicesPage() {
+    const initial = await loadServices();
+    const services = (initial?.services ?? [])
+        .map((service) => ({
+            name: clean(service?.name || service?.service_name || service?.title),
+            description: clean(service?.description),
+        }))
+        .filter((service) => service.name);
+
+    const serviceList = {
+        "@type": "ItemList",
+        "@id": `${PAGE_URL}#service-list`,
+        name: "Medcity Overseas study abroad add-on services",
+        numberOfItems: services.length,
+        itemListElement: services.map((service, index) => ({
+            "@type": "ListItem",
+            position: index + 1,
+            item: {
+                "@type": "Service",
+                name: service.name,
+                ...(service.description ? { description: service.description } : {}),
+                provider: { "@id": ORG_ID },
+                areaServed: { "@type": "Country", name: "India" },
+            },
+        })),
+    };
+
+    const faqSchema = await withPageSeoFaqs({
+        "@context": "https://schema.org",
+        ...faqPageNode(PAGE_PATH, addOnFaqs),
+    });
+
+    const named = services.slice(0, 6).map((service) => service.name);
+
     return (
         <>
-            <script
-                type="application/ld+json"
-                dangerouslySetInnerHTML={{
-                    __html: serializeJsonLd(pageJsonLd),
-                }}
+            <PageSchema
+                path={PAGE_PATH}
+                type="CollectionPage"
+                name={`${PAGE_TITLE} | Medcity Overseas`}
+                description={PAGE_DESCRIPTION}
+                dateModified={TEMPLATE_UPDATED}
+                image={OG_IMAGE_URL}
+                about={{ "@id": ORG_ID }}
+                {...(services.length ? { mainEntity: { "@id": `${PAGE_URL}#service-list` } } : {})}
+                entities={services.length ? [serviceList] : []}
+                breadcrumbs={[
+                    { name: "Home", path: "/" },
+                    { name: "Add-On Services", path: PAGE_PATH },
+                ]}
             />
 
             <script
                 type="application/ld+json"
-                dangerouslySetInnerHTML={{
-                    __html: serializeJsonLd(serviceListJsonLd),
-                }}
+                dangerouslySetInnerHTML={{ __html: jsonLdString(faqSchema) }}
             />
 
-            <script
-                type="application/ld+json"
-                dangerouslySetInnerHTML={{
-                    __html: serializeJsonLd(breadcrumbJsonLd),
-                }}
-            />
+            <AddOnServicesClient
+                initial={initial}
+                intro={
+                    <QuickAnswer updated={TEMPLATE_UPDATED} className="py-10">
+                        {named.length
+                            ? services.length === 1
+                                ? `Medcity Overseas offers one study abroad add-on service on top of counselling and admissions: ${named[0]}. Ask a counsellor about it when you plan your move abroad.`
+                                : `Medcity Overseas offers ${services.length} study abroad add-on services on top of counselling and admissions${
+                                      services.length > named.length ? `, including ${joinList(named)}` : `: ${joinList(named)}`
+                                  }. Choose the ones you need when you plan your move abroad.`
+                            : "Medcity Overseas offers study abroad add-on services on top of counselling and admissions, such as SOP help, education loan guidance, visa interview preparation and travel support."}
+                    </QuickAnswer>
+                }
+                beforeFaq={
+                    <QuestionAnswer
+                        className="py-14"
+                        eyebrow="Add-on services"
+                        question="What are study abroad add-on services?"
+                        answer="Add-on services are extra help around your university application. Medcity Overseas can help you write your statement of purpose, understand education loans, prepare for a visa interview and sort out travel essentials such as a travel card, an international SIM and flight tickets. You choose only the services you need."
+                        points={[
+                            { title: "Before you apply", text: "counselling, course advice and SOP preparation." },
+                            { title: "Paying for it", text: "guidance on education loans and documents." },
+                            { title: "Your visa", text: "visa interview preparation." },
+                            { title: "Before you fly", text: "travel card, international SIM and flight tickets." },
+                        ]}
+                    />
+                }
+                afterFaq={
+                    <>
+                        <OfficialSources
+                            className="pb-12"
+                            links={[
+                                {
+                                    label: "Passport Seva (Ministry of External Affairs)",
+                                    href: "https://www.passportindia.gov.in/",
+                                    note: "Apply for or renew the Indian passport you need for your visa.",
+                                },
+                                ...STUDY_ABROAD_SOURCES,
+                            ]}
+                        />
 
-            <AddOnServicesClient />
+                        <GuideLinks
+                            className="pb-10"
+                            links={[GUIDES.scholarships, GUIDES.visa, GUIDES.withoutIelts]}
+                        />
 
-            <GuideLinks
-                className="py-12"
-                links={[GUIDES.scholarships, GUIDES.visa, GUIDES.withoutIelts]}
+                        <p className="mx-auto max-w-5xl px-4 pb-16 text-sm leading-7 text-slate-600 sm:px-6 lg:px-8">
+                            Still choosing where to study? Compare{" "}
+                            <Link href="/destinations" className="font-bold text-primary hover:underline">
+                                study destinations
+                            </Link>
+                            , search the{" "}
+                            <Link href="/courses" className="font-bold text-primary hover:underline">
+                                course finder
+                            </Link>{" "}
+                            or{" "}
+                            <Link href="/contact-us" className="font-bold text-primary hover:underline">
+                                contact Medcity Overseas
+                            </Link>{" "}
+                            to book a service.
+                        </p>
+                    </>
+                }
             />
         </>
     );

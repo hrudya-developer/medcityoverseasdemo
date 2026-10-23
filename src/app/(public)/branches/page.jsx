@@ -1,6 +1,17 @@
 import AcademyCentersClient from "./AcademyCentersClient";
 import { centers } from "./data/centersData";
-import { applySeoOverrides } from "@/lib/pageSeo";
+import Link from "next/link";
+
+import { branchFaqs } from "./branchesFaqData";
+import OfficialSources from "@/components/seo/OfficialSources";
+import QuestionAnswer from "@/components/seo/QuestionAnswer";
+import QuickAnswer from "@/components/seo/QuickAnswer";
+import { STUDY_ABROAD_SOURCES } from "@/lib/officialSources";
+import { applySeoOverrides, withPageSeoFaqs } from "@/lib/pageSeo";
+import { faqPageNode, joinList, ORG_ID } from "@/lib/seoSchema";
+
+// Update when this page's text or the branch list is reviewed.
+const TEMPLATE_UPDATED = "2026-10-24";
 
 /* =========================================================
    CONFIG
@@ -29,7 +40,7 @@ const PAGE_TITLE =
   "Study Abroad Consultants in Kerala & Mangalore | Medcity Overseas";
 
 const PAGE_DESCRIPTION =
-  "Find Medcity Overseas study abroad consultants across Kerala and Mangalore. Visit your nearest branch for overseas education counselling, university admissions, course selection, application support and student visa guidance.";
+  "Find Medcity Overseas study abroad consultants across Kerala and Mangalore: branch addresses, phone numbers and counselling at a branch near you.";
 
 const pageMetadata = {
   title: {
@@ -547,8 +558,9 @@ const branchItems =
           "LocalBusiness",
         ],
 
+        // Same @id as the branch page's own node.
         "@id":
-          `${branchUrl}#organization`,
+          `${branchUrl}#branch`,
 
         name:
           branchName,
@@ -720,6 +732,13 @@ const branchesStructuredData =
             `${SITE_URL}/#organization`,
         },
 
+        author: {
+          "@id": ORG_ID,
+        },
+
+        dateModified:
+          TEMPLATE_UPDATED,
+
         breadcrumb: {
           "@id":
             `${PAGE_URL}#breadcrumb`,
@@ -814,6 +833,9 @@ const branchesStructuredData =
         itemListElement:
           branchItems,
       },
+
+      // FAQs added in the SEO manager join it (withPageSeoFaqs).
+      faqPageNode(PAGE_PATH, branchFaqs),
     ],
   };
 
@@ -836,7 +858,7 @@ function serializeJsonLd(
    PAGE
 ========================================================= */
 
-export default function BranchesPage() {
+export default async function BranchesPage() {
   const centersWithUrls =
     centers.map(
       (
@@ -902,6 +924,10 @@ export default function BranchesPage() {
       }
     );
 
+  const kerala = centers.filter((center) => center.state === "Kerala");
+  const keralaTowns = [...new Set(kerala.map((center) => center.city).filter(Boolean))];
+  const otherTowns = [...new Set(centers.filter((center) => center.state !== "Kerala").map((center) => center.city).filter(Boolean))];
+
   return (
     <>
       <script
@@ -909,7 +935,7 @@ export default function BranchesPage() {
         dangerouslySetInnerHTML={{
           __html:
             serializeJsonLd(
-              branchesStructuredData
+              await withPageSeoFaqs(branchesStructuredData)
             ),
         }}
       />
@@ -917,6 +943,96 @@ export default function BranchesPage() {
       <AcademyCentersClient
         centers={
           centersWithUrls
+        }
+        intro={
+          <QuickAnswer updated={TEMPLATE_UPDATED} className="pb-10 pt-2">
+            {`Medcity Overseas has ${centers.length} study abroad branches: ${kerala.length} across Kerala, in ${joinList(keralaTowns)}${
+              otherTowns.length ? `, and ${otherTowns.length === 1 ? "one" : otherTowns.length} in ${joinList(otherTowns)}` : ""
+            }. Book a study abroad counselling session at the branch nearest to you; each branch page lists its own address and phone numbers.`}
+          </QuickAnswer>
+        }
+        beforeFaq={
+          <>
+            <QuestionAnswer
+              className="pb-10"
+              eyebrow="Visiting a branch"
+              question="How do you get study abroad counselling at a Medcity branch?"
+              answer="Pick the branch nearest to you in the list below and call it to book a counselling session. Bring your mark sheets, passport and any English or German test results. A counsellor will look at your profile, suggest countries, courses and universities that fit, and explain the application and student visa steps. Services can vary by branch, so check when you call."
+              points={[
+                "Choose your nearest branch from the list.",
+                "Call the branch to book a counselling session.",
+                "Bring your mark sheets, passport and test results.",
+                "Get a shortlist of countries, courses and universities.",
+              ]}
+              ordered
+            />
+
+            <section aria-labelledby="all-branches-heading" className="mx-auto max-w-6xl px-4 pb-14 sm:px-6 lg:px-8">
+              <h2 id="all-branches-heading" className="text-2xl font-black text-slate-900 sm:text-3xl">
+                All {centers.length} Medcity branches
+              </h2>
+
+              <div className="mt-6 overflow-x-auto rounded-2xl border border-slate-200 bg-white">
+                <table className="w-full min-w-[640px] text-left text-sm">
+                  <thead className="bg-slate-50 text-xs font-extrabold uppercase tracking-[0.08em] text-slate-500">
+                    <tr>
+                      <th scope="col" className="px-4 py-3">Branch</th>
+                      <th scope="col" className="px-4 py-3">Town</th>
+                      <th scope="col" className="px-4 py-3">District</th>
+                      <th scope="col" className="px-4 py-3">Phone</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100 text-slate-700">
+                    {centersWithUrls.map((center) => (
+                      <tr key={center.slug || center.name}>
+                        <th scope="row" className="px-4 py-3 font-bold text-slate-900">
+                          <Link href={center.branchUrl} className="hover:text-primary hover:underline">
+                            {center.name}
+                          </Link>
+                        </th>
+                        <td className="px-4 py-3">{center.city || "Not recorded"}</td>
+                        <td className="px-4 py-3">{center.district || "Not recorded"}</td>
+                        <td className="px-4 py-3">
+                          {center.phones?.[0] ? (
+                            <a href={`tel:${center.phones[0].replace(/[^+\d]/g, "")}`} className="font-bold text-primary hover:underline">
+                              {center.phones[0]}
+                            </a>
+                          ) : (
+                            "Not recorded"
+                          )}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </section>
+          </>
+        }
+        afterFaq={
+          <>
+            <OfficialSources className="py-12" links={STUDY_ABROAD_SOURCES} />
+
+            <p className="mx-auto max-w-5xl px-4 pb-16 text-sm leading-7 text-slate-600 sm:px-6 lg:px-8">
+              Before your visit, compare{" "}
+              <Link href="/destinations" className="font-bold text-primary hover:underline">
+                study destinations
+              </Link>
+              , search the{" "}
+              <Link href="/courses" className="font-bold text-primary hover:underline">
+                course finder
+              </Link>
+              , read{" "}
+              <Link href="/about-us" className="font-bold text-primary hover:underline">
+                about Medcity Overseas
+              </Link>{" "}
+              or{" "}
+              <Link href="/contact-us" className="font-bold text-primary hover:underline">
+                contact our main office
+              </Link>
+              .
+            </p>
+          </>
         }
       />
     </>
