@@ -1,5 +1,35 @@
+import Link from "next/link";
+
 import CanadaMigrationContent from "./components/CanadaMigrationContent";
-import { applySeoOverrides } from "@/lib/pageSeo";
+import { canadaFaqs } from "./canadaFaqData";
+import OfficialSources from "@/components/seo/OfficialSources";
+import QuestionAnswer from "@/components/seo/QuestionAnswer";
+import QuickAnswer from "@/components/seo/QuickAnswer";
+import { applySeoOverrides, withPageSeoFaqs } from "@/lib/pageSeo";
+import { faqPageNode, ORG_ID } from "@/lib/seoSchema";
+
+// Update when this page's text or the Express Entry table is reviewed.
+const TEMPLATE_UPDATED = "2026-10-24";
+
+// From IRCC's "Compare Express Entry programs" page (canada.ca), checked
+// on the date above. CLB is the Canadian Language Benchmark.
+const EXPRESS_ENTRY_PROGRAMS = [
+  {
+    name: "Federal Skilled Worker Program",
+    language: "CLB 7",
+    experience: "1 year of continuous skilled work within the last 10 years, in Canada or abroad",
+  },
+  {
+    name: "Canadian Experience Class",
+    language: "CLB 7 for TEER 0 or 1 jobs; CLB 5 for TEER 2 or 3 jobs",
+    experience: "1 year of skilled work in Canada within the last 3 years",
+  },
+  {
+    name: "Federal Skilled Trades Program",
+    language: "CLB 5 for speaking and listening; CLB 4 for reading and writing",
+    experience: "2 years of skilled trade work within the last 5 years",
+  },
+];
 
 const SITE_URL = "https://medcityoverseas.com";
 
@@ -14,13 +44,13 @@ const OG_IMAGE_URL =
   `${SITE_URL}${OG_IMAGE_PATH}`;
 
 const PAGE_TITLE =
-  "Migrate to Canada from Kerala | Canada Immigration Consultants";
+  "Migrate to Canada from Kerala | Medcity Overseas";
 
 const PAGE_DESCRIPTION =
-  "Explore pathways to migrate to Canada from Kerala, including Express Entry, Provincial Nominee Programs, work permits, family sponsorship and permanent residence guidance from Medcity Overseas.";
+  "Migrate to Canada from Kerala: Express Entry, Provincial Nominee Programs, work permits, family sponsorship and PR guidance from Medcity Overseas.";
 
 const pageMetadata = {
-  title: PAGE_TITLE,
+  title: { absolute: PAGE_TITLE },
 
   description: PAGE_DESCRIPTION,
 
@@ -150,8 +180,7 @@ const structuredData = {
 
       url: PAGE_URL,
 
-      name:
-        "Migrate to Canada from Kerala | Canada Immigration Consultants",
+      name: PAGE_TITLE,
 
       description: PAGE_DESCRIPTION,
 
@@ -164,6 +193,10 @@ const structuredData = {
       publisher: {
         "@id": `${SITE_URL}/#organization`,
       },
+
+      author: { "@id": ORG_ID },
+
+      dateModified: TEMPLATE_UPDATED,
 
       breadcrumb: {
         "@id": `${PAGE_URL}#breadcrumb`,
@@ -284,6 +317,9 @@ const structuredData = {
           })
         ),
     },
+
+    // FAQs added in the SEO manager join it (withPageSeoFaqs).
+    faqPageNode(PAGE_PATH, canadaFaqs),
   ],
 };
 
@@ -294,7 +330,7 @@ function serializeJsonLd(data) {
   );
 }
 
-export default function MigrateToCanadaPage() {
+export default async function MigrateToCanadaPage() {
   return (
     <>
       <script
@@ -302,12 +338,103 @@ export default function MigrateToCanadaPage() {
         dangerouslySetInnerHTML={{
           __html:
             serializeJsonLd(
-              structuredData
+              await withPageSeoFaqs(structuredData)
             ),
         }}
       />
 
-      <CanadaMigrationContent />
+      <CanadaMigrationContent
+        intro={
+          <QuickAnswer updated={TEMPLATE_UPDATED} className="py-10">
+            To migrate to Canada from Kerala, most skilled workers apply for permanent residence through Express Entry, which manages 3 programs: the Federal Skilled Worker Program, the Canadian Experience Class and the Federal Skilled Trades Program. Provincial Nominee Programs, work permits and family sponsorship are other routes. Medcity Overseas helps you check which route fits your profile.
+          </QuickAnswer>
+        }
+        beforeFaq={
+          <>
+            <QuestionAnswer
+              className="py-12"
+              eyebrow="Express Entry"
+              question="Who can apply for Canada's Federal Skilled Worker Program?"
+              answer="You need at least 1 year of continuous skilled work experience within the last 10 years, a language test result of at least CLB 7, and enough money to settle in Canada unless you already work there legally with a valid job offer. IRCC then scores you out of 100 on six selection factors, and 67 points or more may qualify you."
+            />
+
+            <section aria-labelledby="express-entry-table-heading" className="mx-auto max-w-6xl px-4 pb-12 sm:px-6 lg:px-8">
+              <h2 id="express-entry-table-heading" className="text-2xl font-black text-slate-900 sm:text-3xl">
+                Express Entry programs compared
+              </h2>
+
+              <p className="mt-3 max-w-3xl leading-7 text-slate-600">
+                The minimum language level and work experience for each program, from IRCC&apos;s comparison of Express Entry programs. Meeting them lets you enter the Express Entry pool; IRCC invites the highest ranked candidates to apply.
+              </p>
+
+              <div className="mt-6 overflow-x-auto rounded-2xl border border-slate-200 bg-white">
+                <table className="w-full min-w-[640px] text-left text-sm">
+                  <thead className="bg-slate-50 text-xs font-extrabold uppercase tracking-[0.08em] text-slate-500">
+                    <tr>
+                      <th scope="col" className="px-4 py-3">Program</th>
+                      <th scope="col" className="px-4 py-3">Minimum language level</th>
+                      <th scope="col" className="px-4 py-3">Work experience</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100 text-slate-700">
+                    {EXPRESS_ENTRY_PROGRAMS.map((program) => (
+                      <tr key={program.name}>
+                        <th scope="row" className="px-4 py-3 font-bold text-slate-900">{program.name}</th>
+                        <td className="px-4 py-3">{program.language}</td>
+                        <td className="px-4 py-3">{program.experience}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </section>
+          </>
+        }
+        afterFaq={
+          <>
+            <OfficialSources
+              className="pb-12"
+              links={[
+                {
+                  label: "Compare Express Entry programs (IRCC)",
+                  href: "https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/express-entry/eligibility/compare.html",
+                  note: "Language and work experience rules for each program.",
+                },
+                {
+                  label: "Federal Skilled Worker Program (IRCC)",
+                  href: "https://www.canada.ca/en/immigration-refugees-citizenship/services/immigrate-canada/express-entry/eligibility/federal-skilled-workers.html",
+                  note: "Eligibility, selection factors and proof of funds.",
+                },
+                {
+                  label: "Immigration, Refugees and Citizenship Canada",
+                  href: "https://www.canada.ca/en/immigration-refugees-citizenship.html",
+                  note: "Canada's official immigration website.",
+                },
+              ]}
+            />
+
+            <p className="mx-auto max-w-5xl px-4 pb-16 text-sm leading-7 text-slate-600 sm:px-6 lg:px-8">
+              Thinking about other countries? Compare{" "}
+              <Link href="/destinations" className="font-bold text-primary hover:underline">
+                study destinations
+              </Link>
+              , see how to{" "}
+              <Link href="/migrate-to-australia" className="font-bold text-primary hover:underline">
+                migrate to Australia
+              </Link>
+              , find your{" "}
+              <Link href="/branches" className="font-bold text-primary hover:underline">
+                nearest Medcity branch
+              </Link>{" "}
+              or{" "}
+              <Link href="/contact-us" className="font-bold text-primary hover:underline">
+                contact Medcity Overseas
+              </Link>
+              .
+            </p>
+          </>
+        }
+      />
     </>
   );
 }
