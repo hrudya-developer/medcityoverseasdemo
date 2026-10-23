@@ -3,7 +3,8 @@ import "server-only";
 import { cache } from "react";
 
 import { listCourses } from "@/lib/courseIndex";
-import { query, queryOne } from "@/lib/db";
+import { query } from "@/lib/db";
+import { getDestinationSummaries } from "@/lib/destinationSummary";
 import { intakeList, recordedValue } from "@/lib/recordValue";
 
 /*
@@ -22,9 +23,11 @@ const LIVE_COURSES = `FROM tb_courses c
 
 export const getLatestCourses = cache(async (limit = 24) => {
     try {
-        const [index, totals, rows] = await Promise.all([
+        // The total is the sum of the destination summaries' course
+        // counts: the same rule, already cached for 15 minutes.
+        const [index, destinations, rows] = await Promise.all([
             listCourses(),
-            queryOne(`SELECT COUNT(*) AS n ${LIVE_COURSES}`),
+            getDestinationSummaries(),
             query(
                 `SELECT c.id, c.level, c.duration, c.intakes, d.country
                  ${LIVE_COURSES}
@@ -62,7 +65,9 @@ export const getLatestCourses = cache(async (limit = 24) => {
             .filter(Boolean)
             .slice(0, limit);
 
-        return { total: Number(totals?.n) || 0, courses };
+        const total = destinations.reduce((sum, row) => sum + (Number(row.courses) || 0), 0);
+
+        return { total, courses };
     } catch (error) {
         console.error("Latest courses could not be loaded:", error);
 
