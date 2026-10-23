@@ -2,6 +2,8 @@ import { cache } from "react";
 
 import { notFound } from "next/navigation";
 
+import { courseGuideLink } from "@/lib/courseGuideData";
+import { guideForCourse } from "@/lib/courseGuides";
 import { findCourseBySlug } from "@/lib/courseIndex";
 import { getLiveDestination, universitiesPageIndexable } from "@/lib/destinationSummary";
 import { callLegacy } from "@/lib/legacy";
@@ -273,9 +275,15 @@ export default async function CourseDetailsPage({ params }) {
     const facts = courseFacts(loaded.course);
     const universitySlug = createUniversityPublicSlug({ name: facts.university });
     const countrySlug = facts.country ? toCountrySlug(facts.country) : "";
-    const [countryLive, indexable] = countrySlug
-        ? await Promise.all([getLiveDestination(countrySlug).then(Boolean), universitiesPageIndexable(countrySlug)])
-        : [false, false];
+    const [countryLive, indexable, courseGuide] = countrySlug
+        ? await Promise.all([
+              getLiveDestination(countrySlug).then(Boolean),
+              universitiesPageIndexable(countrySlug),
+              // The course guide this course belongs to (MBA courses in the
+              // UK link to the MBA guide), when it passes its quality gate.
+              courseGuideLink(guideForCourse(facts)),
+          ])
+        : [false, false, null];
     // Unknown (null) when the summaries cannot be loaded: link as before,
     // whenever the country is live.
     const universitiesIndexable = indexable ?? countryLive;
@@ -300,6 +308,7 @@ export default async function CourseDetailsPage({ params }) {
                     countrySlug={countrySlug}
                     countryLive={countryLive}
                     universitiesIndexable={universitiesIndexable}
+                    courseGuide={courseGuide}
                 />
             </CourseDetailsClient>
         </>

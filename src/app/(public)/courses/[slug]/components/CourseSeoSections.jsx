@@ -49,7 +49,9 @@ export function CourseInShort({ facts, updated }) {
 // countryLive: the country is a live destination (hidden ones 404), so
 // /study-in-<country> exists. universitiesIndexable: /universities-in-<country>
 // lists at least one university; it is noindex otherwise and not linked.
-export function CourseLinks({ facts, universityPath, countrySlug, countryLive = false, universitiesIndexable = false }) {
+// courseGuide: { href, label } of the course guide this course belongs
+// to, when that guide passes its quality gate, or null.
+export function CourseLinks({ facts, universityPath, countrySlug, countryLive = false, universitiesIndexable = false, courseGuide = null }) {
     // Nursing courses link to the nursing guides: UK masters courses to
     // the MSc Nursing list, the rest to the nursing hub.
     const name = String(facts.name ?? "");
@@ -103,6 +105,16 @@ export function CourseLinks({ facts, universityPath, countrySlug, countryLive = 
                             Search all courses
                         </Link>
                     </li>
+                    {courseGuide && (
+                        <li>
+                            <Link
+                                href={courseGuide.href}
+                                className="block rounded-2xl border border-slate-200 p-4 font-bold text-slate-900 transition hover:border-primary/30 hover:text-primary"
+                            >
+                                {courseGuide.label} for Indian students
+                            </Link>
+                        </li>
+                    )}
                     {nursingGuide && (
                         <li>
                             <Link

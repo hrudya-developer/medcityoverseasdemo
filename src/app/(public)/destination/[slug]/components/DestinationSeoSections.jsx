@@ -79,7 +79,9 @@ export function DestinationInShort({ countryName, country, facts, updated }) {
 
 // linkUniversities: whether /universities-in-<country> is indexable;
 // a noindex page is not linked.
-export function DestinationLinks({ countryName, destinationSlug, linkUniversities = false }) {
+// courseGuides: links ({ href, label }) to the course guides for this
+// country that pass their quality gate.
+export function DestinationLinks({ countryName, destinationSlug, linkUniversities = false, courseGuides = [] }) {
     return (
         <div className="space-y-12 bg-white py-14">
             <p className="mx-auto max-w-5xl px-4 text-sm leading-7 text-slate-600 sm:px-6 lg:px-8">
@@ -107,6 +109,8 @@ export function DestinationLinks({ countryName, destinationSlug, linkUniversitie
                 </Link>
                 .
             </p>
+
+            <GuideLinks title={`Course guides for ${countryName}`} links={courseGuides} />
 
             <GuideLinks title={`Guides for studying in ${countryName}`} links={destinationGuides(destinationSlug)} />
 

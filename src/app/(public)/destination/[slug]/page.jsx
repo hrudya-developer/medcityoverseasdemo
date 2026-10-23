@@ -29,6 +29,7 @@ import { withPageSeoFaqs, withSeoOverrides } from "@/lib/pageSeo";
 import { getCountryFacts } from "@/lib/countryFacts";
 import { latestDate } from "@/lib/seoSchema";
 import { createDestinationFaqs } from "./lib/destinationFaqs";
+import { courseGuideLinksForCountry } from "@/lib/courseGuideData";
 import {
   DESTINATION_TEMPLATE_UPDATED,
   DestinationInShort,
@@ -317,10 +318,16 @@ export default async function DestinationDetailsPage({
       image,
     });
 
-  const facts =
-    await getCountryFacts(
-      destinationId
-    );
+  const [facts, courseGuides] =
+    await Promise.all([
+      getCountryFacts(
+        destinationId
+      ),
+      // Only guides that pass their quality gate are linked.
+      courseGuideLinksForCountry(
+        destinationSlug
+      ),
+    ]);
 
   // Link /universities-in-<country> only when that page is indexable:
   // it is noindex when it lists no universities. getDestinationDetails
@@ -392,6 +399,7 @@ export default async function DestinationDetailsPage({
           countryName={seo.countryName}
           destinationSlug={destinationSlug}
           linkUniversities={linkUniversities}
+          courseGuides={courseGuides}
         />
       </DestinationDetailsClient>
     </>

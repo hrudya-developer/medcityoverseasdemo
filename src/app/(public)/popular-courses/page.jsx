@@ -10,6 +10,7 @@ import GuideLinks, { GUIDES } from "@/components/landing/GuideLinks";
 import QuestionAnswer from "@/components/seo/QuestionAnswer";
 import QuickAnswer from "@/components/seo/QuickAnswer";
 import { getCourseAreaSummaries } from "@/lib/courseAreaSummary";
+import { courseGuideLinks } from "@/lib/courseGuideData";
 import { faqPageNode, jsonLdString, organizationNode, websiteNode } from "@/lib/seoSchema";
 
 const SITE_URL = "https://medcityoverseas.com";
@@ -260,7 +261,9 @@ const structuredData = {
 const serializeJsonLd = jsonLdString;
 
 export default async function PopularCoursesPage() {
-    const areas = (await getCourseAreaSummaries()).filter((area) => area.courses > 0);
+    // Course guides are linked only when they pass their quality gate.
+    const [allAreas, guideLinks] = await Promise.all([getCourseAreaSummaries(), courseGuideLinks()]);
+    const areas = allAreas.filter((area) => area.courses > 0);
     const areaNames = areas.slice(0, 5).map((area) => area.name);
 
     return (
@@ -344,6 +347,8 @@ export default async function PopularCoursesPage() {
 
                     <PopularCoursesFAQ />
                 </section>
+
+                <GuideLinks className="pb-8" title="Course guides by country" links={guideLinks} />
 
                 <GuideLinks
                     className="pb-12"
