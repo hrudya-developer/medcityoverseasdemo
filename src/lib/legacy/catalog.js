@@ -212,7 +212,7 @@ async function queryCoursesByFilters(filters) {
     };
 }
 
-// Results are kept for 5 minutes per filter set and offset (the
+// First page results are kept for 5 minutes per filter set (the
 // normalised filters are the cache key), so repeated searches do not
 // hit the database. A failed query throws and is not cached.
 const cachedCoursesByFilters = unstable_cache(
@@ -266,15 +266,15 @@ export async function getCoursesByFilters(input) {
     const filters = normaliseCourseFilters(input ?? {});
 
     // Only a bounded set of searches is cached: no free-text keyword,
-    // numeric ids, one of the 12 month prefixes as intake and an offset
-    // on a page boundary. Anything else (for example a bot sending random
-    // keywords) goes straight to the database, so the cache cannot grow
-    // without limit.
+    // numeric ids, one of the 12 month prefixes as intake and the first
+    // page (offset 0, the only one both callers request). Anything else
+    // (for example a bot sending random keywords or offsets) goes
+    // straight to the database, so the cache cannot grow without limit.
     const cacheable =
         !filters.keyword &&
         [filters.countryId, filters.universityId, filters.courseId].every((id) => !id || /^\d{1,6}$/.test(id)) &&
         (!filters.intake || isMonthIntake(filters.intake)) &&
-        filters.offset % 20 === 0;
+        filters.offset === 0;
 
     if (!cacheable || !(await idsAreKnown(filters))) {
         return queryCoursesByFilters(filters);
