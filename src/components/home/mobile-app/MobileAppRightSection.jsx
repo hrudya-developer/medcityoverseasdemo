@@ -11,6 +11,7 @@ import {
 
 import MobileAppFeatureItem from "./MobileAppFeatureItem";
 import cn from "@/lib/cn";
+import { counsellingTriggerProps } from "@/components/counselling/LazyCounsellingModal";
 
 import { mobileAppFeatures } from "./mobileAppData";
 
@@ -143,6 +144,7 @@ export default function MobileAppRightSection({
                 </a>
 
                 <button onClick={onCounsellingClick}
+                    {...counsellingTriggerProps}
                     className="group inline-flex min-h-[62px] items-center justify-center gap-3 rounded-2xl border border-secondary/25 bg-white/90 px-5 py-3 text-darkPrimary shadow-[0_12px_30px_rgba(15,23,42,0.07)] backdrop-blur-xl transition-all duration-300 hover:-translate-y-1 hover:border-primary/30 hover:shadow-[0_18px_38px_rgba(192,31,83,0.12)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
                 >
                     <span
