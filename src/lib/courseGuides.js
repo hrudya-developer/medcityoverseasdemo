@@ -375,13 +375,19 @@ function escapeLike(text) {
     return text.replace(/[\\%_]/g, (match) => `\\${match}`);
 }
 
+// The word test, behind the cheap quickSql() test it implies, so the
+// REPLACE chain runs only on names that can match. Same result.
 function wordsSql(terms) {
-    return { clause: `(${terms.map(() => `${SQL_WORDS} LIKE ?`).join(" OR ")})`, params: terms.map(likeWord) };
+    const quick = quickSql(terms);
+
+    return {
+        clause: `(${quick.clause} AND (${terms.map(() => `${SQL_WORDS} LIKE ?`).join(" OR ")}))`,
+        params: [...quick.params, ...terms.map(likeWord)],
+    };
 }
 
 // A cheap test the word test implies: the raw name contains the longest
-// word of one of the terms. Put first, it spares most rows the REPLACE
-// chain; it never changes which rows match.
+// word of one of the terms.
 function quickSql(terms) {
     const words = terms.map((term) => normaliseTerm(term).split(" ").sort((a, b) => b.length - a.length)[0]);
 
@@ -406,7 +412,6 @@ export function guideCourseWhere(guide) {
     };
 
     if (guide.include.length) {
-        add(quickSql(guide.include));
         add(wordsSql(guide.include));
     }
 
