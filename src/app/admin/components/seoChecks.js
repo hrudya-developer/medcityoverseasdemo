@@ -4,7 +4,9 @@
  * HTML library.
  */
 
-export const META_TITLE_RANGE = [30, 60];
+// The site adds " | Medcity Overseas" (18 characters) after every title,
+// and Google shows about 65 characters in total.
+export const META_TITLE_RANGE = [30, 47];
 export const META_DESCRIPTION_RANGE = [120, 160];
 export const SUMMARY_WORD_RANGE = [30, 80];
 

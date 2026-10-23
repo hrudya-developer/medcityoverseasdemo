@@ -1,4 +1,5 @@
 import CanadaMigrationContent from "./components/CanadaMigrationContent";
+import { applySeoOverrides } from "@/lib/pageSeo";
 
 const SITE_URL = "https://medcityoverseas.com";
 
@@ -18,7 +19,7 @@ const PAGE_TITLE =
 const PAGE_DESCRIPTION =
   "Explore pathways to migrate to Canada from Kerala, including Express Entry, Provincial Nominee Programs, work permits, family sponsorship and permanent residence guidance from Medcity Overseas.";
 
-export const metadata = {
+const pageMetadata = {
   title: PAGE_TITLE,
 
   description: PAGE_DESCRIPTION,
@@ -309,4 +310,9 @@ export default function MigrateToCanadaPage() {
       <CanadaMigrationContent />
     </>
   );
+}
+
+// Search details edited in the admin apply on top of these.
+export async function generateMetadata() {
+  return applySeoOverrides(pageMetadata);
 }

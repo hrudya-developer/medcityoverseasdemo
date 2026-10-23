@@ -6,6 +6,7 @@ import GermanProgramsClient from "./GermanProgramsClient";
 import WhyStudyGermany from "./components/WhyStudyGermany";
 import StudyInGermanyHero from "./components/StudyInGermanyHero";
 import StudyInGermanyFAQ from "./components/StudyInGermanyFAQ";
+import { applySeoOverrides } from "@/lib/pageSeo";
 
 /* =========================================================
    SEO CONSTANTS
@@ -36,7 +37,7 @@ const OG_IMAGE =
    METADATA
 ========================================================= */
 
-export const metadata = {
+const pageMetadata = {
     title: {
         absolute: PAGE_TITLE,
     },
@@ -599,4 +600,9 @@ export default async function GermanProgramsPage() {
             </main>
         </>
     );
+}
+
+// Search details edited in the admin apply on top of these.
+export async function generateMetadata() {
+  return applySeoOverrides(pageMetadata);
 }

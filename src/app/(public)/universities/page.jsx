@@ -8,6 +8,7 @@ import { postOverseasForm } from "@/lib/overseasApi";
 import { createSlug } from "@/lib/slug";
 
 import { faqs } from "./universitiesData";
+import { applySeoOverrides } from "@/lib/pageSeo";
 
 const SITE_URL = "https://medcityoverseas.com";
 const PAGE_URL = `${SITE_URL}/universities`;
@@ -18,7 +19,7 @@ const OG_IMAGE = `${SITE_URL}/og-images/universities.webp`;
 // Hostinger's build machines and would publish an empty page.
 export const dynamic = "force-dynamic";
 
-export const metadata = {
+const pageMetadata = {
   title: {
     absolute:
       "Universities Abroad for Indian Students | Medcity Overseas",
@@ -229,4 +230,9 @@ export default async function UniversitiesPage() {
       />
     </main>
   );
+}
+
+// Search details edited in the admin apply on top of these.
+export async function generateMetadata() {
+  return applySeoOverrides(pageMetadata);
 }

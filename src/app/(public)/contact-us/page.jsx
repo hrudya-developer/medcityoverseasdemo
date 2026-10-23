@@ -5,6 +5,7 @@ import CounsellingSection from "@/components/home/free-counselling/CounsellingSe
 import ContactHero from "./ContactHero";
 import ContactInfo from "./ContactInfo";
 import ContactFAQ from "./ContactFAQ";
+import { applySeoOverrides } from "@/lib/pageSeo";
 
 const SITE_URL = "https://medcityoverseas.com";
 const PAGE_PATH = "/contact-us";
@@ -28,7 +29,7 @@ const SOCIAL_PROFILES = [
     "https://youtube.com/@medcitystudyabroad",
 ];
 
-export const metadata = {
+const pageMetadata = {
     /*
      * Your root layout title template appends:
      * | Medcity Overseas
@@ -264,4 +265,9 @@ export default function ContactUsPage() {
             </div>
         </>
     );
+}
+
+// Search details edited in the admin apply on top of these.
+export async function generateMetadata() {
+  return applySeoOverrides(pageMetadata);
 }

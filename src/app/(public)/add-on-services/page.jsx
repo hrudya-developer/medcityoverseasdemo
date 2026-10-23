@@ -1,4 +1,5 @@
 import AddOnServicesClient from "./AddOnServicesClient";
+import { applySeoOverrides } from "@/lib/pageSeo";
 
 const SITE_URL = "https://medcityoverseas.com";
 const PAGE_PATH = "/add-on-services";
@@ -11,7 +12,7 @@ const PAGE_TITLE = "Study Abroad Add-On Services";
 const PAGE_DESCRIPTION =
     "Explore Medcity Overseas add-on services for university admissions, student visas, education finance, accommodation, travel, pre-departure preparation and complete study abroad support.";
 
-export const metadata = {
+const pageMetadata = {
     /*
      * Your root layout uses:
      * template: "%s | Medcity Overseas"
@@ -208,4 +209,9 @@ export default function AddOnServicesPage() {
             <AddOnServicesClient />
         </>
     );
+}
+
+// Search details edited in the admin apply on top of these.
+export async function generateMetadata() {
+  return applySeoOverrides(pageMetadata);
 }

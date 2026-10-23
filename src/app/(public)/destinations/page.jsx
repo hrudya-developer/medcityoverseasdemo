@@ -1,6 +1,7 @@
 import DestinationsSection from "@/components/home/destinations/DestinationsSection";
 import DestinationsFAQ from "./components/DestinationsFAQ";
 import Link from "next/link";
+import { applySeoOverrides } from "@/lib/pageSeo";
 
 const SITE_URL = "https://medcityoverseas.com";
 const PAGE_PATH = "/destinations";
@@ -15,7 +16,7 @@ const PAGE_TITLE =
 const PAGE_DESCRIPTION =
   "Explore the best study abroad destinations for Indian students, including Germany, Canada, the UK, Australia, Ireland and New Zealand. Compare universities, courses, admission requirements and international education opportunities with Medcity Overseas.";
 
-export const metadata = {
+const pageMetadata = {
   title: {
     absolute: PAGE_TITLE,
   },
@@ -443,4 +444,9 @@ export default function DestinationsPage() {
       </div>
     </>
   );
+}
+
+// Search details edited in the admin apply on top of these.
+export async function generateMetadata() {
+  return applySeoOverrides(pageMetadata);
 }

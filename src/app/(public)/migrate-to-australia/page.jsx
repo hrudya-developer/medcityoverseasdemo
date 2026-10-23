@@ -1,4 +1,5 @@
 import AustraliaMigrationContent from "./components/AustraliaMigrationContent";
+import { applySeoOverrides } from "@/lib/pageSeo";
 
 const SITE_URL = "https://medcityoverseas.com";
 const PAGE_PATH = "/migrate-to-australia";
@@ -16,7 +17,7 @@ const PAGE_TITLE =
 const PAGE_DESCRIPTION =
   "Explore pathways to migrate to Australia from Kerala, including skilled migration, subclass 189, 190 and 491 visas, employer-sponsored options, eligibility requirements and migration guidance from Medcity Overseas.";
 
-export const metadata = {
+const pageMetadata = {
   title: {
     absolute: `${PAGE_TITLE} | Medcity Overseas`,
   },
@@ -334,4 +335,9 @@ export default function MigrateToAustraliaPage() {
       <AustraliaMigrationContent />
     </>
   );
+}
+
+// Search details edited in the admin apply on top of these.
+export async function generateMetadata() {
+  return applySeoOverrides(pageMetadata);
 }

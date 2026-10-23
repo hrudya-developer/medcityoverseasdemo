@@ -3,6 +3,7 @@ import Navbar from "@/components/header/Navbar";
 import Footer from "@/components/footer/Footer";
 import BottomBar from "@/components/footer/BottomBar";
 import AOSProvider from "@/app/AOSProvider";
+import PageSeoExtras from "@/components/seo/PageSeoExtras";
 
 import "aos/dist/aos.css";
 
@@ -223,6 +224,9 @@ export default function PublicLayout({
                 className="flex-1"
             >
                 {children}
+
+                {/* Quick answer, photos and FAQs added in the admin's SEO manager */}
+                <PageSeoExtras />
             </main>
 
             <Footer />

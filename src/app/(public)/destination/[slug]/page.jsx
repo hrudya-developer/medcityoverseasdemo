@@ -22,6 +22,7 @@ import {
   createDestinationSchema,
   serializeJsonLd,
 } from "./lib/destinationSchema";
+import { withSeoOverrides } from "@/lib/pageSeo";
 
 export const revalidate =
   3600;
@@ -77,7 +78,7 @@ async function loadDestination(
    DYNAMIC METADATA
 ========================================================= */
 
-export async function generateMetadata({
+async function pageGenerateMetadata({
   params,
 }) {
   const { slug } =
@@ -324,3 +325,6 @@ export default async function DestinationDetailsPage({
     </>
   );
 }
+
+// Search details edited in the admin apply on top of the page's own.
+export const generateMetadata = withSeoOverrides(pageGenerateMetadata);

@@ -37,6 +37,7 @@ import {
 import {
     buildUniversityMetadata,
 } from "./lib/universityMetadata";
+import { withSeoOverrides } from "@/lib/pageSeo";
 
 /* =========================================================
    CONFIG
@@ -51,7 +52,7 @@ export const revalidate = 3600;
    METADATA
 ========================================================= */
 
-export async function generateMetadata(
+async function pageGenerateMetadata(
     props
 ) {
     return buildUniversityMetadata(
@@ -866,3 +867,6 @@ export default async function UniversityDetailsPage({
         </>
     );
 }
+
+// Search details edited in the admin apply on top of the page's own.
+export const generateMetadata = withSeoOverrides(pageGenerateMetadata);

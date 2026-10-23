@@ -14,6 +14,9 @@ import {
 
 import CountryUniversitiesHero from "./components/CountryUniversitiesHero";
 import UniversitiesSection from "./components/UniversitiesSection";
+import CountryFacts from "./components/CountryFacts";
+import { countryFaqs, getCountryFacts } from "@/lib/countryFacts";
+import { withSeoOverrides } from "@/lib/pageSeo";
 
 /* =========================================================
    SITE CONFIG
@@ -209,7 +212,9 @@ async function getDestination(
 
 // "alluniversities" returns every university of the country in one
 // response, so a single request is enough.
-const MAX_UNIVERSITY_BATCHES = 1;
+// Straight from the database now, so every university is listed
+// (20 per batch; 60 batches covers the largest country with room to spare).
+const MAX_UNIVERSITY_BATCHES = 60;
 
 /**
  * Load every university for a country straight from the Overseas
@@ -322,7 +327,7 @@ const getUniversities = cache(loadUniversities);
    METADATA
 ========================================================= */
 
-export async function generateMetadata({
+async function pageGenerateMetadata({
     params,
 }) {
     const {
@@ -607,6 +612,14 @@ export default async function UniversitiesByCountryPage({
        SEO URLS
     ===================================================== */
 
+    const facts =
+        await getCountryFacts(countryId);
+
+    const faqs =
+        facts
+            ? countryFaqs(countryName, facts)
+            : [];
+
     const pageUrl =
         `${SITE_URL}/universities-in-${countrySlug}`;
 
@@ -857,6 +870,24 @@ export default async function UniversitiesByCountryPage({
                 }}
             />
 
+            {faqs.length > 0 && (
+                <script
+                    type="application/ld+json"
+                    dangerouslySetInnerHTML={{
+                        __html: serializeJsonLd({
+                            "@context": "https://schema.org",
+                            "@type": "FAQPage",
+                            "@id": `${pageUrl}#faq`,
+                            mainEntity: faqs.map((faq) => ({
+                                "@type": "Question",
+                                name: faq.question,
+                                acceptedAnswer: { "@type": "Answer", text: faq.answer },
+                            })),
+                        }),
+                    }}
+                />
+            )}
+
             {universityItems.length >
                 0 && (
                 <script
@@ -903,7 +934,17 @@ export default async function UniversitiesByCountryPage({
                         universityImagePath
                     }
                 />
+
+                <CountryFacts
+                    countryName={countryName}
+                    countrySlug={countrySlug}
+                    facts={facts}
+                    faqs={faqs}
+                />
             </main>
         </>
     );
 }
+
+// Search details edited in the admin apply on top of the page's own.
+export const generateMetadata = withSeoOverrides(pageGenerateMetadata);

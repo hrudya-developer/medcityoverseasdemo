@@ -1,4 +1,5 @@
 import CommunityPostsClient from "./CommunityPostsClient";
+import { applySeoOverrides } from "@/lib/pageSeo";
 
 const SITE_URL = "https://medcityoverseas.com";
 const PAGE_PATH = "/community-posts";
@@ -13,7 +14,7 @@ const PAGE_TITLE =
 const PAGE_DESCRIPTION =
     "Explore student stories, study abroad opportunities, international education updates and community announcements from Medcity Overseas.";
 
-export const metadata = {
+const pageMetadata = {
     title: PAGE_TITLE,
     description: PAGE_DESCRIPTION,
 
@@ -120,4 +121,9 @@ export default function CommunityPostsPage() {
             <CommunityPostsClient />
         </>
     );
+}
+
+// Search details edited in the admin apply on top of these.
+export async function generateMetadata() {
+  return applySeoOverrides(pageMetadata);
 }

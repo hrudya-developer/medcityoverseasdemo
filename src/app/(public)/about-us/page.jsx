@@ -5,12 +5,13 @@ import ChairmanSection from "./components/ChairmanSection";
 import AboutTeamMembers from "./components/AboutTeamMembers";
 import CoreValues from "./components/CoreValues";
 import AboutFAQ from "./components/AboutFAQ";
+import { applySeoOverrides } from "@/lib/pageSeo";
 
 const SITE_URL = "https://medcityoverseas.com";
 const ABOUT_URL = `${SITE_URL}/about-us`;
 const ABOUT_OG_IMAGE = `${SITE_URL}/og-images/about-us.webp`;
 
-export const metadata = {
+const pageMetadata = {
   title: {
     absolute:
       "About Medcity Overseas | Study Abroad Consultants in Kerala",
@@ -167,4 +168,9 @@ export default function AboutUsPage() {
       </div>
     </>
   );
+}
+
+// Search details edited in the admin apply on top of these.
+export async function generateMetadata() {
+  return applySeoOverrides(pageMetadata);
 }
