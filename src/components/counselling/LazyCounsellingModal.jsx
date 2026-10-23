@@ -1,8 +1,12 @@
 "use client";
 
-import { Component, useEffect } from "react";
+import {
+    Component,
+    Suspense,
+    lazy,
+    useEffect,
+} from "react";
 import { createPortal } from "react-dom";
-import dynamic from "next/dynamic";
 import Link from "next/link";
 import { Phone, X } from "lucide-react";
 
@@ -19,10 +23,14 @@ import {
  * - it is fetched once the page has loaded and the browser is idle,
  *   or earlier when a visitor points at, focuses or touches a
  *   counselling button (see counsellingTriggerProps);
- * - a first tap before that shows the backdrop with a spinner;
+ * - a first tap before that shows the backdrop with a spinner, which
+ *   Esc, a backdrop click or the close button dismiss;
  * - a failed download is retried once, and if it still fails the
  *   visitor gets a small dialog with the contact page and phone
  *   number instead of a broken page.
+ *
+ * React.lazy and Suspense are used directly rather than next/dynamic,
+ * because the loading state needs onClose.
  */
 
 let modalModule = null;
@@ -55,45 +63,9 @@ export const counsellingTriggerProps = {
     onTouchStart: preloadCounsellingModal,
 };
 
-function ModalLayer({ children, onBackdropClick }) {
-    return createPortal(
-        <div
-            role="presentation"
-            className="fixed inset-0 z-[10000] flex items-center justify-center p-3 sm:p-5 lg:p-8"
-        >
-            <div
-                aria-hidden="true"
-                onClick={onBackdropClick}
-                className="absolute inset-0 bg-black/70 backdrop-blur-md"
-            />
+const CounsellingModal = lazy(loadCounsellingModal);
 
-            {children}
-        </div>,
-        document.body
-    );
-}
-
-function CounsellingModalLoading() {
-    return (
-        <ModalLayer>
-            <span
-                role="status"
-                aria-label="Loading"
-                className="relative z-10 size-10 animate-spin rounded-full border-4 border-white/30 border-t-white"
-            />
-        </ModalLayer>
-    );
-}
-
-const CounsellingModal = dynamic(
-    () => loadCounsellingModal(),
-    {
-        ssr: false,
-        loading: CounsellingModalLoading,
-    }
-);
-
-function CounsellingModalUnavailable({ onClose }) {
+function useCloseOnEscape(onClose) {
     useEffect(() => {
         const handleEscape = (event) => {
             if (event.key === "Escape") {
@@ -113,9 +85,55 @@ function CounsellingModalUnavailable({ onClose }) {
             );
         };
     }, [onClose]);
+}
 
+function ModalLayer({ children, onClose }) {
+    useCloseOnEscape(onClose);
+
+    return createPortal(
+        <div
+            role="presentation"
+            className="fixed inset-0 z-[10000] flex items-center justify-center p-3 sm:p-5 lg:p-8"
+        >
+            <div
+                aria-hidden="true"
+                onClick={onClose}
+                className="absolute inset-0 bg-black/70 backdrop-blur-md"
+            />
+
+            {children}
+        </div>,
+        document.body
+    );
+}
+
+function CounsellingModalLoading({ onClose }) {
     return (
-        <ModalLayer onBackdropClick={onClose}>
+        <ModalLayer onClose={onClose}>
+            <button
+                type="button"
+                onClick={onClose}
+                aria-label="Close"
+                className="absolute right-4 top-4 z-20 grid size-10 place-items-center rounded-full bg-primary text-white shadow-[0_10px_30px_rgba(0,0,0,0.3)] transition duration-300 hover:rotate-90 hover:bg-primary/90 focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/30 sm:right-6 sm:top-6"
+            >
+                <X
+                    className="size-5"
+                    aria-hidden="true"
+                />
+            </button>
+
+            <span
+                role="status"
+                aria-label="Loading"
+                className="relative z-10 size-10 animate-spin rounded-full border-4 border-white/30 border-t-white"
+            />
+        </ModalLayer>
+    );
+}
+
+function CounsellingModalUnavailable({ onClose }) {
+    return (
+        <ModalLayer onClose={onClose}>
             <section
                 role="dialog"
                 aria-modal="true"
@@ -203,6 +221,25 @@ class CounsellingModalBoundary extends Component {
     }
 }
 
+function OpenCounsellingModal({ onClose }) {
+    return (
+        <CounsellingModalBoundary onClose={onClose}>
+            <Suspense
+                fallback={
+                    <CounsellingModalLoading
+                        onClose={onClose}
+                    />
+                }
+            >
+                <CounsellingModal
+                    open
+                    onClose={onClose}
+                />
+            </Suspense>
+        </CounsellingModalBoundary>
+    );
+}
+
 export default function LazyCounsellingModal({
     open,
     onClose,
@@ -247,16 +284,11 @@ export default function LazyCounsellingModal({
         };
     }, []);
 
+    // Closing unmounts everything below, including a pending load, so
+    // a download that finishes after the visitor closed shows nothing.
     if (!open) {
         return null;
     }
 
-    return (
-        <CounsellingModalBoundary onClose={onClose}>
-            <CounsellingModal
-                open={open}
-                onClose={onClose}
-            />
-        </CounsellingModalBoundary>
-    );
+    return <OpenCounsellingModal onClose={onClose} />;
 }
