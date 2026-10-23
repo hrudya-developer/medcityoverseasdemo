@@ -558,8 +558,9 @@ const branchItems =
           "LocalBusiness",
         ],
 
+        // Same @id as the branch page's own node.
         "@id":
-          `${branchUrl}#organization`,
+          `${branchUrl}#branch`,
 
         name:
           branchName,

@@ -168,6 +168,7 @@ export default async function UniversitiesPage() {
   const faqJsonLd = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
+    "@id": `${PAGE_URL}#faq`,
 
     mainEntity: faqs.map((faq) => ({
       "@type": "Question",

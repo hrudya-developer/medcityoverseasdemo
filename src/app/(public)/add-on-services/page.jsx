@@ -166,7 +166,11 @@ export default async function AddOnServicesPage() {
                 intro={
                     <QuickAnswer updated={TEMPLATE_UPDATED} className="py-10">
                         {named.length
-                            ? `Medcity Overseas offers ${services.length} study abroad add-on ${services.length === 1 ? "service" : "services"} on top of counselling and admissions, including ${joinList(named)}. Choose the ones you need when you plan your move abroad.`
+                            ? services.length === 1
+                                ? `Medcity Overseas offers one study abroad add-on service on top of counselling and admissions: ${named[0]}. Ask a counsellor about it when you plan your move abroad.`
+                                : `Medcity Overseas offers ${services.length} study abroad add-on services on top of counselling and admissions${
+                                      services.length > named.length ? `, including ${joinList(named)}` : `: ${joinList(named)}`
+                                  }. Choose the ones you need when you plan your move abroad.`
                             : "Medcity Overseas offers study abroad add-on services on top of counselling and admissions, such as SOP help, education loan guidance, visa interview preparation and travel support."}
                     </QuickAnswer>
                 }
