@@ -89,8 +89,9 @@ const ContactHero = () => {
                     <p
                         className="mt-4 max-w-2xl text-sm leading-6 text-slate-600 sm:text-[15px] sm:leading-7 lg:text-base"
                     >
-                        Have questions or need guidance? Our experienced team is
-                        ready to support you throughout your study abroad journey.
+                        We’re here to help. Have questions or need guidance? Our
+                        experienced team is ready to support you throughout your
+                        study abroad journey.
                     </p>
 
                     <div
