@@ -16,7 +16,7 @@ export const branchFaqs = [
     question:
       "What services are available at Medcity Overseas branches?",
     answer:
-      "Services may include study abroad counselling, course and university selection, overseas university application support, documentation guidance, student visa guidance. Language and test preparation is offered at Medcity International Academy centres. Available services can vary by branch, so contact your preferred center for current details.",
+      "Services may include study abroad counselling, course and university selection, overseas university application support, documentation guidance and student visa guidance. Language and test preparation is offered at Medcity International Academy centres. Available services can vary by branch, so contact your preferred center for current details.",
   },
   {
     question:
