@@ -226,26 +226,44 @@ async function queryCoursesByFilters(filters) {
 // Results are kept for 5 minutes per filter set and offset (the
 // normalised filters are the cache key), so repeated searches do not
 // hit the database. A failed query throws and is not cached.
-// Thrown inside the cached function for a search with no results, so
-// Next does not store it: only searches that match real courses are
-// kept, which bounds the cache by the real catalogue.
-class NoCoursesFound extends Error {}
-
-async function queryCoursesByFiltersWithResults(filters) {
-    const result = await queryCoursesByFilters(filters);
-
-    if (result.course.length === 0) {
-        throw new NoCoursesFound();
-    }
-
-    return result;
-}
-
 const cachedCoursesByFilters = unstable_cache(
-    queryCoursesByFiltersWithResults,
+    queryCoursesByFilters,
     ["course-finder-filters"],
     { revalidate: 300 }
 );
+
+// Ids of live countries, live universities and study areas, kept for 5
+// minutes. A search is cached only when every id it names is real, so
+// the cache is bounded by the catalogue and random ids from bots go
+// straight to the database.
+const knownFilterIds = unstable_cache(
+    async () => {
+        const [countries, universities, studyAreas] = await Promise.all([
+            query("SELECT id FROM tb_destinations WHERE status = '1'"),
+            query("SELECT id FROM tb_universities WHERE status = '1'"),
+            query("SELECT id FROM tb_main_course"),
+        ]);
+        const ids = (rows) => rows.map((row) => String(row.id));
+
+        return { countries: ids(countries), universities: ids(universities), studyAreas: ids(studyAreas) };
+    },
+    ["course-finder-known-ids"],
+    { revalidate: 300 }
+);
+
+async function idsAreKnown(filters) {
+    if (!filters.countryId && !filters.universityId && !filters.courseId) {
+        return true;
+    }
+
+    const known = await knownFilterIds();
+
+    return (
+        (!filters.countryId || known.countries.includes(filters.countryId)) &&
+        (!filters.universityId || known.universities.includes(filters.universityId)) &&
+        (!filters.courseId || known.studyAreas.includes(filters.courseId))
+    );
+}
 
 /*
  * Course finder filters (country, university, study area, intake,
@@ -269,19 +287,11 @@ export async function getCoursesByFilters(input) {
         (!filters.intake || CACHEABLE_INTAKES.has(filters.intake)) &&
         filters.offset % 20 === 0;
 
-    if (!cacheable) {
+    if (!cacheable || !(await idsAreKnown(filters))) {
         return queryCoursesByFilters(filters);
     }
 
-    try {
-        return await cachedCoursesByFilters(filters);
-    } catch (error) {
-        if (error instanceof NoCoursesFound) {
-            return { maincourse_image_path: imagePath("icons/"), course: [], nextoffset: "0" };
-        }
-
-        throw error;
-    }
+    return cachedCoursesByFilters(filters);
 }
 
 const CACHEABLE_INTAKES = new Set(
