@@ -102,13 +102,13 @@ const MONTH_NAMES = [
 ];
 
 /**
- * An intake as the 3 letter month prefix the database stores ("January"
- * and "Jan" give "jan"; "September" and "Sept" give "sep", which also
- * matches a stored "Sept"). A value that is not a month is returned
+ * An intake as the 3 letter month prefix the database stores ("January",
+ * "Jan" and "Jan." give "jan"; "September" and "Sept" give "sep", which
+ * also matches a stored "Sept"). A value that is not a month is returned
  * trimmed and lower case, and isMonthIntake reports false for it.
  */
 export function normaliseIntake(value) {
-    const intake = String(value ?? "").trim().toLowerCase();
+    const intake = String(value ?? "").trim().toLowerCase().replace(/\.+$/, "");
     const month = intake.length >= 3 && MONTH_NAMES.find((name) => name.startsWith(intake));
 
     return month ? month.slice(0, 3) : intake;
@@ -119,9 +119,33 @@ export function isMonthIntake(intake) {
     return MONTH_NAMES.some((name) => name.slice(0, 3) === intake);
 }
 
-/** Whether a stored intakes value includes this intake (any form). */
-export function intakeMatches(storedIntakes, intake) {
+/**
+ * The regular expression for an intake: the normalised term at the start
+ * of a word, so "jan" matches "Jan, Sep" and "January" but not a "jan"
+ * inside another word. Other characters are escaped, so a free text
+ * intake is matched literally. "" when there is no intake.
+ */
+export function intakePattern(intake) {
     const term = normaliseIntake(intake);
 
-    return !term || String(storedIntakes ?? "").toLowerCase().includes(term);
+    return term ? `\\b${term.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}` : "";
+}
+
+/**
+ * The SQL REGEXP parameter for an intake, with the same test as
+ * intakeMatches. (?i) keeps it case insensitive whatever the column's
+ * collation. \b and (?i) need a PCRE or ICU regex engine: MariaDB 10.0.5
+ * or later, or MySQL 8. MySQL 5.7 and older do not support them.
+ */
+export function intakeSqlPattern(intake) {
+    const pattern = intakePattern(intake);
+
+    return pattern ? `(?i)${pattern}` : "";
+}
+
+/** Whether a stored intakes value includes this intake at a word start. */
+export function intakeMatches(storedIntakes, intake) {
+    const pattern = intakePattern(intake);
+
+    return !pattern || new RegExp(pattern, "i").test(String(storedIntakes ?? ""));
 }

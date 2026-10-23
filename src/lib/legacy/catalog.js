@@ -2,7 +2,7 @@ import "server-only";
 
 import { unstable_cache } from "next/cache";
 
-import { isMonthIntake, levelSql, normaliseIntake, normaliseLevels } from "@/lib/courseFilterTerms";
+import { intakeSqlPattern, isMonthIntake, levelSql, normaliseIntake, normaliseLevels } from "@/lib/courseFilterTerms";
 import { query, queryOne } from "@/lib/db";
 import { imagePath, legacyOffset, likePattern, toId, today } from "./util";
 
@@ -179,8 +179,11 @@ async function queryCoursesByFilters(filters) {
     }
 
     if (filters.intake) {
-        where.push("c.intakes LIKE ?");
-        params.push(likePattern(filters.intake));
+        // The month at a word start ("Jan, Sep" matches jan and sep).
+        // REGEXP with \b needs MariaDB 10.0.5+ (PCRE) or MySQL 8 (ICU);
+        // see intakeSqlPattern.
+        where.push("c.intakes REGEXP ?");
+        params.push(intakeSqlPattern(filters.intake));
     }
 
     // Each option matches the stored levels that mean the same, so
