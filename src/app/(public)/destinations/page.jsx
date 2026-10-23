@@ -2,6 +2,12 @@ import DestinationsSection from "@/components/home/destinations/DestinationsSect
 import DestinationsFAQ from "./components/DestinationsFAQ";
 import Link from "next/link";
 import { applySeoOverrides } from "@/lib/pageSeo";
+import { faqs } from "./components/destinationsFaqData";
+import DestinationsTable from "@/components/seo/DestinationsTable";
+import OfficialSources from "@/components/seo/OfficialSources";
+import QuestionAnswer from "@/components/seo/QuestionAnswer";
+import QuickAnswer from "@/components/seo/QuickAnswer";
+import { faqPageNode, jsonLdString, organizationNode, websiteNode } from "@/lib/seoSchema";
 
 const SITE_URL = "https://medcityoverseas.com";
 const PAGE_PATH = "/destinations";
@@ -11,10 +17,46 @@ const OG_IMAGE_PATH = "/images/destinations-og.webp";
 const OG_IMAGE_URL = `${SITE_URL}${OG_IMAGE_PATH}`;
 
 const PAGE_TITLE =
-  "Best Study Abroad Destinations for Indian Students | Medcity Overseas";
+  "Study Abroad Destinations for Indian Students | Medcity Overseas";
 
 const PAGE_DESCRIPTION =
-  "Explore the best study abroad destinations for Indian students, including Germany, Canada, the UK, Australia, Ireland and New Zealand. Compare universities, courses, admission requirements and international education opportunities with Medcity Overseas.";
+  "Compare study abroad destinations for Indian students: Germany, Canada, the UK, Australia, Ireland and New Zealand, with universities, courses and admissions.";
+
+// Update when the content of this page is reviewed.
+const PAGE_UPDATED = "2026-10-23";
+
+const OFFICIAL_SOURCES = [
+  {
+    label: "Study in Germany (DAAD)",
+    href: "https://www.study-in-germany.de/en/",
+    note: "The official guide to studying in Germany.",
+  },
+  {
+    label: "UK Student visa (GOV.UK)",
+    href: "https://www.gov.uk/student-visa",
+    note: "The UK government's Student visa rules and application.",
+  },
+  {
+    label: "Immigration, Refugees and Citizenship Canada",
+    href: "https://www.canada.ca/en/immigration-refugees-citizenship.html",
+    note: "Canada's official study permit information.",
+  },
+  {
+    label: "Study Australia",
+    href: "https://www.studyaustralia.gov.au/",
+    note: "The Australian Government's guide for international students.",
+  },
+  {
+    label: "Irish Immigration Service",
+    href: "https://www.irishimmigration.ie/",
+    note: "Ireland's official study visa information.",
+  },
+  {
+    label: "Immigration New Zealand",
+    href: "https://www.immigration.govt.nz/",
+    note: "New Zealand's official student visa information.",
+  },
+];
 
 const pageMetadata = {
   title: {
@@ -111,6 +153,10 @@ const destinationsSchema = {
   "@context": "https://schema.org",
 
   "@graph": [
+    organizationNode(),
+
+    websiteNode(),
+
     {
       "@type": "CollectionPage",
       "@id": `${PAGE_URL}#webpage`,
@@ -125,6 +171,12 @@ const destinationsSchema = {
       publisher: {
         "@id": `${SITE_URL}/#organization`,
       },
+
+      author: {
+        "@id": `${SITE_URL}/#organization`,
+      },
+
+      dateModified: PAGE_UPDATED,
 
       about: {
         "@id": `${SITE_URL}/#organization`,
@@ -202,15 +254,12 @@ const destinationsSchema = {
         })
       ),
     },
+
+    faqPageNode(PAGE_PATH, faqs),
   ],
 };
 
-function serializeJsonLd(data) {
-  return JSON.stringify(data).replace(
-    /</g,
-    "\\u003c"
-  );
-}
+const serializeJsonLd = jsonLdString;
 
 export default function DestinationsPage() {
   return (
@@ -255,7 +304,7 @@ export default function DestinationsPage() {
         Explore Global Education
       </div>
 
-      <h2
+      <h1
         id="destinations-page-title"
         className="mt-6 max-w-3xl text-3xl font-extrabold leading-[1.05] tracking-[-0.045em] text-darkPrimary sm:text-4xl lg:text-5xl"
       >
@@ -264,10 +313,10 @@ export default function DestinationsPage() {
           Study Abroad Destinations
         </span>{" "}
         for Indian Students
-      </h2>
+      </h1>
 
       <p className="mx-auto mt-6 max-w-2xl text-sm leading-7 text-slate-600 sm:text-base sm:leading-8 lg:mx-0 lg:text-[17px]">
-        Explore leading study abroad destinations including Germany,
+        Explore leading study abroad destinations for Indian students, including Germany,
         Canada, the United Kingdom, Australia, Ireland and New Zealand.
         Compare universities, courses and admission requirements to find
         the destination that best matches your academic and career goals.
@@ -294,7 +343,7 @@ export default function DestinationsPage() {
       <div className="mt-8 grid max-w-xl grid-cols-3 gap-3">
         <div className="rounded-2xl border border-white bg-white/80 p-4 shadow-[0_10px_30px_rgba(15,23,42,0.06)] backdrop-blur">
           <p className="text-xl font-black text-darkPrimary">
-            25+
+            25+{" "}
           </p>
           <p className="mt-1 text-[11px] font-semibold text-slate-500">
             Study Destinations
@@ -303,7 +352,7 @@ export default function DestinationsPage() {
 
         <div className="rounded-2xl border border-white bg-white/80 p-4 shadow-[0_10px_30px_rgba(15,23,42,0.06)] backdrop-blur">
           <p className="text-xl font-black text-secondary">
-            100+
+            100+{" "}
           </p>
           <p className="mt-1 text-[11px] font-semibold text-slate-500">
             Partner Universities
@@ -312,7 +361,7 @@ export default function DestinationsPage() {
 
         <div className="rounded-2xl border border-white bg-white/80 p-4 shadow-[0_10px_30px_rgba(15,23,42,0.06)] backdrop-blur">
           <p className="text-xl font-black text-primary">
-            12+
+            12+{" "}
           </p>
           <p className="mt-1 text-[11px] font-semibold text-slate-500">
             Years of Guidance
@@ -438,9 +487,34 @@ export default function DestinationsPage() {
   </div>
 </section>
 
+        <div className="space-y-14 bg-white py-12 sm:py-14">
+          <QuickAnswer updated={PAGE_UPDATED}>
+            Medcity Overseas helps Indian students compare study abroad destinations such as Germany, Canada, the United Kingdom, Australia, Ireland and New Zealand. Each destination guide covers universities, courses, admission requirements and student visas, and our counsellors help you choose the country that fits your goals and budget.
+          </QuickAnswer>
+
+          <QuestionAnswer
+            eyebrow="Choosing a country"
+            question="Which study abroad destination is best for Indian students?"
+            answer="There is no single best destination for every Indian student. The right country depends on your course, academic profile, budget, career goals and language skills. Compare universities, courses, entry requirements, living costs and post-study work rules in each country, then speak to a counsellor who can match the options to your profile."
+            points={[
+              { title: "Course and level", text: "check the country offers your subject at the level you want." },
+              { title: "Budget", text: "compare tuition and living costs on the universities' own pages." },
+              { title: "Language", text: "most courses ask for IELTS, TOEFL or PTE; Germany also has German-taught programmes." },
+              { title: "Career plans", text: "read each country's official post-study work and visa rules." },
+            ]}
+          />
+        </div>
+
         <DestinationsSection />
 
+        <DestinationsTable className="py-12 sm:py-14" />
+
         <DestinationsFAQ />
+
+        <OfficialSources
+          className="py-12 sm:py-14"
+          links={OFFICIAL_SOURCES}
+        />
       </div>
     </>
   );

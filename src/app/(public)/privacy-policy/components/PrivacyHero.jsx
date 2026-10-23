@@ -125,7 +125,7 @@ export default function PrivacyHero() {
                             lg:text-[58px]
                         "
                     >
-                        Your Privacy
+                        Your Privacy{" "}
                         <span
                             className="
                                 mt-1
@@ -151,7 +151,7 @@ export default function PrivacyHero() {
                     >
                         We respect your trust and are
                         committed to protecting your
-                        personal information at every
+                        privacy and personal information at every
                         step of your study abroad
                         journey.
                     </p>
