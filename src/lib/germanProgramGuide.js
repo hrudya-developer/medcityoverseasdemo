@@ -73,7 +73,7 @@ const SOURCES = {
 function helpFaq(name) {
     return {
         question: `How does Medcity Overseas help with ${name}?`,
-        answer: `Medcity Overseas guides students from Kerala through every step of ${name}: a free counselling session to check eligibility, German language training, preparing and translating documents, applications and the German visa. Call or WhatsApp +91 90729 82555 to book a session.`,
+        answer: `Medcity Overseas guides students from Kerala through every step of ${name}: a free counselling session to check eligibility, German language training, preparing documents, applications and the German visa. Call or WhatsApp +91 90729 82555 to book a session.`,
     };
 }
 

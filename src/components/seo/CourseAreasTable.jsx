@@ -15,7 +15,8 @@ export default async function CourseAreasTable({ title = "Course areas at a glan
         return null;
     }
 
-    const count = (value) => (value > 0 ? value.toLocaleString("en-IN") : NOT_RECORDED);
+    // Counted, so a zero is a real 0, not a missing value.
+    const count = (value) => (Number(value) || 0).toLocaleString("en-IN");
 
     return (
         <section className={`mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 ${className}`}>

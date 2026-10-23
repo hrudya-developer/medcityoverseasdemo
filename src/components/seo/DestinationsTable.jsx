@@ -54,10 +54,10 @@ export default async function DestinationsTable({ title = "Study destinations at
                                             {row.universities.toLocaleString("en-IN")}
                                         </Link>
                                     ) : (
-                                        NOT_RECORDED
+                                        0
                                     )}
                                 </td>
-                                <td className="px-4 py-3 text-right">{row.courses > 0 ? row.courses.toLocaleString("en-IN") : NOT_RECORDED}</td>
+                                <td className="px-4 py-3 text-right">{row.courses.toLocaleString("en-IN")}</td>
                             </tr>
                         ))}
                     </tbody>
