@@ -1,4 +1,4 @@
-import { isPlaceholder, normaliseMonth, recordedValue, splitRecordList } from "@/lib/recordValue";
+import { intakeList, isPlaceholder, recordedValue } from "@/lib/recordValue";
 
 // Shown when the database has no value: never a guess.
 export const NOT_RECORDED = "Not recorded";
@@ -69,7 +69,7 @@ export const formatCourseDetails = (course) => {
         course?.intake
     );
 
-    const intakeItems = [...new Set(splitRecordList(intakesRaw).map(normaliseMonth))];
+    const intakeItems = intakeList(intakesRaw);
 
     const intakes =
         intakeItems.length === 12

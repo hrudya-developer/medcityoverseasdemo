@@ -3,7 +3,7 @@ import "server-only";
 import { cache } from "react";
 
 import { query, queryOne } from "@/lib/db";
-import { monthOrder, normaliseMonth, recordedValue, splitRecordList } from "@/lib/recordValue";
+import { intakeList, recordedValue } from "@/lib/recordValue";
 
 /*
  * Facts for a university page, read from the courses and info we hold
@@ -67,9 +67,8 @@ export const getUniversityFacts = cache(async (universityId) => {
             return [...counts.values()].sort((a, b) => b.n - a.n).map((entry) => entry.value);
         };
 
-        const intakes = tally(courses.flatMap((course) => splitRecordList(course.intakes).map(normaliseMonth)))
-            .filter((value) => value.length <= 20)
-            .sort((a, b) => monthOrder(a) - monthOrder(b));
+        // One entry per month in calendar order, placeholders dropped.
+        const intakes = intakeList(courses.map((course) => course.intakes)).filter((value) => value.length <= 20);
 
         const ielts = courses
             .map((course) => Number.parseFloat(clean(course.ielts)))

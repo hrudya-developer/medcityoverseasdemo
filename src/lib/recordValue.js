@@ -1,9 +1,11 @@
 /*
  * Values from the course and university records that only stand in for
- * "nothing recorded": a dash, zeros, "N/A", "null", "none" or an empty
- * date. Pages leave these out instead of showing them as facts.
+ * "nothing recorded": dashes, zeros, "N/A", "NA", "nil", "TBA", "null",
+ * "none", "not available", "not applicable" or an empty date. Pages
+ * leave these out instead of showing them as facts.
  */
-const PLACEHOLDER = /^(?:-+|0+(?:\.0+)?|n\s*\/\s*a|na|null|none|undefined|0000-00-00(?:[ t]00:00:00)?)$/i;
+const PLACEHOLDER =
+    /^(?:[-\u2013\u2014]+|0+(?:\.0+)?|n\s*\/\s*a|n\.?\s?a\.?|nil|tba|null|none|undefined|not\s+(?:available|applicable)|0000-00-00(?:[ t]00:00:00)?)$/i;
 
 export function isPlaceholder(value) {
     const text = String(value ?? "").replace(/\s+/g, " ").trim();
@@ -68,19 +70,46 @@ export function splitRecordList(value) {
         .filter(Boolean);
 }
 
-const ALL_YEAR = /^(?:all\s*year(?:\s*round)?|year\s*round|rolling|any\s*time|throughout\s+the\s+year)$/i;
+const ALL_YEAR = /^(?:all\s*year(?:\s*round)?|year\s*round|rolling(?:\s+intakes?)?|any\s*time|throughout\s+the\s+year)$/i;
 
 /** Whether an intake value means "any time of year". */
 export function isAllYear(value) {
     return ALL_YEAR.test(recordedValue(value));
 }
 
-/** Intake values split into months and whether any of them means "all year". */
+/**
+ * Intakes as a clean list: placeholders dropped, month names normalised,
+ * one entry per month ("Sep" wins over "Sep 2027"), months in calendar
+ * order, then any other values, then "all year" values.
+ */
+export function intakeList(values) {
+    const list = (Array.isArray(values) ? values.flatMap(splitRecordList) : splitRecordList(values)).map(normaliseMonth).filter(Boolean);
+    const byMonth = new Map();
+    const others = [];
+
+    for (const value of list) {
+        const order = monthOrder(value);
+
+        if (order === 99 || isAllYear(value)) {
+            if (!others.some((item) => item.toLowerCase() === value.toLowerCase())) {
+                others.push(value);
+            }
+        } else if (!byMonth.has(order) || value.length < byMonth.get(order).length) {
+            byMonth.set(order, value);
+        }
+    }
+
+    const months = [...byMonth.entries()].sort((a, b) => a[0] - b[0]).map(([, value]) => value);
+
+    return [...months, ...others.filter((value) => !isAllYear(value)), ...others.filter(isAllYear)];
+}
+
+/** Intake values split into months (and other dates) and whether any of them means "all year". */
 export function intakeParts(values) {
-    const list = (Array.isArray(values) ? values : splitRecordList(values)).map(normaliseMonth).filter(Boolean);
+    const list = intakeList(values);
 
     return {
-        months: [...new Set(list.filter((value) => !isAllYear(value)))],
+        months: list.filter((value) => !isAllYear(value)),
         allYear: list.some(isAllYear),
     };
 }

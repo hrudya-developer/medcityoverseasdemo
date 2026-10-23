@@ -5,7 +5,7 @@ import { notFound } from "next/navigation";
 import { findCourseBySlug } from "@/lib/courseIndex";
 import { getLiveDestination } from "@/lib/destinationSummary";
 import { callLegacy } from "@/lib/legacy";
-import { normaliseMonth, recordedValue, splitRecordList } from "@/lib/recordValue";
+import { intakeList, recordedValue } from "@/lib/recordValue";
 import { countrySlug as toCountrySlug } from "@/lib/sitemapData";
 import { createUniversityPublicSlug } from "@/lib/universitySlug";
 
@@ -71,7 +71,7 @@ function courseFacts(course) {
         location: present(course.location),
         level: present(course.level),
         duration: present(course.duration),
-        intakes: [...new Set(splitRecordList(course.intakes).map(normaliseMonth))].join(", "),
+        intakes: intakeList(course.intakes).join(", "),
         deadline: present(course.deadline),
         category: present(course.name),
     };
