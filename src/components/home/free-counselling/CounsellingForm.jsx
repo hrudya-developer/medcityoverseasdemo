@@ -180,9 +180,28 @@ const CounsellingForm = ({ onSuccess, }) => {
         useState(false);
 
     // Fetch SweetAlert2 while the visitor fills in the form, so the
-    // result dialog opens without waiting for the network.
+    // result dialog opens without waiting for the network. It waits
+    // for an idle moment so it does not compete with hydration.
     useEffect(() => {
-        preloadSwal();
+        if ("requestIdleCallback" in window) {
+            const idleId = window.requestIdleCallback(
+                preloadSwal,
+                { timeout: 5000 }
+            );
+
+            return () => {
+                window.cancelIdleCallback(idleId);
+            };
+        }
+
+        const timerId = window.setTimeout(
+            preloadSwal,
+            2000
+        );
+
+        return () => {
+            window.clearTimeout(timerId);
+        };
     }, []);
 
     const {
