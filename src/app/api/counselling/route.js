@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 import {
     postOverseasForm,
 } from "@/lib/overseasApi";
-import { isValidMobile } from "@/lib/phone";
+import { isPlausiblePhone } from "@/lib/phone";
 
 const REQUIRED_FIELDS = [
     "firstname",
@@ -136,7 +136,7 @@ export async function POST(request) {
             );
         }
 
-        if (!isValidMobile(payload.mobile)) {
+        if (!isPlausiblePhone(payload.mobile)) {
             return NextResponse.json(
                 {
                     success: false,
