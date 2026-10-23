@@ -132,6 +132,67 @@ export async function getAllUniversityCoursesLatest(input) {
     return { ...response, status: false, nextoffset: "0" };
 }
 
+/*
+ * Course finder filters (country, university, study area, intake,
+ * level, keyword) in any combination. getAllUniversityCoursesLatest above needs
+ * both a university and a study area, so a country or level filter on
+ * its own found nothing. Same row shape as that endpoint. Only courses
+ * at active universities, so every result opens a live course page.
+ */
+export async function getCoursesByFilters(input) {
+    const offset = legacyOffset(input.offset);
+    const where = ["c.status = '1'", "u.status = '1'"];
+    const params = [];
+
+    for (const [column, value] of [
+        ["c.d_id", input.countryId],
+        ["c.u_id", input.universityId],
+        ["c.c_id", input.courseId],
+    ]) {
+        if (toId(value)) {
+            where.push(`${column} = ?`);
+            params.push(toId(value));
+        }
+    }
+
+    const keyword = String(input.keyword ?? "").trim();
+
+    if (keyword) {
+        where.push("(c.course LIKE ? OR m.name LIKE ? OR u.name LIKE ? OR d.country LIKE ?)");
+        params.push(...Array(4).fill(likePattern(keyword)));
+    }
+
+    if (toId(input.intake)) {
+        where.push("c.intakes LIKE ?");
+        params.push(likePattern(input.intake));
+    }
+
+    const levels = String(input.levels ?? "")
+        .split(",")
+        .map((level) => level.trim())
+        .filter(Boolean);
+
+    if (levels.length > 0) {
+        where.push(`(${levels.map(() => "c.level LIKE ?").join(" OR ")})`);
+        params.push(...levels.map((level) => likePattern(level)));
+    }
+
+    const course = await query(
+        `SELECT c.*, m.name, m.icon, d.country, u.name AS university, u.location
+         ${COURSE_JOIN}
+         WHERE ${where.join(" AND ")}
+         ORDER BY c.id ASC
+         LIMIT 20 OFFSET ?`,
+        [...params, offset]
+    );
+
+    return {
+        maincourse_image_path: imagePath("icons/"),
+        course,
+        nextoffset: course.length === 20 ? offset + 20 : "0",
+    };
+}
+
 export async function getCoursebyMainUniversity(input) {
     return {
         maincourse_image_path: imagePath("icons/"),
