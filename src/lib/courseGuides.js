@@ -149,7 +149,7 @@ export const GUIDE_COUNTRIES = {
         dbNames: ["australia"],
         visaName: "Student visa (subclass 500)",
         visaSteps: [
-            { title: "Get your Confirmation of Enrolment", text: "Study Australia says you must obtain a valid Confirmation of Enrolment (CoE) from your provider before you apply." },
+            { title: "Get your Confirmation of Enrolment", text: "Study Australia says you will generally need to enrol in a course and receive a Confirmation of Enrolment (CoE) before you apply." },
             { title: "Arrange health cover", text: "arrange Overseas Student Health Cover (OSHC), unless an exemption applies." },
             { title: "Prepare your evidence", text: "the Department of Home Affairs uses your main course to decide the financial and English language evidence you need." },
             { title: "Check the visa requirements", text: "read the Department of Home Affairs page for the Student visa (subclass 500) before you apply." },
