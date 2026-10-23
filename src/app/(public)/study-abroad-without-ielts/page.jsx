@@ -27,9 +27,9 @@ import { getLiveSlugs, getWithoutIeltsOptions } from "@/lib/landingData";
 
 /*
  * Study abroad without IELTS: what each country's visa rules accept
- * instead (GOV.UK, Irish Immigration Service, Study Australia, Goethe
- * Institut, checked on UPDATED) and the universities and courses our
- * records mark as accepting other evidence (tb_universities.without_ielts,
+ * instead (GOV.UK, Irish Immigration Service, Study Australia and the
+ * DAAD, checked on UPDATED) and the universities and courses our records
+ * mark as accepting other evidence (tb_universities.without_ielts,
  * tb_courses.ieltsless, pteless, toeflless, duolingo).
  */
 
@@ -43,7 +43,7 @@ const SRC = {
     ukEnglish: "https://www.gov.uk/student-visa/knowledge-of-english",
     ireland: "https://www.irishimmigration.ie/coming-to-study-in-ireland/english-language-requirements-for-study-visas/",
     australia: "https://www.studyaustralia.gov.au/en/plan-your-move/language-testing-organisations",
-    germany: "https://www.goethe.de/ins/hon/en/spr/std/rfs.html",
+    germany: "https://www.daad.de/en/studying-in-germany/living-in-germany/german-language/",
 };
 
 const BREADCRUMBS = [
@@ -80,10 +80,10 @@ const COUNTRY_RULES = [
     {
         country: "Germany",
         slug: "germany",
-        rule: "For English taught programmes, proof of German is generally not needed. Each university sets its own English proof.",
-        caution: "German taught programmes generally need German at B2 or above.",
+        rule: "For English taught international programmes you can usually enrol without German, but you need proof of other language skills, usually English. Check which proof the programme accepts.",
+        caution: "German taught programmes need proof of German, usually a test passed before admission.",
         source: SRC.germany,
-        label: "Goethe-Institut",
+        label: "DAAD",
     },
 ];
 
@@ -118,7 +118,7 @@ export default async function WithoutIeltsPage() {
         {
             question: "Is PTE accepted instead of IELTS?",
             answer:
-                "Often, yes. The Irish Immigration Service lists a PTE Academic score of 30 for degree courses, for visa purposes,, and Study Australia lists PTE Academic among the tests accepted for Australian student visas. Each university also sets its own score, so check the course page.",
+                "Often, yes. The Irish Immigration Service lists a PTE Academic score of 30 for degree courses, for visa purposes, and Study Australia lists PTE Academic among the tests accepted for Australian student visas. Each university also sets its own score, so check the course page.",
         },
         {
             question: "What is an MOI letter?",
@@ -128,7 +128,7 @@ export default async function WithoutIeltsPage() {
         {
             question: "Can I study in Germany without IELTS?",
             answer:
-                "For German taught programmes you show German, generally at B2 or above, instead of English. For English taught programmes, the Goethe-Institut explains that each university sets its own language proof, so some accept other evidence. Check the admission rules of the exact programme.",
+                "For German taught programmes you show German, usually through a test passed before admission, instead of English. For English taught international programmes, the DAAD says you can usually enrol without German but need proof of other language skills, usually English. Check the admission rules of the exact programme.",
         },
     ];
 
@@ -156,7 +156,7 @@ export default async function WithoutIeltsPage() {
 
             <div className="space-y-14 py-12 sm:py-14">
                 <QuickAnswer updated={UPDATED} showContact={false}>
-                    You can study abroad without IELTS in many cases, but you still prove your English. The UK lets universities assess degree level students themselves to CEFR B2. Ireland and Australia accept other tests such as PTE Academic, TOEFL iBT or Duolingo (Ireland). Germany&apos;s English taught programmes set their own proof. Always check the visa rules as well as the university&apos;s.
+                    You can study abroad without IELTS in many cases, but you still prove your English. The UK lets universities assess degree level students themselves to CEFR B2. Ireland and Australia accept other tests such as PTE Academic, TOEFL iBT or Duolingo (Ireland). Germany&apos;s English taught programmes usually ask for English, not German. Always check the visa rules as well as the university&apos;s.
                 </QuickAnswer>
 
                 <QuestionAnswer
@@ -167,7 +167,7 @@ export default async function WithoutIeltsPage() {
 
                 <GuideSection
                     title="What each country accepts instead of IELTS"
-                    intro="From each government's own page, checked on 24 October 2026."
+                    intro="From official and institutional pages, checked on 24 October 2026."
                 >
                     <TableWrap minWidth={760}>
                         <thead className={theadClass}>
