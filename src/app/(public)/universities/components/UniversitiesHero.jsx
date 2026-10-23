@@ -187,9 +187,10 @@ export default function UniversitiesHero() {
               lg:mx-0
             "
           >
-            Discover international universities across leading
-            study destinations. Compare institutions, courses and
-            global study opportunities to build your future.
+            Discover international universities for Indian
+            students across leading study destinations. Compare
+            institutions, courses and global study opportunities
+            to build your future.
           </p>
 
           {/* CTA */}
