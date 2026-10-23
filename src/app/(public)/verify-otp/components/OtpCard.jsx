@@ -18,7 +18,7 @@ export default function OtpCard({
         otp.every(Boolean);
 
     return (
-        <main className="relative flex min-h-[calc(100dvh-140px)] items-center justify-center bg-[#080611] px-4 py-8">
+        <div className="relative flex min-h-[calc(100dvh-140px)] items-center justify-center bg-[#080611] px-4 py-8">
             <section className="w-full max-w-md overflow-hidden rounded-[28px] border border-white/15 bg-white/[0.08] shadow-2xl backdrop-blur-2xl">
                 <OtpHeader
                     email={email}
@@ -89,6 +89,6 @@ export default function OtpCard({
                     </button>
                 </div>
             </section>
-        </main>
+        </div>
     );
 }

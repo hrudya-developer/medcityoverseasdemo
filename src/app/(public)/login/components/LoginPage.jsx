@@ -95,7 +95,7 @@ export default function LoginPage({
   error = "",
 }) {
   return (
-    <main
+    <div
       className="relative isolate flex min-h-[calc(100dvh-140px)] items-center justify-center overflow-hidden bg-[#08050f] px-4 py-6 lg:px-6"
     >
       <BackgroundEffects />
@@ -116,6 +116,6 @@ export default function LoginPage({
           error={error}
         />
       </section>
-    </main>
+    </div>
   );
 }

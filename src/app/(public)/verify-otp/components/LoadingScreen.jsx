@@ -9,7 +9,7 @@ export default function LoadingScreen({
         "Loading verification...",
 }) {
     return (
-        <main
+        <div
             className="
                 relative
 
@@ -154,6 +154,6 @@ export default function LoadingScreen({
                     Please wait a moment
                 </p>
             </div>
-        </main>
+        </div>
     );
 }

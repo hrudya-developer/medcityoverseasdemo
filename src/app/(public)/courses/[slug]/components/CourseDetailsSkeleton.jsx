@@ -1,6 +1,6 @@
 export default function CourseDetailsSkeleton() {
     return (
-        <main className="min-h-screen bg-white px-5 py-12">
+        <div className="min-h-screen bg-white px-5 py-12">
             <div
                 className="mx-auto max-w-7xl animate-pulse"
                 aria-busy="true"
@@ -17,6 +17,6 @@ export default function CourseDetailsSkeleton() {
                     ))}
                 </div>
             </div>
-        </main>
+        </div>
     );
 }

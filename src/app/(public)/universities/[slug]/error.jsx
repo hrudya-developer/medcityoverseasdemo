@@ -7,7 +7,7 @@ export default function UniversityDetailsError({
     reset,
 }) {
     return (
-        <main className="grid min-h-[70vh] place-items-center bg-[#f7f9fd] px-4">
+        <div className="grid min-h-[70vh] place-items-center bg-[#f7f9fd] px-4">
             <section className="w-full max-w-lg rounded-3xl bg-white p-8 text-center shadow-xl">
                 <div className="mx-auto grid size-16 place-items-center rounded-full bg-primary/10 text-primary">
                     <AlertTriangle
@@ -38,6 +38,6 @@ export default function UniversityDetailsError({
                     Try Again
                 </button>
             </section>
-        </main>
+        </div>
     );
 }

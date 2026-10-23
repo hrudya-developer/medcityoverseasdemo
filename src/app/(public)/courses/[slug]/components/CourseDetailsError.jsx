@@ -4,7 +4,7 @@ export default function CourseDetailsError({
     onBack,
 }) {
     return (
-        <main
+        <div
             className="grid min-h-screen place-content-center bg-slate-50 px-5 text-center"
         >
             <div
@@ -36,6 +36,6 @@ export default function CourseDetailsError({
                     </button>
                 </div>
             </div>
-        </main>
+        </div>
     );
 }

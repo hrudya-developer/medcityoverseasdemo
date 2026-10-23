@@ -31,7 +31,7 @@ export default async function RegisterUserProfilePage() {
     }
 
     return (
-        <main
+        <div
             className="
                 min-h-screen
                 bg-[#f7f8fc]
@@ -48,6 +48,6 @@ export default async function RegisterUserProfilePage() {
                     }
                 />
             </div>
-        </main>
+        </div>
     );
 }
