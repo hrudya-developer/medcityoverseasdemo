@@ -9,9 +9,9 @@ import {
 export const mastersRouteData = [
   {
     id: 1,
-    title: "Education + Employment",
+    title: "Education + Registration",
     description:
-      "Earn an advanced degree while gaining direct entry into the UK healthcare workforce.",
+      "Earn an advanced degree on a pre-registration route that prepares you for UK nursing registration.",
     icon: GraduationCap,
     theme: "pink",
   },

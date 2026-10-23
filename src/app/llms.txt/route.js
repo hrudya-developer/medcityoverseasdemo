@@ -33,7 +33,7 @@ const INTRO = `# Medcity Overseas (Medcity Study Abroad)
 - Student visa guidance and documentation
 - Scholarship, funding and education loan guidance
 - German pathways: university, Studienkolleg, Ausbildung (paid vocational training) and Au Pair
-- UK nursing placement guidance for nurses from Kerala
+- Study and registration guidance for nurses from Kerala, including the UK nursing MSc route
 - Language preparation through Medcity International Academy
 - Pre-departure support
 
@@ -78,7 +78,8 @@ export async function GET() {
             line("Universities", `${SITE_URL}/universities`),
             line("Course search", `${SITE_URL}/courses`),
             line("Study in Germany", `${SITE_URL}/study-in-germany`),
-            line("UK nursing placement", `${SITE_URL}/placement-assistance-nursing`),
+            line("Study abroad for nurses", `${SITE_URL}/study-abroad-for-nurses`),
+            line("UK nursing MSc route", `${SITE_URL}/placement-assistance-nursing`),
             line("Migrate to Canada", `${SITE_URL}/migrate-to-canada`),
             line("Migrate to Australia", `${SITE_URL}/migrate-to-australia`),
             line("Study abroad guides", `${SITE_URL}/blogs`),

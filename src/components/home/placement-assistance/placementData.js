@@ -1,13 +1,13 @@
 
 export const placementContent = {
-  eyebrow: "PLACEMENT ASSISTANCE",
+  eyebrow: "NURSING STUDY GUIDANCE",
 
-  titleLine1: "Your Global",
-  titleLine2: "Nursing Career",
+  titleLine1: "Your Nursing",
+  titleLine2: "Study Route Abroad",
   highlightedTitle: "Starts Here",
 
   description:
-    "Take your nursing career beyond borders. Explore international placement assistance programmes for nurses across the USA, UK, Ireland, Germany, Australia and New Zealand. Let us help you take the next step towards your global career.",
+    "Planning to study abroad as a nurse? Compare nursing study routes and the registration body in the UK, Ireland, Germany, Australia and New Zealand, and get guidance from Medcity on your course applications.",
 
   images: {
     destination: "/assets/placement-assistance-uk.webp",
@@ -17,10 +17,6 @@ export const placementContent = {
 };
 
 export const placementCountries = [
-  {
-    name: "USA",
-    flag: "https://flagcdn.com/w80/us.png",
-  },
   {
     name: "United Kingdom",
     flag: "https://flagcdn.com/w80/gb.png",

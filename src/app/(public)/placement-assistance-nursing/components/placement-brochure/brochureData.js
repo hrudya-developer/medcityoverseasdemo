@@ -23,9 +23,9 @@ export const brochureFeatures = [
   },
   {
     id: 3,
-    title: "NHS support and guidance",
+    title: "Guidance up to your course start",
     description:
-      "See how Medcity supports you at every step of your UK journey.",
+      "See how Medcity guides you from application to the start of your course.",
     icon: UsersRound,
     variant: "purple",
   },

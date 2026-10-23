@@ -45,7 +45,7 @@ export const pathwaySteps = [
   },
   {
     id: 8,
-    title: "Professional Employment",
+    title: "Apply for Nursing Roles",
     theme: "blue",
   },
 ];

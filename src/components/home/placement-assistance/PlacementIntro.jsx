@@ -106,7 +106,7 @@ export default function PlacementIntro({
             gap-3 sm:gap-4
             lg:justify-start
           "
-          aria-label="Nursing placement destinations"
+          aria-label="Nursing study destinations"
         >
           {placementCountries.map((country) => (
             <div
@@ -149,12 +149,12 @@ export default function PlacementIntro({
         {/* CTA */}
         <div
           className="
-            mt-8 flex justify-center
-            lg:justify-start
+            mt-8 flex flex-wrap justify-center
+            gap-3 lg:justify-start
           "
         >
           <Link
-            href="/placement-assistance-nursing"
+            href="/study-abroad-for-nurses"
             className="
               group inline-flex
               min-h-[54px]
@@ -172,7 +172,7 @@ export default function PlacementIntro({
               sm:text-base
             "
           >
-            Explore Programmes
+            Study Abroad for Nurses
 
             <ArrowRight
               size={20}
@@ -181,6 +181,27 @@ export default function PlacementIntro({
                 group-hover:translate-x-1
               "
             />
+          </Link>
+
+          <Link
+            href="/placement-assistance-nursing"
+            className="
+              inline-flex
+              min-h-[54px]
+              items-center justify-center
+              rounded-xl
+              border border-[#c01f53]/30
+              bg-white
+              px-7 py-3.5
+              text-sm font-semibold
+              text-[#c01f53]
+              transition-all duration-300
+              hover:-translate-y-1
+              hover:border-[#c01f53]
+              sm:text-base
+            "
+          >
+            UK Nursing MSc Route
           </Link>
         </div>
       </div>
