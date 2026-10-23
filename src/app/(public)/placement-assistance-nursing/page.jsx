@@ -33,7 +33,7 @@ import { applySeoOverrides } from "@/lib/pageSeo";
 
 const PAGE_PATH = "/placement-assistance-nursing";
 
-const PAGE_TITLE = "UK Nursing Placement for Kerala Nurses | Medcity Overseas";
+const PAGE_TITLE = "UK Nursing MSc Route for Kerala Nurses | Medcity Overseas";
 
 const PAGE_DESCRIPTION =
   "MSc Mental Health Nursing and Leadership route to the UK for Kerala nurses: eligibility, admission and NMC registration guidance from Medcity Overseas.";
@@ -61,12 +61,12 @@ const FAQS = [
       "It is a 1-year pre-registration MSc. The first 6 months cover the theory of mental health nursing and leadership, and the next 6 months are supervised clinical placements in healthcare settings.",
   },
   {
-    question: "What are the steps from application to working as a nurse in the UK?",
+    question: "What are the steps on the UK MSc nursing route?",
     answer:
-      "Apply for the master's, attend the university interview, meet the NMC requirements, clear the CBT exam, receive confirmation, secure your visa, begin your studies and then move into professional employment. Medcity Overseas guides you at each step.",
+      "Apply for the master's, attend the university interview, meet the NMC requirements, clear the CBT exam, receive confirmation, secure your visa and begin your studies. Medcity Overseas guides you up to the start of the course; finding work after you register is between you and employers.",
   },
   {
-    question: "Does Medcity Overseas guarantee a job or a visa?",
+    question: "Does Medcity Overseas guarantee admission, registration or a visa?",
     answer:
       "No. Admission decisions are made by the university, registration by the Nursing and Midwifery Council and visas by UK Visas and Immigration. Medcity Overseas helps you meet their requirements and prepare a strong application. Call or WhatsApp +91 90729 82555 to check your eligibility.",
   },
@@ -164,19 +164,18 @@ function HeroSection() {
             </p>
 
             <h1 className="mt-5 text-3xl sm:text-4xl md:text-5xl font-black leading-[1.08] tracking-[-0.055em] text-[#101638]">
-              Work as a Nurse
+              UK Nursing MSc Route{" "}
               <span className="block bg-gradient-to-r from-[#f01473] via-[#cf148d] to-[#9a14b5] bg-clip-text text-transparent">
-                in the UK
+                for Kerala Nurses
               </span>
             </h1>
 
             <p className="mx-auto mt-7 max-w-[620px] text-sm leading-7 text-[#5b6b86] sm:text-base sm:leading-8 lg:mx-0 lg:text-lg">
-              Work as a nurse in the UK through the MSc
-              in Mental Health Nursing &amp; Leadership,
-              with guidance on
-              university admissions, eligibility and
-              the steps towards UK nursing registration
-              and career opportunities.
+              Study the MSc in Mental Health Nursing
+              &amp; Leadership in the UK, a route Kerala
+              nurses take towards UK nursing registration,
+              with guidance on university admissions,
+              eligibility and the NMC steps.
             </p>
 
             <div className="mt-9 flex flex-wrap justify-center gap-3 lg:justify-start">
@@ -306,14 +305,14 @@ export default function PlacementAssistanceNursingPage() {
         faqs={FAQS}
         breadcrumbs={[
           { name: "Home", path: "/" },
-          { name: "UK Nursing Placement Assistance", path: PAGE_PATH },
+          { name: "UK Nursing MSc Route", path: PAGE_PATH },
         ]}
       />
 
       <HeroSection />
 
       <QuickAnswer updated={TEMPLATE_UPDATED} className="pt-12">
-        Medcity Overseas helps Kerala nurses work as nurses in the UK through a 1-year pre-registration MSc in Mental Health Nursing and Leadership. BSc, Post Basic BSc and MSc Nursing graduates with at least 55% marks can apply, freshers included, and Medcity guides you through admission, the English test, the NMC registration steps and the visa.
+        Medcity Overseas guides Kerala nurses applying to a UK pre-registration MSc in Mental Health Nursing and Leadership, a 1-year course that leads towards UK nursing registration. BSc, Post Basic BSc and MSc Nursing graduates with at least 55% marks can apply, freshers included, and Medcity guides you through admission, the English test, the NMC registration steps and the student visa.
       </QuickAnswer>
 
       <MastersRouteSection />
