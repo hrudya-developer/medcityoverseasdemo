@@ -7,6 +7,7 @@ import DestinationDetailsClient
   from "./components/DestinationDetailsClient";
 
 import {
+  findCanonicalSlugForAlias,
   findDestinationSlugById,
   getDestinationDetails,
   resolveDestinationId,
@@ -281,6 +282,15 @@ export default async function DestinationDetailsPage({
   }
 
   if (!destination) {
+    // The short slug style ("uk" for "United Kingdom") moves to the
+    // slug this page uses, so both resolve without duplicate pages.
+    const canonicalSlug =
+      await findCanonicalSlugForAlias(slug);
+
+    if (canonicalSlug) {
+      permanentRedirect(`/study-in-${canonicalSlug}`);
+    }
+
     notFound();
   }
 

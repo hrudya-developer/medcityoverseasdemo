@@ -1,4 +1,4 @@
-import { createSlug } from "@/lib/slug";
+import { countrySlug, createSlug } from "@/lib/slug";
 import { postOverseasForm } from "@/lib/overseasApi";
 
 import { legacyFetch } from "@/lib/legacy";
@@ -120,6 +120,63 @@ export async function findDestinationSlugById(
   return countryName
     ? createSlug(countryName)
     : "";
+}
+
+/*
+ * The short slug style used by the sitemap and links (countrySlug: "uk"
+ * for "United Kingdom", "usa" for "United States") resolves here to the
+ * slug the country pages use (createSlug: "united-kingdom"), so the
+ * pages can redirect it permanently. Returns "" when the slug is not
+ * such an alias (including when the two styles are the same, as for
+ * a destination named "UK").
+ */
+export async function findCanonicalSlugForAlias(
+  slug = ""
+) {
+  const wanted = String(slug).trim().toLowerCase();
+
+  if (!wanted) {
+    return "";
+  }
+
+  const result =
+    await postOverseasForm(
+      "getDestinations",
+      {
+        uid: 0,
+      },
+      {
+        next: {
+          revalidate: 3600,
+        },
+      }
+    );
+
+  const destinations =
+    Array.isArray(result?.destinations)
+      ? result.destinations
+      : Array.isArray(result?.data)
+        ? result.data
+        : [];
+
+  for (const item of destinations) {
+    const countryName =
+      item?.country ||
+      item?.name ||
+      item?.destination ||
+      "";
+    const canonical = createSlug(countryName);
+
+    if (
+      canonical &&
+      canonical !== wanted &&
+      countrySlug(countryName) === wanted
+    ) {
+      return canonical;
+    }
+  }
+
+  return "";
 }
 
 export async function getDestinationDetails(

@@ -28,7 +28,7 @@ import { joinList, latestDate, organizationNode, websiteNode } from "@/lib/seoSc
 // newest university or course record, whichever is later.
 const TEMPLATE_UPDATED = "2026-10-23";
 import { faqsWithPageSeo, withSeoOverrides } from "@/lib/pageSeo";
-import { findDestinationSlugById } from "../../destination/[slug]/lib/destinationApi";
+import { findCanonicalSlugForAlias, findDestinationSlugById } from "../../destination/[slug]/lib/destinationApi";
 
 /* =========================================================
    SITE CONFIG
@@ -513,6 +513,19 @@ export default async function UniversitiesByCountryPage({
     if (
         !destination
     ) {
+        // The short slug style ("uk" for "United Kingdom") moves to the
+        // slug this page uses, so both resolve without duplicate pages.
+        const canonicalSlug =
+            await findCanonicalSlugForAlias(
+                countrySlug
+            );
+
+        if (canonicalSlug) {
+            permanentRedirect(
+                `/universities-in-${canonicalSlug}`
+            );
+        }
+
         notFound();
     }
 
