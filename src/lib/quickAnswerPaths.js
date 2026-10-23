@@ -18,6 +18,7 @@ const PATTERNS = [
     /^\/branch\/[^/]+$/,
     /^\/msc-nursing-in-uk$/,
     /^\/nursing-in-germany-for-indian-nurses$/,
+    /^\/study-abroad-for-nurses$/,
 ];
 
 export function templateShowsQuickAnswer(path) {
