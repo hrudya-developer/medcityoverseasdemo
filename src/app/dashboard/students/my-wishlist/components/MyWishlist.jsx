@@ -171,13 +171,13 @@ export default function MyWishlist() {
         course
     ) {
         /*
-         * getPrefereList:
+         * getPrefereList returns tb_courses.* plus prefid:
          *
-         * id   = wishlist/preference record id
-         * c_id = actual course id
+         * id     = course id
+         * c_id   = course category id
+         * prefid = wishlist record id
          *
-         * removePreferlist expects the
-         * wishlist record id in your current API flow.
+         * removePreferlist matches on the course id (itemid).
          */
 
         const wishlistId =

@@ -20,7 +20,6 @@ import QualificationGateModal from "../../qualification-update/components/Qualif
 
 export default function ApplyCourseButton({
     course,
-    courseId,
     initiallyApplied = false,
 }) {
     const [
@@ -57,10 +56,10 @@ export default function ApplyCourseButton({
     |--------------------------------------------------------------------------
     */
 
-    // On a wishlist card course.id is the wishlist record id, so
-    // the card passes the real course id explicitly.
+    // course.id is the course id, both in search results and on wishlist
+    // cards (getPrefereList returns tb_courses.* plus prefid). c_id is the
+    // course category, so it must never be used to apply.
     const applicationCourseId =
-        courseId ??
         course?.id ??
         course?.course_id ??
         course?.uc_id ??
