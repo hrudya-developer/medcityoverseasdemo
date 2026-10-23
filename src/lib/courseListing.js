@@ -65,7 +65,10 @@ export const getLatestCourses = cache(async (limit = 24) => {
             .filter(Boolean)
             .slice(0, limit);
 
-        const total = destinations.reduce((sum, row) => sum + (Number(row.courses) || 0), 0);
+        const sum = destinations.reduce((total, row) => total + (Number(row.courses) || 0), 0);
+        // Never fewer than the rows shown, so the page cannot say "All 0
+        // courses" above a list (for example when the summaries failed).
+        const total = Math.max(sum, courses.length);
 
         return { total, courses };
     } catch (error) {

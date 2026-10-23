@@ -24,9 +24,14 @@ export default async function LatestCoursesTable({ className = "" }) {
             </h2>
 
             <p className="mt-3 max-w-3xl leading-7 text-slate-600">
-                {courses.length < total
-                    ? `The ${courses.length} newest of the ${total.toLocaleString("en-IN")} courses listed on Medcity Overseas. Use the course finder above to search them all.`
-                    : `All ${total.toLocaleString("en-IN")} courses currently listed on Medcity Overseas, newest first.`}{" "}
+                {/* No count sentence without a real total. */}
+                {total > 0 && (
+                    <>
+                        {courses.length < total
+                            ? `The ${courses.length} newest of the ${total.toLocaleString("en-IN")} courses listed on Medcity Overseas. Use the course finder above to search them all.`
+                            : `All ${total.toLocaleString("en-IN")} courses currently listed on Medcity Overseas, newest first.`}{" "}
+                    </>
+                )}
                 Open a course for its fees and entry requirements where we have recorded them.
             </p>
 
