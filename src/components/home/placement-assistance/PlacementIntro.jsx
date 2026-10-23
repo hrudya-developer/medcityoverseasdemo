@@ -9,7 +9,7 @@ import {
 } from "./placementData";
 
 export default function PlacementIntro({
-  eligibilityHref = "/contact",
+  eligibilityHref = "/contact-us",
 }) {
   return (
     <div
