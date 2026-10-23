@@ -19,6 +19,7 @@ const PATTERNS = [
     /^\/msc-nursing-in-uk$/,
     /^\/nursing-in-germany-for-indian-nurses$/,
     /^\/study-abroad-for-nurses$/,
+    /^\/study-abroad-without-ielts$/,
 ];
 
 export function templateShowsQuickAnswer(path) {

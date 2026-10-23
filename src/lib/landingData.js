@@ -250,7 +250,7 @@ export const getUndergraduateByCountry = cache(async () => {
            AND (c.level LIKE '%bachelor%' OR c.level LIKE '%undergrad%' OR c.level LIKE '%diploma%'
              OR c.level LIKE '%foundation%' OR c.course LIKE 'BSc%' OR c.course LIKE 'B.Sc%' OR c.course LIKE 'BA %'
              OR c.course LIKE 'Bachelor%')
-         GROUP BY d.id, d.country
+         GROUP BY d.id, d.country, d.order
          ORDER BY d.order ASC`
     );
 
