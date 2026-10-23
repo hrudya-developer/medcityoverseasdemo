@@ -1,5 +1,7 @@
 import "server-only";
 
+import { unstable_cache } from "next/cache";
+
 import { query, queryOne } from "@/lib/db";
 import { imagePath, legacyOffset, likePattern, toId, today } from "./util";
 
@@ -132,13 +134,6 @@ export async function getAllUniversityCoursesLatest(input) {
     return { ...response, status: false, nextoffset: "0" };
 }
 
-/*
- * Course finder filters (country, university, study area, intake,
- * level, keyword) in any combination. getAllUniversityCoursesLatest above needs
- * both a university and a study area, so a country or level filter on
- * its own found nothing. Same row shape as that endpoint. Only courses
- * at active universities, so every result opens a live course page.
- */
 // The study levels the course finder offers. Any other value is ignored,
 // so a crafted URL cannot add unbounded LIKE clauses.
 const FILTER_LEVELS = [
@@ -153,66 +148,100 @@ const FILTER_LEVELS = [
 // Deeper pages than this are not offered; it keeps OFFSET scans short.
 const MAX_FILTER_OFFSET = 2000;
 
-export async function getCoursesByFilters(input) {
-    const offset = Math.min(legacyOffset(input.offset), MAX_FILTER_OFFSET);
+// One canonical form of the filters, so equal searches share a cache entry.
+function normaliseCourseFilters(input) {
+    return {
+        countryId: toId(input.countryId),
+        universityId: toId(input.universityId),
+        courseId: toId(input.courseId),
+        intake: toId(input.intake).toLowerCase(),
+        levels: String(input.levels ?? "")
+            .split(",")
+            .map((level) =>
+                FILTER_LEVELS.find(
+                    (known) => known.toLowerCase() === level.trim().toLowerCase()
+                )
+            )
+            .filter((level, index, list) => level && list.indexOf(level) === index)
+            .sort(),
+        keyword: String(input.keyword ?? "").trim().replace(/\s+/g, " ").toLowerCase().slice(0, 100),
+        offset: Math.min(legacyOffset(input.offset), MAX_FILTER_OFFSET),
+    };
+}
+
+async function queryCoursesByFilters(filters) {
     const where = ["c.status = '1'", "u.status = '1'"];
     const params = [];
 
     for (const [column, value] of [
-        ["c.d_id", input.countryId],
-        ["c.u_id", input.universityId],
-        ["c.c_id", input.courseId],
+        ["c.d_id", filters.countryId],
+        ["c.u_id", filters.universityId],
+        ["c.c_id", filters.courseId],
     ]) {
-        if (toId(value)) {
+        if (value) {
             where.push(`${column} = ?`);
-            params.push(toId(value));
+            params.push(value);
         }
     }
 
-    const keyword = String(input.keyword ?? "").trim();
-
-    if (keyword) {
+    if (filters.keyword) {
         // The route filters these rows again by keyword in JS; these
         // columns are among the ones it checks, so it keeps every match.
         const columns = ["c.course", "m.name", "u.name", "d.country", "c.level", "c.intakes"];
 
         where.push(`(${columns.map((column) => `${column} LIKE ?`).join(" OR ")})`);
-        params.push(...columns.map(() => likePattern(keyword)));
+        params.push(...columns.map(() => likePattern(filters.keyword)));
     }
 
-    if (toId(input.intake)) {
+    if (filters.intake) {
         where.push("c.intakes LIKE ?");
-        params.push(likePattern(input.intake));
+        params.push(likePattern(filters.intake));
     }
 
-    const levels = String(input.levels ?? "")
-        .split(",")
-        .map((level) =>
-            FILTER_LEVELS.find(
-                (known) => known.toLowerCase() === level.trim().toLowerCase()
-            )
-        )
-        .filter((level, index, list) => level && list.indexOf(level) === index);
-
-    if (levels.length > 0) {
-        where.push(`(${levels.map(() => "c.level LIKE ?").join(" OR ")})`);
-        params.push(...levels.map((level) => likePattern(level)));
+    if (filters.levels.length > 0) {
+        where.push(`(${filters.levels.map(() => "c.level LIKE ?").join(" OR ")})`);
+        params.push(...filters.levels.map((level) => likePattern(level)));
     }
 
+    // tb_courses holds about 110,000 rows with TEXT columns and these
+    // LIKE filters cannot use an index. Check EXPLAIN for this query on
+    // the production database and add indexes on d_id, u_id, c_id and
+    // status if it scans the whole table.
     const course = await query(
         `SELECT c.*, m.name, m.icon, d.country, u.name AS university, u.location
          ${COURSE_JOIN}
          WHERE ${where.join(" AND ")}
          ORDER BY c.id ASC
          LIMIT 20 OFFSET ?`,
-        [...params, offset]
+        [...params, filters.offset]
     );
 
     return {
         maincourse_image_path: imagePath("icons/"),
         course,
-        nextoffset: course.length === 20 ? offset + 20 : "0",
+        nextoffset: course.length === 20 ? filters.offset + 20 : "0",
     };
+}
+
+// Results are kept for 5 minutes per filter set and offset (the
+// normalised filters are the cache key), so repeated searches do not
+// hit the database. A failed query throws and is not cached.
+const cachedCoursesByFilters = unstable_cache(
+    queryCoursesByFilters,
+    ["course-finder-filters"],
+    { revalidate: 300 }
+);
+
+/*
+ * Course finder filters (country, university, study area, intake,
+ * level, keyword) in any combination. getAllUniversityCoursesLatest
+ * above needs both a university and a study area, so a country or level
+ * filter on its own found nothing. Same row shape as that endpoint.
+ * Only courses at active universities, so every result opens a live
+ * course page.
+ */
+export async function getCoursesByFilters(input) {
+    return cachedCoursesByFilters(normaliseCourseFilters(input ?? {}));
 }
 
 export async function getCoursebyMainUniversity(input) {
