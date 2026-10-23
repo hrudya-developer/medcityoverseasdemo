@@ -13,7 +13,7 @@ import {
     postOverseasForm,
 } from "@/lib/overseasApi";
 
-import { fetchUniversityBatch, universityItems } from "@/lib/countryUniversities";
+import { fetchCountryUniversities, universityItems } from "@/lib/countryUniversities";
 
 import CountryUniversitiesHero from "./components/CountryUniversitiesHero";
 import UniversitiesSection from "./components/UniversitiesSection";
@@ -222,64 +222,33 @@ async function getDestination(
    GET UNIVERSITIES
 ========================================================= */
 
-// "alluniversities" returns every university of the country in one
-// response, so a single request is enough.
-// Straight from the database now, so every university is listed
-// (20 per batch; 60 batches covers the largest country with room to spare).
-const MAX_UNIVERSITY_BATCHES = 60;
-
 /**
- * Load every university for a country straight from the Overseas
- * API. This used to fetch this site's own /api/search/universities
- * URL, which fails during a fresh build or deploy, and it only read
- * the first batch, so larger countries were cut short.
+ * Load every university for a country straight from the database. The
+ * "alluniversities" request returns all of them in one response and
+ * ignores offset, so a single request is enough. (The earlier loop
+ * re-ran that same full query up to 60 times per render.)
  */
 async function loadUniversities(
     countryId
 ) {
-    const universities = [];
+    let universities = [];
     let universityImagePath = "";
-    let offset = "0";
 
     try {
-        for (
-            let batch = 0;
-            batch < MAX_UNIVERSITY_BATCHES;
-            batch += 1
-        ) {
-            const result =
-                await fetchUniversityBatch(
-                    countryId,
-                    offset
-                );
+        const result =
+            await fetchCountryUniversities(
+                countryId
+            );
 
-            const items =
-                universityItems(result);
+        universities =
+            universityItems(result);
 
-            universities.push(...items);
-
-            universityImagePath =
-                universityImagePath ||
-                result?.universities_image_path ||
-                result?.university_image_path ||
-                result?.universityImagePath ||
-                result?.imagePath ||
-                "";
-
-            const nextOffset =
-                String(result?.nextoffset ?? "");
-
-            if (
-                items.length === 0 ||
-                !nextOffset ||
-                nextOffset === "0" ||
-                nextOffset === offset
-            ) {
-                break;
-            }
-
-            offset = nextOffset;
-        }
+        universityImagePath =
+            result?.universities_image_path ||
+            result?.university_image_path ||
+            result?.universityImagePath ||
+            result?.imagePath ||
+            "";
     } catch (error) {
         // At runtime, throw so ISR keeps the last good page instead
         // of caching an empty "0 universities" page for an hour.
@@ -296,7 +265,7 @@ async function loadUniversities(
         );
     }
 
-    // Some batches overlap; keep each university once.
+    // Keep each university once.
     const seen = new Set();
 
     const unique = universities.filter((item) => {
