@@ -161,8 +161,8 @@ function PageRow({ row, open, onToggle, columns }) {
                         type="button"
                         onClick={onToggle}
                         aria-expanded={open}
-                        aria-controls={detailsId}
-                        aria-label={open ? "Hide main aspects" : "Show main aspects"}
+                        aria-controls={open ? detailsId : undefined}
+                        aria-label={`${open ? "Hide" : "Show"} main aspects for ${row.path}`}
                         className="rounded p-1 text-slate-500 hover:bg-slate-200 hover:text-slate-900"
                     >
                         <Chevron open={open} />

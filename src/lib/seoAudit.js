@@ -58,20 +58,50 @@ function clean(text) {
 /** Text with a space between every text node, so "<span>by</span><span>Studying</span>" reads as two words. */
 function spacedText(node) {
     const parts = [];
+    // Walked with a stack, not recursion, so very deep pages cannot overflow it.
+    const stack = node ? [node] : [];
 
-    const walk = (child) => {
-        if (child.nodeType === 3) {
-            parts.push(child.text);
+    while (stack.length) {
+        const current = stack.pop();
+
+        if (current.nodeType === 3) {
+            parts.push(current.text);
         } else {
-            child.childNodes.forEach(walk);
+            for (let index = current.childNodes.length - 1; index >= 0; index -= 1) {
+                stack.push(current.childNodes[index]);
+            }
         }
-    };
-
-    if (node) {
-        walk(node);
     }
 
     return clean(parts.join(" "));
+}
+
+/**
+ * Elements with the given tag names in document order. One linear walk:
+ * node-html-parser's querySelectorAll slows down badly on pages with
+ * tens of thousands of matches.
+ */
+function elementsByTag(root, tags) {
+    const found = [];
+    const stack = root ? [root] : [];
+
+    while (stack.length) {
+        const current = stack.pop();
+
+        if (current.nodeType === 1 && tags.has(current.tagName)) {
+            found.push(current);
+        }
+
+        const children = current.childNodes ?? [];
+
+        for (let index = children.length - 1; index >= 0; index -= 1) {
+            if (children[index].nodeType === 1) {
+                stack.push(children[index]);
+            }
+        }
+    }
+
+    return found;
 }
 
 function countWords(text) {
@@ -185,8 +215,8 @@ const MONTHS = "jan|feb|mar|apr|may|jun|jul|aug|sep|sept|oct|nov|dec";
 /* Patterns for figures an AI answer can quote: money, percentages, durations, years, dates, scores. */
 const FACT_PATTERNS = [
     /(?<![\p{L}])(?:₹|rs\.?|inr|usd|us\$|\$|£|gbp|€|eur|cad|c\$|aud|a\$|nzd|sgd|aed|chf)\s?\d[\d,.]*(?:\s?(?:k|lakhs?|crores?|million))?/giu,
-    /\b\d[\d,.]*\s?(?:lakhs?|crores?|euros?|pounds?|dollars?|rupees?)\b/giu,
-    /\d+(?:\.\d+)?\s?%/gu,
+    /(?<![\d,.])\d[\d,.]{0,20}\s?(?:lakhs?|crores?|euros?|pounds?|dollars?|rupees?)\b/giu,
+    /(?<![\d.])\d{1,6}(?:\.\d{1,4})?\s?%/gu,
     /\b\d+(?:\.\d+)?(?:\s?(?:-|to)\s?\d+(?:\.\d+)?)?\s?(?:years?|yrs?|months?|weeks?|days?|hours?|semesters?)\b/giu,
     /\b(?:19|20)\d{2}\b/gu,
     new RegExp(`\\b\\d{1,2}(?:st|nd|rd|th)?\\s(?:${MONTHS})[a-z]*\\b`, "giu"),
@@ -196,7 +226,9 @@ const FACT_PATTERNS = [
 ];
 
 /** Distinct figures in a text; overlapping matches ("₹15,000" and "15,000") count once. */
-function countFacts(text) {
+function countFacts(rawText) {
+    // Figures near the top are what counts; capping keeps huge pages fast.
+    const text = String(rawText ?? "").slice(0, 200000);
     const spans = [];
 
     for (const pattern of FACT_PATTERNS) {
@@ -288,7 +320,7 @@ function isOwnHost(host) {
 
 /** The first answer paragraph after each question heading: { questions, answers: [word counts] }. */
 function questionAnswers(main) {
-    const blocks = main.querySelectorAll("h2, h3, h4, p");
+    const blocks = elementsByTag(main, new Set(["H2", "H3", "H4", "P"]));
     const answers = [];
     let questions = 0;
 
@@ -354,12 +386,14 @@ export function runChecks({ path, status, ms, html, seo, headers, timedOut = fal
     // Used by the AEO and GEO checks; the older checks keep reading `text`.
     const spaced = spacedText(main);
     const words = text ? text.split(" ").length : 0;
-    const h1s = main.querySelectorAll("h1");
-    const h2s = main.querySelectorAll("h2");
-    const headings = main.querySelectorAll("h2, h3").map((node) => node.text.trim());
-    const images = main.querySelectorAll("img");
+    const h1s = elementsByTag(main, new Set(["H1"]));
+    const h2s = elementsByTag(main, new Set(["H2"]));
+    const headings = elementsByTag(main, new Set(["H2", "H3"])).map((node) => node.text.trim());
+    const images = elementsByTag(main, new Set(["IMG"]));
     const missingAlt = images.filter((img) => !String(img.getAttribute("alt") ?? "").trim()).length;
-    const links = main.querySelectorAll("a[href]").map((a) => ({ href: a.getAttribute("href") ?? "", text: clean(a.text) }));
+    const links = elementsByTag(main, new Set(["A"]))
+        .filter((a) => a.hasAttribute("href"))
+        .map((a) => ({ href: a.getAttribute("href") ?? "", text: clean(a.text) }));
     const hrefs = links.map((link) => link.href);
     const internal = new Set(hrefs.filter((href) => href.startsWith("/") && !href.startsWith("//"))).size;
     const { types } = jsonLd;
@@ -419,7 +453,7 @@ export function runChecks({ path, status, ms, html, seo, headers, timedOut = fal
         set("direct-answer", questions ? "No answer paragraph after a question heading" : "No question heading to answer", false);
     }
 
-    const listItems = main.querySelectorAll("ul li, ol li, table").length;
+    const listItems = elementsByTag(main, new Set(["LI", "TABLE"])).length;
     set("list-or-table", `Uses a list or table (now ${listItems} items)`, listItems > 0);
 
     // AEO / Answer markup
@@ -490,7 +524,7 @@ export function runChecks({ path, status, ms, html, seo, headers, timedOut = fal
         const lower = spaced.toLowerCase();
         const h1At = lower.indexOf(h1Text.toLowerCase());
         const after = h1At >= 0 ? lower.slice(h1At + h1Text.length) : lower;
-        const sequence = main.querySelectorAll("h1, p");
+        const sequence = elementsByTag(main, new Set(["H1", "P"]));
         const firstH1 = sequence.findIndex((node) => node.tagName === "H1");
         const firstParagraph = sequence.slice(firstH1 + 1).find((node) => node.tagName === "P" && countWords(spacedText(node)) >= 8);
         const intro = `${spacedText(firstParagraph).toLowerCase()} ${after.slice(0, 300)}`;
@@ -764,13 +798,19 @@ export async function auditPage(rawPath, origin) {
     };
 }
 
+// Rows saved before checks had ids used the old one-average score; they
+// are shown as "Check again" rather than mixed into the new averages.
+const HAS_IDS_SQL = `(checks LIKE '[{"id":%') AS has_ids`;
+
 export async function listAudits() {
     // Rows from checks that could not load the page at all are not scores.
     let rows;
+    let withPillars = true;
 
     try {
         rows = await query(
-            `SELECT path, page_type, status_code, ${TIMED_OUT_SQL}, score, score_seo, score_aeo, score_geo, aspect_scores, title, checked_at
+            `SELECT path, page_type, status_code, ${TIMED_OUT_SQL}, ${HAS_IDS_SQL}, score, score_seo, score_aeo, score_geo,
+                    aspect_scores, title, checked_at
              FROM web_page_audit WHERE status_code <> 0`
         );
     } catch (error) {
@@ -778,22 +818,32 @@ export async function listAudits() {
             throw error;
         }
 
-        rows = await query(`SELECT path, page_type, status_code, ${TIMED_OUT_SQL}, score, title, checked_at FROM web_page_audit WHERE status_code <> 0`);
+        // db/006 not run yet: work the pillar scores out from the stored checks.
+        withPillars = false;
+        rows = await query(
+            `SELECT path, page_type, status_code, ${TIMED_OUT_SQL}, ${HAS_IDS_SQL}, score, checks, title, checked_at
+             FROM web_page_audit WHERE status_code <> 0`
+        );
     }
 
-    return rows.map((row) => ({
-        path: row.path,
-        page_type: row.page_type,
-        status_code: row.status_code,
-        timed_out: Boolean(Number(row.timed_out)),
-        score: row.score,
-        score_seo: row.score_seo ?? null,
-        score_aeo: row.score_aeo ?? null,
-        score_geo: row.score_geo ?? null,
-        aspects: parseJson(row.aspect_scores, null),
-        title: row.title,
-        checked_at: row.checked_at,
-    }));
+    return rows.map((row) => {
+        const current = Boolean(Number(row.has_ids));
+        const fromChecks = current && !withPillars ? scoreResults(parseJson(row.checks, []), row.status_code) : null;
+
+        return {
+            path: row.path,
+            page_type: row.page_type,
+            status_code: row.status_code,
+            timed_out: Boolean(Number(row.timed_out)),
+            score: current ? row.score : null,
+            score_seo: current ? (fromChecks ? fromChecks.pillars.seo : row.score_seo ?? null) : null,
+            score_aeo: current ? (fromChecks ? fromChecks.pillars.aeo : row.score_aeo ?? null) : null,
+            score_geo: current ? (fromChecks ? fromChecks.pillars.geo : row.score_geo ?? null) : null,
+            aspects: current ? (fromChecks ? fromChecks.aspects : parseJson(row.aspect_scores, null)) : null,
+            title: row.title,
+            checked_at: row.checked_at,
+        };
+    });
 }
 
 export async function getAudit(path) {
