@@ -69,8 +69,8 @@ export default function SeoPagesTable({ rows: initialRows }) {
                             : row
                     )
                 );
-            } catch {
-                setRunning((current) => ({ ...current, failed: current.failed + 1 }));
+            } catch (error) {
+                setRunning((current) => ({ ...current, failed: current.failed + 1, lastError: error.message }));
             }
 
             setRunning((current) => ({ ...current, done: index + 1 }));
@@ -141,6 +141,7 @@ export default function SeoPagesTable({ rows: initialRows }) {
                 <p className="text-sm text-slate-600">
                     {running.finished ? "Finished" : "Checking"} {running.done} of {running.total}
                     {running.failed ? `, ${running.failed} could not be checked` : ""}. One page at a time, so the site stays fast.
+                    {running.lastError && <span className="block text-red-600">Last problem: {running.lastError}</span>}
                 </p>
             )}
 
@@ -174,7 +175,7 @@ export default function SeoPagesTable({ rows: initialRows }) {
                                     <span className={`inline-block min-w-14 rounded-full px-2.5 py-1 text-center text-xs font-bold ${scoreTone(row.score)}`}>
                                         {row.score === null ? "Not checked" : `${row.score}%`}
                                     </span>
-                                    {row.status && row.status !== 200 && (
+                                    {Boolean(row.status) && row.status !== 200 && (
                                         <span className="mt-1 block text-xs font-semibold text-red-600">Error {row.status}</span>
                                     )}
                                 </td>

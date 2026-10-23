@@ -138,6 +138,58 @@ export function runChecks({ path, status, ms, html, seo }) {
     return { type, title, score, checks };
 }
 
+/*
+ * Where the server can load its own pages. Behind Hostinger's proxy the
+ * request's own origin is an internal address that cannot be fetched,
+ * so try, in order: AUDIT_ORIGIN if set, the app's local port, the
+ * public address, the request's origin. The first that answers is
+ * remembered for the life of the process.
+ */
+const SITE_ORIGIN = "https://medcityoverseas.com";
+
+function originCandidates(requestOrigin) {
+    const port = process.env.PORT || "3000";
+
+    return [
+        process.env.AUDIT_ORIGIN,
+        `http://127.0.0.1:${port}`,
+        SITE_ORIGIN,
+        requestOrigin,
+    ].filter((value, index, list) => value && list.indexOf(value) === index);
+}
+
+async function loadPage(path, requestOrigin) {
+    const remembered = globalThis.__medcityAuditOrigin;
+    const candidates = remembered ? [remembered, ...originCandidates(requestOrigin).filter((o) => o !== remembered)] : originCandidates(requestOrigin);
+    const errors = [];
+
+    for (const origin of candidates) {
+        const started = Date.now();
+
+        try {
+            const response = await fetch(`${origin}${path}`, {
+                redirect: "manual",
+                cache: "no-store",
+                headers: { "User-Agent": "MedcitySeoAudit/1.0", Accept: "text/html" },
+                signal: AbortSignal.timeout(25000),
+            });
+
+            globalThis.__medcityAuditOrigin = origin;
+
+            return {
+                status: response.status,
+                html: response.status === 200 ? await response.text() : "",
+                ms: Date.now() - started,
+                origin,
+            };
+        } catch (error) {
+            errors.push(`${origin}: ${error?.cause?.code || error?.name || "failed"}`);
+        }
+    }
+
+    return { status: 0, html: "", ms: 0, origin: "", error: errors.join("; ") };
+}
+
 /** Load a page, score it and save the result. */
 export async function auditPage(rawPath, origin) {
     const path = normalisePath(rawPath);
@@ -146,41 +198,31 @@ export async function auditPage(rawPath, origin) {
         throw new Error("Invalid page address.");
     }
 
-    const started = Date.now();
-    let status = 0;
-    let html = "";
+    const loaded = await loadPage(path, origin);
 
-    try {
-        const response = await fetch(`${origin}${path}`, {
-            redirect: "manual",
-            cache: "no-store",
-            headers: { "User-Agent": "MedcitySeoAudit/1.0", Accept: "text/html" },
-            signal: AbortSignal.timeout(25000),
-        });
-
-        status = response.status;
-        html = status === 200 ? await response.text() : "";
-    } catch {
-        status = 0;
+    // The page could not be reached at all: report that instead of
+    // storing a misleading 1% score.
+    if (loaded.status === 0) {
+        throw new Error(`Could not load the page to check it (${loaded.error}).`);
     }
 
-    const ms = Date.now() - started;
     const seo = await getPageSeo(path);
-    const result = runChecks({ path, status, ms, html, seo });
+    const result = runChecks({ path, status: loaded.status, ms: loaded.ms, html: loaded.html, seo });
 
     await query(
         `INSERT INTO web_page_audit (path, page_type, status_code, score, title, checks, checked_at)
          VALUES (?, ?, ?, ?, ?, ?, ?)
          ON DUPLICATE KEY UPDATE page_type = VALUES(page_type), status_code = VALUES(status_code),
             score = VALUES(score), title = VALUES(title), checks = VALUES(checks), checked_at = VALUES(checked_at)`,
-        [path, result.type, status, result.score, result.title.slice(0, 300), JSON.stringify(result.checks), now()]
+        [path, result.type, loaded.status, result.score, result.title.slice(0, 300), JSON.stringify(result.checks), now()]
     );
 
-    return { path, status, ms, ...result };
+    return { path, status: loaded.status, ms: loaded.ms, ...result };
 }
 
 export async function listAudits() {
-    return query("SELECT path, page_type, status_code, score, title, checked_at FROM web_page_audit");
+    // Rows from checks that could not load the page at all are not scores.
+    return query("SELECT path, page_type, status_code, score, title, checked_at FROM web_page_audit WHERE status_code <> 0");
 }
 
 export async function getAudit(path) {
