@@ -203,104 +203,115 @@ async function getDestination(
    GET UNIVERSITIES
 ========================================================= */
 
+const MAX_UNIVERSITY_BATCHES = 20;
+
+/**
+ * Load every university for a country straight from the Overseas
+ * API. This used to fetch this site's own /api/search/universities
+ * URL, which fails during a fresh build or deploy, and it only read
+ * the first batch, so larger countries were cut short.
+ */
 async function getUniversities(
     countryId
 ) {
-    const params =
-        new URLSearchParams({
-            countryId:
-                String(
-                    countryId
-                ),
-
-            uid:
-                "0",
-
-            offset:
-                "0",
-
-            keyword:
-                "alluniversities",
-        });
-
-    const appUrl =
-        process.env
-            .NEXT_PUBLIC_SITE_URL ||
-        (process.env
-            .NODE_ENV ===
-        "development"
-            ? "http://localhost:3000"
-            : SITE_URL);
+    const universities = [];
+    let universityImagePath = "";
+    let offset = "0";
 
     try {
-        const response =
-            await fetch(
-                `${appUrl}/api/search/universities?${params.toString()}`,
-                {
-                    next: {
-                        revalidate:
-                            3600,
-                    },
-                }
-            );
-
-        if (
-            !response.ok
+        for (
+            let batch = 0;
+            batch < MAX_UNIVERSITY_BATCHES;
+            batch += 1
         ) {
-            console.error(
-                "University API status:",
-                response.status
-            );
+            const result =
+                await postOverseasForm(
+                    "getUniversitybyOffset",
+                    {
+                        uid: "0",
+                        id: String(countryId),
+                        offset,
+                        keyword: "alluniversities",
+                    },
+                    {
+                        next: {
+                            revalidate: 3600,
+                        },
+                    }
+                );
 
-            return {
-                universities:
-                    [],
+            const items =
+                Array.isArray(result?.universities)
+                    ? result.universities
+                    : Array.isArray(result?.data)
+                        ? result.data
+                        : [];
 
-                universityImagePath:
-                    "",
-            };
+            universities.push(...items);
+
+            universityImagePath =
+                universityImagePath ||
+                result?.universities_image_path ||
+                result?.university_image_path ||
+                result?.universityImagePath ||
+                result?.imagePath ||
+                "";
+
+            const nextOffset =
+                String(result?.nextoffset ?? "");
+
+            if (
+                items.length === 0 ||
+                !nextOffset ||
+                nextOffset === "0" ||
+                nextOffset === offset
+            ) {
+                break;
+            }
+
+            offset = nextOffset;
+        }
+    } catch (error) {
+        // At runtime, throw so ISR keeps the last good page instead
+        // of caching an empty "0 universities" page for an hour.
+        if (
+            process.env.NEXT_PHASE !==
+            "phase-production-build"
+        ) {
+            throw error;
         }
 
-        const result =
-            await response.json();
-
-        const universities =
-            Array.isArray(
-                result?.universities
-            )
-                ? result.universities
-                : [];
-
-        const universityImagePath =
-            result
-                ?.universities_image_path ||
-            result
-                ?.university_image_path ||
-            result
-                ?.universityImagePath ||
-            result?.imagePath ||
-            "";
-
-        return {
-            universities,
-            universityImagePath,
-        };
-    } catch (
-        error
-    ) {
         console.error(
-            "University list loading error:",
+            "Universities unavailable during build:",
             error
         );
-
-        return {
-            universities:
-                [],
-
-            universityImagePath:
-                "",
-        };
     }
+
+    // Some batches overlap; keep each university once.
+    const seen = new Set();
+
+    const unique = universities.filter((item) => {
+        const key = String(
+            item?.id ??
+            item?.u_id ??
+            item?.university_id ??
+            item?.name ??
+            ""
+        );
+
+        if (!key || seen.has(key)) {
+            return Boolean(!key);
+        }
+
+        seen.add(key);
+
+        return true;
+    });
+
+    return {
+        universities: unique,
+        universityImagePath,
+    };
 }
 
 /* =========================================================
@@ -744,7 +755,7 @@ export default async function UniversitiesByCountryPage({
                         );
 
                     const universityUrl =
-                        `${SITE_URL}/university-details/${universitySlug}`;
+                        `${SITE_URL}/universities/${universitySlug}`;
 
                     const location =
                         getUniversityLocation(

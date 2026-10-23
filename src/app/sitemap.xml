@@ -25,19 +25,7 @@
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://medcityoverseas.com/universities</loc>
-    <lastmod>2026-09-01T12:05:37+00:00</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
     <loc>https://medcityoverseas.com/courses</loc>
-    <lastmod>2026-09-01T12:05:37+00:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>https://medcityoverseas.com/course-search</loc>
     <lastmod>2026-09-01T12:05:37+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
@@ -67,19 +55,13 @@
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://medcityoverseas.com/german-programs</loc>
+    <loc>https://medcityoverseas.com/migrate-to-canada</loc>
     <lastmod>2026-09-01T12:05:37+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://medcityoverseas.com/canada-migration</loc>
-    <lastmod>2026-09-01T12:05:37+00:00</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://medcityoverseas.com/australia-migration</loc>
+    <loc>https://medcityoverseas.com/migrate-to-australia</loc>
     <lastmod>2026-09-01T12:05:37+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
@@ -89,312 +71,6 @@
     <lastmod>2026-09-01T12:05:37+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://medcityoverseas.com/terms-and-conditions</loc>
-    <lastmod>2026-09-01T12:05:37+00:00</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://medcityoverseas.com/german-programs/1</loc>
-    <lastmod>2026-09-01T12:05:37+00:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://medcityoverseas.com/german-programs/2</loc>
-    <lastmod>2026-09-01T12:05:37+00:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://medcityoverseas.com/german-programs/3</loc>
-    <lastmod>2026-09-01T12:05:37+00:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://medcityoverseas.com/german-programs/4</loc>
-    <lastmod>2026-09-01T12:05:37+00:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://medcityoverseas.com/german-programs/5</loc>
-    <lastmod>2026-09-01T12:05:37+00:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://medcityoverseas.com/german-programs/6</loc>
-    <lastmod>2026-09-01T12:05:37+00:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://medcityoverseas.com/german-programs/7</loc>
-    <lastmod>2026-09-01T12:05:37+00:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://medcityoverseas.com/german-programs/8</loc>
-    <lastmod>2026-09-01T12:05:37+00:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://medcityoverseas.com/german-programs/9</loc>
-    <lastmod>2026-09-01T12:05:37+00:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://medcityoverseas.com/german-programs/10</loc>
-    <lastmod>2026-09-01T12:05:37+00:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://medcityoverseas.com/destination/germany</loc>
-    <lastmod>2026-09-01T12:05:37+00:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://medcityoverseas.com/destination/austria</loc>
-    <lastmod>2026-09-01T12:05:37+00:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://medcityoverseas.com/destination/usa</loc>
-    <lastmod>2026-09-01T12:05:37+00:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://medcityoverseas.com/destination/australia</loc>
-    <lastmod>2026-09-01T12:05:37+00:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://medcityoverseas.com/destination/malta</loc>
-    <lastmod>2026-09-01T12:05:37+00:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://medcityoverseas.com/destination/uk</loc>
-    <lastmod>2026-09-01T12:05:37+00:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://medcityoverseas.com/destination/ireland</loc>
-    <lastmod>2026-09-01T12:05:37+00:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://medcityoverseas.com/destination/new-zealand</loc>
-    <lastmod>2026-09-01T12:05:37+00:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://medcityoverseas.com/destination/georgia</loc>
-    <lastmod>2026-09-01T12:05:37+00:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://medcityoverseas.com/destination/france</loc>
-    <lastmod>2026-09-01T12:05:37+00:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://medcityoverseas.com/destination/sweden</loc>
-    <lastmod>2026-09-01T12:05:37+00:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://medcityoverseas.com/destination/malaysia</loc>
-    <lastmod>2026-09-01T12:05:37+00:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://medcityoverseas.com/destination/italy</loc>
-    <lastmod>2026-09-01T12:05:37+00:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://medcityoverseas.com/destination/poland</loc>
-    <lastmod>2026-09-01T12:05:37+00:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://medcityoverseas.com/destination/dubai-uae</loc>
-    <lastmod>2026-09-01T12:05:37+00:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://medcityoverseas.com/destination/singapore</loc>
-    <lastmod>2026-09-01T12:05:37+00:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://medcityoverseas.com/destination/switzerland</loc>
-    <lastmod>2026-09-01T12:05:37+00:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://medcityoverseas.com/destination/uzbekistan</loc>
-    <lastmod>2026-09-01T12:05:37+00:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://medcityoverseas.com/destination/kazakhstan</loc>
-    <lastmod>2026-09-01T12:05:37+00:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://medcityoverseas.com/destination/spain</loc>
-    <lastmod>2026-09-01T12:05:37+00:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://medcityoverseas.com/destination/canada</loc>
-    <lastmod>2026-09-01T12:05:37+00:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://medcityoverseas.com/destination/finland</loc>
-    <lastmod>2026-09-01T12:05:37+00:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://medcityoverseas.com/destination/lithuania</loc>
-    <lastmod>2026-09-01T12:05:37+00:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://medcityoverseas.com/destination/netherlands</loc>
-    <lastmod>2026-09-01T12:05:37+00:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://medcityoverseas.com/destination/hungary</loc>
-    <lastmod>2026-09-01T12:05:37+00:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://medcityoverseas.com/destination/denmark</loc>
-    <lastmod>2026-09-01T12:05:37+00:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://medcityoverseas.com/destination/japan</loc>
-    <lastmod>2026-09-01T12:05:37+00:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://medcityoverseas.com/destination/cyprus</loc>
-    <lastmod>2026-09-01T12:05:37+00:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://medcityoverseas.com/destination/vietnam</loc>
-    <lastmod>2026-09-01T12:05:37+00:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://medcityoverseas.com/destination/mauritius</loc>
-    <lastmod>2026-09-01T12:05:37+00:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://medcityoverseas.com/destination/china</loc>
-    <lastmod>2026-09-01T12:05:37+00:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://medcityoverseas.com/destination/belgium</loc>
-    <lastmod>2026-09-01T12:05:37+00:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://medcityoverseas.com/destination/russia</loc>
-    <lastmod>2026-09-01T12:05:37+00:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://medcityoverseas.com/destination/south-korea</loc>
-    <lastmod>2026-09-01T12:05:37+00:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://medcityoverseas.com/destination/egypt</loc>
-    <lastmod>2026-09-01T12:05:37+00:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://medcityoverseas.com/destination/kyrgyzstan</loc>
-    <lastmod>2026-09-01T12:05:37+00:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://medcityoverseas.com/destination/azerbaijan</loc>
-    <lastmod>2026-09-01T12:05:37+00:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://medcityoverseas.com/destination/moldova</loc>
-    <lastmod>2026-09-01T12:05:37+00:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://medcityoverseas.com/destination/portugal</loc>
-    <lastmod>2026-09-01T12:05:37+00:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://medcityoverseas.com/destination/latvia</loc>
-    <lastmod>2026-09-01T12:05:37+00:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
   </url>
   <url>
     <loc>https://medcityoverseas.com/study-in-germany</loc>
@@ -637,241 +313,241 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://medcityoverseas.com/universities/germany</loc>
+    <loc>https://medcityoverseas.com/universities-in-germany</loc>
     <lastmod>2026-09-01T12:05:37+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://medcityoverseas.com/universities/austria</loc>
+    <loc>https://medcityoverseas.com/universities-in-austria</loc>
     <lastmod>2026-09-01T12:05:37+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://medcityoverseas.com/universities/usa</loc>
+    <loc>https://medcityoverseas.com/universities-in-usa</loc>
     <lastmod>2026-09-01T12:05:37+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://medcityoverseas.com/universities/australia</loc>
+    <loc>https://medcityoverseas.com/universities-in-australia</loc>
     <lastmod>2026-09-01T12:05:37+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://medcityoverseas.com/universities/malta</loc>
+    <loc>https://medcityoverseas.com/universities-in-malta</loc>
     <lastmod>2026-09-01T12:05:37+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://medcityoverseas.com/universities/uk</loc>
+    <loc>https://medcityoverseas.com/universities-in-uk</loc>
     <lastmod>2026-09-01T12:05:37+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://medcityoverseas.com/universities/ireland</loc>
+    <loc>https://medcityoverseas.com/universities-in-ireland</loc>
     <lastmod>2026-09-01T12:05:37+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://medcityoverseas.com/universities/new-zealand</loc>
+    <loc>https://medcityoverseas.com/universities-in-new-zealand</loc>
     <lastmod>2026-09-01T12:05:37+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://medcityoverseas.com/universities/georgia</loc>
+    <loc>https://medcityoverseas.com/universities-in-georgia</loc>
     <lastmod>2026-09-01T12:05:37+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://medcityoverseas.com/universities/france</loc>
+    <loc>https://medcityoverseas.com/universities-in-france</loc>
     <lastmod>2026-09-01T12:05:37+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://medcityoverseas.com/universities/sweden</loc>
+    <loc>https://medcityoverseas.com/universities-in-sweden</loc>
     <lastmod>2026-09-01T12:05:37+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://medcityoverseas.com/universities/malaysia</loc>
+    <loc>https://medcityoverseas.com/universities-in-malaysia</loc>
     <lastmod>2026-09-01T12:05:37+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://medcityoverseas.com/universities/italy</loc>
+    <loc>https://medcityoverseas.com/universities-in-italy</loc>
     <lastmod>2026-09-01T12:05:37+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://medcityoverseas.com/universities/poland</loc>
+    <loc>https://medcityoverseas.com/universities-in-poland</loc>
     <lastmod>2026-09-01T12:05:37+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://medcityoverseas.com/universities/dubai-uae</loc>
+    <loc>https://medcityoverseas.com/universities-in-dubai-uae</loc>
     <lastmod>2026-09-01T12:05:37+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://medcityoverseas.com/universities/singapore</loc>
+    <loc>https://medcityoverseas.com/universities-in-singapore</loc>
     <lastmod>2026-09-01T12:05:37+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://medcityoverseas.com/universities/switzerland</loc>
+    <loc>https://medcityoverseas.com/universities-in-switzerland</loc>
     <lastmod>2026-09-01T12:05:37+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://medcityoverseas.com/universities/uzbekistan</loc>
+    <loc>https://medcityoverseas.com/universities-in-uzbekistan</loc>
     <lastmod>2026-09-01T12:05:37+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://medcityoverseas.com/universities/kazakhstan</loc>
+    <loc>https://medcityoverseas.com/universities-in-kazakhstan</loc>
     <lastmod>2026-09-01T12:05:37+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://medcityoverseas.com/universities/spain</loc>
+    <loc>https://medcityoverseas.com/universities-in-spain</loc>
     <lastmod>2026-09-01T12:05:37+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://medcityoverseas.com/universities/canada</loc>
+    <loc>https://medcityoverseas.com/universities-in-canada</loc>
     <lastmod>2026-09-01T12:05:37+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://medcityoverseas.com/universities/finland</loc>
+    <loc>https://medcityoverseas.com/universities-in-finland</loc>
     <lastmod>2026-09-01T12:05:37+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://medcityoverseas.com/universities/lithuania</loc>
+    <loc>https://medcityoverseas.com/universities-in-lithuania</loc>
     <lastmod>2026-09-01T12:05:37+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://medcityoverseas.com/universities/netherlands</loc>
+    <loc>https://medcityoverseas.com/universities-in-netherlands</loc>
     <lastmod>2026-09-01T12:05:37+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://medcityoverseas.com/universities/hungary</loc>
+    <loc>https://medcityoverseas.com/universities-in-hungary</loc>
     <lastmod>2026-09-01T12:05:37+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://medcityoverseas.com/universities/denmark</loc>
+    <loc>https://medcityoverseas.com/universities-in-denmark</loc>
     <lastmod>2026-09-01T12:05:37+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://medcityoverseas.com/universities/japan</loc>
+    <loc>https://medcityoverseas.com/universities-in-japan</loc>
     <lastmod>2026-09-01T12:05:37+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://medcityoverseas.com/universities/cyprus</loc>
+    <loc>https://medcityoverseas.com/universities-in-cyprus</loc>
     <lastmod>2026-09-01T12:05:37+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://medcityoverseas.com/universities/vietnam</loc>
+    <loc>https://medcityoverseas.com/universities-in-vietnam</loc>
     <lastmod>2026-09-01T12:05:37+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://medcityoverseas.com/universities/mauritius</loc>
+    <loc>https://medcityoverseas.com/universities-in-mauritius</loc>
     <lastmod>2026-09-01T12:05:37+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://medcityoverseas.com/universities/china</loc>
+    <loc>https://medcityoverseas.com/universities-in-china</loc>
     <lastmod>2026-09-01T12:05:37+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://medcityoverseas.com/universities/belgium</loc>
+    <loc>https://medcityoverseas.com/universities-in-belgium</loc>
     <lastmod>2026-09-01T12:05:37+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://medcityoverseas.com/universities/russia</loc>
+    <loc>https://medcityoverseas.com/universities-in-russia</loc>
     <lastmod>2026-09-01T12:05:37+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://medcityoverseas.com/universities/south-korea</loc>
+    <loc>https://medcityoverseas.com/universities-in-south-korea</loc>
     <lastmod>2026-09-01T12:05:37+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://medcityoverseas.com/universities/egypt</loc>
+    <loc>https://medcityoverseas.com/universities-in-egypt</loc>
     <lastmod>2026-09-01T12:05:37+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://medcityoverseas.com/universities/kyrgyzstan</loc>
+    <loc>https://medcityoverseas.com/universities-in-kyrgyzstan</loc>
     <lastmod>2026-09-01T12:05:37+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://medcityoverseas.com/universities/azerbaijan</loc>
+    <loc>https://medcityoverseas.com/universities-in-azerbaijan</loc>
     <lastmod>2026-09-01T12:05:37+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://medcityoverseas.com/universities/moldova</loc>
+    <loc>https://medcityoverseas.com/universities-in-moldova</loc>
     <lastmod>2026-09-01T12:05:37+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://medcityoverseas.com/universities/portugal</loc>
+    <loc>https://medcityoverseas.com/universities-in-portugal</loc>
     <lastmod>2026-09-01T12:05:37+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://medcityoverseas.com/universities/latvia</loc>
+    <loc>https://medcityoverseas.com/universities-in-latvia</loc>
     <lastmod>2026-09-01T12:05:37+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>

@@ -10,7 +10,7 @@ const SITE_URL = "https://medcityoverseas.com";
 const PAGE_PATH = "/contact-us";
 const PAGE_URL = `${SITE_URL}${PAGE_PATH}`;
 
-const OG_IMAGE_PATH = "/images/contact-us-og.webp";
+const OG_IMAGE_PATH = "/og-images/contact.webp";
 const OG_IMAGE_URL = `${SITE_URL}${OG_IMAGE_PATH}`;
 
 const PAGE_TITLE = "Contact Study Abroad Consultants in Kerala";

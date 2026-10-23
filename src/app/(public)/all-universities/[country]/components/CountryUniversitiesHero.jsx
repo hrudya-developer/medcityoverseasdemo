@@ -1,5 +1,7 @@
 import Link from "next/link";
 
+import { createSlug } from "@/lib/slug";
+
 import {
   ArrowRight,
   Building2,
@@ -13,10 +15,9 @@ export default function CountryUniversitiesHero({
   countryName,
   universityCount,
 }) {
-  const countrySlug = countryName
-    ?.toLowerCase()
-    .trim()
-    .replace(/\s+/g, "-");
+  // Same slug rules as the rest of the site ("Dubai - UAE" ->
+  // "dubai-uae"), so the "study in" link does not break.
+  const countrySlug = createSlug(countryName || "");
 
   return (
     <section className="relative isolate overflow-hidden bg-[#280653] text-white">

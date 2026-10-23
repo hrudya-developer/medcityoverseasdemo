@@ -6,7 +6,8 @@ import {
   ArrowRight,
   GraduationCap,
 } from "lucide-react";
-import { notFound } from "next/navigation";
+import { cache } from "react";
+import { notFound, permanentRedirect } from "next/navigation";
 import { createSlug } from "@/lib/slug";
 import { getGermanProgramsList } from "@/lib/germanPrograms";
 
@@ -96,8 +97,20 @@ export async function generateMetadata({
       course?.description ||
       `Explore ${programName} in Germany, including eligibility, benefits, career opportunities and application guidance with Medcity Overseas.`;
 
+  // One canonical URL per program, built from its name, so the
+  // numeric /study-in-germany/1 and the name URL are not both indexed.
+  const programNameSlug =
+      createSlug(programName);
+
+  const canonicalSlug =
+      programNameSlug &&
+      (await resolveProgramId(programNameSlug)) ===
+          String(programId)
+          ? programNameSlug
+          : slug;
+
   const canonical =
-      `https://medcityoverseas.com/study-in-germany/${slug}`;
+      `https://medcityoverseas.com/study-in-germany/${canonicalSlug}`;
 
   return {
       title: {
@@ -139,7 +152,7 @@ export async function generateMetadata({
    FETCH GERMAN PROGRAM DETAILS
 ========================================================= */
 
-async function getGermanCourseDetails(id) {
+async function fetchGermanCourseDetails(id) {
   if (!API_KEY) {
     console.error("OVERSEAS_API_KEY is missing");
     return null;
@@ -170,11 +183,6 @@ async function getGermanCourseDetails(id) {
 
     const text = await response.text();
 
-    console.log(
-      "German program API status:",
-      response.status
-    );
-
     if (!response.ok) {
       console.error(
         "German program API failed:",
@@ -204,6 +212,9 @@ async function getGermanCourseDetails(id) {
     return null;
   }
 }
+
+// Memoised per request so metadata and the page share one call.
+const getGermanCourseDetails = cache(fetchGermanCourseDetails);
 
 /* =========================================================
    IMAGE HELPER
@@ -959,6 +970,10 @@ export default async function GermanProgramPage({
     programSlug
   );
 
+  if (!programId) {
+    notFound();
+  }
+
   const apiData =
     await getGermanCourseDetails(
       programId
@@ -985,6 +1000,28 @@ export default async function GermanProgramPage({
     );
 
     notFound();
+  }
+
+  // Old numeric URLs (/study-in-germany/3, also reached from
+  // /german-programs/3) move permanently to the name URL.
+  const nameSlug = createSlug(
+    course?.name ||
+    course?.program_name ||
+    course?.title ||
+    ""
+  );
+
+  // Only redirect when the name URL resolves back to this same
+  // program, so the redirect can never land on a 404.
+  if (
+    /^\d+$/.test(programSlug) &&
+    nameSlug &&
+    (await resolveProgramId(nameSlug)) ===
+      String(programId)
+  ) {
+    permanentRedirect(
+      `/study-in-germany/${nameSlug}`
+    );
   }
 
   return (

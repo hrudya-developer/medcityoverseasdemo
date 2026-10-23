@@ -217,20 +217,14 @@ export async function generateMetadata({
         "Education",
     };
   } catch (error) {
+    // Same as the page: an API failure must not mark a real
+    // destination page as noindex.
     console.error(
       "Destination metadata error:",
       error
     );
 
-    return {
-      title:
-        "Destination Not Found",
-
-      robots: {
-        index: false,
-        follow: false,
-      },
-    };
+    throw error;
   }
 }
 
@@ -252,12 +246,15 @@ export default async function DestinationDetailsPage({
         slug
       );
   } catch (error) {
+    // A failed API call (timeout, rate limit) is not a missing
+    // destination. Rethrow so a revalidation keeps the last good
+    // page instead of caching a 404 for an hour.
     console.error(
       "Destination page error:",
       error
     );
 
-    notFound();
+    throw error;
   }
 
   if (!destination) {

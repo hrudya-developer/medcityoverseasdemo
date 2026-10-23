@@ -367,16 +367,10 @@ export const resolveUniversityByExactId =
    /universities/coventry-university
 ========================================================= */
 
-export const resolveUniversityByNameAndCountry =
-    cache(
-        async (
-            rawSlug
-        ) => {
-            const context =
-                await getUniversitySlugContext(
-                    rawSlug
-                );
-
+async function resolveWithContext(
+    context
+) {
+        {
             if (
                 !context ||
                 !context.nameSlug
@@ -645,5 +639,52 @@ export const resolveUniversityByNameAndCountry =
             }
 
             return selected;
+        }
+}
+
+/*
+ * Many university names end in a country or city that is also a
+ * destination ("University of Malta", "Monash University Malaysia",
+ * "National College of Ireland"). Try the whole slug as the name
+ * first; only fall back to the old "<name>-<country>" reading when
+ * that finds nothing. Otherwise these pages 404 on direct visits.
+ */
+export const resolveUniversityByNameAndCountry =
+    cache(
+        async (
+            rawSlug
+        ) => {
+            const context =
+                await getUniversitySlugContext(
+                    rawSlug
+                );
+
+            if (!context) {
+                return null;
+            }
+
+            if (
+                context.countrySlug &&
+                context.slug
+            ) {
+                const fullNameMatch =
+                    await resolveWithContext({
+                        ...context,
+                        nameSlug:
+                            context.slug,
+                        countryId: "",
+                        countryName: "",
+                        countrySlug: "",
+                        destination: null,
+                    });
+
+                if (fullNameMatch) {
+                    return fullNameMatch;
+                }
+            }
+
+            return resolveWithContext(
+                context
+            );
         }
     );
