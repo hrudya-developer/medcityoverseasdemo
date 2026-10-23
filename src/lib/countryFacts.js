@@ -6,8 +6,11 @@ import { query, queryOne } from "@/lib/db";
 
 /*
  * Facts for a country's university page, counted from our own database:
- * how many universities and courses we list, the main student cities
- * and the study levels on offer. Nothing here is estimated.
+ * how many universities and courses we list, the main student cities,
+ * the study levels on offer and the most common course durations (as
+ * written in the course records). `latest` is the newest university or
+ * course record, for the page's last updated date. Nothing here is
+ * estimated.
  */
 export const getCountryFacts = cache(async (countryId) => {
     const id = String(countryId ?? "").trim();
@@ -16,13 +19,18 @@ export const getCountryFacts = cache(async (countryId) => {
         return null;
     }
 
-    const [totals, cities, levels] = await Promise.all([
+    const [totals, cities, levels, durations] = await Promise.all([
         queryOne(
             `SELECT
                 (SELECT COUNT(*) FROM tb_universities u WHERE u.d_id = ? AND u.status = '1') AS universities,
                 (SELECT COUNT(*) FROM tb_courses c JOIN tb_universities u ON u.id = c.u_id
-                  WHERE u.d_id = ? AND u.status = '1' AND c.status = '1') AS courses`,
-            [id, id]
+                  WHERE u.d_id = ? AND u.status = '1' AND c.status = '1') AS courses,
+                GREATEST(
+                    COALESCE((SELECT MAX(u.created_at) FROM tb_universities u WHERE u.d_id = ? AND u.status = '1'), '1970-01-01'),
+                    COALESCE((SELECT MAX(c.created_at) FROM tb_courses c JOIN tb_universities u ON u.id = c.u_id
+                      WHERE u.d_id = ? AND u.status = '1' AND c.status = '1'), '1970-01-01')
+                ) AS latest`,
+            [id, id, id, id]
         ),
         query(
             `SELECT TRIM(location) AS city, COUNT(*) AS n FROM tb_universities
@@ -38,13 +46,29 @@ export const getCountryFacts = cache(async (countryId) => {
              GROUP BY TRIM(c.level) ORDER BY n DESC LIMIT 5`,
             [id]
         ),
+        query(
+            `SELECT TRIM(c.duration) AS duration, COUNT(*) AS n FROM tb_courses c
+             JOIN tb_universities u ON u.id = c.u_id
+             WHERE u.d_id = ? AND u.status = '1' AND c.status = '1'
+               AND c.duration IS NOT NULL AND TRIM(c.duration) <> ''
+             GROUP BY TRIM(c.duration) ORDER BY n DESC LIMIT 4`,
+            [id]
+        ),
     ]);
+
+    const latest = totals?.latest instanceof Date
+        ? totals.latest
+        : totals?.latest
+          ? new Date(String(totals.latest).replace(" ", "T"))
+          : null;
 
     return {
         universities: Number(totals?.universities) || 0,
         courses: Number(totals?.courses) || 0,
         cities: cities.map((row) => ({ name: row.city, count: Number(row.n) })),
         levels: levels.map((row) => ({ name: row.level, count: Number(row.n) })),
+        durations: durations.map((row) => ({ name: row.duration, count: Number(row.n) })),
+        latest: latest && !Number.isNaN(latest.getTime()) && latest.getFullYear() > 1970 ? latest : null,
     };
 });
 

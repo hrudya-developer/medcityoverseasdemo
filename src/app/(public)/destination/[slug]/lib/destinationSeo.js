@@ -83,6 +83,11 @@ export function getDestinationSeo({
     .replace(/\s+/g, " ")
     .trim();
 
+  // A short supplied description makes a thin search snippet.
+  if (description.length < 120) {
+    description = defaultDescription;
+  }
+
   if (description.length > 160) {
     description = `${description
       .slice(0, 157)

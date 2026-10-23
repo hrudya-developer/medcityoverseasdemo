@@ -7,6 +7,34 @@ import WhyStudyGermany from "./components/WhyStudyGermany";
 import StudyInGermanyHero from "./components/StudyInGermanyHero";
 import StudyInGermanyFAQ from "./components/StudyInGermanyFAQ";
 import { applySeoOverrides } from "@/lib/pageSeo";
+import Link from "next/link";
+import { faqs } from "./components/studyInGermanyFaqData";
+import OfficialSources from "@/components/seo/OfficialSources";
+import QuestionAnswer from "@/components/seo/QuestionAnswer";
+import QuickAnswer from "@/components/seo/QuickAnswer";
+import { getCountryFacts } from "@/lib/countryFacts";
+import { getDestinationSummaries } from "@/lib/destinationSummary";
+import { OFFICIAL_SOURCES } from "@/lib/officialSources";
+import { createSlug } from "@/lib/slug";
+import { faqPageNode, joinList, latestDate, organizationNode, websiteNode } from "@/lib/seoSchema";
+
+// The date this page's text was last changed; the page shows this or
+// its newest German university or course record, whichever is later.
+const PAGE_UPDATED = "2026-10-23";
+
+const GERMANY_SOURCES = [
+    ...OFFICIAL_SOURCES.germany,
+    {
+        label: "DAAD (German Academic Exchange Service)",
+        href: "https://www.daad.de/en/",
+        note: "Admission rules, scholarships and the admission database for international students.",
+    },
+    {
+        label: "uni-assist",
+        href: "https://www.uni-assist.de/en/",
+        note: "The application service many German universities use for international applicants.",
+    },
+];
 
 /* =========================================================
    SEO CONSTANTS
@@ -28,7 +56,7 @@ const PAGE_TITLE =
     "Study in Germany from Kerala | Ausbildung, Nursing & Courses";
 
 const PAGE_DESCRIPTION =
-    "Study in Germany from Kerala with Medcity Overseas. Explore university courses, Ausbildung programs, nursing pathways, eligibility, costs, admissions, student visas and application guidance.";
+    "Study in Germany from Kerala with Medcity Overseas: university courses, Ausbildung, nursing pathways, eligibility, admissions and student visa guidance.";
 
 const OG_IMAGE =
     `${SITE_URL}/og-images/study-in-germany.webp`;
@@ -337,6 +365,32 @@ export default async function GermanProgramsPage() {
             ? programs
             : [];
 
+    const germany =
+        (await getDestinationSummaries()).find(
+            (row) => row.slug === "germany"
+        );
+
+    const facts =
+        germany
+            ? await getCountryFacts(germany.id)
+            : null;
+
+    const dateModified =
+        latestDate(
+            facts?.latest,
+            PAGE_UPDATED
+        );
+
+    const programLinks =
+        validPrograms
+            .map((program) => {
+                const name = String(program?.name || program?.title || "").trim();
+                const slug = createSlug(name);
+
+                return name && slug ? { name, href: `/study-in-germany/${slug}` } : null;
+            })
+            .filter(Boolean);
+
     /* =====================================================
        DYNAMIC PROGRAM LIST SCHEMA
     ===================================================== */
@@ -402,9 +456,28 @@ export default async function GermanProgramsPage() {
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{
                     __html:
-                        serializeJsonLd(
-                            webPageJsonLd
-                        ),
+                        serializeJsonLd({
+                            "@context": "https://schema.org",
+                            "@graph": [
+                                organizationNode(),
+                                websiteNode(),
+                                faqPageNode(PAGE_PATH, faqs),
+                            ],
+                        }),
+                }}
+            />
+
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{
+                    __html:
+                        serializeJsonLd({
+                            ...webPageJsonLd,
+                            author: {
+                                "@id": `${SITE_URL}/#organization`,
+                            },
+                            dateModified,
+                        }),
                 }}
             />
 
@@ -445,13 +518,52 @@ export default async function GermanProgramsPage() {
                 PAGE
             ============================================= */}
 
-            <main
+            <div
                 className="
                     min-h-screen
                     bg-slate-50
                 "
             >
                 <StudyInGermanyHero />
+
+                <div className="space-y-12 bg-white py-12">
+                    <QuickAnswer updated={dateModified}>
+                        {`Germany offers university degrees, paid vocational training (Ausbildung) and voluntary services for students from India${
+                            programLinks.length ? `. Medcity Overseas guides students through ${joinList(programLinks.slice(0, 5).map((program) => program.name))}` : ""
+                        }${
+                            facts?.universities > 0
+                                ? `, and lists ${facts.universities} ${facts.universities === 1 ? "university" : "universities"} in Germany${facts.courses > 0 ? ` with ${facts.courses.toLocaleString("en-IN")} courses` : ""}`
+                                : ""
+                        }. Most pathways need German language skills, and our counsellors in Kerala help you choose and apply.`}
+                    </QuickAnswer>
+
+                    <QuestionAnswer
+                        eyebrow="Choosing a pathway"
+                        question="Which Germany programme is right for you?"
+                        answer="The right Germany programme depends on your education and goals. University study suits students who want a bachelor's or master's degree, Ausbildung suits those who want paid vocational training, and voluntary services such as FSJ or BFD give work experience in Germany. Most pathways need German language skills."
+                        points={programLinks.map((program) => (
+                            <Link key={program.href} href={program.href} className="font-bold text-slate-900 hover:text-primary hover:underline">
+                                {program.name} in Germany
+                            </Link>
+                        ))}
+                    />
+
+                    <p className="mx-auto max-w-5xl px-4 text-sm leading-7 text-slate-600 sm:px-6 lg:px-8">
+                        Browse{" "}
+                        <Link href="/universities-in-germany" className="font-bold text-primary hover:underline">
+                            universities in Germany
+                        </Link>
+                        , search the{" "}
+                        <Link href="/courses" className="font-bold text-primary hover:underline">
+                            course finder
+                        </Link>{" "}
+                        or{" "}
+                        <Link href="/contact-us" className="font-bold text-primary hover:underline">
+                            book free counselling
+                        </Link>
+                        .
+                    </p>
+                </div>
 
                 <WhyStudyGermany />
 
@@ -597,7 +709,13 @@ export default async function GermanProgramsPage() {
                 </section>
 
                 <StudyInGermanyFAQ />
-            </main>
+
+                <OfficialSources
+                    className="py-14"
+                    title="Official sources for studying in Germany"
+                    links={GERMANY_SOURCES}
+                />
+            </div>
         </>
     );
 }

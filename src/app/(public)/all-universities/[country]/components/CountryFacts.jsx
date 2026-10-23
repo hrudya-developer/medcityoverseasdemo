@@ -48,6 +48,19 @@ export default function CountryFacts({ countryName, countrySlug, facts, faqs }) 
                     <Stat icon={GraduationCap} value={facts.levels.length} label="Study levels" />
                 </div>
 
+                {facts.durations?.length > 0 && (
+                    <div className="mt-8">
+                        <h3 className="font-bold text-slate-900">Most common course durations</h3>
+                        <ul className="mt-3 flex flex-wrap gap-2">
+                            {facts.durations.map((duration) => (
+                                <li key={duration.name} className="rounded-full border border-slate-200 bg-white px-3 py-1.5 text-sm text-slate-700">
+                                    {duration.name} <span className="text-slate-400">({duration.count} {duration.count === 1 ? "course" : "courses"})</span>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                )}
+
                 {facts.cities.length > 0 && (
                     <div className="mt-8">
                         <h3 className="font-bold text-slate-900">Cities with the most universities</h3>

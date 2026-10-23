@@ -23,6 +23,14 @@ import {
   serializeJsonLd,
 } from "./lib/destinationSchema";
 import { withSeoOverrides } from "@/lib/pageSeo";
+import { getCountryFacts } from "@/lib/countryFacts";
+import { latestDate } from "@/lib/seoSchema";
+import { createDestinationFaqs } from "./lib/destinationFaqs";
+import {
+  DESTINATION_TEMPLATE_UPDATED,
+  DestinationInShort,
+  DestinationLinks,
+} from "./components/DestinationSeoSections";
 
 export const revalidate =
   3600;
@@ -285,11 +293,26 @@ export default async function DestinationDetailsPage({
       image,
     });
 
+  const facts =
+    await getCountryFacts(
+      destinationId
+    );
+
+  const dateModified =
+    latestDate(
+      facts?.latest,
+      DESTINATION_TEMPLATE_UPDATED
+    );
+
   const structuredData =
     createDestinationSchema({
       seo,
       country,
       universities,
+      dateModified,
+      faqs: createDestinationFaqs(
+        seo.countryName
+      ),
     });
 
   return (
@@ -321,7 +344,20 @@ export default async function DestinationDetailsPage({
         image={image}
         flag={flag}
         seo={seo}
-      />
+        summary={
+          <DestinationInShort
+            countryName={seo.countryName}
+            country={country}
+            facts={facts}
+            updated={dateModified}
+          />
+        }
+      >
+        <DestinationLinks
+          countryName={seo.countryName}
+          destinationSlug={destinationSlug}
+        />
+      </DestinationDetailsClient>
     </>
   );
 }

@@ -16,6 +16,14 @@ import CountryUniversitiesHero from "./components/CountryUniversitiesHero";
 import UniversitiesSection from "./components/UniversitiesSection";
 import CountryFacts from "./components/CountryFacts";
 import { countryFaqs, getCountryFacts } from "@/lib/countryFacts";
+import OfficialSources from "@/components/seo/OfficialSources";
+import QuickAnswer from "@/components/seo/QuickAnswer";
+import { officialSourcesFor } from "@/lib/officialSources";
+import { joinList, latestDate, organizationNode, websiteNode } from "@/lib/seoSchema";
+
+// The date the page blocks were last changed; a page shows this or its
+// newest university or course record, whichever is later.
+const TEMPLATE_UPDATED = "2026-10-23";
 import { withSeoOverrides } from "@/lib/pageSeo";
 
 /* =========================================================
@@ -623,6 +631,21 @@ export default async function UniversitiesByCountryPage({
     const pageUrl =
         `${SITE_URL}/universities-in-${countrySlug}`;
 
+    const dateModified =
+        latestDate(
+            facts?.latest,
+            TEMPLATE_UPDATED
+        );
+
+    const inShort =
+        facts && facts.universities > 0
+            ? `Medcity Overseas lists ${facts.universities} ${facts.universities === 1 ? "university" : "universities"} in ${countryName}${
+                  facts.courses > 0 ? ` with ${facts.courses.toLocaleString("en-IN")} courses between them` : ""
+              }${
+                  facts.cities.length ? `, in cities such as ${joinList(facts.cities.slice(0, 3).map((city) => city.name))}` : ""
+              }. Compare universities in ${countryName} by location and courses, then book free counselling to shortlist and apply.`
+            : `Explore universities in ${countryName} for Indian students, compare their courses and book free counselling with Medcity Overseas to shortlist and apply.`;
+
     /* =====================================================
        COLLECTION PAGE SCHEMA
     ===================================================== */
@@ -669,6 +692,13 @@ export default async function UniversitiesByCountryPage({
             "@id":
                 `${SITE_URL}/#organization`,
         },
+
+        author: {
+            "@id":
+                `${SITE_URL}/#organization`,
+        },
+
+        dateModified,
 
         breadcrumb: {
             "@id":
@@ -854,6 +884,21 @@ export default async function UniversitiesByCountryPage({
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{
                     __html:
+                        serializeJsonLd({
+                            "@context":
+                                "https://schema.org",
+                            "@graph": [
+                                organizationNode(),
+                                websiteNode(),
+                            ],
+                        }),
+                }}
+            />
+
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{
+                    __html:
                         serializeJsonLd(
                             pageJsonLd
                         ),
@@ -907,7 +952,7 @@ export default async function UniversitiesByCountryPage({
                 Functionality and UI remain unchanged.
             ============================================= */}
 
-            <main
+            <div
                 className="
                     min-h-screen
                     overflow-hidden
@@ -922,6 +967,13 @@ export default async function UniversitiesByCountryPage({
                         universityItems.length
                     }
                 />
+
+                <QuickAnswer
+                    updated={dateModified}
+                    className="pt-10"
+                >
+                    {inShort}
+                </QuickAnswer>
 
                 <UniversitiesSection
                     countryName={
@@ -941,7 +993,13 @@ export default async function UniversitiesByCountryPage({
                     facts={facts}
                     faqs={faqs}
                 />
-            </main>
+
+                <OfficialSources
+                    className="py-14"
+                    title={`Official sources for studying in ${countryName}`}
+                    links={officialSourcesFor(countrySlug)}
+                />
+            </div>
         </>
     );
 }

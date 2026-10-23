@@ -59,6 +59,8 @@ export default function DestinationDetailsClient({
   image,
   flag,
   seo,
+  summary = null,
+  children = null,
 }) {
   const countryName =
     useMemo(
@@ -77,7 +79,7 @@ export default function DestinationDetailsClient({
     image || DEFAULT_IMAGE;
 
   return (
-    <main className="overflow-hidden bg-[#f8fafc]">
+    <div className="overflow-hidden bg-[#f8fafc]">
       <DestinationHero
         country={country}
         countryName={
@@ -91,6 +93,9 @@ export default function DestinationDetailsClient({
       <DestinationQuickInfo
         country={country}
       />
+
+      {/* Server-rendered "In short" box and direct answer */}
+      {summary}
 
       <DestinationAbout
         country={country}
@@ -138,7 +143,10 @@ export default function DestinationDetailsClient({
   countryName={countryName}
 />
       </section>
-    </main>
+
+      {/* Server-rendered links and official sources */}
+      {children}
+    </div>
   );
 }
 
@@ -173,7 +181,7 @@ function DestinationQuickInfo({
       label: "Capital",
       value: safeText(
         country?.capital,
-        "N/A"
+        "Not recorded"
       ),
     },
 
@@ -184,7 +192,7 @@ function DestinationQuickInfo({
         country?.language ??
           country
             ?.official_language,
-        "N/A"
+        "Not recorded"
       ),
     },
 
@@ -192,7 +200,7 @@ function DestinationQuickInfo({
       icon: Banknote,
       label: "Currency",
       value:
-        currency || "N/A",
+        currency || "Not recorded",
     },
 
     {
@@ -202,7 +210,7 @@ function DestinationQuickInfo({
         country?.diallingcode ??
           country?.dialling_code ??
           country?.phone_code,
-        "N/A"
+        "Not recorded"
       ),
     },
 
@@ -212,7 +220,7 @@ function DestinationQuickInfo({
       value: safeText(
         country?.temperature ??
           country?.climate,
-        "N/A"
+        "Not recorded"
       ),
     },
 
@@ -221,7 +229,7 @@ function DestinationQuickInfo({
       label: "Continent",
       value: safeText(
         country?.continent,
-        "N/A"
+        "Not recorded"
       ),
     },
   ];
@@ -231,14 +239,14 @@ function DestinationQuickInfo({
       aria-label="Destination information"
       className="relative z-10 mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8"
     >
-      <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-6">
+      <ul className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-6">
         {items.map(
           ({
             icon: Icon,
             label,
             value,
           }) => (
-            <article
+            <li
               key={label}
               className="group rounded-2xl border border-slate-200/80 bg-white p-5 text-center shadow-[0_10px_30px_rgba(15,23,42,0.05)] transition-all duration-300 hover:-translate-y-1 hover:border-primary/20 hover:shadow-lg"
             >
@@ -256,10 +264,10 @@ function DestinationQuickInfo({
               <p className="mt-1 break-words text-sm font-black text-darkPrimary">
                 {value}
               </p>
-            </article>
+            </li>
           )
         )}
-      </div>
+      </ul>
     </section>
   );
 }

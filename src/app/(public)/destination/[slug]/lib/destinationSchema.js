@@ -1,3 +1,5 @@
+import { faqPageNode, organizationNode, websiteNode } from "@/lib/seoSchema";
+
 import {
   SITE_URL,
 } from "./destinationSeo";
@@ -6,12 +8,22 @@ export function createDestinationSchema({
   seo,
   country,
   universities = [],
+  dateModified = "",
+  faqs = [],
 }) {
   return {
     "@context":
       "https://schema.org",
 
     "@graph": [
+      organizationNode(),
+
+      websiteNode(),
+
+      ...(faqs.length
+        ? [faqPageNode(seo.pagePath, faqs)]
+        : []),
+
       {
         "@type":
           "WebPage",
@@ -43,6 +55,15 @@ export function createDestinationSchema({
           "@id":
             `${SITE_URL}/#website`,
         },
+
+        author: {
+          "@id":
+            `${SITE_URL}/#organization`,
+        },
+
+        ...(dateModified && {
+          dateModified,
+        }),
 
         publisher: {
           "@id":

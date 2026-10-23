@@ -158,26 +158,26 @@ function normalizeCountry(
 
     capital: toSafeText(
       country?.capital,
-      "N/A"
+      ""
     ),
 
     language: toSafeText(
       country?.language ??
         country?.official_language ??
         country?.primary_language,
-      "N/A"
+      ""
     ),
 
     official_language:
       toSafeText(
         country?.official_language ??
           country?.language,
-        "N/A"
+        ""
       ),
 
     currency: toSafeText(
       country?.currency,
-      "N/A"
+      ""
     ),
 
     currency_symbol:
@@ -191,19 +191,19 @@ function normalizeCountry(
         country?.diallingcode ??
           country?.dialling_code ??
           country?.phone_code,
-        "N/A"
+        ""
       ),
 
     temperature:
       toSafeText(
         country?.temperature ??
           country?.climate,
-        "N/A"
+        ""
       ),
 
     continent: toSafeText(
       country?.continent,
-      "N/A"
+      ""
     ),
 
     description:
