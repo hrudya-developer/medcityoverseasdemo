@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 
+import { legacyFetch } from "@/lib/legacy";
+
 const API_URL =
     "https://overseas.technocitysolutions.com/public/api/getHomeResponses";
 
@@ -14,7 +16,7 @@ export async function GET() {
 
         formData.append("uid", "0");
 
-        const response = await fetch(API_URL, {
+        const response = await legacyFetch(API_URL, {
             method: "POST",
             body: formData,
             cache: "no-store",

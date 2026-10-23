@@ -1,11 +1,13 @@
 import { NextResponse } from "next/server";
 
+import { legacyFetch } from "@/lib/legacy";
+
 const API_URL =
     "https://overseas.technocitysolutions.com/public/api/getServices";
 
 export async function GET() {
     try {
-        const response = await fetch(API_URL, {
+        const response = await legacyFetch(API_URL, {
             method: "POST",
             headers: {
                 Accept: "application/json",

@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 
+import { legacyFetch } from "@/lib/legacy";
+
 const API_URL =
     "https://overseas.technocitysolutions.com/public/api/getDestinationDetails";
 
@@ -57,7 +59,7 @@ export async function POST(request) {
             });
 
         const apiResponse =
-            await fetch(API_URL, {
+            await legacyFetch(API_URL, {
                 method: "POST",
 
                 headers: {

@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 
+import { legacyFetch } from "@/lib/legacy";
+
 const API_KEY =
   process.env.OVERSEAS_API_KEY;
 
@@ -107,8 +109,7 @@ export async function GET(request) {
           );
 
           const response =
-            await fetch(
-              SEARCH_API,
+            await legacyFetch(SEARCH_API,
               {
                 method: "POST",
                 body: formData,

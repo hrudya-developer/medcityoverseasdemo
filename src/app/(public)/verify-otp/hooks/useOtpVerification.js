@@ -22,7 +22,7 @@ import {
   setCredentials,
 } from "@/lib/redux/slices/authSlice";
 
-const EMPTY_OTP = ["", "", "", ""];
+const EMPTY_OTP = ["", "", "", "", "", ""];
 
 const OTP_SESSION_KEY =
   "medcity-otp-session";

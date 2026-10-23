@@ -43,14 +43,14 @@ export default function OtpInputs({
                             onPaste
                         }
                         className="
-                            h-13
-                            w-13
+                            h-12
+                            w-10
                             rounded-xl
                             border
                             border-white/20
                             bg-black/20
                             text-center
-                            text-2xl
+                            text-xl
                             font-black
                             text-white
                             outline-none
@@ -58,7 +58,8 @@ export default function OtpInputs({
                             focus:ring-4
                             focus:ring-pink-500/15
                             sm:h-14
-                            sm:w-14
+                            sm:w-12
+                            sm:text-2xl
                         "
                     />
                 )

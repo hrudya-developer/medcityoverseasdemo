@@ -1,3 +1,4 @@
+import { SESSION_COOKIE_NAME } from "@/lib/auth/session";
 import {
     getSessionUid,
     unauthorizedResponse,
@@ -5,6 +6,8 @@ import {
 // src/app/api/dashboard/student/profile/delete-profile/route.js
 
 import { NextResponse } from "next/server";
+
+import { legacyFetch } from "@/lib/legacy";
 
 export async function POST() {
     try {
@@ -49,8 +52,7 @@ export async function POST() {
         );
 
         const externalResponse =
-            await fetch(
-                "https://overseas.technocitysolutions.com/public/api/deleteAccount",
+            await legacyFetch("https://overseas.technocitysolutions.com/public/api/deleteAccount",
                 {
                     method: "POST",
                     body: formData,
@@ -113,7 +115,7 @@ export async function POST() {
             );
         }
 
-        return NextResponse.json(
+        const deleted = NextResponse.json(
             {
                 status: true,
                 msg:
@@ -124,6 +126,19 @@ export async function POST() {
                 status: 200,
             }
         );
+
+        // The account no longer exists, so end the session here too.
+        deleted.cookies.set({
+            name: SESSION_COOKIE_NAME,
+            value: "",
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            sameSite: "lax",
+            path: "/",
+            maxAge: 0,
+        });
+
+        return deleted;
     } catch (error) {
         console.error(
             "Delete account route error:",

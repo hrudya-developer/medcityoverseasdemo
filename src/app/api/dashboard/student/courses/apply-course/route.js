@@ -12,6 +12,8 @@ import {
 } from "@/lib/auth/session";
 
 
+import { legacyFetch } from "@/lib/legacy";
+
 const APPLY_COURSE_URL =
     "https://overseas.technocitysolutions.com/public/api/applyCourse";
 
@@ -179,8 +181,7 @@ export async function POST(request) {
         ================================================= */
 
         const upstreamResponse =
-            await fetch(
-                APPLY_COURSE_URL,
+            await legacyFetch(APPLY_COURSE_URL,
                 {
                     method:
                         "POST",

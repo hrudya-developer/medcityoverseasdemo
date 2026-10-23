@@ -19,7 +19,7 @@ export default function OtpHeader({
             </h2>
 
             <p className="mt-3 text-sm text-white/70">
-                Enter the four-digit code sent to
+                Enter the six-digit code sent to
             </p>
 
             <p className="mt-1 break-all font-semibold text-amber-300">

@@ -11,6 +11,8 @@ import { notFound, permanentRedirect } from "next/navigation";
 import { createSlug } from "@/lib/slug";
 import { getGermanProgramsList } from "@/lib/germanPrograms";
 
+import { legacyFetch } from "@/lib/legacy";
+
 export const dynamic = "force-dynamic";
 
 const API_URL =
@@ -172,7 +174,7 @@ async function fetchGermanCourseDetails(id) {
   formData.append("id", String(id));
 
   try {
-    const response = await fetch(API_URL, {
+    const response = await legacyFetch(API_URL, {
       method: "POST",
       body: formData,
       headers: {

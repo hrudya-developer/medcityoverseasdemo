@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 
+import { legacyFetch } from "@/lib/legacy";
+
 const API_URL =
   "https://overseas.technocitysolutions.com/public/api/getWebBlogs";
 
@@ -31,8 +33,7 @@ export async function GET() {
     );
 
     const response =
-      await fetch(
-        API_URL,
+      await legacyFetch(API_URL,
         {
           method: "POST",
           body: formData,

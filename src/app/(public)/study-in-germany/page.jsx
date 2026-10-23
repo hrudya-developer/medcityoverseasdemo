@@ -135,8 +135,10 @@ export const metadata = {
    CACHE
 ========================================================= */
 
-export const revalidate =
-    3600;
+// Read straight from the database on each request (same server, a few
+// milliseconds). Prerendering at build time cannot reach the database on
+// Hostinger's build machines and would publish an empty page.
+export const dynamic = "force-dynamic";
 
 /* =========================================================
    STRUCTURED DATA

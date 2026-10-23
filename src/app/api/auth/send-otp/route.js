@@ -1,127 +1,43 @@
 import { NextResponse } from "next/server";
 
-const SEND_OTP_URL =
-  "https://overseas.technocitysolutions.com/public/api/sendOTPforLogin";
+import {
+    LoginCodeError,
+    requestLoginCode,
+} from "@/lib/auth/loginCodes";
+
+export const runtime = "nodejs";
+
+function clientIp(request) {
+    const forwarded = request.headers.get("x-forwarded-for") || "";
+
+    return (
+        forwarded.split(",")[0].trim() ||
+        request.headers.get("x-real-ip") ||
+        ""
+    );
+}
 
 export async function POST(request) {
-  try {
-    const body = await request.json();
-
-    const email =
-      typeof body?.email === "string"
-        ? body.email.trim().toLowerCase()
-        : "";
-
-    if (!email) {
-      return NextResponse.json(
-        {
-          status: false,
-          msg: "Email is required.",
-        },
-        {
-          status: 400,
-        }
-      );
-    }
-
-    const apiKey =
-      process.env.OVERSEAS_API_KEY;
-
-    if (!apiKey) {
-      console.error(
-        "OVERSEAS_API_KEY is missing"
-      );
-
-      return NextResponse.json(
-        {
-          status: false,
-          msg: "Server configuration error.",
-        },
-        {
-          status: 500,
-        }
-      );
-    }
-
-    const formData = new FormData();
-
-    formData.append(
-      "api",
-      apiKey
-    );
-
-    formData.append(
-      "email",
-      email
-    );
-
-    const upstreamResponse = await fetch(
-      SEND_OTP_URL,
-      {
-        method: "POST",
-        body: formData,
-        cache: "no-store",
-      }
-    );
-
-    const responseText =
-      await upstreamResponse.text();
-
-    let data;
-
     try {
-      data = JSON.parse(responseText);
-    } catch {
-      console.error(
-        "Invalid send OTP response:",
-        responseText
-      );
+        const body = await request.json().catch(() => ({}));
 
-      return NextResponse.json(
-        {
-          status: false,
-          msg: "Authentication server returned an invalid response.",
-        },
-        {
-          status: 502,
+        const result = await requestLoginCode(body?.email, clientIp(request));
+
+        // The code itself is only ever sent by email.
+        return NextResponse.json({ status: true, msg: result.msg, uid: null });
+    } catch (error) {
+        if (error instanceof LoginCodeError) {
+            return NextResponse.json(
+                { status: false, msg: error.message },
+                { status: error.status }
+            );
         }
-      );
+
+        console.error("Send code route error:", error);
+
+        return NextResponse.json(
+            { status: false, msg: "Unable to send the code. Please try again." },
+            { status: 500 }
+        );
     }
-
-    // Only pass on the fields the login form needs, never the
-    // raw upstream payload (it could carry OTP details).
-    const isSuccess =
-      data?.status === true ||
-      data?.status === 1 ||
-      data?.status === "1" ||
-      data?.status === "true";
-
-    return NextResponse.json(
-      {
-        status: isSuccess,
-        msg: data?.msg || data?.message || "",
-        uid: data?.uid ?? data?.data?.uid ?? null,
-      },
-      {
-        status: upstreamResponse.ok
-          ? 200
-          : upstreamResponse.status,
-      }
-    );
-  } catch (error) {
-    console.error(
-      "Send OTP route error:",
-      error
-    );
-
-    return NextResponse.json(
-      {
-        status: false,
-        msg: "Unable to send OTP.",
-      },
-      {
-        status: 500,
-      }
-    );
-  }
 }

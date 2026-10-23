@@ -160,6 +160,16 @@ export async function POST(request) {
                 payload
             );
 
+        // A repeat of an enquiry we already hold is not an error for the
+        // visitor: the team already has it.
+        if (result?.response === "Existing Data") {
+            return NextResponse.json({
+                success: true,
+                message:
+                    "We already have your enquiry. Our team will contact you soon.",
+            });
+        }
+
         // The upstream can answer HTTP 200 with status false when it
         // rejects an enquiry. Do not tell the visitor it was sent.
         if (

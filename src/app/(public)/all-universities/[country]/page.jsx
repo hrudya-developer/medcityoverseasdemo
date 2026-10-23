@@ -203,7 +203,9 @@ async function getDestination(
    GET UNIVERSITIES
 ========================================================= */
 
-const MAX_UNIVERSITY_BATCHES = 20;
+// "alluniversities" returns every university of the country in one
+// response, so a single request is enough.
+const MAX_UNIVERSITY_BATCHES = 1;
 
 /**
  * Load every university for a country straight from the Overseas
@@ -233,11 +235,6 @@ async function getUniversities(
                         offset,
                         keyword: "alluniversities",
                     },
-                    {
-                        next: {
-                            revalidate: 3600,
-                        },
-                    }
                 );
 
             const items =

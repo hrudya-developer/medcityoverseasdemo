@@ -11,6 +11,8 @@ import {
     verifySessionToken,
 } from "@/lib/auth/session";
 
+import { legacyFetch } from "@/lib/legacy";
+
 const UPDATE_PROFILE_URL =
     "https://overseas.technocitysolutions.com/public/api/updateUserProfile2";
 
@@ -419,8 +421,7 @@ export async function POST(
         ========================= */
 
         const upstreamResponse =
-            await fetch(
-                UPDATE_PROFILE_URL,
+            await legacyFetch(UPDATE_PROFILE_URL,
                 {
                     method:
                         "POST",

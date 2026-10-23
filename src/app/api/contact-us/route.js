@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 
+import { legacyFetch } from "@/lib/legacy";
+
 const ENQUIRY_API_URL =
     "https://overseas.technocitysolutions.com/public/api/postEnquiries";
 
@@ -164,8 +166,7 @@ export async function POST(request) {
 
         formData.append("ip", "");
 
-        const response = await fetch(
-            ENQUIRY_API_URL,
+        const response = await legacyFetch(ENQUIRY_API_URL,
             {
                 method: "POST",
                 body: formData,
@@ -187,6 +188,16 @@ export async function POST(request) {
                     status: response.status,
                 }
             );
+        }
+
+        // A repeat of an enquiry we already hold is not an error for the
+        // visitor: the team already has it.
+        if (result?.response === "Existing Data") {
+            return NextResponse.json({
+                success: true,
+                message:
+                    "We already have your enquiry. Our team will contact you soon.",
+            });
         }
 
         // The upstream can answer HTTP 200 with status false when it

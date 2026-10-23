@@ -12,6 +12,8 @@ import {
 } from "@/lib/auth/session";
 
 
+import { legacyFetch } from "@/lib/legacy";
+
 const GET_WISHLIST_URL =
   "https://overseas.technocitysolutions.com/public/api/getPrefereList";
 
@@ -127,8 +129,7 @@ export async function POST() {
 
 
       const response =
-          await fetch(
-              GET_WISHLIST_URL,
+          await legacyFetch(GET_WISHLIST_URL,
               {
                   method:
                       "POST",
