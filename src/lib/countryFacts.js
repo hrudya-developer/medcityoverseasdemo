@@ -3,6 +3,7 @@ import "server-only";
 import { cache } from "react";
 
 import { query, queryOne } from "@/lib/db";
+import { recordedValue } from "@/lib/recordValue";
 
 /*
  * Facts for a country's university page, counted from our own database:
@@ -12,6 +13,12 @@ import { query, queryOne } from "@/lib/db";
  * course record, for the page's last updated date. Nothing here is
  * estimated.
  */
+function named(rows, field) {
+    return rows
+        .map((row) => ({ name: recordedValue(row[field]), count: Number(row.n) }))
+        .filter((row) => row.name);
+}
+
 export const getCountryFacts = cache(async (countryId) => {
     const id = String(countryId ?? "").trim();
 
@@ -35,7 +42,7 @@ export const getCountryFacts = cache(async (countryId) => {
         query(
             `SELECT TRIM(location) AS city, COUNT(*) AS n FROM tb_universities
              WHERE d_id = ? AND status = '1' AND location IS NOT NULL AND TRIM(location) <> ''
-             GROUP BY TRIM(location) ORDER BY n DESC, city ASC LIMIT 6`,
+             GROUP BY TRIM(location) ORDER BY n DESC, city ASC LIMIT 10`,
             [id]
         ),
         query(
@@ -43,7 +50,7 @@ export const getCountryFacts = cache(async (countryId) => {
              JOIN tb_universities u ON u.id = c.u_id
              WHERE u.d_id = ? AND u.status = '1' AND c.status = '1'
                AND c.level IS NOT NULL AND TRIM(c.level) <> ''
-             GROUP BY TRIM(c.level) ORDER BY n DESC LIMIT 5`,
+             GROUP BY TRIM(c.level) ORDER BY n DESC LIMIT 10`,
             [id]
         ),
         query(
@@ -51,7 +58,7 @@ export const getCountryFacts = cache(async (countryId) => {
              JOIN tb_universities u ON u.id = c.u_id
              WHERE u.d_id = ? AND u.status = '1' AND c.status = '1'
                AND c.duration IS NOT NULL AND TRIM(c.duration) <> ''
-             GROUP BY TRIM(c.duration) ORDER BY n DESC LIMIT 4`,
+             GROUP BY TRIM(c.duration) ORDER BY n DESC LIMIT 10`,
             [id]
         ),
     ]);
@@ -65,9 +72,10 @@ export const getCountryFacts = cache(async (countryId) => {
     return {
         universities: Number(totals?.universities) || 0,
         courses: Number(totals?.courses) || 0,
-        cities: cities.map((row) => ({ name: row.city, count: Number(row.n) })),
-        levels: levels.map((row) => ({ name: row.level, count: Number(row.n) })),
-        durations: durations.map((row) => ({ name: row.duration, count: Number(row.n) })),
+        // Placeholders ("-", "0", "N/A") are dropped, not shown as values.
+        cities: named(cities, "city").slice(0, 6),
+        levels: named(levels, "level").slice(0, 5),
+        durations: named(durations, "duration").slice(0, 4),
         latest: latest && !Number.isNaN(latest.getTime()) && latest.getFullYear() > 1970 ? latest : null,
     };
 });

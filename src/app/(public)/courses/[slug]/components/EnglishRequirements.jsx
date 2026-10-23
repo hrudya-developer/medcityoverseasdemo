@@ -6,18 +6,18 @@ export default function EnglishRequirements({
     course,
 }) {
     const minimum = [
-        getValue(course?.ielts, "-"),
-        getValue(course?.toefl, "-"),
-        getValue(course?.pte, "-"),
-        getValue(course?.duolingo, "-"),
-        getValue(course?.gre, "-"),
-        getValue(course?.gmat, "-"),
+        getValue(course?.ielts) || "-",
+        getValue(course?.toefl) || "-",
+        getValue(course?.pte) || "-",
+        getValue(course?.duolingo) || "-",
+        getValue(course?.gre) || "-",
+        getValue(course?.gmat) || "-",
     ];
 
     const lessThanMinimum = [
-        getValue(course?.ieltsless, "-"),
-        getValue(course?.toeflless, "-"),
-        getValue(course?.pteless, "-"),
+        getValue(course?.ieltsless) || "-",
+        getValue(course?.toeflless) || "-",
+        getValue(course?.pteless) || "-",
         "-",
         "-",
         "-",

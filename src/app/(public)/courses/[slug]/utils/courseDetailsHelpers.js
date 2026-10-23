@@ -1,13 +1,12 @@
+import { isPlaceholder, normaliseMonth, recordedValue, splitRecordList } from "@/lib/recordValue";
+
 // Shown when the database has no value: never a guess.
 export const NOT_RECORDED = "Not recorded";
 
+// The first real value: empty fields and placeholders such as "0", "-",
+// "N/A" or "0000-00-00" are skipped.
 export const getValue = (...values) =>
-    values.find(
-        (value) =>
-            value !== undefined &&
-            value !== null &&
-            String(value).trim() !== ""
-    ) || "";
+    values.find((value) => !isPlaceholder(value)) || "";
 
 export const formatCourseDetails = (course) => {
     const courseTitle = getValue(
@@ -70,25 +69,20 @@ export const formatCourseDetails = (course) => {
         course?.intake
     );
 
-    const intakeItems = intakesRaw
-        ? String(intakesRaw)
-            .split(",")
-            .map((item) => item.trim())
-            .filter(Boolean)
-        : [];
+    const intakeItems = [...new Set(splitRecordList(intakesRaw).map(normaliseMonth))];
 
     const intakes =
         intakeItems.length === 12
             ? "All Year Round"
-            : intakesRaw || NOT_RECORDED;
+            : intakeItems.join(", ") || NOT_RECORDED;
 
     // A fee of 0 or a dash is a missing value, not a free course.
     const feesValue = [
         course?.fees,
         course?.tuition_fee,
     ]
-        .map((value) => String(value ?? "").trim())
-        .find((value) => value && !/^(0+(\.0+)?|-|null|n\/a)$/i.test(value)) || "";
+        .map(recordedValue)
+        .find(Boolean) || "";
 
     const currency = getValue(
         course?.currency,
@@ -103,8 +97,8 @@ export const formatCourseDetails = (course) => {
         course?.applicationfee,
         course?.application_fee,
     ]
-        .map((value) => String(value ?? "").trim())
-        .find((value) => value && !/^(0+(\.0+)?|-|null|n\/a)$/i.test(value)) || NOT_RECORDED;
+        .map(recordedValue)
+        .find(Boolean) || NOT_RECORDED;
 
     const deadline = getValue(
         course?.deadline,
