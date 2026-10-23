@@ -183,8 +183,10 @@ async function queryCoursesByFilters(filters) {
         // with plain LIKE so it runs on every MySQL and MariaDB version.
         const intake = intakeSql(filters.intake);
 
-        where.push(intake.sql);
-        params.push(...intake.params);
+        if (intake) {
+            where.push(intake.sql);
+            params.push(...intake.params);
+        }
     }
 
     // Each option matches the stored levels that mean the same, so

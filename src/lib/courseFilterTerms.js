@@ -108,7 +108,7 @@ const MONTH_NAMES = [
  * trimmed and lower case, and isMonthIntake reports false for it.
  */
 export function normaliseIntake(value) {
-    const intake = String(value ?? "").trim().toLowerCase().replace(/\.+$/, "");
+    const intake = String(value ?? "").trim().toLowerCase().replace(/[\s.]+$/, "");
     const month = intake.length >= 3 && MONTH_NAMES.find((name) => name.startsWith(intake));
 
     return month ? month.slice(0, 3) : intake;
@@ -124,7 +124,7 @@ export function isMonthIntake(intake) {
 // it starts the text or follows one of these, so "jan" matches "Jan, Sep"
 // and "January" but not "Rejan". The same rule runs in SQL (plain LIKE,
 // so it works on every MySQL and MariaDB version) and in JS.
-const WORD_STARTS = [" ", ",", "/", "(", "-", ";", "&"];
+const WORD_STARTS = [" ", ",", "/", "(", "-", ";", "&", "\n", "\r", "\t", ".", "|"];
 
 function escapeLike(value) {
     return value.replace(/[\\%_]/g, "\\$&");
