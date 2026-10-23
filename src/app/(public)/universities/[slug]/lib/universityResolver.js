@@ -2,13 +2,11 @@ import {
     normalizeSlug,
 } from "./universityHelpers";
 
-import {
-    getStoredUniversityId,
-} from "./universityStoredMapping";
+
+import { findUniversityBySlug } from "@/lib/universityIndex";
 
 import {
     resolveUniversityByExactId,
-    resolveUniversityByNameAndCountry,
 } from "./universityFallbackResolver";
 
 /* =========================================================
@@ -37,50 +35,20 @@ export async function resolveUniversity(
         return null;
     }
 
-    /* =====================================================
-       FAST PATH - STORED INTERNAL ID
-    ===================================================== */
-
-    const storedId =
-        await getStoredUniversityId(
+    // Direct lookup in the database-built list of university addresses.
+    const match =
+        await findUniversityBySlug(
             slug
         );
 
-    if (storedId) {
-        const exact =
-            await resolveUniversityByExactId(
-                storedId,
-                slug
-            );
-
-        if (exact) {
-            return exact;
-        }
-    }
-
-    /* =====================================================
-       SERVER RESOLUTION
-
-       Works for:
-       - refresh
-       - direct URL
-       - Google
-       - incognito
-       - old country-aware links
-    ===================================================== */
-
-    const resolved =
-        await resolveUniversityByNameAndCountry(
-            slug
-        );
-
-    if (
-        !resolved?.id ||
-        !resolved?.university ||
-        !resolved?.details
-    ) {
+    if (!match) {
         return null;
     }
 
-    return resolved;
+    // match.slug is the current address; for an old address the page
+    // sees the difference and redirects to it.
+    return resolveUniversityByExactId(
+        match.id,
+        match.slug
+    );
 }

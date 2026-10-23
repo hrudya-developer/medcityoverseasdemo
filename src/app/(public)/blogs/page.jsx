@@ -1,6 +1,7 @@
 import { callLegacy } from "@/lib/legacy";
 
 import StudyAbroadBlogClient from "./StudyAbroadBlogClient";
+import { applySeoOverrides } from "@/lib/pageSeo";
 
 export const dynamic = "force-dynamic";
 
@@ -26,7 +27,7 @@ const PAGE_DESCRIPTION =
    METADATA
 ========================================================= */
 
-export const metadata = {
+const pageMetadata = {
   title:
     PAGE_TITLE,
 
@@ -210,4 +211,9 @@ export default async function StudyAbroadBlogPage() {
       <StudyAbroadBlogClient initialBlogs={initialBlogs} />
     </>
   );
+}
+
+// Search details edited in the admin apply on top of these.
+export async function generateMetadata() {
+  return applySeoOverrides(pageMetadata);
 }

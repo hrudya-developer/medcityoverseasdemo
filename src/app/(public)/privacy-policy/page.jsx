@@ -4,11 +4,12 @@ import PrivacyHero from "./components/PrivacyHero";
 import PrivacyIntro from "./components/PrivacyIntro";
 import PrivacySection from "./components/PrivacySection";
 import PrivacyTrustGrid from "./components/PrivacyTrustGrid";
+import { applySeoOverrides } from "@/lib/pageSeo";
 
 const SITE_URL =
     "https://medcityoverseas.com";
 
-export const metadata = {
+const pageMetadata = {
     title:
         "Privacy Policy | Medcity Overseas",
 
@@ -192,4 +193,9 @@ export default function PrivacyPolicyPage() {
             </div>
         </main>
     );
+}
+
+// Search details edited in the admin apply on top of these.
+export async function generateMetadata() {
+  return applySeoOverrides(pageMetadata);
 }

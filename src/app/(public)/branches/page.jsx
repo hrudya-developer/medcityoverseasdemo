@@ -1,5 +1,6 @@
 import AcademyCentersClient from "./AcademyCentersClient";
 import { centers } from "./data/centersData";
+import { applySeoOverrides } from "@/lib/pageSeo";
 
 /* =========================================================
    CONFIG
@@ -30,7 +31,7 @@ const PAGE_TITLE =
 const PAGE_DESCRIPTION =
   "Find Medcity Overseas study abroad consultants across Kerala and Mangalore. Visit your nearest branch for overseas education counselling, university admissions, course selection, application support and student visa guidance.";
 
-export const metadata = {
+const pageMetadata = {
   title: {
     absolute: PAGE_TITLE,
   },
@@ -920,4 +921,9 @@ export default function BranchesPage() {
       />
     </>
   );
+}
+
+// Search details edited in the admin apply on top of these.
+export async function generateMetadata() {
+  return applySeoOverrides(pageMetadata);
 }

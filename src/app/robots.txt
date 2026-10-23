@@ -1,4 +1,21 @@
+# Search engines and AI assistants are welcome to read the public site.
 User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /dashboard
+
+# AI search and answer engines, named so they are clearly allowed.
+User-agent: GPTBot
+User-agent: OAI-SearchBot
+User-agent: ChatGPT-User
+User-agent: ClaudeBot
+User-agent: Claude-SearchBot
+User-agent: Claude-User
+User-agent: PerplexityBot
+User-agent: Perplexity-User
+User-agent: Google-Extended
+User-agent: Applebot-Extended
+User-agent: Bingbot
 Allow: /
 Disallow: /admin
 Disallow: /dashboard

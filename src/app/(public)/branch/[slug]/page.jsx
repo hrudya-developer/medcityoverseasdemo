@@ -19,6 +19,7 @@ import {
 
 import BranchSchema from "./seo/BranchSchema";
 import BranchFAQ from "./components/BranchFAQ";
+import { withSeoOverrides } from "@/lib/pageSeo";
 
 /* =========================================================
    GET CENTER
@@ -50,7 +51,7 @@ export function generateStaticParams() {
    METADATA
 ========================================================= */
 
-export async function generateMetadata({
+async function pageGenerateMetadata({
     params,
 }) {
     const { slug } =
@@ -116,3 +117,6 @@ export default async function BranchPage({
         </>
     );
 }
+
+// Search details edited in the admin apply on top of the page's own.
+export const generateMetadata = withSeoOverrides(pageGenerateMetadata);

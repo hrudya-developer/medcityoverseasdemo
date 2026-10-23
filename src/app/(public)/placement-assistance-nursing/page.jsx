@@ -24,9 +24,10 @@ import EligibilitySection from "./components/eligibility/EligibilitySection";
 import PlacementBrochure from "./components/placement-brochure/PlacementBrochure";
 import PlacementContactDetails from "./components/placement-contact-details/PlacementContactDetails";
 import PlacementRegistrationSection from "./components/placement-registration-form/PlacementRegistrationSection";
+import { applySeoOverrides } from "@/lib/pageSeo";
 
 
-export const metadata = {
+const pageMetadata = {
   title: {
     absolute: "UK Nursing Placement Assistance for Kerala Nurses | Medcity Overseas",
   },
@@ -256,4 +257,9 @@ export default function PlacementAssistanceNursingPage() {
        <PlacementRegistrationSection />
     </main>
   );
+}
+
+// Search details edited in the admin apply on top of these.
+export async function generateMetadata() {
+  return applySeoOverrides(pageMetadata);
 }

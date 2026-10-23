@@ -1,6 +1,7 @@
 
 import StudyTabContent from "@/components/home/services/programs/StudyTabContent";
 import PopularCoursesFAQ from "./PopularCoursesFAQ";
+import { applySeoOverrides } from "@/lib/pageSeo";
 
 const SITE_URL = "https://medcityoverseas.com";
 const PAGE_PATH = "/popular-courses";
@@ -14,7 +15,7 @@ const PAGE_TITLE = "Popular Study Abroad Courses and Programs";
 const PAGE_DESCRIPTION =
     "Explore popular study abroad courses offered by international universities. Compare programs, study destinations and career opportunities with guidance from Medcity Overseas.";
 
-export const metadata = {
+const pageMetadata = {
     /*
      * Your root layout adds:
      * | Medcity Overseas
@@ -252,4 +253,9 @@ export default function PopularCoursesPage() {
             </div>
         </>
     );
+}
+
+// Search details edited in the admin apply on top of these.
+export async function generateMetadata() {
+  return applySeoOverrides(pageMetadata);
 }

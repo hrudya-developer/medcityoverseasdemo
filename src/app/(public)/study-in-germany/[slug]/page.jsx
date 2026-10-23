@@ -12,6 +12,7 @@ import { createSlug } from "@/lib/slug";
 import { getGermanProgramsList } from "@/lib/germanPrograms";
 
 import { callLegacy } from "@/lib/legacy";
+import { withSeoOverrides } from "@/lib/pageSeo";
 
 export const dynamic = "force-dynamic";
 
@@ -41,7 +42,7 @@ async function resolveProgramId(slug) {
   );
 }
 
-export async function generateMetadata({
+async function pageGenerateMetadata({
   params,
 }) {
   const { slug } = await params;
@@ -1037,3 +1038,6 @@ export default async function GermanProgramPage({
     </main>
   );
 }
+
+// Search details edited in the admin apply on top of the page's own.
+export const generateMetadata = withSeoOverrides(pageGenerateMetadata);

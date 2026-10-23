@@ -21,6 +21,7 @@ import SASteps from "@/components/home/study-abroad-steps/SASteps";
 import TestimonialSection from "@/components/home/testimonials/TestimonialSection";
 import UniversityPartners from "@/components/home/university-partners/UniversityPartners";
 import VisaAchievers from "@/components/home/visa-achievers/VisaAchievers";
+import { applySeoOverrides } from "@/lib/pageSeo";
 
 
 /* =========================================================
@@ -55,7 +56,7 @@ const HOME_DESCRIPTION =
    PAGE METADATA
 ========================================================= */
 
-export const metadata = {
+const pageMetadata = {
   title: {
     absolute: HOME_TITLE,
   },
@@ -532,4 +533,9 @@ export default function Home() {
       <FAQ />
     </>
   );
+}
+
+// Search details edited in the admin apply on top of these.
+export async function generateMetadata() {
+  return applySeoOverrides(pageMetadata);
 }

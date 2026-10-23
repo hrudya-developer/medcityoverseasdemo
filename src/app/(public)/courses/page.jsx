@@ -7,6 +7,7 @@ import SearchSection from "@/components/home/searchSection/SearchSection";
 import CoursesHero from "./components/CoursesHero";
 
 import CourseFinder from "./components/CourseFinder";
+import { applySeoOverrides } from "@/lib/pageSeo";
 
 const SITE_URL =
   "https://medcityoverseas.com";
@@ -42,7 +43,7 @@ export const dynamic = "force-dynamic";
    METADATA
 ========================================================= */
 
-export const metadata = {
+const pageMetadata = {
   title:
     PAGE_TITLE,
 
@@ -393,4 +394,9 @@ export default function CoursesPage() {
       </Suspense>
     </main>
   );
+}
+
+// Search details edited in the admin apply on top of these.
+export async function generateMetadata() {
+  return applySeoOverrides(pageMetadata);
 }

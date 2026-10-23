@@ -11,12 +11,13 @@ import BranchesInfo from "../../branches/components/BranchesInfo";
 import { getBranchInfoForBlogTitle } from "../../branches/data/branchesInfo";
 
 import BlogArticle from "./components/BlogArticle";
+import { withSeoOverrides } from "@/lib/pageSeo";
 
 export const dynamic = "force-dynamic";
 
 const DEFAULT_OG_IMAGE = `${SITE_URL}/og-images/default.webp`;
 
-export async function generateMetadata({ params }) {
+async function pageGenerateMetadata({ params }) {
   const { slug } = await params;
   const found = await findPostBySlug(slug);
 
@@ -160,3 +161,6 @@ export default async function BlogDetailsPage({ params }) {
     </main>
   );
 }
+
+// Search details edited in the admin apply on top of the page's own.
+export const generateMetadata = withSeoOverrides(pageGenerateMetadata);

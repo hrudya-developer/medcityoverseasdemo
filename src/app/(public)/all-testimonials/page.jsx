@@ -2,6 +2,7 @@ import { getTestimonials } from "@/lib/testimonials";
 import TestimonialsGrid from "./TestimonialsGrid";
 import TestimonialsHero from "./TestimonialsHero";
 import TestimonialsSuccessSection from "./TestimonialsSuccessSection";
+import { applySeoOverrides } from "@/lib/pageSeo";
 
 // Read straight from the database on each request (same server, a few
 // milliseconds). Prerendering at build time cannot reach the database on
@@ -32,7 +33,7 @@ const PAGE_DESCRIPTION =
    SEO METADATA
 ========================================================= */
 
-export const metadata = {
+const pageMetadata = {
     title:
         PAGE_TITLE,
 
@@ -612,4 +613,9 @@ export default async function AllTestimonialsPage() {
 <TestimonialsSuccessSection />
         </>
     );
+}
+
+// Search details edited in the admin apply on top of these.
+export async function generateMetadata() {
+  return applySeoOverrides(pageMetadata);
 }

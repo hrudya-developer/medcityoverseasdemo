@@ -8,6 +8,7 @@ import { createSlug } from "@/lib/slug";
 import { createUniversityPublicSlug } from "@/lib/universitySlug";
 
 import CourseDetailsClient from "./CourseDetailsClient";
+import { withSeoOverrides } from "@/lib/pageSeo";
 
 const SITE_URL = "https://medcityoverseas.com";
 
@@ -99,7 +100,7 @@ function imageUrl(base, file) {
     return `${String(base).replace(/\/+$/, "")}/${name.replace(/^\/+/, "")}`;
 }
 
-export async function generateMetadata({ params }) {
+async function pageGenerateMetadata({ params }) {
     const { slug } = await params;
     const loaded = await loadCourse(slug);
 
@@ -225,3 +226,6 @@ export default async function CourseDetailsPage({ params }) {
         </>
     );
 }
+
+// Search details edited in the admin apply on top of the page's own.
+export const generateMetadata = withSeoOverrides(pageGenerateMetadata);
