@@ -2,7 +2,6 @@ import "./globals.css";
 
 import {
   Nunito,
-  Ubuntu,
 } from "next/font/google";
 
 import StoreProvider from "@/lib/redux/StoreProvider";
@@ -25,21 +24,10 @@ const nunito = Nunito({
     "--font-nunito-loaded",
 });
 
-const ubuntu = Ubuntu({
-  subsets: ["latin"],
-  weight: [
-    "400",
-    "500",
-    "700",
-  ],
-  style: [
-    "normal",
-    "italic",
-  ],
-  display: "swap",
-  variable:
-    "--font-ubuntu-loaded",
-});
+/*
+ * Ubuntu was loaded here too, but no page uses it, and every font
+ * loaded in the root layout is preloaded on every route.
+ */
 
 export default function RootLayout({
   children,
@@ -52,7 +40,6 @@ export default function RootLayout({
       suppressHydrationWarning
       className={`
         ${nunito.variable}
-        ${ubuntu.variable}
         h-full
         scroll-smooth
       `}
