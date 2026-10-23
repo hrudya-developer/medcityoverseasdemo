@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import CarouselButton from "./CarouselButton";
 import CarouselDots from "./CarouselDots";
 import PartnerCard from "./PartnerCard";
@@ -18,10 +18,20 @@ function getCardsPerPage(width) {
 export default function UniversityPartners() {
   const [activePage, setActivePage] = useState(0);
   const [cardsPerPage, setCardsPerPage] = useState(5);
+  const cardsPerPageRef = useRef(null);
 
   useEffect(() => {
+    // Mobile browsers fire resize when the address bar hides on
+    // scroll. Only reset the page when the layout really changes.
     const updateCards = () => {
-      setCardsPerPage(getCardsPerPage(window.innerWidth));
+      const nextCards = getCardsPerPage(window.innerWidth);
+
+      if (cardsPerPageRef.current === nextCards) {
+        return;
+      }
+
+      cardsPerPageRef.current = nextCards;
+      setCardsPerPage(nextCards);
       setActivePage(0);
     };
 

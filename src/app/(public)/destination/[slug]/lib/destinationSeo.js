@@ -6,7 +6,7 @@ export const SITE_URL =
   "https://medcityoverseas.com";
 
 const FALLBACK_IMAGE =
-  "/images/destination-fallback.webp";
+  "/assets/destination-fallback.webp";
 
 function cleanHtml(
   value = ""

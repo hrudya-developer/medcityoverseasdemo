@@ -24,7 +24,7 @@ import WebsiteSwitchHorizontal from "./WebsiteSwitchHorizontal";
 const exploreItems = [
     {
         name: "German Programs",
-        path: "/german-programs",
+        path: "/study-in-germany",
     },
     {
         name: "Community Posts",

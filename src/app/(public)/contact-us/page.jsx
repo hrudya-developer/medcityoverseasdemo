@@ -213,7 +213,10 @@ export default function ContactUsPage() {
             <div className="overflow-hidden bg-white">
                 <ContactHero />
 
-                <section aria-label="Book a free study abroad counselling session">
+                <section
+                    id="contact-form"
+                    aria-label="Book a free study abroad counselling session"
+                >
                     <CounsellingSection />
                 </section>
 

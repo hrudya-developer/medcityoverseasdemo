@@ -1,3 +1,5 @@
+import sanitizeHtml from "sanitize-html";
+
 import {
   BookOpenText,
   CalendarDays,
@@ -13,6 +15,41 @@ function hasValue(
       value ?? ""
     ).trim()
   );
+}
+
+/**
+ * Blog HTML comes from the backend. Allow ordinary article markup
+ * only, so a script, event handler or javascript: link stored in a
+ * blog can never run on medcityoverseas.com.
+ */
+const SANITIZE_OPTIONS = {
+  allowedTags: sanitizeHtml.defaults.allowedTags.concat([
+    "img",
+    "h1",
+    "h2",
+    "span",
+    "u",
+  ]),
+  allowedAttributes: {
+    a: ["href", "name", "target", "rel"],
+    img: ["src", "alt", "title", "width", "height", "loading"],
+    "*": ["class", "id"],
+  },
+  allowedSchemes: ["http", "https", "mailto", "tel"],
+  transformTags: {
+    a: sanitizeHtml.simpleTransform("a", {
+      rel: "noopener noreferrer",
+    }),
+  },
+};
+
+function escapeHtml(value) {
+  return value
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
 }
 
 function formatContent(
@@ -31,10 +68,11 @@ function formatContent(
     value.includes("<ul") ||
     value.includes("<ol")
   ) {
-    return value;
+    return sanitizeHtml(value, SANITIZE_OPTIONS);
   }
 
-  return value
+  // Plain text: escape it, then turn line breaks into paragraphs.
+  return escapeHtml(value)
     .split(
       /\n\s*\n/
     )

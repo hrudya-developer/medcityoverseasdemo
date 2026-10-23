@@ -1,3 +1,5 @@
+import { cache } from "react";
+
 import {
   notFound,
   redirect,
@@ -22,7 +24,7 @@ const SITE_URL =
   "https://medcityoverseas.com";
 
 const API_BASE_URL =
-  "http://overseas.technocitysolutions.com/public/api";
+  "https://overseas.technocitysolutions.com/public/api";
 
 const BLOG_LIST_API_URL =
   `${API_BASE_URL}/getWebBlogs`;
@@ -36,6 +38,18 @@ const API_KEY =
 export const dynamic =
   "force-dynamic";
 
+/**
+ * decodeURIComponent throws on malformed input such as "%E0".
+ * Treat that as "no such blog" (404) instead of a 500.
+ */
+function safeDecode(value) {
+  try {
+    return decodeURIComponent(String(value));
+  } catch {
+    return "";
+  }
+}
+
 /* =========================================================
    FETCH ALL BLOGS
 
@@ -43,7 +57,7 @@ export const dynamic =
    slug -> blog -> internal id
 ========================================================= */
 
-async function getAllBlogs() {
+async function fetchAllBlogs() {
   try {
     if (!API_KEY) {
       console.error(
@@ -144,6 +158,10 @@ async function getAllBlogs() {
    ID remains internal.
 ========================================================= */
 
+// Memoised per request: generateMetadata and the page share one
+// set of backend calls instead of fetching everything twice.
+const getAllBlogs = cache(fetchAllBlogs);
+
 async function getBlogBySlug(
   slug
 ) {
@@ -164,9 +182,7 @@ async function getBlogBySlug(
   }
 
   const normalizedSlug =
-    decodeURIComponent(
-      String(slug)
-    )
+    safeDecode(slug)
       .toLowerCase()
       .trim();
 
@@ -223,7 +239,7 @@ async function getBlogBySlug(
    link
 ========================================================= */
 
-async function getBlogDetails(
+async function fetchBlogDetails(
   id
 ) {
   try {
@@ -325,6 +341,8 @@ async function getBlogDetails(
     return null;
   }
 }
+
+const getBlogDetails = cache(fetchBlogDetails);
 
 /* =========================================================
    STRIP HTML
@@ -779,9 +797,7 @@ export default async function BlogDetailsPage({
   ===================================================== */
 
   const currentSlug =
-    decodeURIComponent(
-      String(slug)
-    )
+    safeDecode(slug)
       .toLowerCase()
       .trim();
 

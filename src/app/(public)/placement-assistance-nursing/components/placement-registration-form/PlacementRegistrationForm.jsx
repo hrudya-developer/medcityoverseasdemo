@@ -13,7 +13,7 @@ export default function PlacementRegistrationForm({
       {/* Background image */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 bg-[url('/assets/placement/nursing-registration-bg.webp')] bg-cover bg-center"
+        className="pointer-events-none absolute inset-0 bg-[url('/assets/nursing-uk.webp')] bg-cover bg-center"
       />
 
       {/* Background overlay */}

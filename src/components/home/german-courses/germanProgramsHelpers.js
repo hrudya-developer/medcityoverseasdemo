@@ -1,5 +1,5 @@
 export const FALLBACK_IMAGE =
-    "/assets/german-program-fallback.webp";
+    "/assets/german-program-fallback.png";
 
 export const getSearchableProgramText = (
     item

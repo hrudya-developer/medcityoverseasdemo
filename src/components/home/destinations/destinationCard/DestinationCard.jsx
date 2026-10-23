@@ -45,7 +45,7 @@ export default function DestinationCard({
     `destination-${destinationId}`;
 
   const href =
-    `/destination/${createSlug(
+    `/study-in-${createSlug(
       country
     )}`;
 

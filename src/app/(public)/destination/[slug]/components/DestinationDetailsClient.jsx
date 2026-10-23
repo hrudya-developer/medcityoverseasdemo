@@ -24,7 +24,7 @@ import DestinationUniversities from "./DestinationUniversities";
 import DestinationFAQ from "./DestinationFAQ";
 
 const DEFAULT_IMAGE =
-  "/images/destination-fallback.webp";
+  "/assets/destination-fallback.webp";
 
 function safeText(
   value,

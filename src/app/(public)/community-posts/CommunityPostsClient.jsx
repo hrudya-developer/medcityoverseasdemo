@@ -236,11 +236,17 @@ export default function CommunityPostsClient() {
       [offsets]
     );
 
+  // Depend on this page's offset only. Depending on the whole
+  // offsets array refetched the same page when the next offset
+  // was recorded after a successful load.
+  const currentOffset =
+    offsets[
+    currentPage - 1
+    ];
+
   useEffect(() => {
     const offset =
-      offsets[
-      currentPage - 1
-      ];
+      currentOffset;
 
     if (
       offset === null ||
@@ -441,7 +447,7 @@ export default function CommunityPostsClient() {
     };
   }, [
     currentPage,
-    offsets,
+    currentOffset,
   ]);
 
   const scrollToPosts = () => {

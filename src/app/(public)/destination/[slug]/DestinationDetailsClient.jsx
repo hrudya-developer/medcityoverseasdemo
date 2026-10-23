@@ -26,7 +26,7 @@ import DestinationUniversities from "./DestinationUniversities";
 // import CounsellingModal from "@/components/counselling/CounsellingModal";
 
 const DEFAULT_IMAGE =
-    "/images/destination-fallback.webp";
+    "/assets/destination-fallback.webp";
 
 function toSafeText(
     value,

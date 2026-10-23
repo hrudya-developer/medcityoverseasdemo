@@ -1,5 +1,5 @@
 const FALLBACK_IMAGE =
-  "/images/destination-fallback.webp";
+  "/assets/destination-fallback.webp";
 
 const DEFAULT_DESTINATION_IMAGE_PATH =
   "https://overseas.technocitysolutions.com/public/images/destinations";

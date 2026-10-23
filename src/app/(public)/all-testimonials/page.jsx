@@ -1,3 +1,4 @@
+import { getTestimonials } from "@/lib/testimonials";
 import TestimonialsGrid from "./TestimonialsGrid";
 import TestimonialsHero from "./TestimonialsHero";
 import TestimonialsSuccessSection from "./TestimonialsSuccessSection";
@@ -131,39 +132,11 @@ export const metadata = {
    FETCH TESTIMONIALS
 ========================================================= */
 
-async function getTestimonials() {
+// Calls the Overseas API directly. Fetching this site's own
+// /api/testimonials URL fails during a fresh build or deploy.
+async function loadTestimonials() {
     try {
-        const response =
-            await fetch(
-                `${SITE_URL}/api/testimonials`,
-                {
-                    next: {
-                        revalidate:
-                            3600,
-
-                        tags: [
-                            "testimonials",
-                        ],
-                    },
-                }
-            );
-
-        if (!response.ok) {
-            console.error(
-                `Testimonials request failed with status ${response.status}`
-            );
-
-            return [];
-        }
-
-        const result =
-            await response.json();
-
-        return Array.isArray(
-            result?.testimonials
-        )
-            ? result.testimonials
-            : [];
+        return await getTestimonials();
     } catch (error) {
         console.error(
             "Unable to retrieve testimonials:",
@@ -218,7 +191,7 @@ function getTestimonialText(
 
 export default async function AllTestimonialsPage() {
     const testimonials =
-        await getTestimonials();
+        await loadTestimonials();
 
     /* =====================================================
        COLLECTION PAGE
