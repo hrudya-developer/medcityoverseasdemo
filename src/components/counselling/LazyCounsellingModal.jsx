@@ -27,10 +27,11 @@ import {
  *   Esc, a backdrop click or the close button dismiss;
  * - a failed download is retried once, and if it still fails the
  *   visitor gets a small dialog with the contact page and phone
- *   number instead of a broken page.
+ *   number instead of a broken page. The next open tries again.
  *
- * React.lazy and Suspense are used directly rather than next/dynamic,
- * because the loading state needs onClose.
+ * React.lazy and Suspense are used directly rather than next/dynamic:
+ * the loading state needs onClose, and a failed load needs a fresh
+ * lazy component (React.lazy keeps a rejected load forever).
  */
 
 let modalModule = null;
@@ -63,7 +64,11 @@ export const counsellingTriggerProps = {
     onTouchStart: preloadCounsellingModal,
 };
 
-const CounsellingModal = lazy(loadCounsellingModal);
+/*
+ * Replaced with a fresh lazy component after a failed load, so the
+ * next open downloads again instead of reusing the cached failure.
+ */
+let CounsellingModal = lazy(loadCounsellingModal);
 
 function useCloseOnEscape(onClose) {
     useEffect(() => {
@@ -206,6 +211,10 @@ class CounsellingModalBoundary extends Component {
             "Counselling modal could not be loaded:",
             error
         );
+
+        // The boundary unmounts when the visitor closes this dialog,
+        // so the next open renders the fresh component and retries.
+        CounsellingModal = lazy(loadCounsellingModal);
     }
 
     render() {
