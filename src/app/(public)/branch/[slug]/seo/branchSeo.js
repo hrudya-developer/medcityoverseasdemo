@@ -385,3 +385,5 @@ export {
   SITE_NAME,
   SITE_URL,
 };
+// The date the branch page content was last reviewed.
+export const BRANCH_CONTENT_UPDATED = "2026-10-23";

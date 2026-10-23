@@ -1,4 +1,7 @@
+import { faqPageNode, organizationNode, websiteNode } from "@/lib/seoSchema";
+
 import {
+    BRANCH_CONTENT_UPDATED,
     getBranchCanonical,
     getBranchSeoDescription,
     getBranchSeoImage,
@@ -213,6 +216,19 @@ import {
         "@id":
           breadcrumbId,
       },
+
+      publisher: {
+        "@id":
+          parentId,
+      },
+
+      author: {
+        "@id":
+          parentId,
+      },
+
+      dateModified:
+        BRANCH_CONTENT_UPDATED,
   
       ...(image && {
         primaryImageOfPage: {
@@ -272,14 +288,28 @@ import {
       ],
     };
   
+    const faqs =
+      Array.isArray(center?.faqs)
+        ? center.faqs.filter(
+            (faq) =>
+              faq?.question &&
+              faq?.answer
+          )
+        : [];
+
     const schema = {
       "@context":
         "https://schema.org",
   
       "@graph": [
+        organizationNode(),
+        websiteNode(),
         organization,
         webpage,
         breadcrumb,
+        ...(faqs.length
+          ? [faqPageNode(`/branch/${center.slug}`, faqs)]
+          : []),
       ],
     };
   

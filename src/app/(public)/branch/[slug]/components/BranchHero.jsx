@@ -20,9 +20,15 @@ export default function BranchHero({
     center?.name ||
     `Medcity ${location}`;
 
-  const description =
+  const baseDescription =
     center?.seoDescription ||
     `Visit Medcity Overseas ${location} for expert study abroad counselling, university admissions, course selection and student visa guidance.`;
+
+  // The intro under the H1 names the same topic as the H1.
+  const description =
+    /consultant/i.test(baseDescription)
+      ? baseDescription
+      : `Study abroad consultants in ${location}: ${baseDescription.charAt(0).toLowerCase()}${baseDescription.slice(1)}`;
 
   return (
     <section

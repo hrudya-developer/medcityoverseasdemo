@@ -367,7 +367,7 @@ const rawCenters = [
       "Study Abroad Consultants in Thiruvalla",
 
     seoDescription:
-      "Visit Medcity Overseas Thiruvalla KSRTC for expert study abroad counselling, overseas university applications, course selection, student visa guidance and language training.",
+      "Visit Medcity Overseas Thiruvalla KSRTC for study abroad counselling, university applications, course selection, student visa guidance and language training.",
 
     image:
       thiruvallaKsrtcImage,
@@ -491,7 +491,7 @@ const rawCenters = [
       "Study Abroad Consultants in Kannur",
 
     seoDescription:
-      "Visit Medcity Overseas Kannur for expert study abroad counselling, overseas university admissions, course selection, student visa guidance and language training.",
+      "Visit Medcity Overseas Kannur for expert study abroad counselling, university admissions, course selection, student visa guidance and language training.",
 
     image:
       kannurImage,
@@ -825,7 +825,7 @@ const rawCenters = [
       "medcity-thiruvalla-chandrima",
 
     seoTitle:
-      "Study Abroad Consultants in Thiruvalla - Chandrima",
+      "Chandrima Thiruvalla Study Abroad Consultants",
 
     seoDescription:
       "Visit Medcity Overseas Chandrima branch in Thiruvalla for expert study abroad counselling, university applications, course selection and student visa guidance.",
