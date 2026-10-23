@@ -99,11 +99,12 @@ export const formatCourseDetails = (course) => {
         ? `${currency}${feesValue}`
         : NOT_RECORDED;
 
-    const applicationFee = getValue(
+    const applicationFee = [
         course?.applicationfee,
         course?.application_fee,
-        NOT_RECORDED
-    );
+    ]
+        .map((value) => String(value ?? "").trim())
+        .find((value) => value && !/^(0+(\.0+)?|-|null|n\/a)$/i.test(value)) || NOT_RECORDED;
 
     const deadline = getValue(
         course?.deadline,
