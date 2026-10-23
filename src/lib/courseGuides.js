@@ -55,6 +55,18 @@ const MASTER_NAMES = [
     "mim",
 ];
 
+// An MBA by any of its spellings ("M.B.A." is matched as "m b a").
+const MBA_NAMES = [
+    "mba",
+    "m.b.a.",
+    "master of business administration",
+    "masters of business administration",
+    "master's of business administration",
+    "master in business administration",
+    "masters in business administration",
+    "master's in business administration",
+];
+
 // A pre-master's course prepares for a master's; it is not one.
 const PRE_MASTERS = ["pre-master", "pre master", "premaster", "pre-masters", "pre masters", "premasters", "pre-mba", "pre mba"];
 
@@ -139,10 +151,10 @@ export const COURSE_GUIDES = [
         subjectPhrase: "an MBA",
         country: "uk",
         keyword: "mba in uk for indian students",
-        include: ["mba", "master of business administration", "masters of business administration", "master in business administration"],
+        include: MBA_NAMES,
         exclude: PRE_MASTERS,
         levels: ["Postgraduate"],
-        levelNames: ["mba", "master of business administration", "masters of business administration", "master in business administration"],
+        levelNames: MBA_NAMES,
         notLevels: NOT_POSTGRADUATE,
         search: "MBA",
         description:
