@@ -42,6 +42,7 @@ const DESCRIPTION =
 const SRC = {
     studienkolleg: "https://www.daad.de/en/studying-in-germany/requirements/studienkollegs/",
     ucas: "https://www.gla.ac.uk/undergraduate/how-to-apply-for-an-undergraduate-degree/ucas",
+    ucasDates: "https://www.bath.ac.uk/corporate-information/important-dates-for-undergraduate-applicants-starting-in-2027/",
     ukEnglish: "https://www.gov.uk/student-visa/knowledge-of-english",
     galway: "https://universityofgalway.ie/undergrad-admissions/faqs",
     australia: "https://www.studyaustralia.gov.au/en/plan-your-move/language-testing-organisations",
@@ -59,7 +60,7 @@ const DEGREE_ROUTES = [
     {
         country: "United Kingdom",
         slug: "uk",
-        route: "Apply for a bachelor's degree, usually through UCAS. Each university sets its own deadline and offer conditions.",
+        route: "Apply for a bachelor's degree, usually through UCAS. UCAS sets the main deadlines (15 October for medicine, dentistry, veterinary courses and Oxford or Cambridge, mid January for most others), and some universities, such as Glasgow, accept international applications until 30 June.",
         english: "CEFR B2 for degree level, by test or the university's own assessment",
         source: SRC.ucas,
         label: "University of Glasgow on UCAS",
@@ -67,7 +68,7 @@ const DEGREE_ROUTES = [
     {
         country: "Ireland",
         slug: "ireland",
-        route: "Non EU students apply directly to the university (for example through its international office), not through the CAO.",
+        route: "At the University of Galway, for example, non EU students apply directly through the International Affairs Office; check each university's own route.",
         english: "A test from the Irish visa list, such as IELTS, PTE, TOEFL or Duolingo",
         source: SRC.galway,
         label: "University of Galway",
@@ -309,7 +310,8 @@ export default async function AfterTwelfthPage() {
                 <OfficialSources
                     links={[
                         ...DEGREE_ROUTES.map((row) => ({ label: `${row.label} (${row.country})`, href: row.source, note: "How students apply after school." })),
-                        { label: "GOV.UK: knowledge of English", href: SRC.ukEnglish, note: "The English level for UK degree study." },
+                        { label: "University of Bath: UCAS dates for 2027 entry", href: SRC.ucasDates, note: "The 15 October and January UCAS deadlines." },
+        { label: "GOV.UK: knowledge of English", href: SRC.ukEnglish, note: "The English level for UK degree study." },
                         { label: "Make it in Germany: training visa", href: SRC.training, note: "The visa for vocational training." },
                     ]}
                     intro="Admission and visa rules change. These are the official pages behind this guide, checked on 24 October 2026."
