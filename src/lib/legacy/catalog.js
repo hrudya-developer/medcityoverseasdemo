@@ -241,8 +241,29 @@ const cachedCoursesByFilters = unstable_cache(
  * course page.
  */
 export async function getCoursesByFilters(input) {
-    return cachedCoursesByFilters(normaliseCourseFilters(input ?? {}));
+    const filters = normaliseCourseFilters(input ?? {});
+
+    // Only a bounded set of searches is cached: no free-text keyword,
+    // numeric ids, a month name as intake and an offset on a page
+    // boundary. Anything else (for example a bot sending random
+    // keywords) goes straight to the database, so the cache cannot grow
+    // without limit.
+    const cacheable =
+        !filters.keyword &&
+        [filters.countryId, filters.universityId, filters.courseId].every((id) => !id || /^\d{1,6}$/.test(id)) &&
+        (!filters.intake || CACHEABLE_INTAKES.has(filters.intake)) &&
+        filters.offset % 20 === 0;
+
+    return cacheable ? cachedCoursesByFilters(filters) : queryCoursesByFilters(filters);
 }
+
+const CACHEABLE_INTAKES = new Set(
+    [
+        "january", "february", "march", "april", "may", "june",
+        "july", "august", "september", "october", "november", "december",
+        "jan", "feb", "mar", "apr", "jun", "jul", "aug", "sep", "sept", "oct", "nov", "dec",
+    ]
+);
 
 export async function getCoursebyMainUniversity(input) {
     return {

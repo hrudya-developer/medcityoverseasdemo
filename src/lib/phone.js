@@ -23,16 +23,17 @@ export function isValidMobile(value) {
 
 /**
  * Lenient check for the server, so no genuine enquiry is turned away:
- * any number with 8 to 15 digits once spaces, brackets, dashes, dots,
- * a leading "+" and a leading "00" are removed. Only a 12-digit number
- * starting 91 (India with its country code) must look like a real
- * Indian number, which accepts landlines but still rejects "+91 12345".
+ * every digit in the value counts, whatever separators or labels
+ * surround them ("tel:", "Mob:", "/", "_", non-breaking hyphens, two
+ * numbers). A leading "00" is dropped. At least 8 digits are needed.
+ * Only a 12-digit number starting 91 (India with its country code)
+ * must look like a real Indian number, which accepts landlines but
+ * still rejects "+91 12345".
  */
 export function isPlausiblePhone(value) {
-    const compact = String(value ?? "").trim().replace(/[\s().-]/g, "");
-    const digits = compact.replace(/^\+/, "").replace(/^00/, "");
+    const digits = String(value ?? "").replace(/\D/g, "").replace(/^00/, "");
 
-    if (!/^\d{8,15}$/.test(digits)) {
+    if (digits.length < 8) {
         return false;
     }
 
