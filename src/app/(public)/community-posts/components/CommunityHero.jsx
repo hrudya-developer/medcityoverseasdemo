@@ -59,7 +59,7 @@ export default function CommunityHero() {
                         Stay Updated
                     </div>
 
-                    <h2
+                    <h1
                         id="community-posts-heading"
                         className="text-3xl font-extrabold leading-tight text-[#6b123b] md:text-5xl"
                     >
@@ -67,13 +67,14 @@ export default function CommunityHero() {
                         <span className="text-primary">
                             Community Posts
                         </span>
-                    </h2>
+                    </h1>
 
                     <p
                         className="mt-4 max-w-2xl text-base leading-7 text-slate-600 md:text-lg"
                     >
-                        Explore the latest study
-                        abroad updates, student
+                        Explore community posts with
+                        the latest study abroad
+                        updates, student
                         stories, opportunities and
                         announcements shared by the
                         Medcity global community.
