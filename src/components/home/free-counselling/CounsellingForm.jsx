@@ -24,6 +24,7 @@ import {
 import Swal from "sweetalert2";
 
 import cn from "@/lib/cn";
+import { isValidMobile } from "@/lib/phone";
 
 import {
     useGetAllDestinationsQuery,
@@ -294,14 +295,16 @@ const CounsellingForm = ({ onSuccess, }) => {
                 "Enter a valid email address.";
         }
 
+        // The picker keeps the country code ("+91") in an empty
+        // field, and country codes have at most 3 digits.
         const mobileDigits =
             mobile.replace(/\D/g, "");
 
-        if (!mobile.trim()) {
+        if (mobileDigits.length <= 3) {
             nextErrors.mobile =
                 "Mobile number is required.";
         } else if (
-            mobileDigits.length < 7
+            !isValidMobile(mobile)
         ) {
             nextErrors.mobile =
                 "Enter a valid mobile number.";
@@ -382,10 +385,12 @@ const CounsellingForm = ({ onSuccess, }) => {
                 }
             );
 
-            const result =
-                await response.json();
+            // A proxy or server error page is not JSON.
+            const result = await response
+                .json()
+                .catch(() => null);
 
-            if (!response.ok) {
+            if (!response.ok || !result || result.success === false) {
                 throw new Error(
                     result?.message ||
                     "Unable to submit your enquiry."
@@ -423,10 +428,13 @@ const CounsellingForm = ({ onSuccess, }) => {
             await Swal.fire({
                 icon: "error",
                 title: "Submission Failed",
+                // fetch throws a TypeError when the network fails.
                 text:
-                    error instanceof Error
-                        ? error.message
-                        : "Please try again.",
+                    error instanceof TypeError
+                        ? "We could not reach our server. Please check your connection and try again."
+                        : error instanceof Error
+                            ? error.message
+                            : "Please try again.",
                 confirmButtonText: "OK",
                 confirmButtonColor:
                     "#631A33",

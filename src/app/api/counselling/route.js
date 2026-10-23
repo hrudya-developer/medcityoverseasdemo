@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import {
     postOverseasForm,
 } from "@/lib/overseasApi";
+import { isValidMobile } from "@/lib/phone";
 
 const REQUIRED_FIELDS = [
     "firstname",
@@ -135,13 +136,7 @@ export async function POST(request) {
             );
         }
 
-        const mobileDigits =
-            payload.mobile.replace(
-                /\D/g,
-                ""
-            );
-
-        if (mobileDigits.length < 7) {
+        if (!isValidMobile(payload.mobile)) {
             return NextResponse.json(
                 {
                     success: false,
