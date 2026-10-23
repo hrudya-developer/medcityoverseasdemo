@@ -9,7 +9,7 @@ import {
 } from "lucide-react";
 
 import {
-  createBlogSlug,
+  blogPublicSlug,
 } from "@/lib/blogSlug";
 
 function getBlogTitle(
@@ -107,11 +107,18 @@ export default function BlogCard({
     );
 
   const slug =
-    createBlogSlug(
-      title
-    );
+    blogPublicSlug({
+      ...blog,
+      title,
+    });
 
+  // The meta description written in the admin doubles as the excerpt.
   const excerpt =
+    String(
+      blog?.meta_description ||
+      blog?.summary ||
+      ""
+    ).trim() ||
     stripHtml(
       blog?.blog ||
       blog?.subtext1 ||

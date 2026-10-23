@@ -11,22 +11,19 @@ import { notFound, permanentRedirect } from "next/navigation";
 import { createSlug } from "@/lib/slug";
 import { getGermanProgramsList } from "@/lib/germanPrograms";
 
-import { legacyFetch } from "@/lib/legacy";
+import { callLegacy } from "@/lib/legacy";
 
 export const dynamic = "force-dynamic";
-
-const API_URL =
-  `${process.env.OVERSEAS_API_BASE_URL}/getHomeTileDetails`;
-
-const API_KEY =
-  process.env.OVERSEAS_API_KEY;
 
 async function resolveProgramId(slug) {
   if (/^\d+$/.test(slug)) {
     return slug;
   }
 
-  const result = await getGermanProgramsList(6);
+  // Throw on failure: an empty list would turn real programs into 404s.
+  const result = await getGermanProgramsList(6, {
+    throwOnError: true,
+  });
   const program = result?.programs?.find((item) =>
     createSlug(
       item?.name ||
@@ -155,64 +152,12 @@ export async function generateMetadata({
 ========================================================= */
 
 async function fetchGermanCourseDetails(id) {
-  if (!API_KEY) {
-    console.error("OVERSEAS_API_KEY is missing");
-    return null;
-  }
-
-  if (!process.env.OVERSEAS_API_BASE_URL) {
-    console.error(
-      "OVERSEAS_API_BASE_URL is missing"
-    );
-    return null;
-  }
-
-  const formData = new FormData();
-
-  formData.append("api", API_KEY);
-  formData.append("uid", "0");
-  formData.append("id", String(id));
-
-  try {
-    const response = await legacyFetch(API_URL, {
-      method: "POST",
-      body: formData,
-      headers: {
-        Accept: "application/json",
-      },
-      cache: "no-store",
-    });
-
-    const text = await response.text();
-
-    if (!response.ok) {
-      console.error(
-        "German program API failed:",
-        response.status,
-        text
-      );
-
-      return null;
-    }
-
-    try {
-      return JSON.parse(text);
-    } catch (error) {
-      console.error(
-        "Invalid JSON from German program API:",
-        text
-      );
-
-      return null;
-    }
-  } catch (error) {
-    console.error(
-      "German program API error:",
-      error
-    );
-
-    return null;
-  }
+  // Straight from the database. A failure throws, so the visitor and
+  // Google get a temporary server error rather than a "not found".
+  return callLegacy("getHomeTileDetails", {
+    uid: "0",
+    id: String(id),
+  });
 }
 
 // Memoised per request so metadata and the page share one call.

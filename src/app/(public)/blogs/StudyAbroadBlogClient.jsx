@@ -7,7 +7,9 @@ import BlogPagination from "./components/BlogPagination";
 
 import useBlogs from "./hooks/useBlogs";
 
-export default function StudyAbroadBlogClient() {
+export default function StudyAbroadBlogClient({
+  initialBlogs = null,
+}) {
   const {
     blogs,
     paginatedBlogs,
@@ -22,7 +24,7 @@ export default function StudyAbroadBlogClient() {
     goToPage,
     nextPage,
     previousPage,
-  } = useBlogs();
+  } = useBlogs(initialBlogs);
 
   return (
     <main className="min-h-screen bg-white">

@@ -1,4 +1,8 @@
+import { callLegacy } from "@/lib/legacy";
+
 import StudyAbroadBlogClient from "./StudyAbroadBlogClient";
+
+export const dynamic = "force-dynamic";
 
 const SITE_URL =
   "https://medcityoverseas.com";
@@ -13,7 +17,7 @@ const OG_IMAGE =
   `${SITE_URL}/og-images/study-abroad-blog-og.webp`;
 
 const PAGE_TITLE =
-  "Study Abroad Blogs, Visa Tips & Student Guides | Medcity";
+  "Study Abroad Blogs, Visa Tips & Student Guides";
 
 const PAGE_DESCRIPTION =
   "Read expert study abroad blogs covering student visas, scholarships, university admissions, destinations, courses and international student experiences.";
@@ -175,7 +179,22 @@ function serializeJsonLd(
    PAGE
 ========================================================= */
 
-export default function StudyAbroadBlogPage() {
+export default async function StudyAbroadBlogPage() {
+  // Rendered on the server so the list (and its links) are in the page
+  // Google reads, not loaded afterwards in the browser.
+  const result = await callLegacy("getWebBlogs", {});
+
+  const initialBlogs = {
+    // Cards only need the start of each post for their excerpt.
+    blogs: (Array.isArray(result?.blog) ? result.blog : []).map(
+      ({ blog, faqs, gallery, old_slugs, ip, ...card }) => ({
+        ...card,
+        blog: String(blog ?? "").slice(0, 1500),
+      })
+    ),
+    imagePath: result?.blog_image_path ?? "",
+  };
+
   return (
     <>
       <script
@@ -188,7 +207,7 @@ export default function StudyAbroadBlogPage() {
         }}
       />
 
-      <StudyAbroadBlogClient />
+      <StudyAbroadBlogClient initialBlogs={initialBlogs} />
     </>
   );
 }

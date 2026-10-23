@@ -8,7 +8,7 @@ export default function NewBlogPage() {
     return (
         <>
             <h1 className="text-2xl font-bold">New post</h1>
-            <BlogForm initial={{ date: today(), status: "1" }} oldImageBase={imagePath("blog/")} />
+            <BlogForm initial={{ date: today(), status: "1", faqs: [], gallery: [] }} oldImageBase={imagePath("blog/")} />
         </>
     );
 }

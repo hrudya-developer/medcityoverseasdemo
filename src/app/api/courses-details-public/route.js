@@ -6,6 +6,7 @@ import {
   createSlug,
 } from "@/lib/slug";
 
+import { findCourseBySlug } from "@/lib/courseIndex";
 import {
   postOverseasForm,
 } from "@/lib/overseasApi";
@@ -688,7 +689,9 @@ export async function GET(request) {
       directCourseId;
 
     if (!courseId) {
+      // Fast path: the in-memory slug list built from the database.
       courseId =
+        (await findCourseBySlug(requestedSlug))?.id ||
         await resolveCourseId(
           requestedSlug
         );

@@ -1,3 +1,5 @@
+import { cache } from "react";
+
 import {
     notFound,
 } from "next/navigation";
@@ -190,12 +192,14 @@ async function getDestination(
     } catch (
         error
     ) {
+        // A failed lookup is not a missing country: answer with a
+        // server error so Google retries instead of dropping the page.
         console.error(
             "Destination loading error:",
             error
         );
 
-        return null;
+        throw error;
     }
 }
 
@@ -213,7 +217,7 @@ const MAX_UNIVERSITY_BATCHES = 1;
  * URL, which fails during a fresh build or deploy, and it only read
  * the first batch, so larger countries were cut short.
  */
-async function getUniversities(
+async function loadUniversities(
     countryId
 ) {
     const universities = [];
@@ -311,6 +315,9 @@ async function getUniversities(
     };
 }
 
+// Memoised per request: metadata and the page share one lookup.
+const getUniversities = cache(loadUniversities);
+
 /* =========================================================
    METADATA
 ========================================================= */
@@ -354,6 +361,17 @@ export async function generateMetadata({
         getDestinationName(
             destination
         );
+
+    const {
+        universities: listedUniversities,
+    } = await getUniversities(
+        getDestinationId(
+            destination
+        )
+    );
+
+    const hasUniversities =
+        listedUniversities.length > 0;
 
     const canonical =
         `${SITE_URL}/universities-in-${countrySlug}`;
@@ -449,16 +467,18 @@ export async function generateMetadata({
             ],
         },
 
+        // A country with no universities listed has nothing to show:
+        // keep it out of search until it does.
         robots: {
             index:
-                true,
+                hasUniversities,
 
             follow:
                 true,
 
             googleBot: {
                 index:
-                    true,
+                    hasUniversities,
 
                 follow:
                     true,
