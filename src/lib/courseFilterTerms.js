@@ -119,33 +119,51 @@ export function isMonthIntake(intake) {
     return MONTH_NAMES.some((name) => name.slice(0, 3) === intake);
 }
 
-/**
- * The regular expression for an intake: the normalised term at the start
- * of a word, so "jan" matches "Jan, Sep" and "January" but not a "jan"
- * inside another word. Other characters are escaped, so a free text
- * intake is matched literally. "" when there is no intake.
- */
-export function intakePattern(intake) {
-    const term = normaliseIntake(intake);
+// Characters that can come right before a month in the stored intakes
+// text ("Jan, Sep", "Jan/May", "(Sep)", "Feb-Jun"). A month counts when
+// it starts the text or follows one of these, so "jan" matches "Jan, Sep"
+// and "January" but not "Rejan". The same rule runs in SQL (plain LIKE,
+// so it works on every MySQL and MariaDB version) and in JS.
+const WORD_STARTS = [" ", ",", "/", "(", "-", ";", "&"];
 
-    return term ? `\\b${term.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}` : "";
+function escapeLike(value) {
+    return value.replace(/[\\%_]/g, "\\$&");
 }
 
 /**
- * The SQL REGEXP parameter for an intake, with the same test as
- * intakeMatches. (?i) keeps it case insensitive whatever the column's
- * collation. \b and (?i) need a PCRE or ICU regex engine: MariaDB 10.0.5
- * or later, or MySQL 8. MySQL 5.7 and older do not support them.
+ * The SQL condition and parameters for an intake, or null when there is
+ * no intake: c.intakes starts with the term or has it right after one
+ * of WORD_STARTS. Values are bound as parameters.
  */
-export function intakeSqlPattern(intake) {
-    const pattern = intakePattern(intake);
+export function intakeSql(intake, column = "c.intakes") {
+    const term = normaliseIntake(intake);
 
-    return pattern ? `(?i)${pattern}` : "";
+    if (!term) {
+        return null;
+    }
+
+    const escaped = escapeLike(term);
+    const patterns = [`${escaped}%`, ...WORD_STARTS.map((start) => `%${escapeLike(start)}${escaped}%`)];
+
+    return {
+        sql: `(${patterns.map(() => `LOWER(${column}) LIKE ?`).join(" OR ")})`,
+        params: patterns,
+    };
 }
 
 /** Whether a stored intakes value includes this intake at a word start. */
 export function intakeMatches(storedIntakes, intake) {
-    const pattern = intakePattern(intake);
+    const term = normaliseIntake(intake);
 
-    return !pattern || new RegExp(pattern, "i").test(String(storedIntakes ?? ""));
+    if (!term) {
+        return true;
+    }
+
+    const text = String(storedIntakes ?? "").toLowerCase();
+
+    if (text.startsWith(term)) {
+        return true;
+    }
+
+    return WORD_STARTS.some((start) => text.includes(`${start}${term}`));
 }
