@@ -9,26 +9,103 @@ import {
 
 import { createSlug } from "@/lib/slug";
 
+/*
+ * A destination whose /universities-in-<country> page is known to list
+ * no universities (that page is noindex). It is not a link and has no
+ * hover effects, so it does not look clickable; its one link goes to the
+ * country guide when the destination is live, or to a counsellor.
+ */
+function PlainDestinationCard({ name, slug, studyGuideLive }) {
+  return (
+    <div
+      className="
+        relative
+        flex
+        min-h-[320px]
+        flex-col
+        rounded-[2rem]
+        bg-white
+        p-7
+      "
+    >
+      <div
+        className="
+          grid
+          size-16
+          place-items-center
+          rounded-[1.35rem]
+          bg-gradient-to-br
+          from-primary
+          via-darkPrimary
+          to-secondary
+          text-white
+        "
+      >
+        <MapPin size={25} strokeWidth={2.2} aria-hidden="true" />
+      </div>
+
+      <div className="mt-8">
+        <h3
+          className="
+            text-[1.35rem]
+            font-black
+            leading-[1.22]
+            tracking-[-0.025em]
+            text-darkPrimary
+          "
+        >
+          Study options in {name}
+        </h3>
+
+        <p className="mt-3 max-w-[95%] text-sm leading-6 text-slate-600">
+          Courses, admissions and student visa guidance for {name}.
+        </p>
+      </div>
+
+      <div className="mt-auto pt-7">
+        {studyGuideLive ? (
+          <Link
+            href={`/study-in-${slug}`}
+            className="text-sm font-black text-primary hover:underline"
+          >
+            Study in {name} guide
+          </Link>
+        ) : (
+          <Link
+            href="/contact-us"
+            className="text-sm font-black text-primary hover:underline"
+          >
+            Ask a counsellor
+          </Link>
+        )}
+      </div>
+    </div>
+  );
+}
+
 export default function DestinationCard({
   destination,
 }) {
   const name = destination.destinationName;
   const slug = createSlug(name);
+
   // /universities-in-<country> is noindex while it lists no
-  // universities, so the card does not link to it when it is known to
-  // list none. Unknown (null) keeps the link.
-  const linked = destination.universitiesIndexable !== false;
-  const Card = linked ? Link : "div";
-  const linkProps = linked
-    ? {
-        href: `/universities-in-${slug}`,
-        "aria-label": `Explore universities in ${name}`,
-      }
-    : {};
+  // universities, so a country known to list none gets a plain card that
+  // does not link there. Unknown (null) keeps the linked card.
+  if (destination.universitiesIndexable === false) {
+    return (
+      <PlainDestinationCard
+        name={name}
+        slug={slug}
+        studyGuideLive={destination.studyGuideLive === true}
+      />
+    );
+  }
 
   return (
-    <Card
-      {...linkProps}
+    <Link
+      href={`/universities-in-${slug}`}
+      aria-label={`Explore universities in ${name}`}
       className="
         group
         relative
@@ -273,42 +350,34 @@ export default function DestinationCard({
             text-primary
           "
         >
-          {linked ? (
-            <>
-              View Universities
+          View Universities
 
-              <ArrowUpRight
-                size={16}
-                className="
-                  transition-transform
-                  duration-300
-                  group-hover:translate-x-1
-                  group-hover:-translate-y-1
-                "
-              />
-            </>
-          ) : (
-            "Universities coming soon"
-          )}
+          <ArrowUpRight
+            size={16}
+            className="
+              transition-transform
+              duration-300
+              group-hover:translate-x-1
+              group-hover:-translate-y-1
+            "
+          />
         </span>
 
-        {linked && (
-          <span
-            className="
-              rounded-full
-              bg-logoYellow/80
-              px-3
-              py-1
-              text-[10px]
-              font-black
-              uppercase
-              tracking-[0.12em]
-              text-darkPrimary
-            "
-          >
-            Explore
-          </span>
-        )}
+        <span
+          className="
+            rounded-full
+            bg-logoYellow/80
+            px-3
+            py-1
+            text-[10px]
+            font-black
+            uppercase
+            tracking-[0.12em]
+            text-darkPrimary
+          "
+        >
+          Explore
+        </span>
       </div>
 
       {/* BOTTOM GRADIENT */}
@@ -330,6 +399,6 @@ export default function DestinationCard({
           group-hover:scale-x-100
         "
       />
-    </Card>
+    </Link>
   );
 }
