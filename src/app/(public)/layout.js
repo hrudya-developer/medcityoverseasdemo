@@ -116,7 +116,7 @@ export const metadata = {
             },
             {
                 url:
-                    "/logo.png",
+                    "/icon-192.png",
                 type:
                     "image/png",
                 sizes:
@@ -124,7 +124,7 @@ export const metadata = {
             },
             {
                 url:
-                    "/logo.png",
+                    "/icon-512.png",
                 type:
                     "image/png",
                 sizes:
