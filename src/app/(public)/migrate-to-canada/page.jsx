@@ -346,7 +346,7 @@ export default async function MigrateToCanadaPage() {
       <CanadaMigrationContent
         intro={
           <QuickAnswer updated={TEMPLATE_UPDATED} className="py-10">
-            To migrate to Canada from Kerala, most skilled workers apply for permanent residence through Express Entry, which manages 3 programs: the Federal Skilled Worker Program, the Canadian Experience Class and the Federal Skilled Trades Program. Provincial Nominee Programs, work permits and family sponsorship are other routes. Medcity Overseas helps you check which route fits your profile.
+            To migrate to Canada from Kerala, most skilled workers apply for permanent residence through Express Entry, which manages 3 programs: the Federal Skilled Worker Program, the Canadian Experience Class and the Federal Skilled Trades Program. Provincial Nominee Programs, work permits and family sponsorship are other routes. Medcity Overseas can explain these routes in general terms; for advice on your own case, speak to an authorised immigration representative.
           </QuickAnswer>
         }
         beforeFaq={

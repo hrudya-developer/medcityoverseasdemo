@@ -367,7 +367,7 @@ export default async function MigrateToAustraliaPage() {
       <AustraliaMigrationContent
         intro={
           <QuickAnswer updated={TEMPLATE_UPDATED} className="py-10">
-            To migrate to Australia from Kerala, skilled workers usually apply through the points tested skilled visas: the Skilled Independent visa (subclass 189), the state nominated Skilled Nominated visa (subclass 190) and the regional Skilled Work Regional visa (subclass 491). Employer sponsored visas are another route. Medcity Overseas helps you check which pathway fits your occupation and profile.
+            To migrate to Australia from Kerala, skilled workers usually apply through the points tested skilled visas: the Skilled Independent visa (subclass 189), the state nominated Skilled Nominated visa (subclass 190) and the regional Skilled Work Regional visa (subclass 491). Employer sponsored visas are another route. Medcity Overseas can explain these routes in general terms; for advice on your own case, speak to a registered migration agent.
           </QuickAnswer>
         }
         beforeFaq={
