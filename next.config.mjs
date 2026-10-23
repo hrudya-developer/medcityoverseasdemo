@@ -78,6 +78,20 @@ const legacyPageRedirects = [
     permanent: true,
 }));
 
+/*
+ * Photos that were PNG files are now WebP. The old addresses may still be
+ * linked from outside or indexed by Google Images, so they redirect.
+ */
+const convertedImageRedirects = [
+    "placement-assistance-uk",
+    "study-abroad-student",
+    "study-in-germany",
+].map((name) => ({
+    source: `/assets/${name}.png`,
+    destination: `/assets/${name}.webp`,
+    permanent: true,
+}));
+
 const nextConfig = {
     reactCompiler: true,
 
@@ -262,6 +276,8 @@ const nextConfig = {
             ...branchRedirects,
 
             ...legacyPageRedirects,
+
+            ...convertedImageRedirects,
         ];
     },
 };
