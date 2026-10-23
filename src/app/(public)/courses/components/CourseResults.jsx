@@ -199,8 +199,9 @@ export default function CourseResults({
     ]);
 
   return (
-    <main
+    <section
       ref={resultsRef}
+      aria-label="Course results"
       className="min-w-0 scroll-mt-24"
     >
       {/* HEADER */}
@@ -432,6 +433,6 @@ export default function CourseResults({
           </p>
         </div>
       )}
-    </main>
+    </section>
   );
 }
