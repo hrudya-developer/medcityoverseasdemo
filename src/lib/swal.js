@@ -23,3 +23,13 @@ export async function fireSwal(options) {
 
     return Swal.fire(options);
 }
+
+/*
+ * Starts fetching SweetAlert2 without showing anything. Call it when a
+ * form appears so the dialog is ready by the time it is submitted.
+ */
+export function preloadSwal() {
+    import("sweetalert2").catch(() => {
+        // fireSwal retries the import and falls back to an alert.
+    });
+}

@@ -1,6 +1,7 @@
 "use client";
 
 import {
+    useEffect,
     useMemo,
     useState,
 } from "react";
@@ -19,7 +20,7 @@ import {
 
 import dynamic from "next/dynamic";
 
-import { fireSwal } from "@/lib/swal";
+import { fireSwal, preloadSwal } from "@/lib/swal";
 
 import cn from "@/lib/cn";
 import { isValidMobile } from "@/lib/phone";
@@ -177,6 +178,12 @@ const CounsellingForm = ({ onSuccess, }) => {
 
     const [submitting, setSubmitting] =
         useState(false);
+
+    // Fetch SweetAlert2 while the visitor fills in the form, so the
+    // result dialog opens without waiting for the network.
+    useEffect(() => {
+        preloadSwal();
+    }, []);
 
     const {
         data: destinationsData,
@@ -422,16 +429,20 @@ const CounsellingForm = ({ onSuccess, }) => {
             );
         } catch (error) {
             // Only the request itself fails here: the network is down.
-            setSubmitting(false);
-
             console.error(
                 "Counselling form error:",
                 error
             );
 
-            await showError(
-                "We could not reach our server. Please check your connection and try again."
-            );
+            // Stay in the submitting state until the message is
+            // closed, so a second tap cannot send the form again.
+            try {
+                await showError(
+                    "We could not reach our server. Please check your connection and try again."
+                );
+            } finally {
+                setSubmitting(false);
+            }
 
             return;
         }
@@ -442,12 +453,14 @@ const CounsellingForm = ({ onSuccess, }) => {
             .catch(() => null);
 
         if (!response.ok || !result || result.success === false) {
-            setSubmitting(false);
-
-            await showError(
-                result?.message ||
-                "Unable to submit your enquiry. Please try again."
-            );
+            try {
+                await showError(
+                    result?.message ||
+                    "Unable to submit your enquiry. Please try again."
+                );
+            } finally {
+                setSubmitting(false);
+            }
 
             return;
         }
