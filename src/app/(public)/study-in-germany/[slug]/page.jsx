@@ -13,6 +13,14 @@ import { getGermanProgramsList } from "@/lib/germanPrograms";
 
 import { callLegacy } from "@/lib/legacy";
 import { withSeoOverrides } from "@/lib/pageSeo";
+import { germanProgramGuide, GUIDE_UPDATED } from "@/lib/germanProgramGuide";
+import FaqList from "@/components/seo/FaqList";
+import OfficialSources from "@/components/seo/OfficialSources";
+import PageSchema from "@/components/seo/PageSchema";
+import QuestionAnswer from "@/components/seo/QuestionAnswer";
+import QuickAnswer from "@/components/seo/QuickAnswer";
+
+const OG_IMAGE = "/og-images/study-in-germany.webp";
 
 export const dynamic = "force-dynamic";
 
@@ -92,10 +100,16 @@ async function pageGenerateMetadata({
       course?.title ||
       "German Program";
 
+  // Title and description come from the written guide; the database
+  // text ("why") is often a short phrase, too short for a description.
+  const guide =
+      germanProgramGuide(programName, course?.why);
+
+  const title =
+      `${guide.title} | Medcity Overseas`;
+
   const description =
-      course?.why ||
-      course?.description ||
-      `Explore ${programName} in Germany, including eligibility, benefits, career opportunities and application guidance with Medcity Overseas.`;
+      guide.description;
 
   // One canonical URL per program, built from its name, so the
   // numeric /study-in-germany/1 and the name URL are not both indexed.
@@ -114,15 +128,10 @@ async function pageGenerateMetadata({
 
   return {
       title: {
-          absolute:
-              `${programName} in Germany | Medcity Overseas`,
+          absolute: title,
       },
 
-      description:
-          String(description)
-              .replace(/\s+/g, " ")
-              .trim()
-              .slice(0, 160),
+      description,
 
       alternates: {
           canonical,
@@ -133,13 +142,16 @@ async function pageGenerateMetadata({
           locale: "en_IN",
           url: canonical,
           siteName: "Medcity Overseas",
-          title:
-              `${programName} in Germany | Medcity Overseas`,
-          description:
-              String(description)
-                  .replace(/\s+/g, " ")
-                  .trim()
-                  .slice(0, 160),
+          title,
+          description,
+          images: [
+              {
+                  url: OG_IMAGE,
+                  width: 1200,
+                  height: 630,
+                  alt: `${guide.name} in Germany with Medcity Overseas`,
+              },
+          ],
       },
 
       robots: {
@@ -236,9 +248,9 @@ function Hero({ course, apiData }) {
         </div>
 
         {/* Title */}
-        <h2 className="max-w-4xl text-5xl font-black leading-[1.05] tracking-tight text-white sm:text-6xl lg:text-7xl">
+        <h1 className="max-w-4xl text-5xl font-black leading-[1.05] tracking-tight text-white sm:text-6xl lg:text-7xl">
           {course.name}
-        </h2>
+        </h1>
 
         {/* Subtitle */}
         {course.titleWhy && (
@@ -520,7 +532,7 @@ function Roadmap({ roadmap, apiData }) {
                     {countImage ? (
                       <img
                         src={countImage}
-                        alt="count image"
+                        alt={`Step ${index + 1}`}
                         className="h-10 w-10 object-contain"
                       />
                     ) : (
@@ -972,11 +984,80 @@ export default async function GermanProgramPage({
     );
   }
 
+  const guide = germanProgramGuide(
+    course?.name || course?.program_name || course?.title,
+    course?.why
+  );
+
+  const pagePath = `/study-in-germany/${programSlug}`;
+
   return (
-    <main className="bg-slate-50">
+    <div className="bg-slate-50">
+
+      <PageSchema
+        path={pagePath}
+        name={`${guide.title} | Medcity Overseas`}
+        description={guide.description}
+        dateModified={GUIDE_UPDATED}
+        image={OG_IMAGE}
+        breadcrumbs={[
+          { name: "Home", path: "/" },
+          { name: "Study in Germany", path: "/study-in-germany" },
+          { name: guide.name, path: pagePath },
+        ]}
+        about={{ "@id": `https://medcityoverseas.com${pagePath}#program` }}
+        entities={[
+          {
+            "@type": "EducationalOccupationalProgram",
+            "@id": `https://medcityoverseas.com${pagePath}#program`,
+            name: `${guide.name} in Germany`,
+            description: guide.answer,
+            url: `https://medcityoverseas.com${pagePath}`,
+          },
+        ]}
+      />
 
       {/* HERO */}
       <Hero course={course} />
+
+      {/* IN SHORT */}
+      <div className="bg-white pt-10 sm:pt-12">
+        <QuickAnswer updated={GUIDE_UPDATED}>
+          {guide.summary}
+        </QuickAnswer>
+
+        <QuestionAnswer
+          className="pt-12"
+          eyebrow="Overview"
+          question={guide.question}
+          answer={guide.answer}
+        />
+
+        <QuestionAnswer
+          className="pb-4 pt-12"
+          eyebrow="Getting started"
+          question={guide.start.question}
+          answer={guide.start.answer}
+          points={guide.start.steps}
+          ordered
+        />
+
+        <p className="mx-auto max-w-5xl px-4 pb-2 pt-4 text-sm leading-7 text-slate-600 sm:px-6 lg:px-8">
+          Compare all{" "}
+          <Link href="/study-in-germany" className="font-bold text-primary hover:underline">
+            Germany programmes
+          </Link>
+          , browse{" "}
+          <Link href="/universities-in-germany" className="font-bold text-primary hover:underline">
+            universities in Germany
+          </Link>{" "}
+          or{" "}
+          <Link href="/contact-us" className="font-bold text-primary hover:underline">
+            contact a Medcity Overseas counsellor
+          </Link>
+          .
+        </p>
+      </div>
 
       {/* BENEFITS */}
       <Benefits
@@ -1030,12 +1111,23 @@ export default async function GermanProgramPage({
         }
       />
 
+      {/* FAQS AND OFFICIAL SOURCES */}
+      <div className="space-y-14 bg-white py-16">
+        <FaqList
+          path={pagePath}
+          faqs={guide.faqs}
+          title={`${guide.name} in Germany: frequently asked questions`}
+        />
+
+        <OfficialSources links={guide.sources} />
+      </div>
+
       {/* RELATED PROGRAMS */}
       <RelatedPrograms
         apiData={apiData}
       />
 
-    </main>
+    </div>
   );
 }
 
