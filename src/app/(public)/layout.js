@@ -22,7 +22,7 @@ export const metadata = {
     },
 
     description:
-        "Medcity Overseas is a study abroad consultancy in Kerala offering expert guidance for overseas university admissions, course selection, scholarships, student visas, language training and pre-departure support.",
+        "Medcity Overseas is a study abroad consultancy in Kerala offering expert guidance for overseas university admissions, course selection, scholarships, student visas and pre-departure support.",
 
     applicationName:
         "Medcity Overseas",
@@ -60,7 +60,7 @@ export const metadata = {
         title:
             "Study Abroad Consultants in Kerala | Medcity Overseas",
         description:
-            "Get expert guidance for overseas university admissions, course selection, scholarships, student visas, German language training and study abroad planning.",
+            "Get expert guidance for overseas university admissions, course selection, scholarships, student visas and study abroad planning.",
         images: [
             {
                 url:
@@ -81,7 +81,7 @@ export const metadata = {
         title:
             "Study Abroad Consultants in Kerala | Medcity Overseas",
         description:
-            "Expert guidance for overseas education, university admissions, scholarships, student visas and language training.",
+            "Expert guidance for overseas education, university admissions, scholarships, student visas and pre-departure planning.",
         images: [
             "/og-images/default.webp",
         ],

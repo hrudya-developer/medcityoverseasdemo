@@ -39,9 +39,11 @@ const services = [
     {
         icon: Languages,
         title:
-            "Language Training",
+            "Language classes at Medcity International Academy",
         description:
-            "Language preparation and training support for selected study destinations.",
+            "IELTS, OET and German classes are run by Medcity International Academy, our sister institute.",
+        href:
+            "https://medcityacademy.com/courses/",
     },
     {
         icon: PlaneTakeoff,
@@ -137,6 +139,7 @@ export default function BranchServices({
                             icon: Icon,
                             title,
                             description,
+                            href,
                         }) => (
                             <article
                                 key={title}
@@ -177,7 +180,18 @@ export default function BranchServices({
                                         text-darkPrimary
                                     "
                                 >
-                                    {title}
+                                    {href ? (
+                                        <a
+                                            href={href}
+                                            target="_blank"
+                                            rel="noopener"
+                                            className="hover:text-primary hover:underline"
+                                        >
+                                            {title}
+                                        </a>
+                                    ) : (
+                                        title
+                                    )}
                                 </h3>
 
                                 <p

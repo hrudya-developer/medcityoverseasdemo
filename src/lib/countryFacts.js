@@ -135,7 +135,7 @@ export function countryFaqs(countryName, facts) {
 
     faqs.push({
         question: `How do I apply to a university in ${countryName} from Kerala?`,
-        answer: `Book a free counselling session with Medcity Overseas. We check your eligibility, shortlist universities and courses, prepare and submit your applications, and guide you through the offer letter, funding and student visa. Call or WhatsApp +91 90729 82555, or visit any of our 18 branches.`,
+        answer: `Book a counselling session with Medcity Overseas. We check your eligibility, shortlist universities and courses, prepare and submit your applications, and guide you through the offer letter, funding and student visa. Call or WhatsApp +91 90729 82555, or visit any of our 18 branches.`,
     });
 
     return faqs;

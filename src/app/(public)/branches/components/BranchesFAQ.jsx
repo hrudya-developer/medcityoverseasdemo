@@ -217,8 +217,9 @@ export default function BranchesFAQ() {
       Explore our branch directory to find a
       Medcity Overseas study abroad counselling
       center near you. Get guidance for university
-      applications, course selection, student visas
-      and language training programs.
+      applications, course selection and student
+      visas. Language classes are available at
+      Medcity International Academy.
     </p>
 
     {/* CTA */}

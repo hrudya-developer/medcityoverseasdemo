@@ -202,7 +202,7 @@ const organizationJsonLd = {
   },
 
   description:
-    "Medcity International Overseas Corporation, operating as Medcity Overseas, provides study abroad counselling, university admissions guidance, scholarship guidance, student visa assistance, German language training and overseas education support.",
+    "Medcity International Overseas Corporation, operating as Medcity Overseas, provides study abroad counselling, university admissions guidance, scholarship guidance, student visa assistance and overseas education support.",
 
   areaServed: {
     "@type": "Country",
@@ -310,25 +310,6 @@ const organizationJsonLd = {
 
           serviceType:
             "Study Abroad Scholarship Guidance",
-
-          provider: {
-            "@id":
-              `${SITE_URL}/#organization`,
-          },
-        },
-      },
-
-      {
-        "@type": "Offer",
-
-        itemOffered: {
-          "@type": "Service",
-
-          name:
-            "German Language Training",
-
-          serviceType:
-            "German Language Training",
 
           provider: {
             "@id":

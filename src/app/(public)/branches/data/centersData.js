@@ -70,7 +70,7 @@ function buildSeoDescription(
   }
 
   return cleanText(
-    `Visit Medcity Overseas ${location} for expert study abroad counselling, overseas university admissions, course and university selection, application support, student visa guidance, language training and pre-departure assistance.`
+    `Visit Medcity Overseas ${location} for expert study abroad counselling, overseas university admissions, course and university selection, application support, student visa guidance and pre-departure assistance.`
   );
 }
 
