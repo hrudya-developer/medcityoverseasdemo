@@ -8,7 +8,7 @@ import { postOverseasForm } from "@/lib/overseasApi";
 import { createSlug } from "@/lib/slug";
 
 import { faqs } from "./universitiesData";
-import { applySeoOverrides } from "@/lib/pageSeo";
+import { applySeoOverrides, withPageSeoFaqs } from "@/lib/pageSeo";
 
 const SITE_URL = "https://medcityoverseas.com";
 const PAGE_URL = `${SITE_URL}/universities`;

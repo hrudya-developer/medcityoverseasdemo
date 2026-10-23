@@ -6,6 +6,7 @@ import { headers } from "next/headers";
 
 import { parseFaqs, parseGallery } from "@/lib/blogHtml";
 import { query, queryOne } from "@/lib/db";
+import { templateOutputsFaqSchema } from "@/lib/faqSchemaPaths";
 import { imagePath, now } from "@/lib/legacy/util";
 
 /*
@@ -97,6 +98,70 @@ export const getPageSeo = cache(async (rawPath) => {
         throw error;
     }
 });
+
+function questionKey(question) {
+    return String(question ?? "").toLowerCase().replace(/[^\p{L}\p{N}]+/gu, " ").trim();
+}
+
+/**
+ * The FAQs for a template's FAQPage markup: its own, then the ones added
+ * to this page in the admin's SEO manager that it does not already ask.
+ * Only on templates listed in lib/faqSchemaPaths.js, where PageSeoExtras
+ * shows the admin's FAQs without a FAQPage block of its own.
+ */
+export async function faqsWithPageSeo(faqs = []) {
+    const own = (faqs ?? []).filter((faq) => faq?.question && faq?.answer);
+    const path = await currentPagePath();
+
+    if (!path || !templateOutputsFaqSchema(path)) {
+        return own;
+    }
+
+    const extra = (await getPageSeo(path))?.faqs ?? [];
+    const asked = new Set(own.map((faq) => questionKey(faq.question)));
+
+    return [...own, ...extra.filter((faq) => !asked.has(questionKey(faq.question)))];
+}
+
+/**
+ * The same for a JSON-LD object a template already built: its FAQPage
+ * node (at the top or in @graph) gets the admin's FAQs added. A FAQPage
+ * in @graph that ends up with no questions is dropped, so templates can
+ * always include one. Data without a FAQPage comes back unchanged.
+ */
+export async function withPageSeoFaqs(data) {
+    const isFaqPage = (node) => [].concat(node?.["@type"]).includes("FAQPage");
+    const graph = Array.isArray(data?.["@graph"]) ? data["@graph"] : null;
+    const node = graph ? graph.find(isFaqPage) : isFaqPage(data) ? data : null;
+
+    if (!node) {
+        return data;
+    }
+
+    const own = (node.mainEntity ?? [])
+        .map((item) => ({ question: item?.name, answer: item?.acceptedAnswer?.text }))
+        .filter((faq) => faq.question && faq.answer);
+    const added = (await faqsWithPageSeo(own)).slice(own.length);
+    const mainEntity = [
+        ...(node.mainEntity ?? []),
+        ...added.map((faq) => ({
+            "@type": "Question",
+            name: faq.question,
+            acceptedAnswer: { "@type": "Answer", text: faq.answer },
+        })),
+    ];
+
+    if (!graph) {
+        return added.length ? { ...node, mainEntity } : data;
+    }
+
+    return {
+        ...data,
+        "@graph": mainEntity.length
+            ? graph.map((item) => (item === node ? { ...node, mainEntity } : item))
+            : graph.filter((item) => item !== node),
+    };
+}
 
 function absolute(url) {
     return url && url.startsWith("/") ? `${SITE_URL}${url}` : url;

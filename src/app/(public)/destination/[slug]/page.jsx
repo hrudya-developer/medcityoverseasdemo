@@ -22,7 +22,7 @@ import {
   createDestinationSchema,
   serializeJsonLd,
 } from "./lib/destinationSchema";
-import { withSeoOverrides } from "@/lib/pageSeo";
+import { withPageSeoFaqs, withSeoOverrides } from "@/lib/pageSeo";
 import { getCountryFacts } from "@/lib/countryFacts";
 import { latestDate } from "@/lib/seoSchema";
 import { createDestinationFaqs } from "./lib/destinationFaqs";
@@ -305,7 +305,7 @@ export default async function DestinationDetailsPage({
     );
 
   const structuredData =
-    createDestinationSchema({
+    await withPageSeoFaqs(createDestinationSchema({
       seo,
       country,
       universities,
@@ -313,7 +313,7 @@ export default async function DestinationDetailsPage({
       faqs: createDestinationFaqs(
         seo.countryName
       ),
-    });
+    }));
 
   return (
     <>

@@ -1,7 +1,7 @@
 
 import StudyTabContent from "@/components/home/services/programs/StudyTabContent";
 import PopularCoursesFAQ from "./PopularCoursesFAQ";
-import { applySeoOverrides } from "@/lib/pageSeo";
+import { applySeoOverrides, withPageSeoFaqs } from "@/lib/pageSeo";
 import Link from "next/link";
 import { faqs } from "./popularCoursesFaqData";
 import CourseAreasTable from "@/components/seo/CourseAreasTable";
@@ -267,7 +267,7 @@ export default async function PopularCoursesPage() {
             <script
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{
-                    __html: serializeJsonLd(structuredData),
+                    __html: serializeJsonLd(await withPageSeoFaqs(structuredData)),
                 }}
             />
 

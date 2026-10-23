@@ -6,7 +6,7 @@ import GermanProgramsClient from "./GermanProgramsClient";
 import WhyStudyGermany from "./components/WhyStudyGermany";
 import StudyInGermanyHero from "./components/StudyInGermanyHero";
 import StudyInGermanyFAQ from "./components/StudyInGermanyFAQ";
-import { applySeoOverrides } from "@/lib/pageSeo";
+import { applySeoOverrides, withPageSeoFaqs } from "@/lib/pageSeo";
 import Link from "next/link";
 import { faqs } from "./components/studyInGermanyFaqData";
 import OfficialSources from "@/components/seo/OfficialSources";
@@ -456,14 +456,16 @@ export default async function GermanProgramsPage() {
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{
                     __html:
-                        serializeJsonLd({
-                            "@context": "https://schema.org",
-                            "@graph": [
-                                organizationNode(),
-                                websiteNode(),
-                                faqPageNode(PAGE_PATH, faqs),
-                            ],
-                        }),
+                        serializeJsonLd(
+                            await withPageSeoFaqs({
+                                "@context": "https://schema.org",
+                                "@graph": [
+                                    organizationNode(),
+                                    websiteNode(),
+                                    faqPageNode(PAGE_PATH, faqs),
+                                ],
+                            })
+                        ),
                 }}
             />
 

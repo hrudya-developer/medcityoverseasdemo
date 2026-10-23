@@ -24,7 +24,7 @@ import { joinList, latestDate, organizationNode, websiteNode } from "@/lib/seoSc
 // The date the page blocks were last changed; a page shows this or its
 // newest university or course record, whichever is later.
 const TEMPLATE_UPDATED = "2026-10-23";
-import { withSeoOverrides } from "@/lib/pageSeo";
+import { faqsWithPageSeo, withSeoOverrides } from "@/lib/pageSeo";
 
 /* =========================================================
    SITE CONFIG
@@ -628,6 +628,10 @@ export default async function UniversitiesByCountryPage({
             ? countryFaqs(countryName, facts)
             : [];
 
+    // FAQs added in the SEO manager join this page's FAQPage.
+    const schemaFaqs =
+        await faqsWithPageSeo(faqs);
+
     const pageUrl =
         `${SITE_URL}/universities-in-${countrySlug}`;
 
@@ -915,7 +919,7 @@ export default async function UniversitiesByCountryPage({
                 }}
             />
 
-            {faqs.length > 0 && (
+            {schemaFaqs.length > 0 && (
                 <script
                     type="application/ld+json"
                     dangerouslySetInnerHTML={{
@@ -923,7 +927,7 @@ export default async function UniversitiesByCountryPage({
                             "@context": "https://schema.org",
                             "@type": "FAQPage",
                             "@id": `${pageUrl}#faq`,
-                            mainEntity: faqs.map((faq) => ({
+                            mainEntity: schemaFaqs.map((faq) => ({
                                 "@type": "Question",
                                 name: faq.question,
                                 acceptedAnswer: { "@type": "Answer", text: faq.answer },

@@ -21,7 +21,7 @@ import SASteps from "@/components/home/study-abroad-steps/SASteps";
 import TestimonialSection from "@/components/home/testimonials/TestimonialSection";
 import UniversityPartners from "@/components/home/university-partners/UniversityPartners";
 import VisaAchievers from "@/components/home/visa-achievers/VisaAchievers";
-import { applySeoOverrides } from "@/lib/pageSeo";
+import { applySeoOverrides, withPageSeoFaqs } from "@/lib/pageSeo";
 import { centers } from "@/app/(public)/branches/data/centersData";
 import OfficialSources from "@/components/seo/OfficialSources";
 import QuickAnswer from "@/components/seo/QuickAnswer";
@@ -454,7 +454,10 @@ function serializeJsonLd(data) {
    HOMEPAGE
 ========================================================= */
 
-export default function Home() {
+export default async function Home() {
+  // FAQs added to the home page in the SEO manager join its FAQPage.
+  const homeFaqSchema = await withPageSeoFaqs(faqSchema);
+
   return (
     <>
       {/* ===================================================
@@ -523,7 +526,7 @@ export default function Home() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html: serializeJsonLd(
-            faqSchema
+            homeFaqSchema
           ),
         }}
       />

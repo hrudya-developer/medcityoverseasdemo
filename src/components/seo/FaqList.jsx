@@ -1,29 +1,34 @@
 import { ChevronRight } from "lucide-react";
 
+import { faqsWithPageSeo } from "@/lib/pageSeo";
 import { faqPageNode, jsonLdString } from "@/lib/seoSchema";
 
 /*
  * Frequently asked questions with their FAQPage structured data. Pass
  * `path` so the markup gets a stable @id; set schema={false} when the
- * page's own graph already carries the FAQs.
+ * page's own graph already carries the FAQs. The markup also carries
+ * FAQs added to the page in the admin's SEO manager (shown below the
+ * page by PageSeoExtras).
  */
-export default function FaqList({ faqs, path, title = "Frequently asked questions", schema = true, className = "" }) {
+export default async function FaqList({ faqs, path, title = "Frequently asked questions", schema = true, className = "" }) {
     const list = (faqs ?? []).filter((faq) => faq?.question && faq?.answer);
+    const schemaFaqs = schema ? await faqsWithPageSeo(list) : [];
+    const script = schemaFaqs.length > 0 && (
+        <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+                __html: jsonLdString({ "@context": "https://schema.org", ...faqPageNode(path || "/", schemaFaqs) }),
+            }}
+        />
+    );
 
     if (!list.length) {
-        return null;
+        return script || null;
     }
 
     return (
         <section className={`mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 ${className}`}>
-            {schema && (
-                <script
-                    type="application/ld+json"
-                    dangerouslySetInnerHTML={{
-                        __html: jsonLdString({ "@context": "https://schema.org", ...faqPageNode(path || "/", list) }),
-                    }}
-                />
-            )}
+            {script}
 
             <h2 className="text-2xl font-black text-secondary sm:text-3xl">{title}</h2>
 

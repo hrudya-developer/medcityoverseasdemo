@@ -12,7 +12,7 @@ import CourseDetailsClient from "./CourseDetailsClient";
 import { COURSE_TEMPLATE_UPDATED, CourseInShort, CourseLinks } from "./components/CourseSeoSections";
 import { formatCourseDetails } from "./utils/courseDetailsHelpers";
 import { createCourseFaqs } from "./utils/courseFaqs";
-import { withSeoOverrides } from "@/lib/pageSeo";
+import { withPageSeoFaqs, withSeoOverrides } from "@/lib/pageSeo";
 import { faqPageNode, latestDate, organizationNode, websiteNode } from "@/lib/seoSchema";
 
 const SITE_URL = "https://medcityoverseas.com";
@@ -241,7 +241,7 @@ function structuredData(loaded) {
                 breadcrumb: { "@id": `${url}#breadcrumb` },
             },
             course,
-            ...(faqs.length ? [faqPageNode(`/courses/${loaded.slug}`, faqs)] : []),
+            faqPageNode(`/courses/${loaded.slug}`, faqs),
             {
                 "@type": "BreadcrumbList",
                 "@id": `${url}#breadcrumb`,
@@ -276,7 +276,7 @@ export default async function CourseDetailsPage({ params }) {
             <script
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{
-                    __html: JSON.stringify(structuredData(loaded)).replace(/</g, "\\u003c"),
+                    __html: JSON.stringify(await withPageSeoFaqs(structuredData(loaded))).replace(/</g, "\\u003c"),
                 }}
             />
 
