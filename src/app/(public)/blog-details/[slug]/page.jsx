@@ -1,5 +1,6 @@
 import { notFound, permanentRedirect } from "next/navigation";
 import { officialSourcesForText } from "@/lib/officialSources";
+import { organizationNode } from "@/lib/seoSchema";
 
 import {
   absoluteUrl,
@@ -35,8 +36,10 @@ async function pageGenerateMetadata({ params }) {
   const image = absoluteUrl(post.cover) || DEFAULT_OG_IMAGE;
 
   return {
-    // Long titles drop the brand so the whole title shows in results.
-    title: { absolute: `${title} | Medcity Overseas`.length <= 65 || title.length < 30 ? `${title} | Medcity Overseas` : title },
+    // Always branded and never cut. The SEO meta title (at most 47
+    // characters) fits with the brand; a long post title without one
+    // shows a length warning in the SEO manager as a nudge to add it.
+    title: { absolute: `${title.replace(/\s*\|\s*Medcity Overseas\s*$/i, "")} | Medcity Overseas` },
     description: post.metaDescription,
     ...(post.focusKeyword ? { keywords: [post.focusKeyword] } : {}),
     alternates: { canonical: `/blog-details/${post.slug}` },
@@ -69,13 +72,8 @@ async function pageGenerateMetadata({ params }) {
 
 function structuredData(post) {
   const url = `${SITE_URL}/blog-details/${post.slug}`;
-  const organization = {
-    "@type": "Organization",
-    "@id": `${SITE_URL}/#organization`,
-    name: "Medcity Overseas",
-    url: SITE_URL,
-    logo: { "@type": "ImageObject", url: `${SITE_URL}/logo.png` },
-  };
+  // The same organisation node as every other page.
+  const organization = organizationNode();
 
   const images = [post.cover, ...post.gallery.map((photo) => photo.src)].map(absoluteUrl).filter(Boolean);
 

@@ -163,12 +163,11 @@ const organizationJsonLd = {
 
   "@id": `${SITE_URL}/#organization`,
 
-  name: LEGAL_NAME,
+  name: SITE_NAME,
 
-  alternateName: [
-    "Medcity Overseas",
-    "Medcity Study Abroad",
-  ],
+  legalName: LEGAL_NAME,
+
+  alternateName: "Medcity Study Abroad",
 
   url: SITE_URL,
 
@@ -185,9 +184,9 @@ const organizationJsonLd = {
 
     contentUrl: `${SITE_URL}/logo.png`,
 
-    width: 512,
+    width: 7344,
 
-    height: 512,
+    height: 2080,
 
     caption: SITE_NAME,
   },

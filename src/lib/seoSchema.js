@@ -68,8 +68,9 @@ export function organizationNode() {
         logo: {
             "@type": "ImageObject",
             url: `${SITE_URL}/logo.png`,
-            width: 512,
-            height: 512,
+            // The real size of public/logo.png.
+            width: 7344,
+            height: 2080,
         },
         telephone: CONTACT_PHONE,
         email: "info@mioc.in",
