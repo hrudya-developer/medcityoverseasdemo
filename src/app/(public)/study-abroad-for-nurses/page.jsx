@@ -168,7 +168,7 @@ export default async function StudyAbroadForNursesPage() {
             />
 
             <div className="space-y-14 py-12 sm:py-14">
-                <QuickAnswer updated={UPDATED} showContact={false}>
+                <QuickAnswer updated={UPDATED}>
                     Nurses from Kerala have three kinds of route abroad: study (an MSc or a nursing degree), training (nursing Ausbildung in Germany) and registration (joining the nursing register in the UK, Ireland, Germany, Australia, New Zealand or Malta). Each country&apos;s regulator sets its own steps and language level. Medcity Overseas guides applications to study routes such as the UK pre-registration MSc and nursing Ausbildung.
                 </QuickAnswer>
 

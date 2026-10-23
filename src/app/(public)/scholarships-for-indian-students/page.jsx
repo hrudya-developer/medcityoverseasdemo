@@ -146,7 +146,7 @@ export default async function ScholarshipsPage() {
             />
 
             <div className="space-y-14 py-12 sm:py-14">
-                <QuickAnswer updated={UPDATED} showContact={false}>
+                <QuickAnswer updated={UPDATED}>
                     Indian students can apply for university scholarships, government scholarships such as Chevening (UK), GREAT (UK) and the Government of Ireland International Education Scholarship, and external awards found through the DAAD database for Germany. Most need an offer or a course application first, and few cover every cost. Medcity Overseas helps you find schemes and apply; it does not award them.
                 </QuickAnswer>
 

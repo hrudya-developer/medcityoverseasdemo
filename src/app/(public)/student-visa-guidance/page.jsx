@@ -132,7 +132,7 @@ export default async function StudentVisaGuidancePage() {
             />
 
             <div className="space-y-14 py-12 sm:py-14">
-                <QuickAnswer updated={UPDATED} showContact={false}>
+                <QuickAnswer updated={UPDATED}>
                     A student visa needs an offer from a recognised institution, proof that you can pay your living costs, proof of English (or German) and a complete document set. The UK asks for living cost funds held for 28 days, Ireland at least 10,000 euros for the first year, and Germany a blocked account. Only the government decides; Medcity Overseas helps you prepare.
                 </QuickAnswer>
 

@@ -135,7 +135,7 @@ export default function NursingAusbildungPage() {
             />
 
             <div className="space-y-14 py-12 sm:py-14">
-                <QuickAnswer updated={UPDATED} showContact={false}>
+                <QuickAnswer updated={UPDATED}>
                     Nursing Ausbildung in Germany takes three years full time (up to five part time) under the Nursing Professions Act. You need at least ten years of schooling, a training contract with a German employer and, for the visa, usually German at B1. The employer must pay a reasonable training allowance. Medcity Overseas guides Kerala students through documents, applications and the visa file, and German classes are available at Medcity International Academy.
                 </QuickAnswer>
 

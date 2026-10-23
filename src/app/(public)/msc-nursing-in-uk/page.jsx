@@ -153,7 +153,7 @@ export default async function MscNursingUkPage() {
             />
 
             <div className="space-y-14 py-12 sm:py-14">
-                <QuickAnswer updated={UPDATED} showContact={false}>
+                <QuickAnswer updated={UPDATED}>
                     {`MSc Nursing in the UK is a postgraduate degree for nurses. ${
                         courses.length
                             ? `We currently list ${courses.length} MSc Nursing ${courses.length === 1 ? "course" : "courses"} at ${universities.length} UK ${universities.length === 1 ? "university" : "universities"}.`

@@ -114,7 +114,7 @@ export default function NursingInGermanyPage() {
             />
 
             <div className="space-y-14 py-12 sm:py-14">
-                <QuickAnswer updated={UPDATED} showContact={false}>
+                <QuickAnswer updated={UPDATED}>
                     Nurses qualified in India can work in Germany once their qualification is recognised and they hold permission to use the nursing title. Recognition normally needs German at B2. If your training differs from the German one, you close the gap with a knowledge test or an adaptation course of up to three years. Medcity Overseas does not give migration advice or offer jobs; it guides study and training routes, and German classes are available at Medcity International Academy.
                 </QuickAnswer>
 

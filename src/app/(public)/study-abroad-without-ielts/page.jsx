@@ -155,7 +155,7 @@ export default async function WithoutIeltsPage() {
             />
 
             <div className="space-y-14 py-12 sm:py-14">
-                <QuickAnswer updated={UPDATED} showContact={false}>
+                <QuickAnswer updated={UPDATED}>
                     You can study abroad without IELTS in many cases, but you still prove your English. The UK lets universities assess degree level students themselves to CEFR B2. Ireland and Australia accept other tests such as PTE Academic, TOEFL iBT or Duolingo (Ireland). Germany&apos;s English taught programmes usually ask for English, not German. Always check the visa rules as well as the university&apos;s.
                 </QuickAnswer>
 
