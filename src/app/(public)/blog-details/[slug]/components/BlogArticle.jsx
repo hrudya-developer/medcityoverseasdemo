@@ -1,4 +1,5 @@
 import Image from "next/image";
+import OfficialSources from "@/components/seo/OfficialSources";
 import Link from "next/link";
 
 import {
@@ -327,7 +328,7 @@ function RelatedPosts({ posts }) {
   );
 }
 
-export default function BlogArticle({ post, related, replacementBody = null }) {
+export default function BlogArticle({ post, related, replacementBody = null, sources = [] }) {
   return (
     <>
       <article>
@@ -419,6 +420,13 @@ export default function BlogArticle({ post, related, replacementBody = null }) {
                       Learn more <ExternalLink size={15} aria-hidden="true" />
                     </a>
                   )}
+
+                  <OfficialSources
+                    className="mt-12 !px-0"
+                    title="Official sources"
+                    intro="Rules and requirements change. Check the latest details on these official websites."
+                    links={sources}
+                  />
 
                   <AuthorCard post={post} />
                 </>

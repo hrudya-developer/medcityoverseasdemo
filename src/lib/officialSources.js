@@ -90,3 +90,22 @@ export const STUDY_ABROAD_SOURCES = [
 export function officialSourcesFor(slug) {
     return OFFICIAL_SOURCES[String(slug ?? "").toLowerCase()] ?? STUDY_ABROAD_SOURCES;
 }
+
+const COUNTRY_WORDS = [
+    ["germany", /\b(germany|german|ausbildung|studienkolleg)\b/i],
+    ["uk", /\b(uk|united kingdom|britain|england|scotland)\b/i],
+    ["canada", /\bcanad(a|ian)\b/i],
+    ["australia", /\baustralia(n)?\b/i],
+    ["ireland", /\b(ireland|irish)\b/i],
+    ["new-zealand", /\bnew zealand\b/i],
+    ["malta", /\bmalta\b/i],
+    ["usa", /\b(usa|united states|america)\b/i],
+];
+
+/** The sources for the first country a text names, or the general list. */
+export function officialSourcesForText(text) {
+    const value = String(text ?? "");
+    const match = COUNTRY_WORDS.find(([, pattern]) => pattern.test(value));
+
+    return match ? OFFICIAL_SOURCES[match[0]] : STUDY_ABROAD_SOURCES;
+}

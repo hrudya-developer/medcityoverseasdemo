@@ -1,4 +1,5 @@
 import { notFound, permanentRedirect } from "next/navigation";
+import { officialSourcesForText } from "@/lib/officialSources";
 
 import {
   absoluteUrl,
@@ -34,7 +35,8 @@ async function pageGenerateMetadata({ params }) {
   const image = absoluteUrl(post.cover) || DEFAULT_OG_IMAGE;
 
   return {
-    title: { absolute: `${title} | Medcity Overseas` },
+    // Long titles drop the brand so the whole title shows in results.
+    title: { absolute: `${title} | Medcity Overseas`.length <= 65 || title.length < 30 ? `${title} | Medcity Overseas` : title },
     description: post.metaDescription,
     ...(post.focusKeyword ? { keywords: [post.focusKeyword] } : {}),
     alternates: { canonical: `/blog-details/${post.slug}` },
@@ -145,7 +147,7 @@ export default async function BlogDetailsPage({ params }) {
   const branchInfo = getBranchInfoForBlogTitle(post.title);
 
   return (
-    <main className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -157,8 +159,9 @@ export default async function BlogDetailsPage({ params }) {
         post={post}
         related={related}
         replacementBody={branchInfo ? <BranchesInfo branch={branchInfo} /> : null}
+        sources={officialSourcesForText(`${post.title} ${post.focusKeyword ?? ""}`)}
       />
-    </main>
+    </div>
   );
 }
 
