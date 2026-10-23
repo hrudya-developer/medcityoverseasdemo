@@ -130,7 +130,7 @@ export const GUIDE_COUNTRIES = {
  * level options (lib/courseFilterTerms.js) the recorded level must
  * match (empty: any level); levelNames: words in the course name that
  * stand in for the level when the recorded level is empty or does not
- * match, unless it is one of notLevels.
+ * match; notLevels: levels that rule a course out in every case.
  */
 export const COURSE_GUIDES = [
     {
@@ -298,15 +298,17 @@ export function courseMatchesGuide({ course, level }, guide) {
         return false;
     }
 
+    // A ruled out level (a PG Certificate or PG Diploma in a master's
+    // guide) never matches, whichever way the level is read.
+    if (guide.notLevels.length && levelMatches(level, guide.notLevels)) {
+        return false;
+    }
+
     if (!guide.levels.length) {
         return true;
     }
 
-    if (levelMatches(level, guide.levels)) {
-        return true;
-    }
-
-    return guide.levelNames.length > 0 && hasWord(name, guide.levelNames) && !levelMatches(level, guide.notLevels);
+    return levelMatches(level, guide.levels) || (guide.levelNames.length > 0 && hasWord(name, guide.levelNames));
 }
 
 /** The guide a course page belongs to ({ name, level, country } as on the page), or null. */
@@ -375,20 +377,21 @@ export function guideCourseWhere(guide) {
         add(wordsSql(guide.exclude), "NOT ");
     }
 
+    const notLevels = levelSql(guide.notLevels, "COALESCE(c.level, '')");
+
+    if (notLevels) {
+        add(notLevels, "NOT ");
+    }
+
     if (guide.levels.length) {
         const level = levelSql(guide.levels, "COALESCE(c.level, '')");
-        const options = [level.clause];
-        const optionParams = [...level.params];
+        const names = guide.levelNames.length ? wordsSql(guide.levelNames) : null;
 
-        if (guide.levelNames.length) {
-            const names = wordsSql(guide.levelNames);
-            const not = levelSql(guide.notLevels, "COALESCE(c.level, '')");
-
-            options.push(not ? `(${names.clause} AND NOT ${not.clause})` : names.clause);
-            optionParams.push(...names.params, ...(not ? not.params : []));
-        }
-
-        add({ clause: `(${options.join(" OR ")})`, params: optionParams });
+        add(
+            names
+                ? { clause: `(${level.clause} OR ${names.clause})`, params: [...level.params, ...names.params] }
+                : level
+        );
     }
 
     return { clause: parts.join(" AND "), params };
