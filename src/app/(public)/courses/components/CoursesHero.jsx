@@ -1,33 +1,11 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
 import { useRouter } from "next/navigation";
-import {
-  Building2,
-  Globe2,
-  GraduationCap,
-  Headphones,
-  Search,
-} from "lucide-react";
+import { Headphones } from "lucide-react";
 
 export default function CoursesHero() {
   const router = useRouter();
-
-  const [filters, setFilters] = useState({
-    country: "",
-    university: "",
-    course: "",
-  });
-
-  const updateFilter = (event) => {
-    const { name, value } = event.target;
-
-    setFilters((current) => ({
-      ...current,
-      [name]: value,
-    }));
-  };
 
   const handleExploreCourses = () => {
     const searchSection =
@@ -44,26 +22,6 @@ export default function CoursesHero() {
         ?.querySelector("input:not([type=hidden])")
         ?.focus({ preventScroll: true });
     }, 500);
-  };
-
-  const handleSearch = (event) => {
-    event.preventDefault();
-
-    const searchParams = new URLSearchParams();
-
-    Object.entries(filters).forEach(([key, value]) => {
-      if (value) {
-        searchParams.set(key, value);
-      }
-    });
-
-    const query = searchParams.toString();
-
-    router.push(
-      query
-        ? `/courses/search?${query}`
-        : "/courses/search"
-    );
   };
 
   return (
@@ -464,49 +422,5 @@ function HeroBackground() {
         className="pointer-events-none absolute left-1/2 top-[58%] -z-[5] h-[38%] w-[90%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-white/55 blur-3xl lg:left-[28%] lg:top-[45%] lg:h-[55%] lg:w-[46%]"
       />
     </>
-  );
-}
-
-function FilterSelect({
-  selectRef,
-  icon: Icon,
-  label,
-  name,
-  value,
-  placeholder,
-  options,
-  onChange,
-}) {
-  return (
-    <label className="block min-w-0">
-      <span className="mb-2 flex items-center gap-2 text-sm font-bold text-slate-700">
-        <Icon
-          size={17}
-          className="shrink-0 text-primary"
-          aria-hidden="true"
-        />
-
-        {label}
-      </span>
-
-      <select
-        ref={selectRef}
-        name={name}
-        value={value}
-        onChange={onChange}
-        className="min-h-[52px] w-full min-w-0 cursor-pointer rounded-lg border border-slate-200 bg-white px-4 text-sm font-medium text-slate-700 outline-none transition focus:border-primary focus:ring-4 focus:ring-primary/10"
-      >
-        <option value="">{placeholder}</option>
-
-        {options.map((option) => (
-          <option
-            key={option}
-            value={option}
-          >
-            {option}
-          </option>
-        ))}
-      </select>
-    </label>
   );
 }
