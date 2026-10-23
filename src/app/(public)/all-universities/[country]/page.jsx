@@ -589,7 +589,7 @@ export default async function UniversitiesByCountryPage({
      * may be required by the UI.
      */
 
-    const universityItems =
+    const universityListEntries =
         universities.map(
             (
                 university,
@@ -808,13 +808,13 @@ export default async function UniversitiesByCountryPage({
             `Directory of universities in ${countryName} for students exploring international education opportunities.`,
 
         numberOfItems:
-            universityItems.length,
+            universityListEntries.length,
 
         itemListOrder:
             "https://schema.org/ItemListOrderUnordered",
 
         itemListElement:
-            universityItems.map(
+            universityListEntries.map(
                 (
                     university,
                     index
@@ -950,7 +950,7 @@ export default async function UniversitiesByCountryPage({
                 />
             )}
 
-            {universityItems.length >
+            {universityListEntries.length >
                 0 && (
                 <script
                     type="application/ld+json"
@@ -981,7 +981,7 @@ export default async function UniversitiesByCountryPage({
                         countryName
                     }
                     universityCount={
-                        universityItems.length
+                        universityListEntries.length
                     }
                 />
 
@@ -997,7 +997,7 @@ export default async function UniversitiesByCountryPage({
                         countryName
                     }
                     universities={
-                        universityItems
+                        universityListEntries
                     }
                     universityImagePath={
                         universityImagePath
