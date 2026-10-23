@@ -68,6 +68,10 @@ const TestimonialCard = ({
                     <img
                         src={imageSource}
                         alt={`${name} testimonial`}
+                        width={205}
+                        height={205}
+                        loading="lazy"
+                        decoding="async"
                         onError={() => {
                             if (
                                 imageSource !==

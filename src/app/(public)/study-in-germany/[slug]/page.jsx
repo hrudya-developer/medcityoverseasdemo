@@ -315,6 +315,7 @@ function Benefits({ benefits, iconPath }) {
                       <img
                         src={icon}
                         alt={item.text}
+                        decoding="async"
                         className="h-full w-full object-contain transition group-hover:brightness-0 group-hover:invert"
                       />
                     ) : (
@@ -519,6 +520,8 @@ function Roadmap({ roadmap, apiData }) {
                         <img
                           src={iconImage}
                           alt={item.text || "Step icon"}
+                          loading="lazy"
+                          decoding="async"
                           className="h-full w-full object-contain"
                         />
                       ) : (
@@ -534,6 +537,10 @@ function Roadmap({ roadmap, apiData }) {
                       <img
                         src={countImage}
                         alt={`Step ${index + 1}`}
+                        width={40}
+                        height={40}
+                        loading="lazy"
+                        decoding="async"
                         className="h-10 w-10 object-contain"
                       />
                     ) : (
@@ -616,6 +623,8 @@ function WorkSectors({
                     <img
                       src={icon}
                       alt={item.name || ""}
+                      loading="lazy"
+                      decoding="async"
                       className="h-full w-full object-contain"
                     />
                   </div>
@@ -781,6 +790,8 @@ function Videos({
                     <img
                       src={thumbnail}
                       alt={video.title || ""}
+                      loading="lazy"
+                      decoding="async"
                       className="h-64 w-full object-cover transition duration-500 group-hover:scale-105"
                     />
                   )}
@@ -889,6 +900,8 @@ function RelatedPrograms({ apiData }) {
                       <img
                         src={image}
                         alt={program.name}
+                        loading="lazy"
+                        decoding="async"
                         className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
                       />
                     )}
