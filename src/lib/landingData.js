@@ -230,10 +230,14 @@ export const getWithoutIeltsOptions = cache(() =>
 const cachedScholarships = unstable_cache(
     async () => {
         const rows = await query(
+            // Course counts come from one grouped pass over tb_courses rather than
+            // a count per university, which took over a minute during builds.
             `SELECT u.id, u.name, u.location, u.scholarship, u.applicationfeewaiver, d.country,
-                    (SELECT COUNT(*) FROM tb_courses c WHERE c.u_id = u.id AND c.status = '1') AS courses
+                    COALESCE(cc.courses, 0) AS courses
              FROM tb_universities u
              LEFT JOIN tb_destinations d ON d.id = u.d_id
+             LEFT JOIN (SELECT u_id, COUNT(*) AS courses FROM tb_courses WHERE status = '1' GROUP BY u_id) cc
+               ON cc.u_id = u.id
              WHERE u.status = '1' AND (d.id IS NULL OR d.status = '1')
                AND (LOWER(TRIM(COALESCE(u.scholarship, ''))) IN (${YES_SQL})
                  OR LOWER(TRIM(COALESCE(u.applicationfeewaiver, ''))) IN (${YES_SQL}))
