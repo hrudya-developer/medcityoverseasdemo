@@ -23,6 +23,10 @@ const navItems = [
       name: "Blogs",
       path: "/blogs",
     },
+    {
+      name: "Events",
+      path: "/events",
+    },
   ];
   
   export default navItems;

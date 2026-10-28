@@ -4,6 +4,9 @@ import Footer from "@/components/footer/Footer";
 import BottomBar from "@/components/footer/BottomBar";
 import AOSProvider from "@/app/AOSProvider";
 import PageSeoExtras from "@/components/seo/PageSeoExtras";
+import EventPopup from "@/components/events/EventPopup";
+import { eventDateTimeLabel } from "@/lib/eventFormat";
+import { getPopupEvent } from "@/lib/events";
 
 import "aos/dist/aos.css";
 
@@ -188,9 +191,30 @@ export const viewport = {
         "light",
 };
 
-export default function PublicLayout({
+/* Only what the registration popup shows, as plain values. */
+async function popupEventProps() {
+    const event = await getPopupEvent();
+
+    if (!event) {
+        return null;
+    }
+
+    return {
+        slug: event.slug,
+        url: event.url,
+        title: event.title,
+        poster: event.poster,
+        posterAlt: event.posterAlt,
+        startsAtIso: event.startsAtIso,
+        dateLabel: eventDateTimeLabel(event.startsAtIso),
+    };
+}
+
+export default async function PublicLayout({
     children,
 }) {
+    const popupEvent = await popupEventProps();
+
     return (
         <>
             <AOSProvider />
@@ -231,6 +255,8 @@ export default function PublicLayout({
 
             <Footer />
             <BottomBar />
+
+            {popupEvent && <EventPopup event={popupEvent} />}
         </>
     );
 }

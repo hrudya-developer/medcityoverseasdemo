@@ -7,6 +7,7 @@ import { loadCourseGuide } from "@/lib/courseGuideData";
 import { listCourses } from "@/lib/courseIndex";
 import { query } from "@/lib/db";
 import { loadDestinationSummaries } from "@/lib/destinationSummary";
+import { getPublishedEvents } from "@/lib/events";
 import { getGermanProgramsList } from "@/lib/germanPrograms";
 import { countrySlug, createSlug } from "@/lib/slug";
 import { createUniversityPublicSlug } from "@/lib/universitySlug";
@@ -59,6 +60,7 @@ const STATIC_PAGES = [
     ["/migrate-to-australia", "monthly", 0.7],
     ["/add-on-services", "monthly", 0.6],
     ["/blogs", "weekly", 0.8],
+    ["/events", "weekly", 0.7],
     ["/branches", "monthly", 0.7],
     ["/about-us", "monthly", 0.6],
     ["/contact-us", "monthly", 0.6],
@@ -137,6 +139,23 @@ export async function pageEntries() {
                 url: `${SITE_URL}${guidePath(guide)}`,
                 changeFrequency: "weekly",
                 priority: 0.8,
+            });
+        }
+    }
+
+    // Upcoming events only. A failure to read them only leaves them out.
+    const events = await getPublishedEvents().catch((error) => {
+        console.error("Sitemap: events could not be loaded:", error);
+
+        return [];
+    });
+
+    for (const event of events) {
+        if (!event.isPast) {
+            entries.push({
+                url: `${SITE_URL}${event.url}`,
+                changeFrequency: "weekly",
+                priority: 0.7,
             });
         }
     }
