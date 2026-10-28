@@ -47,6 +47,7 @@ function EventCard({ event }) {
                     {event.poster && (
                         <Image
                             src={event.poster}
+                            unoptimized={/^https?:/i.test(event.poster)}
                             alt=""
                             fill
                             sizes="(min-width: 1024px) 360px, (min-width: 640px) 45vw, calc(100vw - 32px)"

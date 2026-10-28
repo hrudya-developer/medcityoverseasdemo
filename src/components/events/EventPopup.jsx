@@ -82,6 +82,23 @@ function isExcludedPath(pathname, event) {
     );
 }
 
+/* Another dialog is open, or the visitor is typing in a form: not now. */
+function visitorIsBusy() {
+    if (document.querySelector('[role="dialog"][aria-modal="true"], dialog[open]')) {
+        return true;
+    }
+
+    if (document.body.style.overflow === "hidden" || document.documentElement.style.overflow === "hidden") {
+        return true;
+    }
+
+    const active = document.activeElement;
+
+    return Boolean(active && (active.isContentEditable || /^(INPUT|SELECT|TEXTAREA)$/.test(active.tagName)));
+}
+
+const RETRY_WHEN_BUSY_MS = 5000;
+
 function canShow(event) {
     return !popupShownThisSession() && !popupDismissedRecently(event.slug) && !isRegisteredFor(event.slug);
 }
@@ -102,6 +119,14 @@ export default function EventPopup({ event }) {
 
         const show = () => {
             if (fired) {
+                return;
+            }
+
+            // Try again a little later instead of covering what they are doing.
+            if (visitorIsBusy()) {
+                window.clearTimeout(timerId);
+                timerId = window.setTimeout(show, RETRY_WHEN_BUSY_MS);
+
                 return;
             }
 

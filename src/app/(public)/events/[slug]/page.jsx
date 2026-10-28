@@ -92,6 +92,13 @@ function eventNode(event) {
         ...(event.poster ? { image: [absoluteUrl(event.poster)] } : {}),
         organizer: { "@type": "Organization", name: SITE_NAME, url: SITE_URL },
         isAccessibleForFree: true,
+        offers: {
+            "@type": "Offer",
+            price: 0,
+            priceCurrency: "INR",
+            url,
+            availability: event.registrationOpen && !event.isPast ? "https://schema.org/InStock" : "https://schema.org/SoldOut",
+        },
         inLanguage: "en-IN",
     };
 }
@@ -166,6 +173,7 @@ export default async function EventPage({ params }) {
                         <div className="mx-auto w-full max-w-md lg:max-w-none">
                             <Image
                                 src={event.poster}
+                                unoptimized={/^https?:/i.test(event.poster)}
                                 alt={event.posterAlt}
                                 width={1080}
                                 height={1440}

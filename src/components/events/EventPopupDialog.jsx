@@ -122,6 +122,7 @@ export default function EventPopupDialog({ event, onClose }) {
                     <div className="relative aspect-[2/1] w-full shrink-0 bg-gradient-to-b from-[#3a3a3a] to-[#1b1b1b] md:aspect-auto md:w-[44%]">
                         <Image
                             src={event.poster}
+                            unoptimized={/^https?:/i.test(event.poster)}
                             alt={event.posterAlt}
                             fill
                             sizes="(min-width: 768px) 400px, 100vw"

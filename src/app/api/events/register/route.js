@@ -1,8 +1,8 @@
 import { after, NextResponse } from "next/server";
 
 import { checkSameOrigin, clientIp } from "@/lib/auth/adminApi";
-import { EVENT_TIME_ZONE, EventRegistrationError, registerForEvent } from "@/lib/events";
-import { postOverseasForm } from "@/lib/overseasApi";
+import { query, queryOne } from "@/lib/db";
+import { EVENT_TIME_ZONE, EventRegistrationError, normalisePhone, registerForEvent } from "@/lib/events";
 
 export const runtime = "nodejs";
 
@@ -113,16 +113,21 @@ function splitName(name) {
 }
 
 /*
- * Copy the lead into the website enquiries (tb_enquiry) through the same
- * postEnquiries call as /api/counselling, with the same field names, so
- * counsellors see it with the other enquiries. The event note goes in
- * modeofcounselling, which the enquiry list shows as "Type".
+ * Copy the lead into the website enquiries (tb_enquiry), with the same
+ * columns as /api/counselling, so counsellors see it with the other
+ * enquiries. The event note goes in modeofcounselling, which the
+ * enquiry list shows as "Type".
+ *
+ * Written here rather than through postEnquiries: that skips a lead
+ * whose email, destination and IP match an earlier enquiry, which would
+ * drop every registrant without an email on a shared network (a nursing
+ * college, an office). Here one phone number counts once per event.
  */
-function crmPayload(event, input, ip) {
+function crmValues(event, input, ip) {
     return {
         ...splitName(input.name),
         email: clean(input.email, 191),
-        mobile: clean(input.phone, 32),
+        mobile: normalisePhone(clean(input.phone, 32)).slice(0, 32),
         destination: "",
         nearestidp: clean(input.city, 100),
         studylevel: clean(input.qualification, 100),
@@ -135,14 +140,27 @@ function crmPayload(event, input, ip) {
 
 async function forwardToCrm(event, input, ip) {
     try {
-        const result = await postOverseasForm("postEnquiries", crmPayload(event, input, ip));
+        const values = crmValues(event, input, ip);
 
-        if (result?.status === false && result?.response !== "Existing Data") {
-            console.error("Event registration CRM forward was refused:", result);
+        const exists = await queryOne(
+            "SELECT id FROM tb_enquiry WHERE mobile = ? AND modeofcounselling = ? LIMIT 1",
+            [values.mobile, values.modeofcounselling]
+        );
+
+        if (exists) {
+            return;
         }
+
+        const columns = Object.keys(values);
+
+        await query(
+            `INSERT INTO tb_enquiry (${columns.join(", ")}, status)
+             VALUES (${columns.map(() => "?").join(", ")}, '1')`,
+            Object.values(values)
+        );
     } catch (error) {
         console.error(
-            "Event registration CRM forward failed:",
+            "Event registration could not be copied to the enquiries:",
             error?.cause?.message || error?.message || error
         );
     }

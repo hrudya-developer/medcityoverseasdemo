@@ -221,15 +221,26 @@ export async function registerForEvent(input, ip = "") {
         throw new EventRegistrationError("Please enter a valid email address, or leave it empty.");
     }
 
-    const result = await query(
-        `INSERT INTO web_event_registrations
+    // INSERT IGNORE adds a row only for a new phone number, so affectedRows
+    // is 1 for a new registration and 0 for a repeat (the pool's
+    // found-rows setting makes an upsert unreliable for telling them apart).
+    const inserted = await query(
+        `INSERT IGNORE INTO web_event_registrations
             (event_id, name, phone, email, qualification, city, source, ip, created_at)
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-         ON DUPLICATE KEY UPDATE name = VALUES(name), email = VALUES(email),
-            qualification = VALUES(qualification), city = VALUES(city)`,
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
         [event.id, name, storedPhone, email || null, qualification || null, city || null, source, String(ip).slice(0, 64), now()]
     );
 
-    // MySQL reports 1 affected row for a new insert and 2 (or 0) for an update.
-    return { event, alreadyRegistered: Number(result?.affectedRows) !== 1 };
+    if (Number(inserted?.affectedRows) === 1) {
+        return { event, alreadyRegistered: false };
+    }
+
+    await query(
+        `UPDATE web_event_registrations
+         SET name = ?, email = COALESCE(?, email), qualification = COALESCE(?, qualification), city = COALESCE(?, city)
+         WHERE event_id = ? AND phone = ?`,
+        [name, email || null, qualification || null, city || null, event.id, storedPhone]
+    );
+
+    return { event, alreadyRegistered: true };
 }
