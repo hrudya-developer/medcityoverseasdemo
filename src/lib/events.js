@@ -162,6 +162,29 @@ function cleanText(value, max) {
 }
 
 /**
+ * One stored form per phone number, so "+91 98765 43210", "9876543210"
+ * and "09876543210" count as the same person: Indian numbers become
+ * "+91" plus 10 digits, numbers with a country code become "+" plus
+ * digits.
+ */
+export function normalisePhone(value) {
+    const text = String(value ?? "").trim();
+    let digits = text.replace(/\D/g, "");
+
+    if (/^00/.test(digits)) {
+        digits = digits.slice(2);
+    } else if (/^0[6-9]\d{9}$/.test(digits)) {
+        digits = digits.slice(1);
+    }
+
+    if (/^[6-9]\d{9}$/.test(digits) && !text.startsWith("+")) {
+        return `+91${digits}`;
+    }
+
+    return digits ? `+${digits}` : "";
+}
+
+/**
  * Save a registration. Returns { event, alreadyRegistered }.
  * The same phone number registering twice for one event is not an
  * error: the existing registration is kept and the details refreshed.
@@ -192,6 +215,8 @@ export async function registerForEvent(input, ip = "") {
         throw new EventRegistrationError("Please enter a valid mobile number.");
     }
 
+    const storedPhone = normalisePhone(phone).slice(0, 32);
+
     if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
         throw new EventRegistrationError("Please enter a valid email address, or leave it empty.");
     }
@@ -202,7 +227,7 @@ export async function registerForEvent(input, ip = "") {
          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
          ON DUPLICATE KEY UPDATE name = VALUES(name), email = VALUES(email),
             qualification = VALUES(qualification), city = VALUES(city)`,
-        [event.id, name, phone, email || null, qualification || null, city || null, source, String(ip).slice(0, 64), now()]
+        [event.id, name, storedPhone, email || null, qualification || null, city || null, source, String(ip).slice(0, 64), now()]
     );
 
     // MySQL reports 1 affected row for a new insert and 2 (or 0) for an update.
