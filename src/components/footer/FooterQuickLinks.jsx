@@ -17,6 +17,10 @@ const footerLinks = [
         href: "/courses",
     },
     {
+        label: "Events and Webinars",
+        href: "/events",
+    },
+    {
         label: "Our Branches",
         href: "/branches",
     },
