@@ -52,12 +52,7 @@ export default function OfficialSources({
     <section
       className={`relative isolate mx-auto w-full max-w-6xl min-w-0 overflow-hidden px-4 py-10 sm:px-6 sm:py-14 lg:px-8 lg:py-20 ${className}`}
     >
-      {/* Background decoration */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute -right-20 -top-20 -z-10 h-64 w-64 rounded-full bg-blue-50/60 blur-3xl"
-      />
-
+     
       <div
         aria-hidden="true"
         className="pointer-events-none absolute -bottom-20 -left-20 -z-10 h-64 w-64 rounded-full bg-pink-50/60 blur-3xl"
@@ -65,7 +60,7 @@ export default function OfficialSources({
 
       {/* Heading */}
       <div className="mb-7 sm:mb-9 lg:mb-11">
-        <div className="mb-4 h-1.5 w-14 rounded-full bg-pink-600 sm:w-16" />
+        <div className="mb-4 h-1.5 w-14 rounded-full bg-primary sm:w-16" />
 
         <div className="flex items-start justify-between gap-4">
           <div className="min-w-0 flex-1">
@@ -81,7 +76,7 @@ export default function OfficialSources({
 
           <div
             aria-hidden="true"
-            className="hidden shrink-0 -rotate-12 rounded-2xl bg-blue-50 p-4 text-blue-700 lg:flex"
+            className="hidden shrink-0 -rotate-12 rounded-2xl bg-blue-50 p-4 text-primary lg:flex"
           >
             <Plane size={32} strokeWidth={1.5} />
           </div>
