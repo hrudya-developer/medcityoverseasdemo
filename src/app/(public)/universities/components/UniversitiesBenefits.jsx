@@ -30,7 +30,7 @@ import {
   
   export default function UniversitiesBenefits() {
     return (
-      <section className="mx-auto max-w-7xl px-5 py-16 lg:px-8 lg:py-20">
+      <section className="mx-auto max-w-7xl px-5 lg:px-8">
         <div className="rounded-[2rem] bg-gradient-to-r from-darkPrimary via-primary to-secondary px-7 py-10 text-white">
           <div className="grid gap-8 md:grid-cols-3">
             {benefits.map(
