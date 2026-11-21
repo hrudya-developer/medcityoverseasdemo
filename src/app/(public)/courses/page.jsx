@@ -275,7 +275,7 @@ export default async function CoursesPage() {
 
       <CoursesHero />
 
-      <QuickAnswer updated={TEMPLATE_UPDATED} className="pt-4 sm:pt-6">
+      <QuickAnswer updated={TEMPLATE_UPDATED} className="pt-4 sm:pt-6 mt-8 mb-10">
         {Number.isFinite(total) && total > 0
           ? `Search ${total.toLocaleString("en-IN")} study abroad courses listed on Medcity Overseas${
               countries > 0 ? ` in ${countries} ${countries === 1 ? "country" : "countries"}` : ""
