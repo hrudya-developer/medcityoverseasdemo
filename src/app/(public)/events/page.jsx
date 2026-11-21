@@ -110,11 +110,11 @@ function EventCard({ event }) {
 function Feature({ icon: Icon, children }) {
   return (
     <div className="flex items-center gap-3">
-      <span className="flex size-11 shrink-0 items-center justify-center rounded-2xl border border-white/15 bg-white/10 text-[#ff79ab] backdrop-blur-sm sm:size-12">
+      <span className="flex size-11 shrink-0 items-center justify-center rounded-2xl border border-white/15 bg-white/10 text-secondary backdrop-blur-sm sm:size-12">
         <Icon size={21} strokeWidth={2} aria-hidden="true" />
       </span>
 
-      <span className="text-sm font-extrabold text-white sm:text-base">
+      <span className="text-sm font-extrabold text-darkPrimary sm:text-base">
         {children}
       </span>
     </div>
@@ -160,64 +160,113 @@ export default async function EventsPage() {
 
       <div className="mx-auto w-full max-w-[1400px] px-4 pb-16 pt-10 sm:px-6 sm:pt-14 lg:px-10 lg:pb-24">
        
-<header className="relative overflow-hidden rounded-[28px] border border-white/10 bg-gradient-to-br from-[#07152f] via-darkPrimary to-[#123e70] px-6 py-9 shadow-[0_20px_60px_rgba(4,20,48,0.18)] sm:px-10 sm:py-12 lg:px-14">
 
-  {/* Grid Pattern */}
+
+<header className="relative isolate overflow-hidden rounded-[30px] border border-[#f5dce6] bg-gradient-to-br from-[#fff0f6] via-[#fffafd] to-[#eef3ff] px-6 py-10 shadow-[0_20px_70px_-45px_rgba(190,24,93,0.25)] sm:px-10 sm:py-12 lg:px-14 lg:py-14">
+
+  {/* PREMIUM GRID PATTERN */}
   <div
-    className="pointer-events-none absolute inset-0 opacity-[0.12]"
+    className="pointer-events-none absolute inset-0 opacity-[0.45]"
     style={{
       backgroundImage: `
-        linear-gradient(to right, rgba(255,255,255,0.25) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(255,255,255,0.25) 1px, transparent 1px)
+        linear-gradient(to right, rgba(212,20,98,0.09) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(212,20,98,0.09) 1px, transparent 1px)
       `,
-      backgroundSize: "42px 42px",
+      backgroundSize: "38px 38px",
+      maskImage:
+        "linear-gradient(to right, transparent 5%, black 55%, black 100%)",
+      WebkitMaskImage:
+        "linear-gradient(to right, transparent 5%, black 55%, black 100%)",
     }}
   />
 
-  {/* Decorative Gradient Glows */}
-  <div className="pointer-events-none absolute -right-20 -top-28 size-72 rounded-full bg-blue-400/20 blur-3xl" />
-  <div className="pointer-events-none absolute -bottom-28 left-1/3 size-72 rounded-full bg-pink-500/10 blur-3xl" />
+  {/* SOFT GRADIENT LIGHTING */}
+  <div className="pointer-events-none absolute -right-24 -top-32 h-[400px] w-[400px] rounded-full bg-[#ffd5e5]/70 blur-[100px]" />
 
-  {/* Content */}
+  <div className="pointer-events-none absolute -bottom-40 right-[15%] h-[350px] w-[350px] rounded-full bg-[#dce8ff]/80 blur-[100px]" />
+
+  <div className="pointer-events-none absolute -left-32 bottom-0 h-[280px] w-[280px] rounded-full bg-[#ffe4ee]/60 blur-[100px]" />
+
+  {/* DECORATIVE CIRCLES */}
+  <div className="pointer-events-none absolute right-[8%] top-[15%] hidden h-48 w-48 rounded-full border border-[#d41462]/10 lg:block" />
+
+  <div className="pointer-events-none absolute right-[11%] top-[22%] hidden h-32 w-32 rounded-full border border-[#d41462]/10 lg:block" />
+
+  <div className="pointer-events-none absolute right-[14%] top-[30%] hidden h-16 w-16 rounded-full bg-white/40 backdrop-blur-sm lg:block" />
+
+  {/* DECORATIVE DOT PATTERN */}
+  <div
+    className="pointer-events-none absolute bottom-8 right-10 hidden h-28 w-28 opacity-30 lg:block"
+    style={{
+      backgroundImage:
+        "radial-gradient(#d41462 1.5px, transparent 1.5px)",
+      backgroundSize: "14px 14px",
+    }}
+  />
+
+  {/* TOP ACCENT LINE */}
+  <div className="absolute left-0 top-0 h-[3px] w-full bg-gradient-to-r from-[#d41462] via-[#f6a3c1] to-transparent" />
+
+  {/* CONTENT */}
   <div className="relative z-10 max-w-4xl">
 
-    {/* Eyebrow */}
-    <div className="flex items-center gap-3">
-      <span className="h-1.5 w-9 rounded-full bg-[#f72575]" />
+    {/* EYEBROW */}
+    <div className="flex flex-wrap items-center gap-3">
+
+      <span className="h-1.5 w-9 rounded-full bg-[#d41462]" />
+
       <span className="h-1.5 w-3 rounded-full bg-yellow-400" />
 
-      <span className="text-xs font-extrabold uppercase tracking-[0.16em] text-pink-200">
+      <span className="text-[11px] font-extrabold uppercase tracking-[0.18em] text-[#b30e50] sm:text-xs">
         Medcity Overseas
       </span>
+
     </div>
 
-    {/* Heading */}
-    <h1 className="mt-5 font-nunito text-3xl font-black tracking-tight text-white sm:text-4xl lg:text-5xl">
+    {/* HEADING */}
+    <h1 className="mt-6 font-nunito text-3xl font-black leading-tight tracking-tight text-[#101b3c] sm:text-4xl lg:text-5xl">
+
       Events and{" "}
-      <span className="text-[#ff5b9a]">
+
+      <span className="relative inline-block text-[#d41462]">
         Webinars
+
+        {/* UNDERLINE ACCENT */}
+        <span className="absolute -bottom-2 left-0 h-[5px] w-[65%] rounded-full bg-gradient-to-r from-[#d41462]/30 to-transparent" />
+
       </span>
+
     </h1>
 
-    {/* Description */}
-    <p className="mt-4 max-w-3xl text-sm leading-7 text-slate-200 sm:text-base">
+    {/* DESCRIPTION */}
+    <p className="mt-6 max-w-3xl text-sm leading-7 text-[#59657d] sm:text-base sm:leading-8">
       Join our live webinars and events to learn about studying
       and working abroad, ask our counsellors your questions
       and plan your next steps. Register online for any
       upcoming event.
     </p>
 
-    {/* Features */}
-    <div className="mt-7 flex flex-wrap gap-x-7 gap-y-4">
-      <Feature icon={Video}>Live Sessions</Feature>
-      <Feature icon={GraduationCap}>Expert Guidance</Feature>
+    {/* FEATURES */}
+    <div className="mt-8 flex flex-wrap gap-x-7 gap-y-4">
+
+      <Feature icon={Video}>
+        Live Sessions
+      </Feature>
+
+      <Feature icon={GraduationCap}>
+        Expert Guidance
+      </Feature>
+
       <Feature icon={Users}>
         Q&amp;A with Counsellors
       </Feature>
+
     </div>
 
   </div>
 </header>
+
+
 
         {events.length === 0 ? (
           <section className="mt-12 rounded-[28px] border border-pink-100 bg-white p-8 text-center shadow-sm sm:p-12">
