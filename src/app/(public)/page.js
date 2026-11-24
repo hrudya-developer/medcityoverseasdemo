@@ -547,7 +547,7 @@ export default async function Home() {
       <GermanCoursesLayout />
 
       <GuideLinks
-        className="py-8"
+        className="py-8 my-10"
         title="Germany and nursing guides"
         links={[GUIDES.nursingAusbildung, GUIDES.nurses, GUIDES.after12th, GUIDES.visa]}
       />
