@@ -379,42 +379,125 @@ export default async function MigrateToAustraliaPage() {
               answer="For the Skilled Nominated visa (subclass 190) you need a nomination from an Australian state or territory, must be under 45 years of age when nominated, need at least 65 points on the Australian Government's points test, at least Competent English and a skills assessment in an occupation on the eligible skilled occupation list."
             />
 
-            <section aria-labelledby="skilled-visas-table-heading" className="mx-auto max-w-6xl px-4 pb-12 sm:px-6 lg:px-8">
-              <h2 id="skilled-visas-table-heading" className="text-2xl font-black text-slate-900 sm:text-3xl">
-                State nominated skilled visas compared
-              </h2>
+           <section
+  aria-labelledby="skilled-visas-table-heading"
+  className="mx-auto max-w-6xl px-4 pb-0 sm:px-6 lg:px-8"
+>
+  {/* Section Heading */}
+  <div className="mb-7">
+    <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-blue-100 bg-blue-50 px-3 py-1.5 text-xs font-bold tracking-wide text-secondary">
+      <span className="h-2 w-2 rounded-full bg-secondary" />
+      VISA COMPARISON
+    </div>
 
-              <p className="mt-3 max-w-3xl leading-7 text-slate-600">
-                The main rules for the two state nominated visas, as the Victorian Government sets them out from the Department of Home Affairs requirements. Each state adds its own nomination criteria.
-              </p>
+    <h2
+      id="skilled-visas-table-heading"
+      className="text-2xl font-extrabold tracking-tight text-slate-900 sm:text-3xl"
+    >
+      State nominated skilled visas compared
+    </h2>
 
-              <div className="mt-6 overflow-x-auto rounded-2xl border border-slate-200 bg-white">
-                <table className="w-full min-w-[640px] text-left text-sm">
-                  <thead className="bg-slate-50 text-xs font-extrabold uppercase tracking-[0.08em] text-slate-500">
-                    <tr>
-                      <th scope="col" className="px-4 py-3">Visa</th>
-                      <th scope="col" className="px-4 py-3">Type</th>
-                      <th scope="col" className="px-4 py-3">Main requirements</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-slate-100 text-slate-700">
-                    {SKILLED_VISAS.map((visa) => (
-                      <tr key={visa.name}>
-                        <th scope="row" className="px-4 py-3 font-bold text-slate-900">{visa.name}</th>
-                        <td className="px-4 py-3">{visa.type}</td>
-                        <td className="px-4 py-3">{visa.rules}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </section>
+    <p className="mt-3 max-w-3xl text-sm leading-7 text-slate-600 sm:text-base">
+      The main rules for the two state nominated visas, as the Victorian
+      Government sets them out from the Department of Home Affairs
+      requirements. Each state adds its own nomination criteria.
+    </p>
+  </div>
+
+  {/* Comparison Table */}
+  <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+
+    {/* Table Header Accent */}
+    <div className="h-1.5 bg-gradient-to-r from-secondary via-darkPrimary to-secondary" />
+
+    <div className="overflow-x-auto">
+      <table className="w-full min-w-[700px] text-left">
+        <thead>
+          <tr className="bg-slate-50/80">
+            <th
+              scope="col"
+              className="px-5 py-4 text-xs font-bold uppercase tracking-wider text-slate-500 sm:px-6"
+            >
+              Visa
+            </th>
+
+            <th
+              scope="col"
+              className="px-5 py-4 text-xs font-bold uppercase tracking-wider text-slate-500 sm:px-6"
+            >
+              Type
+            </th>
+
+            <th
+              scope="col"
+              className="px-5 py-4 text-xs font-bold uppercase tracking-wider text-slate-500 sm:px-6"
+            >
+              Main requirements
+            </th>
+          </tr>
+        </thead>
+
+        <tbody className="divide-y divide-slate-100">
+          {SKILLED_VISAS.map((visa, index) => (
+            <tr
+              key={visa.name}
+              className="group transition-colors duration-200 hover:bg-blue-50/40"
+            >
+              {/* Visa Name */}
+              <th
+                scope="row"
+                className="px-5 py-5 align-top sm:px-6"
+              >
+                <div className="flex items-start gap-3">
+                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-blue-50 text-sm font-bold text-secondary transition-colors group-hover:bg-blue-100">
+                    {String(index + 1).padStart(2, "0")}
+                  </div>
+
+                  <div className="min-w-0">
+                    <p className="text-sm font-bold leading-6 text-slate-900 sm:text-base">
+                      {visa.name}
+                    </p>
+                  </div>
+                </div>
+              </th>
+
+              {/* Visa Type */}
+              <td className="px-5 py-5 align-top sm:px-6">
+                <span className="inline-flex items-center rounded-full border border-blue-100 bg-blue-50 px-3 py-1.5 text-xs font-semibold text-secondary sm:text-sm">
+                  {visa.type}
+                </span>
+              </td>
+
+              {/* Requirements */}
+              <td className="px-5 py-5 align-top sm:px-6">
+                <p className="max-w-2xl text-sm leading-7 text-slate-600">
+                  {visa.rules}
+                </p>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+
+    {/* Footer */}
+    <div className="border-t border-slate-100 bg-slate-50/70 px-5 py-3.5 sm:px-6">
+      <p className="text-xs leading-6 text-slate-500 sm:text-sm">
+        <span className="font-semibold text-slate-700">
+          Note:
+        </span>{" "}
+        Nomination criteria and eligibility requirements may vary.
+        Check the relevant state and official immigration guidelines.
+      </p>
+    </div>
+  </div>
+</section>
           </>
         }
         afterFaq={
           <>
             <OfficialSources
-              className="pb-12"
+              className="pb-12 my-10"
               links={[
                 {
                   label: "Skilled Nominated visa (subclass 190), Victorian Government",

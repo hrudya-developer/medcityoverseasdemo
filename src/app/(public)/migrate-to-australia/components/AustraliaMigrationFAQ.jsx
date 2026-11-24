@@ -171,24 +171,36 @@ export default function AustraliaMigrationFAQ() {
         </div>
 
         {/* Bottom information */}
-        <div className="mx-auto mt-10 flex max-w-3xl items-start gap-3 rounded-2xl border border-primary/10 bg-white/80 p-5 shadow-sm backdrop-blur-sm sm:p-6">
-          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
-            <MapPin
-              size={19}
-              aria-hidden="true"
-            />
-          </div>
+        <div className="relative mx-auto mt-10 flex max-w-9xl items-start gap-3 overflow-hidden rounded-2xl border border-white/10 bg-darkPrimary p-5 shadow-lg sm:p-6">
 
-          <p className="text-sm leading-7 text-slate-600">
-            Australian immigration requirements,
-            occupation lists, state nomination criteria
-            and visa rules may change. Always verify the
-            latest requirements with the Australian
-            Department of Home Affairs and other relevant
-            official authorities before making an
-            application.
-          </p>
-        </div>
+  {/* Grid pattern */}
+  <div
+    aria-hidden="true"
+    className="pointer-events-none absolute inset-0 opacity-[0.10]"
+    style={{
+      backgroundImage: `
+        linear-gradient(rgba(255,255,255,0.4) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.4) 1px, transparent 1px)
+      `,
+      backgroundSize: "24px 24px",
+    }}
+  />
+
+ 
+
+  <div
+    className="relative z-10 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-white/15 bg-white/10 text-white shadow-inner"
+  >
+    <MapPin size={19} aria-hidden="true" />
+  </div>
+
+  <p className="relative z-10 text-sm leading-7 text-white sm:text-base">
+    Australian immigration requirements, occupation lists, state nomination
+    criteria and visa rules may change. Always verify the latest requirements
+    with the Australian Department of Home Affairs and other relevant official
+    authorities before making an application.
+  </p>
+</div>
       </div>
     </section>
   );

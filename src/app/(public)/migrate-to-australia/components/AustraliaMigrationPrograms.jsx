@@ -184,7 +184,7 @@ export default function AustraliaMigrationPrograms() {
         <section
             id="australia-migration-programs"
             aria-labelledby="australia-pathways-heading"
-            className="relative scroll-mt-24 overflow-hidden bg-gradient-to-b from-white via-[#fffafb] to-[#f4f9ff] px-4 py-14 sm:px-6 sm:py-16 lg:px-8 lg:py-20"
+            className="relative scroll-mt-24 overflow-hidden max-w-[1500px] mx-auto px-4 py-14 sm:px-6 sm:py-16 lg:px-8 lg:py-20"
         >
             <SectionBackground />
 

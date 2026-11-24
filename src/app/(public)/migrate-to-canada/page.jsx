@@ -358,42 +358,139 @@ export default async function MigrateToCanadaPage() {
               answer="You need at least 1 year of continuous skilled work experience within the last 10 years, a language test result of at least CLB 7, and enough money to settle in Canada unless you already work there legally with a valid job offer. IRCC then scores you out of 100 on six selection factors, and 67 points or more may qualify you."
             />
 
-            <section aria-labelledby="express-entry-table-heading" className="mx-auto max-w-6xl px-4 pb-12 sm:px-6 lg:px-8">
-              <h2 id="express-entry-table-heading" className="text-2xl font-black text-slate-900 sm:text-3xl">
-                Express Entry programs compared
-              </h2>
+            <section
+  aria-labelledby="express-entry-table-heading"
+  className="mx-auto max-w-6xl px-4 pb-0 sm:px-6 lg:px-8"
+>
+  {/* Heading */}
+  <div className="mb-8">
+    <div className="mb-3 flex items-center gap-2">
+      <span className="h-1 w-10 rounded-full bg-[#c01f53]" />
+      <span className="text-sm font-bold uppercase tracking-wider text-[#c01f53]">
+        Program Comparison
+      </span>
+    </div>
 
-              <p className="mt-3 max-w-3xl leading-7 text-slate-600">
-                The minimum language level and work experience for each program, from IRCC&apos;s comparison of Express Entry programs. Meeting them lets you enter the Express Entry pool; IRCC invites the highest ranked candidates to apply.
-              </p>
+    <h2
+      id="express-entry-table-heading"
+      className="text-2xl font-extrabold tracking-tight text-slate-900 sm:text-3xl lg:text-4xl"
+    >
+      Express Entry programs compared
+    </h2>
 
-              <div className="mt-6 overflow-x-auto rounded-2xl border border-slate-200 bg-white">
-                <table className="w-full min-w-[640px] text-left text-sm">
-                  <thead className="bg-slate-50 text-xs font-extrabold uppercase tracking-[0.08em] text-slate-500">
-                    <tr>
-                      <th scope="col" className="px-4 py-3">Program</th>
-                      <th scope="col" className="px-4 py-3">Minimum language level</th>
-                      <th scope="col" className="px-4 py-3">Work experience</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-slate-100 text-slate-700">
-                    {EXPRESS_ENTRY_PROGRAMS.map((program) => (
-                      <tr key={program.name}>
-                        <th scope="row" className="px-4 py-3 font-bold text-slate-900">{program.name}</th>
-                        <td className="px-4 py-3">{program.language}</td>
-                        <td className="px-4 py-3">{program.experience}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </section>
+    <p className="mt-4 max-w-3xl text-sm leading-7 text-slate-600 sm:text-base">
+      The minimum language level and work experience for each program, from
+      IRCC&apos;s comparison of Express Entry programs. Meeting them lets you
+      enter the Express Entry pool; IRCC invites the highest ranked candidates
+      to apply.
+    </p>
+  </div>
+
+  {/* Table */}
+  <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+    <div className="overflow-x-auto">
+      <table className="w-full min-w-[640px] text-left text-sm">
+        <thead>
+          <tr className="bg-slate-50">
+            <th
+              scope="col"
+              className="border-b border-slate-200 px-5 py-5 text-xs font-extrabold uppercase tracking-wider text-slate-500 sm:px-6"
+            >
+              Program
+            </th>
+
+            <th
+              scope="col"
+              className="border-b border-slate-200 px-5 py-5 text-xs font-extrabold uppercase tracking-wider text-slate-500 sm:px-6"
+            >
+              Minimum language level
+            </th>
+
+            <th
+              scope="col"
+              className="border-b border-slate-200 px-5 py-5 text-xs font-extrabold uppercase tracking-wider text-slate-500 sm:px-6"
+            >
+              Work experience
+            </th>
+          </tr>
+        </thead>
+
+        <tbody className="divide-y divide-slate-100 text-slate-700">
+          {EXPRESS_ENTRY_PROGRAMS.map((program) => (
+            <tr
+              key={program.name}
+              className="transition-colors duration-200 hover:bg-rose-50/50"
+            >
+              <th
+                scope="row"
+                className="px-5 py-5 font-bold text-slate-900 sm:px-6"
+              >
+                <div className="flex items-center gap-3">
+                  <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-rose-50 text-[#c01f53]">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="18"
+                      height="18"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.8"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path d="M12 15V3" />
+                      <path d="m7 8 5-5 5 5" />
+                      <path d="M5 21h14" />
+                      <path d="M7 18h10" />
+                    </svg>
+                  </span>
+
+                  <span>{program.name}</span>
+                </div>
+              </th>
+
+              <td className="px-5 py-5 leading-6 sm:px-6">
+                {program.language}
+              </td>
+
+              <td className="px-5 py-5 leading-6 sm:px-6">
+                {program.experience}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+
+    {/* Mobile scroll hint */}
+    <div className="border-t border-slate-100 bg-slate-50 px-4 py-3 sm:hidden">
+      <p className="flex items-center justify-center gap-2 text-xs font-medium text-slate-500">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <path d="m8 7-5 5 5 5" />
+          <path d="M3 12h18" />
+          <path d="m16 7 5 5-5 5" />
+        </svg>
+        Scroll horizontally to view all columns
+      </p>
+    </div>
+  </div>
+</section>
           </>
         }
         afterFaq={
           <>
             <OfficialSources
-              className="pb-12"
+              className="pb-12 my-10"
               links={[
                 {
                   label: "Compare Express Entry programs (IRCC)",

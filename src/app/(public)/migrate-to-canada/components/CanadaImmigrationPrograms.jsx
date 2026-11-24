@@ -9,7 +9,8 @@ export default function CanadaImmigrationPrograms() {
     return (
         <section
             aria-labelledby="canada-programs-heading"
-            className="scroll-mt-24" id="canada-immigration-programs"
+            className="scroll-mt-24 max-w-[1500px] mx-auto px-4 sm:px-6 lg:px-8"
+            id="canada-immigration-programs"
         >
             <h2
                 id="canada-programs-heading"

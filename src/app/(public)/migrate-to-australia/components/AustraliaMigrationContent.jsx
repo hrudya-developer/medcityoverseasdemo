@@ -36,7 +36,7 @@ function MigrationDisclaimer() {
     return (
         <aside
             aria-label="Australia migration information disclaimer"
-            className="mx-auto max-w-7xl px-4 pt-12 sm:px-6 lg:px-8"
+            className="mx-auto max-w-7xl px-4 pt-10 pb-10 sm:px-6 lg:px-8"
         >
             <div
                 className="rounded-2xl border border-amber-200 bg-amber-50 px-5 py-4 text-sm leading-6 text-amber-950"
