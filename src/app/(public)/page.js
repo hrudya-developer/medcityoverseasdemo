@@ -569,7 +569,7 @@ export default async function Home() {
       <FAQ />
 
       <OfficialSources
-        className="py-14"
+        className="py-14 my-10"
         title="Official visa information"
         links={STUDY_ABROAD_SOURCES}
       />
