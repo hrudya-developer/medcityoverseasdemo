@@ -336,7 +336,7 @@ export default async function PopularCoursesPage() {
                 <section
                     id="popular-courses-faq"
                     aria-labelledby="popular-courses-faq-heading"
-                    className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8 lg:py-20"
+                    className="mx-auto max-w-7xl px-4 py-0 sm:px-6 lg:px-8 lg:py-0"
                 >
                     <h2
                         id="popular-courses-faq-heading"
@@ -348,10 +348,10 @@ export default async function PopularCoursesPage() {
                     <PopularCoursesFAQ />
                 </section>
 
-                <GuideLinks className="pb-8" title="Course guides by country" links={guideLinks} />
+                <GuideLinks className="pb-8 bg-transparent border border-gray-200" title="Course guides by country" links={guideLinks} />
 
                 <GuideLinks
-                    className="pb-12"
+                    className="pb-12 bg-blue-50"
                     title="Nursing and other guides"
                     links={[GUIDES.nurses, GUIDES.mscNursingUk, GUIDES.nursingAusbildung, GUIDES.after12th]}
                 />

@@ -145,7 +145,7 @@ export default function PopularCoursesFAQ() {
     faqs.slice(4, 8);
 
   return (
-    <section className="relative overflow-hidden bg-white py-16 sm:py-20 lg:py-24">
+    <section className="relative overflow-hidden bg-white py-10 sm:py-10 lg:py-10">
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-0"
@@ -267,7 +267,7 @@ export default function PopularCoursesFAQ() {
           </div>
         </div>
 
-        <div className="mt-9 flex flex-wrap items-center justify-center gap-2 text-center text-sm text-slate-500">
+        <div className="mt-9 flex flex-wrap items-center justify-center gap-2 text-center text-sm text-slate-500 p-3 rounded-full bg-blue-50">
           <GraduationCap
             size={18}
             className="text-primary"
