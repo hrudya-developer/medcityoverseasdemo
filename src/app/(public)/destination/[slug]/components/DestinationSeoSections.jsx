@@ -84,7 +84,7 @@ export function DestinationInShort({ countryName, country, facts, updated }) {
 export function DestinationLinks({ countryName, destinationSlug, linkUniversities = false, courseGuides = [] }) {
     return (
         <div className="space-y-12 bg-white py-14">
-            <p className="mx-auto max-w-5xl px-4 text-sm leading-7 text-slate-600 sm:px-6 lg:px-8">
+            <p className="mx-auto max-w-5xl px-4 text-sm leading-7 text-slate-600 border border-dotted border-[#079d7f12] bg-[#079d7f12] text-center sm:px-6 lg:px-8 py-3 rounded-full">
                 {linkUniversities ? (
                     <>
                         Compare{" "}
