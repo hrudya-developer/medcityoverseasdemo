@@ -64,14 +64,14 @@ export function CourseLinks({ facts, universityPath, countrySlug, countryLive = 
     return (
         <div className="space-y-12 bg-white py-14">
             <section className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
-                <h2 className="text-2xl font-black text-slate-900 sm:text-3xl">More about {facts.university}</h2>
+                <h2 className="text-2xl font-black text-slate-900 sm:text-3xl my-2 text-center">More about {facts.university}</h2>
 
                 <ul className="mt-5 grid gap-3 sm:grid-cols-2">
                     {universityPath && (
                         <li>
                             <Link
                                 href={universityPath}
-                                className="block rounded-2xl border border-slate-200 p-4 font-bold text-slate-900 transition hover:border-primary/30 hover:text-primary"
+                                className="block rounded-2xl border border-slate-200 p-4 font-bold text-white text-center bg-darkPrimary transition hover:border-primary/30 hover:text-primary"
                             >
                                 All courses at {facts.university}
                             </Link>
@@ -81,7 +81,7 @@ export function CourseLinks({ facts, universityPath, countrySlug, countryLive = 
                         <li>
                             <Link
                                 href={`/universities-in-${countrySlug}`}
-                                className="block rounded-2xl border border-slate-200 p-4 font-bold text-slate-900 transition hover:border-primary/30 hover:text-primary"
+                                className="block rounded-2xl border border-slate-200 p-4 font-bold text-white bg-darkPrimary text-center transition hover:border-primary/30 hover:text-primary"
                             >
                                 Universities in {facts.country}
                             </Link>
@@ -91,7 +91,7 @@ export function CourseLinks({ facts, universityPath, countrySlug, countryLive = 
                         <li>
                             <Link
                                 href={`/study-in-${countrySlug}`}
-                                className="block rounded-2xl border border-slate-200 p-4 font-bold text-slate-900 transition hover:border-primary/30 hover:text-primary"
+                                className="block rounded-2xl border border-slate-200 p-4 font-bold text-white bg-darkPrimary text-center transition hover:border-primary/30 hover:text-primary"
                             >
                                 Study in {facts.country} guide
                             </Link>
@@ -100,7 +100,7 @@ export function CourseLinks({ facts, universityPath, countrySlug, countryLive = 
                     <li>
                         <Link
                             href="/courses"
-                            className="block rounded-2xl border border-slate-200 p-4 font-bold text-slate-900 transition hover:border-primary/30 hover:text-primary"
+                            className="block rounded-2xl border border-slate-200 p-4 font-bold text-white bg-darkPrimary text-center transition hover:border-primary/30 hover:text-primary"
                         >
                             Search all courses
                         </Link>
@@ -109,7 +109,7 @@ export function CourseLinks({ facts, universityPath, countrySlug, countryLive = 
                         <li>
                             <Link
                                 href={courseGuide.href}
-                                className="block rounded-2xl border border-slate-200 p-4 font-bold text-slate-900 transition hover:border-primary/30 hover:text-primary"
+                                className="block rounded-2xl border border-slate-200 p-4 font-bold text-white bg-darkPrimary text-center transition hover:border-primary/30 hover:text-primary"
                             >
                                 {courseGuide.label} for Indian students
                             </Link>
@@ -119,7 +119,7 @@ export function CourseLinks({ facts, universityPath, countrySlug, countryLive = 
                         <li>
                             <Link
                                 href={nursingGuide.href}
-                                className="block rounded-2xl border border-slate-200 p-4 font-bold text-slate-900 transition hover:border-primary/30 hover:text-primary"
+                                className="block rounded-2xl border border-slate-200 p-4 font-bold text-white bg-darkPrimary text-center transition hover:border-primary/30 hover:text-primary"
                             >
                                 {nursingGuide.label}
                             </Link>
@@ -128,7 +128,7 @@ export function CourseLinks({ facts, universityPath, countrySlug, countryLive = 
                     <li>
                         <Link
                             href="/contact-us"
-                            className="block rounded-2xl border border-slate-200 p-4 font-bold text-slate-900 transition hover:border-primary/30 hover:text-primary"
+                            className="block rounded-2xl border border-slate-200 p-4 font-bold text-white bg-darkPrimary text-center transition hover:border-primary/30 hover:text-primary"
                         >
                             Book a counselling session
                         </Link>
