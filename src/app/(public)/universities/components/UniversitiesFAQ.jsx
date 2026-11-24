@@ -9,7 +9,7 @@ export default function UniversitiesFAQ({
               Frequently Asked Questions
             </p>
   
-            <h2 className="mt-3 text-3xl font-black text-[#071641] sm:text-4xl">
+            <h2 className="mt-3 text-3xl font-black text-darkPrimary sm:text-4xl">
               Universities Abroad FAQs
             </h2>
           </div>

@@ -53,7 +53,7 @@ export default function QuestionAnswer({
 
     return (
         <section
-            className={`relative isolate mx-auto w-full min-w-0 max-w-[1600px] px-4 py-8 sm:px-6 sm:py-12 lg:px-8 lg:py-10 ${className}`}
+            className={`relative isolate mx-auto w-full min-w-0 max-w-7xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8 lg:py-10 ${className}`}
         >
             <div
                 className={`relative overflow-hidden rounded-[24px] border p-5 sm:rounded-[30px] sm:p-8 lg:p-10 ${

@@ -292,7 +292,7 @@ export default function UniversityAbout({
           pt-5
         "
       >
-        <FAQ />
+        {/* <FAQ /> */}
       </section>
     </div>
   );
