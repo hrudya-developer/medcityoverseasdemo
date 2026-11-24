@@ -62,7 +62,7 @@ export default function GuideLinks({
     return (
         <nav
             aria-label={title}
-            className={`relative mx-auto w-full max-w-7xl min-w-0 bg-[#ff467b14] rounded-3xl px-4 py-10 sm:px-6 sm:py-14 lg:px-8 lg:py-16 ${className}`}
+            className={`relative mx-auto w-full max-w-7xl min-w-0 bg-[#ff884614] rounded-3xl px-4 py-10 sm:px-6 sm:py-14 lg:px-8 lg:py-16 ${className}`}
         >
             {/* Section heading */}
             <div className="mb-7 sm:mb-9">
