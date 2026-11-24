@@ -50,7 +50,7 @@ export default function OfficialSources({
 
   return (
     <section
-      className={`relative isolate mx-auto w-full max-w-6xl min-w-0 overflow-hidden px-4 py-10 sm:px-6 sm:py-14 lg:px-8 lg:py-20 ${className}`}
+      className={`relative isolate mx-auto w-full max-w-6xl bg-gray-50 border border-gray-100 rounded-4xl min-w-0 overflow-hidden px-4 py-10 sm:px-6 sm:py-14 lg:px-8 lg:py-20 ${className}`}
     >
      
       <div
@@ -76,7 +76,7 @@ export default function OfficialSources({
 
           <div
             aria-hidden="true"
-            className="hidden shrink-0 -rotate-12 rounded-2xl bg-blue-50 p-4 text-primary lg:flex"
+            className="hidden shrink-0 -rotate-12 rounded-2xl bg-blue-50 border border-blue-50 shadow-sm p-4 text-primary lg:flex"
           >
             <Plane size={32} strokeWidth={1.5} />
           </div>
