@@ -64,7 +64,7 @@ export function CourseLinks({ facts, universityPath, countrySlug, countryLive = 
     return (
         <div className="space-y-12 bg-white py-14">
             <section className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
-                <h2 className="text-2xl font-black text-slate-900 sm:text-3xl my-2 text-center">More about {facts.university}</h2>
+                <h2 className="text-2xl font-black text-slate-900 sm:text-3xl my-2 mb-10 text-center">More about {facts.university}</h2>
 
                 <ul className="mt-5 grid gap-3 sm:grid-cols-2">
                     {universityPath && (
