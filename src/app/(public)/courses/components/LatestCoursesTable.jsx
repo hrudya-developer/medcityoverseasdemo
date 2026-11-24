@@ -34,7 +34,7 @@ export default async function LatestCoursesTable({
     return (
         <section
             aria-labelledby="latest-courses-heading"
-            className={`relative mx-auto w-full max-w-[1500px] bg-[#f4faff] rounded-4xl p-12 ${className}`}
+            className={`relative mx-auto w-full max-w-[1500px] bg-[#f4faff] rounded-3xl p-12 ${className}`}
         >
             {/* Section heading */}
             <div className="mb-8 sm:mb-10">

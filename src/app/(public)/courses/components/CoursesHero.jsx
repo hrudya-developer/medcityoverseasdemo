@@ -111,12 +111,7 @@ function HeroImage() {
           alt="Student exploring international study opportunities"
           fill
           priority
-          sizes="
-            (max-width: 440px) 82vw,
-            (max-width: 640px) 70vw,
-            (max-width: 1024px) 62vw,
-            45vw
-          "
+          sizes="(max-width: 440px) 82vw,(max-width: 640px) 70vw,(max-width: 1024px) 62vw,45vw"
           className="object-cover object-center"
         />
       </div>
