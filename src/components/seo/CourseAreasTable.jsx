@@ -34,7 +34,7 @@ export default async function CourseAreasTable({
 
   return (
     <section
-      className={`relative mx-auto w-full max-w-[1500px] px-4 py-12 sm:px-6 sm:py-16 lg:px-8 lg:py-20 ${className}`}
+      className={`relative mx-auto w-full max-w-7xl bg-orange-50/70 mb-8 rounded-3xl px-10 py-10 ${className}`}
     >
       {/* SECTION HEADING */}
       <div className="mb-8 sm:mb-10">
