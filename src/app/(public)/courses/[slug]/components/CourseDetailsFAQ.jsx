@@ -79,9 +79,9 @@ export default function CourseDetailsFAQ({
 
                     <h2
                         id="course-details-faq-heading"
-                        className="mt-3 text-3xl font-black tracking-tight text-darkPrimary sm:text-4xl lg:text-5xl"
+                        className="mt-3 text-3xl font-black tracking-tight text-black sm:text-4xl lg:text-4xl"
                     >
-                        Frequently Asked Questions About{" "}
+                        Frequently Asked Questions About{" "} 
                         <span className="text-primary">
                             {courseTitle ||
                                 "This Course"}
@@ -194,7 +194,7 @@ export default function CourseDetailsFAQ({
                                                     )}
                                                 </span>
 
-                                                <span className="text-base font-extrabold leading-7 text-slate-900 sm:text-[17px]">
+                                                <span className="text-sm font-extrabold leading-7 text-slate-900 sm:text-[14px]">
                                                     {
                                                         faq.question
                                                     }

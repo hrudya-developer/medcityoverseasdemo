@@ -33,6 +33,8 @@ const TITLE = "Nursing Ausbildung in Germany from Kerala";
 const DESCRIPTION =
     "Nursing Ausbildung in Germany for Kerala students: who can apply, the German level the visa asks for, the paid training contract and each step to your visa.";
 const OG_IMAGE = "/og-images/study-in-germany.webp";
+const GUIDE_SECTION_SURFACE =
+    "!my-5 !max-w-6xl rounded-[1.75rem] border border-slate-200/70 bg-white/90 py-6 shadow-[0_16px_50px_rgba(15,23,42,0.06)] ring-1 ring-white/80 transition-shadow duration-300 hover:shadow-[0_20px_60px_rgba(15,23,42,0.09)] sm:py-8 lg:py-9";
 
 const SRC = {
     pflbg1: "https://www.gesetze-im-internet.de/pflbg/__1.html",
@@ -126,15 +128,15 @@ export default function NursingAusbildungPage() {
                 ]}
                 faqs={FAQS}
             />
-
+<div className="[&>section>div:nth-child(2)]:!mx-auto [&>section>div:nth-child(2)]:!max-w-9xl [&>section>div:nth-child(2)]:!w-full [&>section>div:nth-child(2)]:!text-center [&>section>div:nth-child(2)>nav>ol]:!justify-center [&>section>div:nth-child(2)>h1]:!mx-auto [&>section>div:nth-child(2)>p]:!mx-auto [&>section>div:nth-child(2)>div]:!justify-center w-full text-center flex flex-col items-stretch justify-center">
             <GuideHero
                 eyebrow="Study in Germany"
                 title={TITLE}
                 breadcrumbs={BREADCRUMBS}
                 intro="Nursing Ausbildung in Germany is a three year, state regulated training that leads to the Pflegefachfrau or Pflegefachmann qualification. You learn at a nursing school and work on hospital or care wards under a training contract, and your employer pays you a training allowance."
-            />
+            /></div>
 
-            <div className="space-y-14 py-12 sm:py-14">
+            <div className="relative isolate space-y-6 overflow-hidden bg-gradient-to-b from-slate-50 via-white to-rose-50/30 py-10 sm:space-y-8 sm:py-14 lg:py-16">
                 <QuickAnswer updated={UPDATED}>
                     Nursing Ausbildung in Germany takes three years full time (up to five part time) under the Nursing Professions Act. You need at least ten years of schooling, a training contract with a German employer and, for the visa, usually German at B1. The employer must pay a reasonable training allowance. Medcity Overseas guides Kerala students through documents, applications and the visa file, and German classes are available at Medcity International Academy.
                 </QuickAnswer>
@@ -143,56 +145,203 @@ export default function NursingAusbildungPage() {
                     eyebrow="Overview"
                     question="What is nursing Ausbildung in Germany?"
                     answer="Nursing Ausbildung is Germany's generalist nursing training. It lasts three years full time, mixes classes at a nursing school with practical placements, and ends with a state examination. If you pass, you may use the protected title Pflegefachfrau or Pflegefachmann. Practical training makes up the larger share, and your training provider pays you throughout."
+                    className="!py-4 sm:!py-5 lg:!py-6"
                 />
 
-                <GuideSection title="Who can apply for nursing Ausbildung?">
-                    <Prose>
-                        <p>
-                            Section 11 of the{" "}
-                            <SourceLink href={SRC.pflbg11}>Nursing Professions Act (PflBG)</SourceLink> sets the school education needed. Section 2 of the same act, which section 11 applies, adds reliability, health and German language. In plain terms:
-                        </p>
-                    </Prose>
-                    <PointList
-                        items={[
-                            { title: "School education", text: "a certificate equal to the German intermediate school certificate (mittlerer Schulabschluss), or ten years of general schooling, or a lower certificate together with a completed vocational training of at least two years." },
-                            { title: "Reliability", text: "no conduct that shows you are unreliable for the profession." },
-                            { title: "Health", text: "you must not be medically unfit to work as a nurse." },
-                            { title: "German", text: "the German needed to practise the profession, built up during the training." },
-                            { title: "A training place", text: "a signed training contract with a German hospital or care provider, plus the training plan, for the visa." },
-                        ]}
-                    />
-                    <Prose>
-                        <p>
-                            A Class 10 or Class 12 certificate from Kerala is checked against these rules by the nursing school or the responsible German office. A Class 12 pass is more than ten years of schooling, and you do not need a nursing degree first.
-                        </p>
-                    </Prose>
-                </GuideSection>
+              
+<GuideSection title="Who can apply for nursing Ausbildung?" className={GUIDE_SECTION_SURFACE}>
+    <div className="relative overflow-hidden rounded-3xl border mt-4 border-slate-200/70 bg-gradient-to-br from-white via-white to-rose-50/50 p-4 sm:p-6 lg:p-8">
 
-                <GuideSection title="What German level do you need, and how do you get there?">
-                    <Prose>
-                        <p>
-                            For a vocational training visa, section 16a of the{" "}
-                            <SourceLink href={SRC.aufenthg16a}>Residence Act</SourceLink> asks for sufficient German (ausreichende Sprachkenntnisse), which section 2 of the{" "}
-                            <SourceLink href={SRC.aufenthg2}>same act</SourceLink> defines as level B1. The checklist of the{" "}
-                            <SourceLink href={SRC.mission}>German Missions in India</SourceLink> accepts one of three things:
-                        </p>
-                    </Prose>
-                    <PointList
-                        items={[
-                            "a German language certificate of at least B1,",
-                            "a confirmation from the school or employer that your German was checked and is sufficient, or",
-                            "proof that you will attend a preparatory German course.",
-                        ]}
-                    />
-                    <Prose>
-                        <p>
-                            Your employer or nursing school may ask for more than the visa minimum, and classes, placements and the final exam are in German, so plan to keep learning after B1.
-                        </p>
-                    </Prose>
-                    <AcademyNote subjects="German" />
-                </GuideSection>
+        {/* Decorative background */}
+        <div className="pointer-events-none absolute -right-20 -top-20 h-52 w-52 rounded-full bg-pink-100/40 blur-3xl" />
+        <div className="pointer-events-none absolute -bottom-20 -left-16 h-48 w-48 rounded-full bg-rose-100/30 blur-3xl" />
 
-                <GuideSection title="Is the training allowance paid every month?">
+        <div className="relative">
+
+            {/* Intro */}
+            <div className="mb-6 sm:mb-8">
+                <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-pink-100 bg-pink-50 px-3 py-1.5 text-xs font-bold tracking-wider text-pink-600 sm:text-sm">
+                    <span className="h-1.5 w-1.5 rounded-full bg-pink-500" />
+                    ELIGIBILITY REQUIREMENTS
+                </div>
+
+                <Prose>
+                    <p>
+                        Section 11 of the{" "}
+                        <SourceLink href={SRC.pflbg11}>
+                            Nursing Professions Act (PflBG)
+                        </SourceLink>{" "}
+                        sets the school education needed. Section 2 of the same act,
+                        which section 11 applies, adds reliability, health and German
+                        language. In plain terms:
+                    </p>
+                </Prose>
+            </div>
+
+            {/* Requirements */}
+            <PointList
+                items={[
+                    {
+                        title: "School education",
+                        text: "a certificate equal to the German intermediate school certificate (mittlerer Schulabschluss), or ten years of general schooling, or a lower certificate together with a completed vocational training of at least two years.",
+                    },
+                    {
+                        title: "Reliability",
+                        text: "no conduct that shows you are unreliable for the profession.",
+                    },
+                    {
+                        title: "Health",
+                        text: "you must not be medically unfit to work as a nurse.",
+                    },
+                    {
+                        title: "German",
+                        text: "the German needed to practise the profession, built up during the training.",
+                    },
+                    {
+                        title: "A training place",
+                        text: "a signed training contract with a German hospital or care provider, plus the training plan, for the visa.",
+                    },
+                ]}
+            />
+
+            {/* Closing note */}
+            <div className="mt-6 rounded-2xl border border-pink-100 bg-white/80 p-4 sm:mt-8 sm:p-5">
+                <div className="flex items-start gap-3">
+                    <div className="mt-1 h-2.5 w-2.5 shrink-0 rounded-full bg-pink-500 ring-4 ring-pink-100" />
+
+                    <div className="min-w-0">
+                        <h3 className="mb-2 text-sm font-bold text-slate-900 sm:text-base">
+                            What this means for Indian students
+                        </h3>
+
+                        <div className="text-sm leading-7 text-slate-600 sm:text-base sm:leading-8">
+                            <Prose>
+                                <p>
+                                    A Class 10 or Class 12 certificate from Kerala is
+                                    checked against these rules by the nursing school
+                                    or the responsible German office. A Class 12 pass
+                                    is more than ten years of schooling, and you do
+                                    not need a nursing degree first.
+                                </p>
+                            </Prose>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</GuideSection>
+
+
+              
+<GuideSection title="What German level do you need, and how do you get there?" className={GUIDE_SECTION_SURFACE}>
+    <div className="space-y-7">
+
+        {/* Introduction */}
+        <Prose>
+            <p>
+                For a vocational training visa, section 16a of the{" "}
+                <SourceLink href={SRC.aufenthg16a}>Residence Act</SourceLink>{" "}
+                asks for sufficient German (ausreichende Sprachkenntnisse),
+                which section 2 of the{" "}
+                <SourceLink href={SRC.aufenthg2}>same act</SourceLink>{" "}
+                defines as level B1. The checklist of the{" "}
+                <SourceLink href={SRC.mission}>German Missions in India</SourceLink>{" "}
+                accepts one of three things:
+            </p>
+        </Prose>
+
+        {/* B1 highlight */}
+        <div className="relative overflow-hidden rounded-2xl border border-primary/15 bg-gradient-to-br from-primary/[0.07] via-white to-rose-50/70 p-5 sm:p-7">
+            <div className="pointer-events-none absolute -right-10 -top-10 h-36 w-36 rounded-full bg-primary/[0.06] blur-2xl" />
+
+            <div className="relative flex flex-col gap-4 sm:flex-row sm:items-center">
+                <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-primary text-2xl font-black text-white shadow-lg shadow-primary/20">
+                    B1
+                </div>
+
+                <div>
+                    <span className="text-xs font-bold uppercase tracking-[0.16em] text-primary">
+                        Visa language requirement
+                    </span>
+                    <h3 className="mt-1 text-lg font-bold text-slate-900 sm:text-xl">
+                        German language proficiency
+                    </h3>
+                    <p className="mt-1 text-sm leading-6 text-slate-600">
+                        You need to demonstrate sufficient German language
+                        skills for your vocational training visa.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        {/* Accepted proof options */}
+        <div className="space-y-4">
+            <div className="flex flex-wrap items-center justify-between gap-2">
+                <h3 className="text-lg font-bold text-slate-900 sm:text-xl">
+                    Accepted proof options
+                </h3>
+                <span className="rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
+                    3 accepted options
+                </span>
+            </div>
+
+            <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-6">
+                <PointList
+                    items={[
+                        "a German language certificate of at least B1,",
+                        "a confirmation from the school or employer that your German was checked and is sufficient, or",
+                        "proof that you will attend a preparatory German course.",
+                    ]}
+                />
+            </div>
+        </div>
+
+        {/* Important information */}
+        <div className="relative overflow-hidden rounded-2xl border border-amber-200/80 bg-amber-50/70 p-5 sm:p-6">
+            <div className="flex items-start gap-3">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-amber-100 text-amber-700">
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                    >
+                        <circle cx="12" cy="12" r="10" />
+                        <path d="M12 16v-4" />
+                        <path d="M12 8h.01" />
+                    </svg>
+                </div>
+
+                <div>
+                    <h3 className="font-bold text-slate-900">
+                        Important to remember
+                    </h3>
+                    <div className="mt-2 text-sm leading-7 text-slate-700">
+                        <Prose>
+                            <p>
+                                Your employer or nursing school may ask for more than the visa minimum, and classes, placements and the final exam are in German, so plan to keep learning after B1.
+                            </p>
+                        </Prose>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {/* Academy note */}
+        <AcademyNote subjects="German" />
+
+    </div>
+</GuideSection>
+
+
+                <GuideSection title="Is the training allowance paid every month?" className={GUIDE_SECTION_SURFACE}>
                     <Prose>
                         <p>
                             Yes, you are paid while you train. Section 19 of the{" "}
@@ -216,6 +365,7 @@ export default function NursingAusbildungPage() {
                 <GuideSection
                     title="Step by step: from Kerala to your first day of training"
                     intro="This is the usual order. The visa documents are from the German Missions in India checklist for vocational training."
+                    className={GUIDE_SECTION_SURFACE}
                 >
                     <PointList
                         ordered
@@ -241,6 +391,7 @@ export default function NursingAusbildungPage() {
                 <GuideSection
                     title="Nursing Ausbildung or a nursing degree in India first?"
                     intro="Both routes can lead to nursing in Germany. Which one suits you depends on where you are now."
+                    className={GUIDE_SECTION_SURFACE}
                 >
                     <TableWrap minWidth={640}>
                         <thead className={theadClass}>
@@ -275,7 +426,7 @@ export default function NursingAusbildungPage() {
                     </Prose>
                 </GuideSection>
 
-                <GuideSection title="How Medcity Overseas helps">
+                <GuideSection title="How Medcity Overseas helps" className={GUIDE_SECTION_SURFACE}>
                     <Prose>
                         <p>
                             Medcity Overseas guides your applications. We do not promise a training place or a visa: employers choose their trainees and the German Mission decides on the visa.
@@ -301,16 +452,40 @@ export default function NursingAusbildungPage() {
 
                 <FaqList path={PATH} faqs={FAQS} schema={false} title="Nursing Ausbildung: frequently asked questions" />
 
-                <OfficialSources links={SOURCES} intro={`Rules and amounts change. These are the official pages behind this guide, checked on 24 October 2026.`} />
-
-                <RelatedLinks
-                    links={[
-                        { href: "/nursing-in-germany-for-indian-nurses", title: "Nursing in Germany for Indian nurses", text: "The recognition route for GNM and BSc nurses." },
-                        { href: "/study-abroad-for-nurses", title: "Study abroad for nurses", text: "Compare the UK, Ireland, Germany, Australia, New Zealand and Malta." },
-                        { href: "/placement-assistance-nursing", title: "UK nursing pathway", text: "Our MSc nursing pathway in the United Kingdom." },
-                        { href: "/study-abroad-after-12th", title: "Study abroad after 12th", text: "Degree and vocational routes for Class 12 students." },
-                    ]}
+                <OfficialSources
+                    links={SOURCES}
+                    intro={`Rules and amounts change. These are the official pages behind this guide, checked on 24 October 2026.`}
+                    className="!my-0"
                 />
+
+               
+<RelatedLinks
+    className="!mt-[60px] text-center rounded-[2rem] border border-rose-100/80 !px-5 !py-8 shadow-[0_20px_60px_rgba(15,23,42,0.06)] ring-1 ring-white/80 sm:!px-8 sm:!py-10"
+    title="Related guides"
+    links={[
+        {
+            href: "/nursing-in-germany-for-indian-nurses",
+            title: "Nursing in Germany for Indian nurses",
+            text: "The recognition route for GNM and BSc nurses.",
+        },
+        {
+            href: "/study-abroad-for-nurses",
+            title: "Study abroad for nurses",
+            text: "Compare the UK, Ireland, Germany, Australia, New Zealand and Malta.",
+        },
+        {
+            href: "/placement-assistance-nursing",
+            title: "UK nursing pathway",
+            text: "Our MSc nursing pathway in the United Kingdom.",
+        },
+        {
+            href: "/study-abroad-after-12th",
+            title: "Study abroad after 12th",
+            text: "Degree and vocational routes for Class 12 students.",
+        },
+    ]}
+/>
+
 
                 <ContactBand />
             </div>

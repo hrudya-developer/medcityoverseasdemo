@@ -534,12 +534,12 @@ export default async function GermanProgramsPage() {
             <div
                 className="
                     min-h-screen
-                    bg-slate-50
+                    bg-white
                 "
             >
                 <StudyInGermanyHero />
 
-                <div className="space-y-12 bg-white py-12">
+                <div className="space-y-0 bg-white py-12">
                     <QuickAnswer updated={dateModified}>
                         {`Germany offers university degrees, paid vocational training (Ausbildung) and voluntary services for students from India${
                             programLinks.length ? `. Medcity Overseas guides students through ${joinList(programLinks.slice(0, 5).map((program) => program.name))}` : ""
@@ -561,7 +561,7 @@ export default async function GermanProgramsPage() {
                         ))}
                     />
 
-                    <p className="mx-auto max-w-5xl px-4 text-sm leading-7 text-slate-600 sm:px-6 lg:px-8">
+                    <p className="mx-auto w-[80%] border border-dotted border-blue-200 sm:w-fit px-4 text-sm leading-6 text-center py-3 text-slate-800 sm:px-6 lg:px-8 bg-[#f2fcff] rounded-full">
                         {linkGermanUniversities ? (
                             <>
                                 Browse{" "}

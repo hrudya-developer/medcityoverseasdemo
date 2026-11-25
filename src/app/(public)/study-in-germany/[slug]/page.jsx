@@ -1012,7 +1012,7 @@ export default async function GermanProgramPage({
   const linkGermanUniversities = (await universitiesPageIndexable("germany")) !== false;
 
   return (
-    <div className="bg-slate-50">
+    <div className="bg-white">
 
       <PageSchema
         path={pagePath}
