@@ -38,6 +38,8 @@ const UPDATED = "2026-10-24";
 const TITLE = "Study Abroad After 12th from Kerala";
 const DESCRIPTION =
     "Study abroad after 12th from Kerala: degree routes in the UK, Ireland, Australia and Germany, Ausbildung and other routes, documents, timeline and tests.";
+const GUIDE_SECTION_SURFACE =
+    "!my-8 !max-w-6xl rounded-[1.75rem] border border-slate-200/70 bg-white/90 py-6 shadow-[0_16px_50px_rgba(15,23,42,0.06)] ring-1 ring-white/80 transition-shadow duration-300 hover:shadow-[0_20px_60px_rgba(15,23,42,0.09)] sm:py-8 lg:py-9";
 
 const SRC = {
     studienkolleg: "https://www.daad.de/en/studying-in-germany/requirements/studienkollegs/",
@@ -128,7 +130,7 @@ export default async function AfterTwelfthPage() {
     ];
 
     return (
-        <div className="bg-white">
+        <div className="bg-slate-50">
             <PageSchema
                 path={PATH}
                 type="Article"
@@ -142,14 +144,28 @@ export default async function AfterTwelfthPage() {
                 faqs={faqs}
             />
 
-            <GuideHero
-                eyebrow="After plus two"
-                title={TITLE}
-                breadcrumbs={BREADCRUMBS}
-                intro="Study abroad after 12th opens two kinds of route for Kerala students: a bachelor's degree, or paid vocational training in Germany. This guide sets out how each country admits Class 12 students, which English or German you need, the documents to gather and when to start, written for students and parents together."
-            />
+            <div
+                className="
+                    [&>section>div:nth-child(2)]:!mx-auto
+                    [&>section>div:nth-child(2)]:!max-w-9xl
+                    [&>section>div:nth-child(2)]:!w-full
+                    [&>section>div:nth-child(2)]:!text-center
+                    [&>section>div:nth-child(2)>nav>ol]:!justify-center
+                    [&>section>div:nth-child(2)>h1]:!mx-auto
+                    [&>section>div:nth-child(2)>p]:!mx-auto
+                    [&>section>div:nth-child(2)>div]:!justify-center
+                    flex w-full flex-col items-stretch
+                "
+            >
+                <GuideHero
+                    eyebrow="After plus two"
+                    title={TITLE}
+                    breadcrumbs={BREADCRUMBS}
+                    intro="Study abroad after 12th opens two kinds of route for Kerala students: a bachelor's degree, or paid vocational training in Germany. This guide sets out how each country admits Class 12 students, which English or German you need, the documents to gather and when to start, written for students and parents together."
+                />
+            </div>
 
-            <div className="space-y-14 py-12 sm:py-14">
+            <div className="relative isolate space-y-6 bg-gradient-to-b from-slate-50 via-white to-rose-50/30 py-10 sm:space-y-8 sm:py-14 lg:py-16">
                 <QuickAnswer updated={UPDATED}>
                     After Class 12 you can apply for a bachelor&apos;s degree in the UK, Ireland or Australia, or go to Germany through a Studienkolleg (usually 2 semesters, then an assessment test) or Ausbildung. You need English (or German for Germany), your marksheets, a passport and proof of funds for the visa. Start planning in Class 11 or early Class 12.
                 </QuickAnswer>
@@ -158,11 +174,12 @@ export default async function AfterTwelfthPage() {
                     eyebrow="Choosing a route"
                     question="Which country is best to study after 12th for Indian students?"
                     answer="The best country depends on your marks, budget, subject and language. English speaking countries suit students who want a degree in English straight away. Germany suits students willing to learn German, through a Studienkolleg for university or Ausbildung for paid training. Compare entry rules, course length and living costs before you decide."
+                    className="!py-4 sm:!py-5 lg:!py-6"
                 />
 
-                <GuideSection title="Degree routes by country" intro="How each country admits Class 12 students from India, from official and university sources checked on 24 October 2026.">
+                <GuideSection title="Degree routes by country" intro="How each country admits Class 12 students from India, from official and university sources checked on 24 October 2026." className={GUIDE_SECTION_SURFACE}>
                     <TableWrap minWidth={760}>
-                        <thead className={theadClass}>
+                       <thead className={`${theadClass} bg-darkPrimary! text-white!`}>
                             <tr>
                                 <th scope="col" className={th}>Country</th>
                                 <th scope="col" className={th}>How to apply after Class 12</th>
@@ -199,7 +216,7 @@ export default async function AfterTwelfthPage() {
                     </Prose>
                 </GuideSection>
 
-                <GuideSection title="Undergraduate courses we list" intro="Bachelor's, diploma and foundation courses from our course records, counted by country.">
+                <GuideSection title="Undergraduate courses we list" intro="Bachelor's, diploma and foundation courses from our course records, counted by country." className={GUIDE_SECTION_SURFACE}>
                     {byCountry.length ? (
                         <TableWrap minWidth={520}>
                             <thead className={theadClass}>
@@ -244,7 +261,7 @@ export default async function AfterTwelfthPage() {
                     </Prose>
                 </GuideSection>
 
-                <GuideSection title="Vocational routes in Germany after Class 12">
+                <GuideSection title="Vocational routes in Germany after Class 12" className={GUIDE_SECTION_SURFACE}>
                     <PointList
                         items={[
                             {
@@ -276,7 +293,7 @@ export default async function AfterTwelfthPage() {
                     </Prose>
                 </GuideSection>
 
-                <GuideSection title="Documents and timeline for Class 12 students">
+                <GuideSection title="Documents and timeline for Class 12 students" className={GUIDE_SECTION_SURFACE}>
                     <PointList
                         ordered
                         items={[
@@ -295,7 +312,7 @@ export default async function AfterTwelfthPage() {
                     </Prose>
                 </GuideSection>
 
-                <GuideSection title="English and German preparation">
+                <GuideSection title="English and German preparation" className={GUIDE_SECTION_SURFACE}>
                     <Prose>
                         <p>
                             For UK degree level study, <SourceLink href={SRC.ukEnglish}>GOV.UK</SourceLink> asks for English equal to CEFR B2. For Germany, German taught degrees and Ausbildung need German, and the{" "}
@@ -315,6 +332,7 @@ export default async function AfterTwelfthPage() {
                         { label: "Make it in Germany: training visa", href: SRC.training, note: "The visa for vocational training." },
                     ]}
                     intro="Admission and visa rules change. These are the official pages behind this guide, checked on 24 October 2026."
+                    className="!my-0"
                 />
 
                 <RelatedLinks
@@ -324,6 +342,7 @@ export default async function AfterTwelfthPage() {
                         { href: "/scholarships-for-indian-students", title: "Scholarships for Indian students", text: "University and government scholarships." },
                         { href: "/study-in-germany", title: "Study in Germany", text: "All our Germany programmes." },
                     ]}
+                    className="!my-0 rounded-[2rem] border border-rose-100/80 bg-gradient-to-br from-white via-rose-50/70 to-sky-50/60 !px-5 !py-8 shadow-[0_20px_60px_rgba(15,23,42,0.06)] ring-1 ring-white/80 sm:!px-8 sm:!py-10"
                 />
 
                 <ContactBand />

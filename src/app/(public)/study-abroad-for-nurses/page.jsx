@@ -295,7 +295,7 @@ export default async function StudyAbroadForNursesPage() {
                     <AcademyNote subjects="IELTS, OET and German" />
                 </GuideSection>
 
-                <FaqList path={PATH} faqs={faqs} schema={false} title="Study abroad for nurses: frequently asked questions" />
+                <FaqList path={PATH} faqs={faqs} schema={false} title="Study abroad for nurses: " />
 
                 <OfficialSources
                     links={ROUTES.map((route) => ({ label: `${route.regulator} (${route.country})`, href: route.href, note: "The regulator's page for nurses trained abroad." }))}

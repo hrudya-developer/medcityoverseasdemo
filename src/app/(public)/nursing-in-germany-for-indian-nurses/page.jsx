@@ -33,6 +33,8 @@ const TITLE = "Nursing in Germany for Indian Nurses";
 const DESCRIPTION =
     "Nursing in Germany for Indian nurses from Kerala: how recognition works, the B2 German level, the knowledge test or adaptation course, and official sources.";
 const OG_IMAGE = "/og-images/study-in-germany.webp";
+const GUIDE_SECTION_SURFACE =
+    "!my-5 !max-w-6xl rounded-[1.75rem] border border-slate-200/70 bg-white/90 py-6 shadow-[0_16px_50px_rgba(15,23,42,0.06)] ring-1 ring-white/80 transition-shadow duration-300 hover:shadow-[0_20px_60px_rgba(15,23,42,0.09)] sm:py-8 lg:py-9";
 
 const SRC = {
     makeIt: "https://www.make-it-in-germany.com/en/working-in-germany/professions-in-demand/nursing",
@@ -106,14 +108,28 @@ export default function NursingInGermanyPage() {
                 faqs={FAQS}
             />
 
-            <GuideHero
-                eyebrow="Germany for qualified nurses"
-                title={TITLE}
-                breadcrumbs={BREADCRUMBS}
-                intro="Nursing in Germany for Indian nurses starts with recognition (Anerkennung) of your GNM or BSc qualification. You need German at B2, a decision from the state recognition office, and in many cases a knowledge test or an adaptation course before you can work under the German nursing title."
-            />
+            <div
+                className="
+                    [&>section>div:nth-child(2)]:!mx-auto
+                    [&>section>div:nth-child(2)]:!max-w-9xl
+                    [&>section>div:nth-child(2)]:!w-full
+                    [&>section>div:nth-child(2)]:!text-center
+                    [&>section>div:nth-child(2)>nav>ol]:!justify-center
+                    [&>section>div:nth-child(2)>h1]:!mx-auto
+                    [&>section>div:nth-child(2)>p]:!mx-auto
+                    [&>section>div:nth-child(2)>div]:!justify-center
+                    flex w-full flex-col items-stretch
+                "
+            >
+                <GuideHero
+                    eyebrow="Germany for qualified nurses"
+                    title={TITLE}
+                    breadcrumbs={BREADCRUMBS}
+                    intro="Nursing in Germany for Indian nurses starts with recognition (Anerkennung) of your GNM or BSc qualification. You need German at B2, a decision from the state recognition office, and in many cases a knowledge test or an adaptation course before you can work under the German nursing title."
+                />
+            </div>
 
-            <div className="space-y-14 py-12 sm:py-14">
+            <div className="relative isolate space-y-6 bg-gradient-to-b from-slate-50 via-white to-rose-50/30 py-10 sm:space-y-8 sm:py-14 lg:py-16">
                 <QuickAnswer updated={UPDATED}>
                     Nurses qualified in India can work in Germany once their qualification is recognised and they hold permission to use the nursing title. Recognition normally needs German at B2. If your training differs from the German one, you close the gap with a knowledge test or an adaptation course of up to three years. Medcity Overseas does not give migration advice or offer jobs; it guides study and training routes, and German classes are available at Medcity International Academy.
                 </QuickAnswer>
@@ -122,9 +138,10 @@ export default function NursingInGermanyPage() {
                     eyebrow="Recognition"
                     question="How does recognition of an Indian nursing qualification work?"
                     answer="You apply to the recognition office of the German state where you will work, even from India. It compares your GNM or BSc training with German nursing training. If they match, you are recognised. If there are significant differences, you choose a knowledge test or an adaptation course. Make it in Germany also describes skipping the comparison and going straight to the adaptation route."
+                    className="!py-4 sm:!py-5 lg:!py-6"
                 />
 
-                <GuideSection title="Recognition in plain steps" intro="The order below follows Make it in Germany and the Bremen recognition office.">
+                <GuideSection title="Recognition in plain steps" intro="The order below follows Make it in Germany and the Bremen recognition office." className={GUIDE_SECTION_SURFACE}>
                     <PointList
                         ordered
                         items={[
@@ -145,7 +162,7 @@ export default function NursingInGermanyPage() {
                     </Prose>
                 </GuideSection>
 
-                <GuideSection title="What German level do Indian nurses need?">
+                <GuideSection title="What German level do Indian nurses need?" className={GUIDE_SECTION_SURFACE}>
                     <Prose>
                         <p>
                             Both <SourceLink href={SRC.makeIt}>Make it in Germany</SourceLink> and the{" "}
@@ -159,6 +176,7 @@ export default function NursingInGermanyPage() {
                 <GuideSection
                     title="Knowledge test or adaptation course?"
                     intro="If the recognition office finds significant differences, you choose how to show the missing knowledge. The Bremen office lets you choose either measure."
+                    className={GUIDE_SECTION_SURFACE}
                 >
                     <TableWrap minWidth={600}>
                         <thead className={theadClass}>
@@ -183,7 +201,7 @@ export default function NursingInGermanyPage() {
                     </TableWrap>
                 </GuideSection>
 
-                <GuideSection title="How Medcity Overseas can help, and what we do not do">
+                <GuideSection title="How Medcity Overseas can help, and what we do not do" className={GUIDE_SECTION_SURFACE}>
                     <Prose>
                         <p>
                             Visas for work or recognition are outside what Medcity Overseas does. For those, use the official recognition portal, the Make it in Germany nursing page and the German Missions in India, or the free advice of the Service Center for Professional Recognition.
@@ -217,6 +235,7 @@ export default function NursingInGermanyPage() {
                         { href: "/msc-nursing-in-uk", title: "MSc Nursing in the UK", text: "Courses and the Student visa for nurses." },
                         { href: "/placement-assistance-nursing", title: "UK nursing pathway", text: "The MSc pathway we support in the UK." },
                     ]}
+                    className="my-15!"
                 />
 
                 <ContactBand />
