@@ -23,6 +23,7 @@ import {
 } from "@/components/landing/Guide";
 import { guideMetadata } from "@/lib/guideMeta";
 import { getLiveSlugs, getUndergraduateByCountry } from "@/lib/landingData";
+import { BadgeCheck, BookOpenCheck, BriefcaseBusiness, Compass, FileCheck2, GraduationCap, HandHeart, HeartPulse, House, Plane } from "lucide-react";
 
 /*
  * Study abroad after Class 12 (plus two) for Kerala students and
@@ -219,7 +220,7 @@ export default async function AfterTwelfthPage() {
                 <GuideSection title="Undergraduate courses we list" intro="Bachelor's, diploma and foundation courses from our course records, counted by country." className={GUIDE_SECTION_SURFACE}>
                     {byCountry.length ? (
                         <TableWrap minWidth={520}>
-                            <thead className={theadClass}>
+                            <thead className={`${theadClass} bg-darkPrimary! text-white!`}>
                                 <tr>
                                     <th scope="col" className={th}>Country</th>
                                     <th scope="col" className={th}>Courses</th>
@@ -261,56 +262,311 @@ export default async function AfterTwelfthPage() {
                     </Prose>
                 </GuideSection>
 
-                <GuideSection title="Vocational routes in Germany after Class 12" className={GUIDE_SECTION_SURFACE}>
-                    <PointList
-                        items={[
-                            {
-                                title: "Ausbildung",
-                                text: "vocational training with a training contract and pay from the employer. The visa usually needs German at B1; a side job of up to 20 hours a week is allowed if it is independent of the training.",
-                            },
-                            {
-                                title: "Nursing Ausbildung",
-                                text: "3 years of paid nursing training leading to the German nursing title.",
-                            },
-                            {
-                                title: "Voluntary service (FSJ or BFD)",
-                                text: "voluntary service in Germany; the federal volunteer service site sets out who can take part and how.",
-                            },
-                            {
-                                title: "Au Pair",
-                                text: "living with a German host family and helping with childcare while you learn German.",
-                            },
-                        ]}
-                    />
-                    <Prose>
-                        <p>
-                            Read <TextLink href="/study-in-germany/ausbildung">Ausbildung in Germany</TextLink>,{" "}
-                            <TextLink href="/study-in-germany/nursing-ausbildung">nursing Ausbildung</TextLink> and{" "}
-                            <TextLink href="/study-in-germany/au-pair">Au Pair in Germany</TextLink>. Rules for the training visa are on{" "}
-                            <SourceLink href={SRC.training}>Make it in Germany</SourceLink> and the volunteer service on{" "}
-                            <SourceLink href={SRC.bfd}>bundesfreiwilligendienst.de</SourceLink>.
-                        </p>
-                    </Prose>
-                </GuideSection>
+             <GuideSection title="Vocational routes in Germany after Class 12" className={GUIDE_SECTION_SURFACE}>
+    <div className="relative overflow-hidden rounded-3xl mt-7 border border-slate-200 bg-gradient-to-br from-white via-slate-50 to-primary/[0.035] p-5 shadow-sm sm:p-7 lg:p-8">
 
-                <GuideSection title="Documents and timeline for Class 12 students" className={GUIDE_SECTION_SURFACE}>
-                    <PointList
-                        ordered
-                        items={[
-                            { title: "Class 11 or early Class 12", text: "choose countries and courses with a counsellor, and start English or German classes." },
-                            { title: "During Class 12", text: "take your English test (or reach the German level you need), get a passport and prepare a statement of purpose and references." },
-                            { title: "Applications", text: "apply with your Class 10 marksheet, predicted or final Class 12 marks and your test results. Some offers are conditional on final marks." },
-                            { title: "After results", text: "send final marksheets, accept your offer, arrange funds and apply for the visa." },
-                            { title: "Before travel", text: "book housing, arrange health insurance where required and attend a pre-departure session." },
-                        ]}
-                    />
+        {/* Decorative background */}
+        <div className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-primary/[0.05] blur-3xl" />
+        <div className="pointer-events-none absolute -bottom-20 -left-20 h-52 w-52 rounded-full bg-slate-200/50 blur-3xl" />
+
+        {/* Intro */}
+        <div className="relative mb-8">
+            <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-primary/15 bg-primary/[0.05] px-3 py-1.5 text-xs font-bold tracking-wider text-primary">
+                <span className="h-2 w-2 rounded-full bg-primary" />
+                CAREER PATHWAYS
+            </div>
+
+            <p className="max-w-2xl text-sm leading-7 text-slate-600 sm:text-base">
+                Explore different vocational and practical opportunities
+                in Germany after Class 12, from paid training to
+                volunteering and cultural exchange.
+            </p>
+        </div>
+
+        {/* Vocational route cards */}
+       {/* Vocational route cards */}
+<div className="relative grid grid-cols-1 gap-5 sm:grid-cols-2">
+
+    {[
+        {
+            number: "01",
+            tag: "Vocational training",
+            title: "Ausbildung",
+            text: "vocational training with a training contract and pay from the employer. The visa usually needs German at B1; a side job of up to 20 hours a week is allowed if it is independent of the training.",
+            icon: BriefcaseBusiness,
+            card: "border-rose-100 bg-rose-50/70 hover:border-rose-200",
+            iconStyle: "bg-rose-100 text-rose-700 group-hover:bg-rose-600 group-hover:text-white",
+            tagStyle: "bg-rose-100/80 text-rose-700",
+            accent: "from-rose-400/70 via-rose-200/50",
+            numberStyle: "text-rose-200 group-hover:text-rose-300",
+            bottom: "bg-rose-200 group-hover:bg-rose-400",
+        },
+        {
+            number: "02",
+            tag: "Healthcare career",
+            title: "Nursing Ausbildung",
+            text: "3 years of paid nursing training leading to the German nursing title.",
+            icon: HeartPulse,
+            card: "border-sky-100 bg-sky-50/70 hover:border-sky-200",
+            iconStyle: "bg-sky-100 text-sky-700 group-hover:bg-sky-600 group-hover:text-white",
+            tagStyle: "bg-sky-100/80 text-sky-700",
+            accent: "from-sky-400/70 via-sky-200/50",
+            numberStyle: "text-sky-200 group-hover:text-sky-300",
+            bottom: "bg-sky-200 group-hover:bg-sky-400",
+        },
+        {
+            number: "03",
+            tag: "Voluntary programme",
+            title: "FSJ or BFD",
+            text: "voluntary service in Germany; the federal volunteer service site sets out who can take part and how.",
+            icon: HandHeart,
+            card: "border-amber-100 bg-amber-50/70 hover:border-amber-200",
+            iconStyle: "bg-amber-100 text-amber-700 group-hover:bg-amber-600 group-hover:text-white",
+            tagStyle: "bg-amber-100/80 text-amber-700",
+            accent: "from-amber-400/70 via-amber-200/50",
+            numberStyle: "text-amber-200 group-hover:text-amber-300",
+            bottom: "bg-amber-200 group-hover:bg-amber-400",
+        },
+        {
+            number: "04",
+            tag: "Cultural exchange",
+            title: "Au Pair",
+            text: "living with a German host family and helping with childcare while you learn German.",
+            icon: House,
+            card: "border-violet-100 bg-violet-50/70 hover:border-violet-200",
+            iconStyle: "bg-violet-100 text-violet-700 group-hover:bg-violet-600 group-hover:text-white",
+            tagStyle: "bg-violet-100/80 text-violet-700",
+            accent: "from-violet-400/70 via-violet-200/50",
+            numberStyle: "text-violet-200 group-hover:text-violet-300",
+            bottom: "bg-violet-200 group-hover:bg-violet-400",
+        },
+    ].map((item) => {
+        const Icon = item.icon;
+
+        return (
+            <div
+                key={item.number}
+                className={`group relative flex h-full flex-col overflow-hidden rounded-2xl border p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg sm:p-6 ${item.card}`}
+            >
+                {/* Top accent */}
+                <div className={`absolute left-0 top-0 h-1 w-full bg-gradient-to-r ${item.accent} to-transparent`} />
+
+                {/* Header */}
+                <div className="mb-5 flex items-start justify-between">
+                    <div className={`flex h-14 w-14 items-center justify-center rounded-2xl transition-all duration-300 ${item.iconStyle}`}>
+                        <Icon size={24} strokeWidth={1.8} />
+                    </div>
+
+                    <span className={`text-2xl font-black tracking-tight transition-colors ${item.numberStyle}`}>
+                        {item.number}
+                    </span>
+                </div>
+
+                {/* Category */}
+                <div className="mb-3">
+                    <span className={`inline-flex rounded-lg px-3 py-1 text-xs font-semibold ${item.tagStyle}`}>
+                        {item.tag}
+                    </span>
+                </div>
+
+                {/* Content */}
+                <h3 className="mb-3 text-xl font-bold text-slate-900 sm:text-2xl">
+                    {item.title}
+                </h3>
+
+                <p className="text-sm leading-7 text-slate-700">
+                    {item.text}
+                </p>
+
+                {/* Bottom accent */}
+                <div className="mt-auto pt-6">
+                    <div className={`h-px w-12 transition-all duration-300 group-hover:w-20 ${item.bottom}`} />
+                </div>
+            </div>
+        );
+    })}
+</div>
+
+        {/* Related guides and official resources */}
+        <div className="relative mt-8 rounded-2xl border border-slate-200 bg-slate-50/80 p-5 sm:p-6">
+            <div className="flex items-start gap-4">
+                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                    <BookOpenCheck size={21} />
+                </div>
+
+                <div className="min-w-0 flex-1">
+                    <h3 className="mb-3 text-base font-bold text-slate-900 sm:text-lg">
+                        Explore programmes & official information
+                    </h3>
+
                     <Prose>
                         <p>
-                            The visa steps differ by country; see <TextLink href="/student-visa-guidance">student visa guidance</TextLink>. If you are worried about IELTS, read{" "}
-                            <TextLink href="/study-abroad-without-ielts">study abroad without IELTS</TextLink>.
+                            Read{" "}
+                            <TextLink href="/study-in-germany/ausbildung">
+                                Ausbildung in Germany
+                            </TextLink>
+                            ,{" "}
+                            <TextLink href="/study-in-germany/nursing-ausbildung">
+                                nursing Ausbildung
+                            </TextLink>{" "}
+                            and{" "}
+                            <TextLink href="/study-in-germany/au-pair">
+                                Au Pair in Germany
+                            </TextLink>.
+                            Rules for the training visa are on{" "}
+                            <SourceLink href={SRC.training}>
+                                Make it in Germany
+                            </SourceLink>{" "}
+                            and the volunteer service on{" "}
+                            <SourceLink href={SRC.bfd}>
+                                bundesfreiwilligendienst.de
+                            </SourceLink>.
                         </p>
                     </Prose>
-                </GuideSection>
+                </div>
+            </div>
+        </div>
+    </div>
+</GuideSection>
+
+        <GuideSection title="Documents and timeline for Class 12 students" className={GUIDE_SECTION_SURFACE}>
+    <div className="relative overflow-hidden rounded-3xl mt-6 border border-slate-200 bg-gradient-to-br from-white via-slate-50 to-primary/[0.035] p-5 shadow-sm sm:p-7 lg:p-8">
+
+        {/* Decorative background */}
+        <div className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-primary/[0.05] blur-3xl" />
+        <div className="pointer-events-none absolute -bottom-20 -left-20 h-52 w-52 rounded-full bg-slate-200/50 blur-3xl" />
+
+        {/* Header */}
+        <div className="relative mb-8">
+            <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-primary/15 bg-primary/[0.05] px-3 py-1.5 text-xs font-bold tracking-wider text-primary">
+                <span className="h-2 w-2 rounded-full bg-primary" />
+                YOUR STUDY ABROAD ROADMAP
+            </div>
+
+            <p className="max-w-2xl text-sm leading-7 text-slate-600 sm:text-base">
+                Planning early can make your overseas education journey
+                smoother. Follow these key stages to stay prepared from
+                Class 11 through departure.
+            </p>
+        </div>
+
+        {/* Timeline Cards */}
+        <div className="relative grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3">
+
+            {[
+                {
+                    number: "01",
+                    period: "Class 11 / Early Class 12",
+                    title: "Start planning early",
+                    text: "choose countries and courses with a counsellor, and start English or German classes.",
+                    icon: Compass,
+                },
+                {
+                    number: "02",
+                    period: "During Class 12",
+                    title: "Prepare your essentials",
+                    text: "take your English test (or reach the German level you need), get a passport and prepare a statement of purpose and references.",
+                    icon: FileCheck2,
+                },
+                {
+                    number: "03",
+                    period: "Application stage",
+                    title: "Apply to universities",
+                    text: "apply with your Class 10 marksheet, predicted or final Class 12 marks and your test results. Some offers are conditional on final marks.",
+                    icon: GraduationCap,
+                },
+                {
+                    number: "04",
+                    period: "After Class 12 results",
+                    title: "Confirm your admission",
+                    text: "send final marksheets, accept your offer, arrange funds and apply for the visa.",
+                    icon: BadgeCheck,
+                },
+                {
+                    number: "05",
+                    period: "Before departure",
+                    title: "Get ready to travel",
+                    text: "book housing, arrange health insurance where required and attend a pre-departure session.",
+                    icon: Plane,
+                },
+            ].map((item, index) => {
+                const Icon = item.icon;
+
+                return (
+                    <div
+                        key={item.number}
+                        className={`group relative flex h-full flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-primary/25 hover:shadow-xl hover:shadow-primary/[0.04] sm:p-6 ${
+                            index === 4 ? "sm:col-span-2 xl:col-span-1" : ""
+                        }`}
+                    >
+                        {/* Top accent */}
+                        <div className="absolute left-0 top-0 h-1 w-full bg-gradient-to-r from-primary/70 via-primary/20 to-transparent" />
+
+                        {/* Card header */}
+                        <div className="mb-5 flex items-start justify-between gap-3">
+                            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/[0.07] text-primary transition-all duration-300 group-hover:bg-primary group-hover:text-white">
+                                <Icon size={22} strokeWidth={1.8} />
+                            </div>
+
+                            <span className="text-2xl font-black tracking-tight text-slate-200 transition-colors group-hover:text-primary/20">
+                                {item.number}
+                            </span>
+                        </div>
+
+                        {/* Timeline label */}
+                        <div className="mb-3">
+                            <span className="inline-flex rounded-lg bg-primary/[0.05] px-3 py-1 text-xs font-semibold text-primary">
+                                {item.period}
+                            </span>
+                        </div>
+
+                        {/* Card content */}
+                        <h3 className="mb-3 text-lg font-bold leading-snug text-slate-900 sm:text-xl">
+                            {item.title}
+                        </h3>
+
+                        <p className="text-sm leading-7 text-slate-600">
+                            {item.text}
+                        </p>
+
+                        {/* Bottom decorative line */}
+                        <div className="mt-auto pt-6">
+                            <div className="h-px w-12 bg-primary/20 transition-all duration-300 group-hover:w-20 group-hover:bg-primary/50" />
+                        </div>
+                    </div>
+                );
+            })}
+        </div>
+
+        {/* Related guides */}
+        <div className="relative mt-8 overflow-hidden rounded-2xl border border-slate-200 bg-slate-50/80 p-5 sm:p-6">
+            <div className="flex items-start gap-4">
+                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                    <BookOpenCheck size={21} />
+                </div>
+
+                <div className="min-w-0 flex-1">
+                    <h3 className="mb-3 text-base font-bold text-slate-900 sm:text-lg">
+                        Helpful guides for your next step
+                    </h3>
+
+                    <Prose>
+                        <p>
+                            The visa steps differ by country; see{" "}
+                            <TextLink href="/student-visa-guidance">
+                                student visa guidance
+                            </TextLink>.
+                            {" "}If you are worried about IELTS, read{" "}
+                            <TextLink href="/study-abroad-without-ielts">
+                                study abroad without IELTS
+                            </TextLink>.
+                        </p>
+                    </Prose>
+                </div>
+            </div>
+        </div>
+    </div>
+</GuideSection>
 
                 <GuideSection title="English and German preparation" className={GUIDE_SECTION_SURFACE}>
                     <Prose>
