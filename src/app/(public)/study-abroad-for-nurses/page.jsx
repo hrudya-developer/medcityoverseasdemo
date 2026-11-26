@@ -160,12 +160,76 @@ export default async function StudyAbroadForNursesPage() {
                 faqs={faqs}
             />
 
-            <GuideHero
-                eyebrow="Nursing abroad"
-                title={TITLE}
-                breadcrumbs={BREADCRUMBS}
-                intro="Study abroad for nurses from Kerala can mean a degree, a paid training, or registration as a nurse in another country. This guide compares six countries, names the regulator that decides in each, and links the nursing courses and guides that fit where you are now."
-            />
+            <div
+                className="
+                    relative
+                    isolate
+                    overflow-hidden
+                    bg-gradient-to-br
+                    from-[#1b103c]
+                    via-[#172554]
+                    to-[#075985]
+
+                    [&>section]:relative
+                    [&>section]:z-10
+                    [&>section]:!bg-transparent
+                    [&>section>div:first-child]:!hidden
+                    [&>section>div:nth-child(2)]:!max-w-6xl
+                    [&>section>div:nth-child(2)]:!pb-20
+                    [&>section>div:nth-child(2)]:!pt-12
+
+                    [&>section>div>nav]:mx-auto
+                    [&>section>div>nav]:w-fit
+                    [&>section>div>nav]:max-w-full
+                    [&>section>div>nav]:rounded-full
+                    [&>section>div>nav]:border
+                    [&>section>div>nav]:border-white/15
+                    [&>section>div>nav]:bg-white/[0.06]
+                    [&>section>div>nav]:px-4
+                    [&>section>div>nav]:py-2
+                    [&>section>div>nav]:backdrop-blur-md
+                    [&>section>div>nav>ol]:justify-center
+                    [&>section>div>nav>ol]:gap-x-2
+                    [&>section>div>nav>ol]:gap-y-1
+
+                    text-center
+                    [&>section>div>nav+p]:mx-auto
+                    [&>section>div>nav+p]:w-fit
+                    [&>section>div>nav+p]:max-w-full
+                    [&>section>div>nav+p]:rounded-full
+                    [&>section>div>nav+p]:border
+                    [&>section>div>nav+p]:border-amber-200/25
+                    [&>section>div>nav+p]:bg-white/[0.06]
+                    [&>section>div>nav+p]:px-4
+                    [&>section>div>nav+p]:py-2
+                    [&>section>div>nav+p]:backdrop-blur-md
+
+                    [&>section>div>h1]:mx-auto
+                    [&>section>div>h1]:text-balance
+                    [&>section>div>h1]:lg:text-6xl
+                    [&>section>div>h1+p]:mx-auto
+                    [&>section>div>h1+p]:text-pretty
+
+                    [&>section>div>div:last-child]:items-center
+                    [&>section>div>div:last-child]:justify-center
+                "
+            >
+                <div
+                    aria-hidden="true"
+                    className="pointer-events-none absolute inset-0 z-0"
+                >
+                    <span className="absolute -left-32 -top-36 size-[28rem] rounded-full bg-primary/20 blur-3xl" />
+                    <span className="absolute -bottom-48 -right-32 size-[32rem] rounded-full bg-cyan-300/15 blur-3xl" />
+                    <span className="absolute inset-0 opacity-[0.045] [background-image:radial-gradient(circle_at_center,white_1px,transparent_1px)] [background-size:24px_24px]" />
+                </div>
+
+                <GuideHero
+                    eyebrow="Nursing abroad"
+                    title={TITLE}
+                    breadcrumbs={BREADCRUMBS}
+                    intro="Study abroad for nurses from Kerala can mean a degree, a paid training, or registration as a nurse in another country. This guide compares six countries, names the regulator that decides in each, and links the nursing courses and guides that fit where you are now."
+                />
+            </div>
 
             <div className="space-y-14 py-12 sm:py-14">
                 <QuickAnswer updated={UPDATED}>
@@ -183,7 +247,7 @@ export default async function StudyAbroadForNursesPage() {
                     intro="Each row comes from the regulator's own website, checked on 24 October 2026. We do not show salaries or success rates."
                 >
                     <TableWrap minWidth={820}>
-                        <thead className={theadClass}>
+                        <thead className={`{theadClass} bg-darkPrimary! text-white!`}>
                             <tr>
                                 <th scope="col" className={th}>Country</th>
                                 <th scope="col" className={th}>Regulator</th>
@@ -221,7 +285,7 @@ export default async function StudyAbroadForNursesPage() {
                 <GuideSection title="Study routes for nurses" intro="Nursing courses we currently list, read from our course records and grouped by country.">
                     {groups.length ? (
                         <TableWrap minWidth={560}>
-                            <thead className={theadClass}>
+                            <thead className={`${theadClass} bg-darkPrimary! text-white!`}>
                                 <tr>
                                     <th scope="col" className={th}>Country</th>
                                     <th scope="col" className={th}>Courses listed</th>
