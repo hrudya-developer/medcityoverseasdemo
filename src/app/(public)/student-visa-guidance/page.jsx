@@ -1186,7 +1186,7 @@ export default async function StudentVisaGuidancePage() {
                         { href: "/scholarships-for-indian-students", title: "Scholarships for Indian students", text: "University and government scholarships." },
                         { href: "/add-on-services", title: "Add-on services", text: "Extra help before you travel." },
                     ]}
-                    className="!my-0 rounded-[2rem] border border-rose-100/80 bg-gradient-to-br from-white via-rose-50/70 to-sky-50/60 !px-5 !py-8 shadow-[0_20px_60px_rgba(15,23,42,0.06)] ring-1 ring-white/80 sm:!px-8 sm:!py-10"
+                    className="!my-8 rounded-[2rem] border border-rose-100/80 bg-gradient-to-br from-white via-rose-50/70 to-sky-50/60 !px-5 !py-8 shadow-[0_20px_60px_rgba(15,23,42,0.06)] ring-1 ring-white/80 sm:!px-8 sm:!py-10"
                 />
 
                 <ContactBand />
