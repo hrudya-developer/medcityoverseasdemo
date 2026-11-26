@@ -23,6 +23,7 @@ import {
 } from "@/components/landing/Guide";
 import { guideMetadata } from "@/lib/guideMeta";
 import { getLiveSlugs, getScholarshipUniversities } from "@/lib/landingData";
+import { BookOpenCheck } from "lucide-react";
 
 /*
  * Scholarships for Indian students. The university list is read from
@@ -138,12 +139,14 @@ export default async function ScholarshipsPage() {
                 faqs={FAQS}
             />
 
-            <GuideHero
-                eyebrow="Funding your studies"
-                title={TITLE}
-                breadcrumbs={BREADCRUMBS}
-                intro="Scholarships for Indian students abroad come from three places: the universities themselves, governments such as the UK and Ireland, and external funders listed by bodies like the DAAD. This guide lists the universities we work with that record a scholarship, and the main government schemes, with their official rules."
-            />
+            <div className="text-center [&>section>div>nav>ol]:justify-center [&>section>div>h1]:mx-auto [&>section>div>p.max-w-3xl]:mx-auto [&>section>div>div:last-child]:items-center [&>section>div>div:last-child]:justify-center">
+                <GuideHero
+                    eyebrow="Funding your studies"
+                    title={TITLE}
+                    breadcrumbs={BREADCRUMBS} className="mx-auto! text-center!"
+                    intro="Scholarships for Indian students abroad come from three places: the universities themselves, governments such as the UK and Ireland, and external funders listed by bodies like the DAAD. This guide lists the universities we work with that record a scholarship, and the main government schemes, with their official rules."
+                />
+            </div>
 
             <div className="space-y-14 py-12 sm:py-14">
                 <QuickAnswer updated={UPDATED}>
@@ -158,7 +161,7 @@ export default async function ScholarshipsPage() {
 
                 <GuideSection title="Types of scholarship, with official links" intro="From each scheme's official page, checked on 24 October 2026. Values are for the year stated and can change.">
                     <TableWrap minWidth={760}>
-                        <thead className={theadClass}>
+                        <thead className={`${theadClass} bg-darkPrimary! text-white!`}>
                             <tr>
                                 <th scope="col" className={th}>Scholarship</th>
                                 <th scope="col" className={th}>Country</th>
@@ -187,7 +190,7 @@ export default async function ScholarshipsPage() {
                 >
                     {universities.length ? (
                         <TableWrap minWidth={640}>
-                            <thead className={theadClass}>
+                            <thead className={`${theadClass} bg-darkPrimary! text-white!`}>
                                 <tr>
                                     <th scope="col" className={th}>University</th>
                                     <th scope="col" className={th}>Country</th>
@@ -238,26 +241,114 @@ export default async function ScholarshipsPage() {
                     )}
                 </GuideSection>
 
-                <GuideSection title="How to apply for a scholarship, and when">
-                    <PointList
-                        ordered
-                        items={[
-                            { title: "Shortlist courses first", text: "most schemes need a course application or an offer. The Irish government scholarship asks for a conditional or final offer when you apply." },
-                            { title: "Check eligibility on the official page", text: "for example, Chevening asks for 2,800 hours of work experience after your degree and a commitment to return home for 2 years." },
-                            { title: "Note each deadline", text: "the Irish government scholarship 2026 call closed on 12 March 2026; GREAT deadlines vary by university." },
-                            { title: "Prepare your documents", text: "marksheets, a strong statement, references and your English test results." },
-                            { title: "Apply to more than one", text: "apply for the university's own awards as well as government schemes where you are eligible." },
-                        ]}
-                    />
-                    <Prose>
-                        <p>
-                            Read the official pages for <SourceLink href={SRC.chevening}>Chevening</SourceLink>, <SourceLink href={SRC.great}>GREAT Scholarships India</SourceLink>,{" "}
-                            <SourceLink href={SRC.goiies}>the Government of Ireland scholarship</SourceLink> and the <SourceLink href={SRC.daad}>DAAD database</SourceLink>. Our country guides for the{" "}
-                            <TextLink href="/study-in-uk">UK</TextLink>, <TextLink href="/study-in-ireland">Ireland</TextLink> and <TextLink href="/study-in-germany">Germany</TextLink> cover fees and living costs, and{" "}
-                            <TextLink href="/add-on-services">our add-on services</TextLink> cover help beyond the application.
-                        </p>
-                    </Prose>
-                </GuideSection>
+            <GuideSection title="How to apply for a scholarship, and when">
+    <div className="relative overflow-hidden rounded-3xl border border-slate-200 my-5 bg-gradient-to-br from-white via-slate-50 to-primary/[0.04] p-5 shadow-sm sm:p-7 lg:p-8">
+
+        {/* Decorative background */}
+        <div className="pointer-events-none absolute -right-20 -top-20 h-56 w-56 rounded-full bg-primary/[0.04] blur-3xl" />
+        <div className="pointer-events-none absolute -bottom-20 -left-20 h-48 w-48 rounded-full bg-slate-200/40 blur-3xl" />
+
+        {/* Intro */}
+        <div className="relative mb-8">
+            <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-primary/15 bg-primary/[0.05] px-3 py-1.5 text-xs font-bold tracking-wide text-primary">
+                <span className="h-2 w-2 rounded-full bg-primary" />
+                SCHOLARSHIP ROADMAP
+            </div>
+
+            <p className="max-w-2xl text-sm leading-7 text-slate-600 sm:text-base">
+                Follow these steps to prepare your scholarship applications
+                strategically, meet deadlines and improve the quality of your application.
+            </p>
+        </div>
+
+        {/* Steps Grid */}
+        <div className="relative grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
+
+            {[
+                {
+                    number: "01",
+                    title: "Shortlist courses first",
+                    text: "most schemes need a course application or an offer. The Irish government scholarship asks for a conditional or final offer when you apply.",
+                },
+                {
+                    number: "02",
+                    title: "Check eligibility",
+                    text: "for example, Chevening asks for 2,800 hours of work experience after your degree and a commitment to return home for 2 years.",
+                },
+                {
+                    number: "03",
+                    title: "Note each deadline",
+                    text: "the Irish government scholarship 2026 call closed on 12 March 2026; GREAT deadlines vary by university.",
+                },
+                {
+                    number: "04",
+                    title: "Prepare your documents",
+                    text: "marksheets, a strong statement, references and your English test results.",
+                },
+                {
+                    number: "05",
+                    title: "Apply to more than one",
+                    text: "apply for the university's own awards as well as government schemes where you are eligible.",
+                },
+            ].map((item, index) => (
+                <div
+                    key={item.number}
+                    className={`group relative rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-primary/20 hover:shadow-lg hover:shadow-primary/[0.04] sm:p-6 ${
+                        index === 4 ? "sm:col-span-2 xl:col-span-1" : ""
+                    }`}
+                >
+                    {/* Number + accent */}
+                    <div className="mb-5 flex items-center justify-between">
+                        <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/[0.07] text-lg font-extrabold text-primary transition-all duration-300 group-hover:bg-primary group-hover:text-white">
+                            {item.number}
+                        </div>
+
+                        <div className="h-px flex-1 ml-4 bg-gradient-to-r from-primary/20 to-transparent" />
+                    </div>
+
+                    {/* Content */}
+                    <h3 className="mb-3 text-lg font-bold leading-snug text-slate-900 sm:text-xl">
+                        {item.title}
+                    </h3>
+
+                    <p className="text-sm leading-7 text-slate-600">
+                        {item.text}
+                    </p>
+                </div>
+            ))}
+        </div>
+
+        {/* Official Sources */}
+        <div className="relative mt-8 rounded-2xl border border-slate-200 bg-slate-50/80 p-5 sm:p-6">
+            <div className="mb-4 flex items-center gap-3">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                    <BookOpenCheck size={20} />
+                </div>
+
+                <h3 className="text-base font-bold text-slate-900 sm:text-lg">
+                    Official scholarship resources & related guides
+                </h3>
+            </div>
+
+            <Prose>
+                <p>
+                    Read the official pages for{" "}
+                    <SourceLink href={SRC.chevening}>Chevening</SourceLink>,{" "}
+                    <SourceLink href={SRC.great}>GREAT Scholarships India</SourceLink>,{" "}
+                    <SourceLink href={SRC.goiies}>the Government of Ireland scholarship</SourceLink>{" "}
+                    and the <SourceLink href={SRC.daad}>DAAD database</SourceLink>.
+                    Our country guides for the{" "}
+                    <TextLink href="/study-in-uk">UK</TextLink>,{" "}
+                    <TextLink href="/study-in-ireland">Ireland</TextLink> and{" "}
+                    <TextLink href="/study-in-germany">Germany</TextLink> cover
+                    fees and living costs, and{" "}
+                    <TextLink href="/add-on-services">our add-on services</TextLink>{" "}
+                    cover help beyond the application.
+                </p>
+            </Prose>
+        </div>
+    </div>
+</GuideSection>
 
                 <FaqList path={PATH} faqs={FAQS} schema={false} title="Scholarships for Indian students: frequently asked questions" />
 
@@ -266,7 +357,7 @@ export default async function ScholarshipsPage() {
                     intro="Scholarship rules, values and deadlines change every year. These are the official pages behind this guide, checked on 24 October 2026."
                 />
 
-                <RelatedLinks
+                <RelatedLinks className="mt-10!"
                     links={[
                         { href: "/universities", title: "All universities", text: "Browse every university we list." },
                         { href: "/student-visa-guidance", title: "Student visa guidance", text: "The money and documents each visa asks for." },

@@ -55,16 +55,16 @@ export default async function FaqList({
                 <div className="mb-10 text-center sm:mb-14">
 
                     <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-pink-200/80 bg-white/80 px-4 py-2 shadow-sm shadow-pink-100/50 backdrop-blur-md">
-                        <span className="flex h-7 w-7 items-center justify-center rounded-full bg-pink-100 text-pink-600">
+                        <span className="flex h-7 w-7 items-center justify-center rounded-full bg-pink-100 text-primary">
                             <MessageCircleQuestion size={15} />
                         </span>
 
-                        <span className="text-xs font-bold tracking-[0.12em] text-pink-700 sm:text-sm">
+                        <span className="text-xs font-bold tracking-[0.12em] text-primary sm:text-sm">
                             HELP & SUPPORT
                         </span>
                     </div>
 
-                    <h2 className="mx-auto max-w-3xl text-3xl font-extrabold leading-tight tracking-tight text-slate-900 sm:text-4xl lg:text-5xl">
+                    <h2 className="mx-auto max-w-3xl text-3xl font-extrabold leading-tight tracking-tight text-slate-900 sm:text-4xl lg:text-4xl">
                         {title}
                     </h2>
 
@@ -76,7 +76,7 @@ export default async function FaqList({
 
                     <div className="mx-auto mt-6 flex items-center justify-center gap-2">
                         <span className="h-1 w-8 rounded-full bg-pink-300" />
-                        <span className="h-1.5 w-12 rounded-full bg-pink-600" />
+                        <span className="h-1.5 w-12 rounded-full bg-primary" />
                         <span className="h-1 w-8 rounded-full bg-pink-300" />
                     </div>
                 </div>
@@ -91,22 +91,22 @@ export default async function FaqList({
                             className="group relative overflow-hidden rounded-2xl border border-slate-200/80 bg-white/90 shadow-[0_4px_20px_rgba(15,23,42,0.035)] transition-all duration-300 hover:border-pink-200 hover:shadow-[0_10px_35px_rgba(219,39,119,0.07)] open:border-pink-200 open:shadow-[0_10px_35px_rgba(219,39,119,0.06)] sm:rounded-3xl"
                         >
                             {/* Subtle open accent */}
-                            <div className="absolute left-0 top-0 h-full w-1 bg-pink-500 opacity-0 transition-opacity duration-300 group-open:opacity-100" />
+                            <div className="absolute left-0 top-0 h-full w-1 bg-primary opacity-0 transition-opacity duration-300 group-open:opacity-100" />
 
                             <summary className="flex cursor-pointer list-none items-center gap-3 px-4 py-4 sm:gap-5 sm:px-6 sm:py-5 lg:px-7 lg:py-6 [&::-webkit-details-marker]:hidden">
 
                                 {/* Number */}
-                                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-slate-100 bg-slate-50 text-xs font-extrabold tracking-wider text-slate-500 transition-all duration-300 group-open:border-pink-600 group-open:bg-pink-600 group-open:text-white sm:h-12 sm:w-12 sm:rounded-2xl sm:text-sm">
+                                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-slate-100 bg-slate-50 text-xs font-extrabold tracking-wider text-slate-500 transition-all duration-300 group-open:border-primary group-open:bg-primary group-open:text-white sm:h-12 sm:w-12 sm:rounded-2xl sm:text-sm">
                                     {String(index + 1).padStart(2, "0")}
                                 </div>
 
                                 {/* Question */}
-                                <h3 className="min-w-0 flex-1 text-sm font-bold leading-6 text-slate-800 transition-colors duration-300 group-open:text-pink-700 sm:text-base sm:leading-7 lg:text-lg">
+                                <h3 className="min-w-0 flex-1 text-sm font-bold leading-6 text-slate-800 transition-colors duration-300 group-open:text-primary-700 sm:text-sm sm:leading-7 lg:text-[15px]">
                                     {faq.question}
                                 </h3>
 
                                 {/* Toggle */}
-                                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-500 transition-all duration-300 group-hover:border-pink-200 group-hover:text-pink-600 group-open:rotate-180 group-open:border-pink-600 group-open:bg-pink-600 group-open:text-white sm:h-10 sm:w-10 sm:rounded-xl">
+                                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-500 transition-all duration-300 group-hover:border-primary-200 group-hover:text-primary-600 group-open:rotate-180 group-open:border-primary-600 group-open:bg-primary-600 group-open:text-primary sm:h-10 sm:w-10 sm:rounded-xl">
                                     <ChevronDown size={18} strokeWidth={2.2} />
                                 </div>
                             </summary>
@@ -139,7 +139,7 @@ export default async function FaqList({
 
                     {/* Decorative */}
                     <div className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full bg-white/10 blur-3xl" />
-                    <div className="pointer-events-none absolute -bottom-16 -left-10 h-36 w-36 rounded-full bg-pink-500/20 blur-3xl" />
+                    <div className="pointer-events-none absolute -bottom-16 -left-10 h-36 w-36 rounded-full bg-primary/20 blur-3xl" />
 
                     <div className="relative flex flex-col items-center gap-4 text-center sm:flex-row sm:text-left">
 
@@ -158,7 +158,7 @@ export default async function FaqList({
                             </p>
                         </div>
 
-                        <div className="hidden shrink-0 items-center gap-2 rounded-xl border border-white/15 bg-white/10 px-4 py-2.5 text-xs font-semibold text-white sm:flex">
+                        <div className="hidden shrink-0 items-center gap-2 rounded-xl border border-white/15 bg-white/10 px-4 py-2.5 text-xs font-semibold text-logoYellow sm:flex">
                             <MessageCircleQuestion size={16} />
                             We're here to help
                         </div>
