@@ -366,7 +366,7 @@ export default async function StudyAbroadForNursesPage() {
                     intro="Registration rules change. These are the regulators' pages behind this guide, checked on 24 October 2026."
                 />
 
-                <RelatedLinks
+                <RelatedLinks className="mt-10!"
                     links={[
                         { href: "/study-in-germany/nursing-ausbildung", title: "Nursing Ausbildung in Germany", text: "Paid nursing training after Class 12." },
                         { href: "/msc-nursing-in-uk", title: "MSc Nursing in the UK", text: "UK courses, entry rules and the Student visa." },
