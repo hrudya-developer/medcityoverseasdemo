@@ -21,20 +21,20 @@ export default function Carousel() {
             <div
                 className="
                     relative
-                    aspect-video
+                    aspect-auto
+                    h-[calc(100svh-4rem)]
                     w-full
                     overflow-hidden
                     bg-black
 
-                    max-md:h-[calc(100svh-4rem)]
-                    max-md:aspect-auto
+                    lg:h-[calc(100svh-8.75rem)]
                 "
             >
                 <HeroVideo />
 
                 {/* WEBSITE SWITCH */}
 
-                <div
+                {/* <div
                     className="
                         absolute
                         left-0
@@ -47,7 +47,7 @@ export default function Carousel() {
                     "
                 >
                     <WebsiteSwitchVertical />
-                </div>
+                </div> */}
 
                 {/* SOCIAL LINKS */}
 

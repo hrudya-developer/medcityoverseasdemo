@@ -21,7 +21,7 @@ import {
 } from "@/components/landing/Guide";
 import { guideMetadata } from "@/lib/guideMeta";
 import { getLiveSlugs } from "@/lib/landingData";
-import { ArrowRight, BookOpen } from "lucide-react";
+import { ArrowRight, BookOpen, BookOpenCheck, Check, FileText, GraduationCap, HeartPulse, Info, Languages, Route, Wallet } from "lucide-react";
 
 /*
  * Student visa guidance for Kerala students, one section per country
@@ -375,7 +375,7 @@ export default async function StudentVisaGuidancePage() {
     <div className="relative overflow-hidden rounded-[28px] border border-slate-200 bg-white shadow-sm mt-5">
 
         {/* Hero */}
-        <div className="relative overflow-hidden bg-[#f5f7f4]">
+        <div className="relative overflow-hidden bg-[#fff0eec9]">
             <div className="grid md:grid-cols-[1fr_240px] lg:grid-cols-[1fr_280px]">
 
                 <div className="relative z-10 p-6 sm:p-9 lg:p-10">
@@ -501,85 +501,662 @@ export default async function StudentVisaGuidancePage() {
 </GuideSection>
 
 
-                <GuideSection title="Germany student visa from Kerala" className={GUIDE_SECTION_SURFACE}>
-                    <PointList
-                        items={[
-                            { title: "Admission", text: "proof of admission to the course or a preparatory college, stating the language of instruction." },
-                            { title: "Funds", text: "a blocked account (11,904 euros for the first year on the checklist dated 30 August 2024), a scholarship, or a formal obligation letter from a sponsor in Germany. Check the current amount before you open the account." },
-                            { title: "APS certificate", text: "from the Academic Evaluation Centre (APS) in India." },
-                            { title: "Language", text: "at least B2 in the language of instruction unless the admission letter confirms it; exemption letters and medium of instruction certificates are not accepted." },
-                            { title: "Fee and insurance", text: "a visa fee of 75 euros, paid in rupees, and travel health insurance until enrolment." },
-                        ]}
-                    />
-                    <Prose>
-                        <p>
-                            Source: <SourceLink href={SRC.deStudy}>German Missions in India checklist</SourceLink>. For training rather than study, see{" "}
-                            <TextLink href="/study-in-germany/nursing-ausbildung">nursing Ausbildung</TextLink> and our{" "}
-                            <TextLink href="/study-in-germany">Germany programmes</TextLink>.
-                        </p>
-                    </Prose>
-                </GuideSection>
+             <GuideSection
+    title="Germany student visa from Kerala"
+    className={`${GUIDE_SECTION_SURFACE} [&>section>div]:max-w-7xl mt-8!`}
+>
+    <div className="relative overflow-hidden rounded-3xl border mt-5! border-slate-200/80 bg-gradient-to-br from-white via-white to-rose-50/60 p-4 shadow-sm sm:p-6 lg:p-8">
+        {/* Decorative background */}
+        <div className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-primary/5 blur-3xl" />
+        <div className="pointer-events-none absolute -bottom-20 -left-20 h-48 w-48 rounded-full bg-rose-100/40 blur-3xl" />
 
-                <GuideSection title="Australia student visa from Kerala" className={GUIDE_SECTION_SURFACE}>
-                    <PointList
-                        items={[
-                            { title: "One visa", text: "the Student visa (subclass 500), usually applied for online through ImmiAccount." },
-                            { title: "Confirmation of Enrolment", text: "a CoE from your education provider for each course." },
-                            { title: "Health", text: "you may need health examinations; Home Affairs tells you which ones after you apply." },
-                            { title: "English", text: "a test from the accepted list, taken at a secure test centre." },
-                        ]}
-                    />
-                    <Prose>
-                        <p>
-                            Sources: <SourceLink href={SRC.auHomeAffairs}>Department of Home Affairs: Student visa</SourceLink> and{" "}
-                            <SourceLink href={SRC.auTests}>Study Australia</SourceLink>. Read our <TextLink href="/study-in-australia">study in Australia guide</TextLink>.
-                        </p>
-                    </Prose>
-                </GuideSection>
+        <div className="relative">
+            {/* Intro */}
+         {/* Premium Intro */}
+<div className="relative mb-8 overflow-hidden rounded-2xl border border-slate-200/70 bg-white/80 p-5 sm:p-7 lg:p-8">
 
-                <GuideSection title="Malta student visa from Kerala" className={GUIDE_SECTION_SURFACE}>
-                    <PointList
-                        items={[
-                            { title: "Two stages", text: "a long stay (D) study visa first, then an e-Residence Permit through Identità after you arrive and enrol." },
-                            { title: "Funds", text: "bank statements for the last 3 months with at least 950 euros per month of stay, excluding tuition fees; the University of Malta warns this is not enough for real living costs." },
-                            { title: "Health", text: "an immunisation certificate and a health screening form." },
-                            { title: "Course type", text: "the study permit is for full time higher education; part time courses do not qualify." },
-                        ]}
-                    />
-                    <Prose>
-                        <p>
-                            Sources: <SourceLink href={SRC.mtUni}>University of Malta</SourceLink> and <SourceLink href={SRC.mtIdentita}>Identità</SourceLink>. Read our{" "}
-                            <TextLink href="/study-in-malta">study in Malta guide</TextLink>.
-                        </p>
-                    </Prose>
-                </GuideSection>
+    {/* Accent */}
+    <div className="absolute left-0 top-0 h-full w-1 bg-primary" />
 
-                <GuideSection title="Common reasons visa applications are delayed or refused" className={GUIDE_SECTION_SURFACE}>
-                    <PointList
-                        items={[
-                            "Incomplete documents or a missed appointment: the German Missions in India say this may lead to rejection.",
-                            "Funds not held long enough: the UK needs 28 days in a row, ending within 31 days of your application.",
-                            "Unexplained deposits: Ireland asks you to explain large or irregular amounts in your statements.",
-                        ]}
-                    />
-                </GuideSection>
+    <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
 
-                <GuideSection title="How Medcity Overseas helps with your student visa" className={GUIDE_SECTION_SURFACE}>
-                    <PointList
-                        items={[
-                            "Going through the official checklist for your country with you, line by line.",
-                            "Checking that your offer, funds, test results and documents tell one consistent story.",
-                            "Help with forms, appointment booking and interview preparation where an interview is part of the process.",
-                            "Pre-departure guidance once your visa is decided.",
-                        ]}
-                    />
-                    <Prose>
-                        <p>
-                            We do not guarantee visas or publish approval rates, and we do not give advice on work or migration visas. Visit a <TextLink href="/branches">branch near you</TextLink> or{" "}
-                            <TextLink href="/contact-us">contact us</TextLink> to book a counselling session.
+        {/* Left side */}
+        <div className="max-w-2xl">
+            <div className="mb-4 flex items-center gap-2">
+                <span className="h-1.5 w-8 rounded-full bg-primary" />
+                <span className="text-xs font-bold uppercase tracking-[0.18em] text-primary sm:text-sm">
+                    Student visa checklist
+                </span>
+            </div>
+
+            <h3 className="text-2xl font-black leading-tight tracking-tight text-slate-900 sm:text-3xl lg:text-4xl">
+                Get your documents
+                <span className="mt-1 block text-primary">
+                    ready for Germany
+                </span>
+            </h3>
+
+            <p className="mt-4 max-w-xl text-sm leading-7 text-slate-600 sm:text-base">
+                A clear overview of the essential documents and financial,
+                language and insurance requirements for your German student
+                visa application.
+            </p>
+        </div>
+
+        {/* Right side */}
+        <div className="relative shrink-0 lg:max-w-xs">
+            <div className="flex items-start gap-4 rounded-2xl bg-blue-50 p-4 sm:p-5">
+
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                    <BookOpenCheck size={23} />
+                </div>
+
+                <div>
+                    <p className="text-sm font-bold text-slate-900">
+                        Before you apply
+                    </p>
+                    <p className="mt-1 text-xs leading-6 text-slate-500 sm:text-sm">
+                        Review each requirement and verify the latest
+                        visa checklist with the German Missions in India.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+            {/* Requirement cards */}
+            <PointList
+                items={[
+                    {
+                        title: "Admission",
+                        text: "proof of admission to the course or a preparatory college, stating the language of instruction.",
+                    },
+                    {
+                        title: "Funds",
+                        text: "a blocked account (11,904 euros for the first year on the checklist dated 30 August 2024), a scholarship, or a formal obligation letter from a sponsor in Germany. Check the current amount before you open the account.",
+                    },
+                    {
+                        title: "APS certificate",
+                        text: "from the Academic Evaluation Centre (APS) in India.",
+                    },
+                    {
+                        title: "Language",
+                        text: "at least B2 in the language of instruction unless the admission letter confirms it; exemption letters and medium of instruction certificates are not accepted.",
+                    },
+                    {
+                        title: "Fee and insurance",
+                        text: "a visa fee of 75 euros, paid in rupees, and travel health insurance until enrolment.",
+                    },
+                ]}
+            />
+
+            {/* Source section */}
+            <div className="mt-8 border-t border-slate-200/80 pt-6 sm:mt-10 sm:pt-8">
+                <div className="flex flex-col gap-4 rounded-2xl border border-slate-200 bg-white/80 p-4 sm:p-5 md:flex-row md:items-start md:gap-5">
+                    <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                        <BookOpenCheck size={21} />
+                    </div>
+
+                    <div className="min-w-0 flex-1">
+                        <h3 className="text-sm font-bold text-slate-900 sm:text-base">
+                            Official visa checklist
+                        </h3>
+
+                        <div className="mt-2">
+                            <Prose>
+                                <p className="text-sm leading-7 text-slate-600">
+                                    Source:{" "}
+                                    <SourceLink href={SRC.deStudy}>
+                                        German Missions in India checklist
+                                    </SourceLink>
+                                    . For training rather than study, see{" "}
+                                    <TextLink href="/study-in-germany/nursing-ausbildung">
+                                        nursing Ausbildung
+                                    </TextLink>{" "}
+                                    and our{" "}
+                                    <TextLink href="/study-in-germany">
+                                        Germany programmes
+                                    </TextLink>
+                                    .
+                                </p>
+                            </Prose>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</GuideSection>
+
+              <GuideSection
+    title="Australia student visa from Kerala"
+    className={`${GUIDE_SECTION_SURFACE} mt-8!`}
+>
+    <div className="relative mt-5! overflow-hidden rounded-3xl border border-slate-200/80 bg-gradient-to-br from-white via-white to-rose-50/50 p-4 shadow-sm sm:p-6 lg:p-8">
+
+        {/* Decorative background */}
+        <div className="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full bg-primary/5 blur-3xl" />
+        <div className="pointer-events-none absolute -bottom-24 -left-24 h-64 w-64 rounded-full bg-rose-100/40 blur-3xl" />
+
+        <div className="relative">
+
+            {/* Header */}
+            <div className="mb-8 flex flex-col gap-5 sm:mb-10 lg:flex-row lg:items-end lg:justify-between">
+                <div className="max-w-2xl">
+                    <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-primary/10 bg-primary/5 px-3 py-1.5 text-xs font-bold uppercase tracking-[0.15em] text-primary sm:text-sm">
+                        <span className="h-2 w-2 rounded-full bg-primary" />
+                        Student visa guide
+                    </div>
+
+                    <h3 className="text-2xl font-black leading-tight tracking-tight text-slate-900 sm:text-3xl lg:text-4xl">
+                        Your Australian
+                        <span className="text-primary"> student visa</span>
+                        <span className="block">requirements</span>
+                    </h3>
+
+                    <p className="mt-4 max-w-xl text-sm leading-7 text-slate-600 sm:text-base">
+                        Understand the essential documents and steps to
+                        prepare before applying for your Australian
+                        Student visa.
+                    </p>
+                </div>
+
+                <div className="flex items-center gap-3 rounded-2xl border border-slate-200/80 bg-white/80 p-4 shadow-sm sm:max-w-sm">
+                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                        <GraduationCap size={24} />
+                    </div>
+
+                    <div>
+                        <p className="text-sm font-bold text-slate-900">
+                            Subclass 500
                         </p>
-                    </Prose>
-                </GuideSection>
+                        <p className="mt-1 text-xs leading-5 text-slate-500 sm:text-sm">
+                            Australian Student visa
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            {/* Requirements Grid */}
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:gap-5">
+
+                {/* Card 1 */}
+                <div className="group relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-primary/20 hover:shadow-lg hover:shadow-primary/5 sm:p-6">
+                    <div className="mb-5 flex items-center justify-between">
+                        <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary transition-colors group-hover:bg-primary group-hover:text-white">
+                            <FileText size={22} />
+                        </div>
+
+                        <span className="text-sm font-black tracking-wider text-slate-300">
+                            01
+                        </span>
+                    </div>
+
+                    <h4 className="text-lg font-bold text-slate-900 sm:text-xl">
+                        One visa
+                    </h4>
+
+                    <p className="mt-3 text-sm leading-7 text-slate-600">
+                        the Student visa (subclass 500), usually applied
+                        for online through ImmiAccount.
+                    </p>
+
+                    <div className="mt-5 h-1 w-12 rounded-full bg-primary/20 transition-all duration-300 group-hover:w-20 group-hover:bg-primary" />
+                </div>
+
+                {/* Card 2 */}
+                <div className="group relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-primary/20 hover:shadow-lg hover:shadow-primary/5 sm:p-6">
+                    <div className="mb-5 flex items-center justify-between">
+                        <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary transition-colors group-hover:bg-primary group-hover:text-white">
+                            <GraduationCap size={22} />
+                        </div>
+
+                        <span className="text-sm font-black tracking-wider text-slate-300">
+                            02
+                        </span>
+                    </div>
+
+                    <h4 className="text-lg font-bold text-slate-900 sm:text-xl">
+                        Confirmation of Enrolment
+                    </h4>
+
+                    <p className="mt-3 text-sm leading-7 text-slate-600">
+                        a CoE from your education provider for each course.
+                    </p>
+
+                    <div className="mt-5 h-1 w-12 rounded-full bg-primary/20 transition-all duration-300 group-hover:w-20 group-hover:bg-primary" />
+                </div>
+
+                {/* Card 3 */}
+                <div className="group relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-primary/20 hover:shadow-lg hover:shadow-primary/5 sm:p-6">
+                    <div className="mb-5 flex items-center justify-between">
+                        <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary transition-colors group-hover:bg-primary group-hover:text-white">
+                            <HeartPulse size={22} />
+                        </div>
+
+                        <span className="text-sm font-black tracking-wider text-slate-300">
+                            03
+                        </span>
+                    </div>
+
+                    <h4 className="text-lg font-bold text-slate-900 sm:text-xl">
+                        Health
+                    </h4>
+
+                    <p className="mt-3 text-sm leading-7 text-slate-600">
+                        you may need health examinations; Home Affairs
+                        tells you which ones after you apply.
+                    </p>
+
+                    <div className="mt-5 h-1 w-12 rounded-full bg-primary/20 transition-all duration-300 group-hover:w-20 group-hover:bg-primary" />
+                </div>
+
+                {/* Card 4 */}
+                <div className="group relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-primary/20 hover:shadow-lg hover:shadow-primary/5 sm:p-6">
+                    <div className="mb-5 flex items-center justify-between">
+                        <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary transition-colors group-hover:bg-primary group-hover:text-white">
+                            <Languages size={22} />
+                        </div>
+
+                        <span className="text-sm font-black tracking-wider text-slate-300">
+                            04
+                        </span>
+                    </div>
+
+                    <h4 className="text-lg font-bold text-slate-900 sm:text-xl">
+                        English
+                    </h4>
+
+                    <p className="mt-3 text-sm leading-7 text-slate-600">
+                        a test from the accepted list, taken at a secure
+                        test centre.
+                    </p>
+
+                    <div className="mt-5 h-1 w-12 rounded-full bg-primary/20 transition-all duration-300 group-hover:w-20 group-hover:bg-primary" />
+                </div>
+            </div>
+
+            {/* Sources */}
+            <div className="mt-8 border-t border-slate-200/80 pt-6 sm:mt-10 sm:pt-8">
+                <div className="flex flex-col gap-4 rounded-2xl border border-slate-200 bg-white/80 p-4 sm:p-5 md:flex-row md:items-start md:gap-5">
+
+                    <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                        <BookOpenCheck size={21} />
+                    </div>
+
+                    <div className="min-w-0 flex-1">
+                        <h4 className="text-sm font-bold text-slate-900 sm:text-base">
+                            Official visa information
+                        </h4>
+
+                        <div className="mt-2">
+                            <Prose>
+                                <p className="text-sm leading-7 text-slate-600">
+                                    Sources:{" "}
+                                    <SourceLink href={SRC.auHomeAffairs}>
+                                        Department of Home Affairs: Student visa
+                                    </SourceLink>{" "}
+                                    and{" "}
+                                    <SourceLink href={SRC.auTests}>
+                                        Study Australia
+                                    </SourceLink>
+                                    . Read our{" "}
+                                    <TextLink href="/study-in-australia">
+                                        study in Australia guide
+                                    </TextLink>
+                                    .
+                                </p>
+                            </Prose>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</GuideSection>
+
+              
+
+<GuideSection
+    title="Malta student visa from Kerala"
+    className={`${GUIDE_SECTION_SURFACE} mt-8!`}
+>
+    <div className="relative mt-5! overflow-hidden rounded-3xl border border-sky-100 bg-gradient-to-br from-white via-sky-50/40 to-blue-50/70 p-4 shadow-sm sm:p-6 lg:p-8">
+
+        {/* Background decoration */}
+        <div className="pointer-events-none absolute -right-20 -top-20 h-72 w-72 rounded-full bg-sky-200/30 blur-3xl" />
+        <div className="pointer-events-none absolute -bottom-20 -left-20 h-64 w-64 rounded-full bg-blue-100/50 blur-3xl" />
+
+        <div className="relative">
+
+            {/* Header */}
+            <div className="mb-8 max-w-3xl sm:mb-10">
+                <div className="inline-flex items-center gap-2 rounded-full border border-pink-100 bg-white/80 px-3 py-1.5 text-xs font-bold uppercase tracking-[0.15em] text-primary">
+                    <span className="h-2 w-2 rounded-full bg-primary" />
+                    Malta · Student visa guide
+                </div>
+
+                <h3 className="mt-5 text-3xl font-black leading-tight tracking-tight text-slate-900 sm:text-4xl lg:text-4xl">
+                    Plan your journey to
+                    <span className="block text-primary">study in Malta</span>
+                </h3>
+
+                <p className="mt-4 max-w-2xl text-sm leading-7 text-slate-600 sm:text-base">
+                    Understand the visa process, financial requirements,
+                    health documentation and course eligibility before
+                    preparing your Malta student visa application.
+                </p>
+            </div>
+
+            {/* Main content: Timeline + Requirements */}
+            <div className="grid grid-cols-1 gap-5 lg:grid-cols-[0.9fr_1.1fr] lg:gap-6">
+
+                {/* Left: Visa journey timeline */}
+                <div className="rounded-2xl border border-sky-100 bg-white p-5 shadow-sm sm:p-6">
+
+                    <div className="mb-7">
+                        <div className="flex items-center gap-2 text-sky-700">
+                            <Route size={18} />
+                            <span className="text-xs font-bold uppercase tracking-[0.15em]">
+                                Application process
+                            </span>
+                        </div>
+
+                        <h4 className="mt-2 text-xl font-black text-slate-900">
+                            Two stages to follow
+                        </h4>
+
+                        <p className="mt-2 text-sm leading-6 text-slate-500">
+                            Your Malta study journey involves two
+                            important visa stages.
+                        </p>
+                    </div>
+
+                    <div className="relative space-y-7 pl-2">
+
+                        {/* Timeline connector */}
+                        <div className="absolute bottom-8 left-[23px] top-7 w-px bg-sky-200" />
+
+                        {/* Stage 1 */}
+                        <div className="relative flex gap-4">
+                            <div className="relative z-10 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary text-sm font-bold text-white shadow-md shadow-sky-200">
+                                01
+                            </div>
+
+                            <div className="min-w-0 flex-1 pb-2">
+                                <span className="text-[11px] font-bold uppercase tracking-wider text-sky-600">
+                                    Before arrival
+                                </span>
+
+                                <h5 className="mt-1 text-base font-bold text-slate-900">
+                                    Long-stay study visa
+                                </h5>
+
+                                <p className="mt-2 text-sm leading-7 text-slate-600">
+                                    a long stay (D) study visa first
+                                </p>
+                            </div>
+                        </div>
+
+                        {/* Stage 2 */}
+                        <div className="relative flex gap-4">
+                            <div className="relative z-10 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border-1 border-primary bg-pink-50 text-sm font-bold text-sky-700">
+                                02
+                            </div>
+
+                            <div className="min-w-0 flex-1">
+                                <span className="text-[11px] font-bold uppercase tracking-wider text-sky-600">
+                                    After arrival
+                                </span>
+
+                                <h5 className="mt-1 text-base font-bold text-slate-900">
+                                    e-Residence Permit
+                                </h5>
+
+                                <p className="mt-2 text-sm leading-7 text-slate-600">
+                                    then an e-Residence Permit through
+                                    Identità after you arrive and enrol
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Bottom note */}
+                    <div className="mt-8 flex items-start gap-3 rounded-xl bg-sky-50 p-4">
+                        <Info size={18} className="mt-0.5 shrink-0 text-sky-700" />
+                        <p className="text-xs leading-6 text-sky-900">
+                            Keep both stages in mind while planning
+                            your travel and enrolment.
+                        </p>
+                    </div>
+                </div>
+
+                {/* Right: Requirements */}
+                <div className="space-y-4">
+
+                    <div className="mb-2">
+                        <span className="text-xs font-bold uppercase tracking-[0.15em] text-sky-700">
+                            Important requirements
+                        </span>
+                        <h4 className="mt-2 text-xl font-black text-slate-900">
+                            What you need to prepare
+                        </h4>
+                    </div>
+
+                    {/* Funds */}
+                    <div className="group flex gap-4 rounded-2xl border border-sky-100 bg-white p-4 shadow-sm transition-all duration-300 hover:border-sky-300 hover:shadow-md sm:p-5">
+                        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-sky-100 text-sky-700 transition-colors group-hover:bg-sky-600 group-hover:text-white">
+                            <Wallet size={21} />
+                        </div>
+
+                        <div className="min-w-0 flex-1">
+                            <div className="flex flex-wrap items-center justify-between gap-2">
+                                <h5 className="text-base font-bold text-slate-900">
+                                    Financial requirements
+                                </h5>
+                                <span className="rounded-full bg-sky-50 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-sky-700">
+                                    Funds
+                                </span>
+                            </div>
+
+                            <p className="mt-2 text-sm leading-7 text-slate-600">
+                                bank statements for the last 3 months
+                                with at least 950 euros per month of stay,
+                                excluding tuition fees; the University of
+                                Malta warns this is not enough for real
+                                living costs.
+                            </p>
+                        </div>
+                    </div>
+
+                    {/* Health */}
+                    <div className="group flex gap-4 rounded-2xl border border-sky-100 bg-white p-4 shadow-sm transition-all duration-300 hover:border-sky-300 hover:shadow-md sm:p-5">
+                        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-sky-100 text-sky-700 transition-colors group-hover:bg-sky-600 group-hover:text-white">
+                            <HeartPulse size={21} />
+                        </div>
+
+                        <div className="min-w-0 flex-1">
+                            <div className="flex flex-wrap items-center justify-between gap-2">
+                                <h5 className="text-base font-bold text-slate-900">
+                                    Health documentation
+                                </h5>
+                                <span className="rounded-full bg-sky-50 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-sky-700">
+                                    Health
+                                </span>
+                            </div>
+
+                            <p className="mt-2 text-sm leading-7 text-slate-600">
+                                an immunisation certificate and a
+                                health screening form.
+                            </p>
+                        </div>
+                    </div>
+
+                    {/* Course type */}
+                    <div className="group flex gap-4 rounded-2xl border border-sky-100 bg-white p-4 shadow-sm transition-all duration-300 hover:border-sky-300 hover:shadow-md sm:p-5">
+                        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-sky-100 text-sky-700 transition-colors group-hover:bg-sky-600 group-hover:text-white">
+                            <GraduationCap size={21} />
+                        </div>
+
+                        <div className="min-w-0 flex-1">
+                            <div className="flex flex-wrap items-center justify-between gap-2">
+                                <h5 className="text-base font-bold text-slate-900">
+                                    Course eligibility
+                                </h5>
+                                <span className="rounded-full bg-sky-50 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-sky-700">
+                                    Courses
+                                </span>
+                            </div>
+
+                            <p className="mt-2 text-sm leading-7 text-slate-600">
+                                the study permit is for full time
+                                higher education; part time courses
+                                do not qualify.
+                            </p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            {/* Sources */}
+            <div className="mt-8 border-t border-sky-100 pt-6 sm:mt-10 sm:pt-8">
+                <div className="flex flex-col gap-4 rounded-2xl border border-sky-100 bg-white/90 p-4 sm:p-5 md:flex-row md:items-start md:gap-5">
+
+                    <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-sky-100 text-sky-700">
+                        <BookOpenCheck size={21} />
+                    </div>
+
+                    <div className="min-w-0 flex-1">
+                        <h4 className="text-sm font-bold text-slate-900 sm:text-base">
+                            Official visa information
+                        </h4>
+
+                        <div className="mt-2">
+                            <Prose>
+                                <p className="text-sm leading-7 text-slate-600">
+                                    Sources:{" "}
+                                    <SourceLink href={SRC.mtUni}>
+                                        University of Malta
+                                    </SourceLink>{" "}
+                                    and{" "}
+                                    <SourceLink href={SRC.mtIdentita}>
+                                        Identità
+                                    </SourceLink>
+                                    . Read our{" "}
+                                    <TextLink href="/study-in-malta">
+                                        study in Malta guide
+                                    </TextLink>
+                                    .
+                                </p>
+                            </Prose>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</GuideSection>
+
+
+                <div className="mx-auto grid w-full mt-8 max-w-7xl grid-cols-1 items-stretch gap-5 px-4 sm:px-6 lg:grid-cols-2 lg:gap-7">
+                    <section className="relative isolate flex h-full min-w-0 flex-col overflow-hidden rounded-3xl border border-rose-100 bg-gradient-to-br from-white via-rose-50/70 to-orange-50/60 p-5 shadow-[0_16px_45px_rgba(190,24,93,0.08)] sm:p-6 lg:p-7">
+                        <div
+                            aria-hidden="true"
+                            className="pointer-events-none absolute -right-12 -top-12 size-40 rounded-full bg-rose-200/40 blur-3xl"
+                        />
+
+                        <div className="relative flex items-start gap-3.5">
+                            <span className="grid size-11 shrink-0 place-items-center rounded-2xl bg-gradient-to-br from-rose-500 to-rose-700 text-white shadow-lg shadow-rose-500/20 sm:size-12">
+                                <Info size={21} strokeWidth={2.2} aria-hidden="true" />
+                            </span>
+                            <div className="min-w-0">
+                                <p className="text-[10px] font-extrabold uppercase tracking-[0.16em] text-rose-700 sm:text-xs">
+                                    Common visa pitfalls
+                                </p>
+                                <h2 className="mt-1 text-xl font-black leading-tight text-slate-900 sm:text-2xl">
+                                    Common reasons visa applications are delayed or refused
+                                </h2>
+                            </div>
+                        </div>
+
+                        <div className="relative mt-5 grid gap-3">
+                            {[
+                                "Incomplete documents or a missed appointment: the German Missions in India say this may lead to rejection.",
+                                "Funds not held long enough: the UK needs 28 days in a row, ending within 31 days of your application.",
+                                "Unexplained deposits: Ireland asks you to explain large or irregular amounts in your statements.",
+                            ].map((item, index) => (
+                                <div
+                                    key={item}
+                                    className="flex min-w-0 items-start gap-3 rounded-2xl border border-rose-100/80 bg-white/85 p-3.5 shadow-sm transition duration-200 hover:-translate-y-0.5 hover:border-rose-200 hover:shadow-md sm:p-4"
+                                >
+                                    <span className="mt-0.5 grid size-8 shrink-0 place-items-center rounded-full bg-rose-100 text-xs font-black text-rose-700">
+                                        {String(index + 1).padStart(2, "0")}
+                                    </span>
+                                    <p className="min-w-0 text-sm leading-6 text-slate-700">
+                                        {item}
+                                    </p>
+                                </div>
+                            ))}
+                        </div>
+                    </section>
+
+                    <section className="relative isolate flex h-full min-w-0 flex-col overflow-hidden rounded-3xl border border-sky-100 bg-gradient-to-br from-white via-sky-50/70 to-indigo-50/60 p-5 shadow-[0_16px_45px_rgba(14,116,144,0.08)] sm:p-6 lg:p-7">
+                        <div
+                            aria-hidden="true"
+                            className="pointer-events-none absolute -right-12 -top-12 size-40 rounded-full bg-sky-200/50 blur-3xl"
+                        />
+
+                        <div className="relative flex items-start gap-3.5">
+                            <span className="grid size-11 shrink-0 place-items-center rounded-2xl bg-gradient-to-br from-sky-500 to-indigo-600 text-white shadow-lg shadow-sky-500/20 sm:size-12">
+                                <BookOpenCheck size={21} strokeWidth={2.2} aria-hidden="true" />
+                            </span>
+                            <div className="min-w-0">
+                                <p className="text-[10px] font-extrabold uppercase tracking-[0.16em] text-sky-700 sm:text-xs">
+                                    Guidance at every step
+                                </p>
+                                <h2 className="mt-1 text-xl font-black leading-tight text-slate-900 sm:text-2xl">
+                                    How Medcity Overseas helps with your student visa
+                                </h2>
+                            </div>
+                        </div>
+
+                        <div className="relative mt-5 grid gap-3">
+                            {[
+                                "Going through the official checklist for your country with you, line by line.",
+                                "Checking that your offer, funds, test results and documents tell one consistent story.",
+                                "Help with forms, appointment booking and interview preparation where an interview is part of the process.",
+                                "Pre-departure guidance once your visa is decided.",
+                            ].map((item) => (
+                                <div
+                                    key={item}
+                                    className="flex min-w-0 items-start gap-3 rounded-2xl border border-sky-100/80 bg-white/85 p-3.5 shadow-sm transition duration-200 hover:-translate-y-0.5 hover:border-sky-200 hover:shadow-md sm:p-4"
+                                >
+                                    <span className="mt-0.5 grid size-8 shrink-0 place-items-center rounded-full bg-sky-100 text-sky-700">
+                                        <Check size={16} strokeWidth={3} aria-hidden="true" />
+                                    </span>
+                                    <p className="min-w-0 text-sm leading-6 text-slate-700">
+                                        {item}
+                                    </p>
+                                </div>
+                            ))}
+                        </div>
+
+                        <div className="relative mt-4 rounded-2xl border border-indigo-100 bg-gradient-to-r from-sky-50 to-indigo-50 p-4">
+                            <p className="text-[10px] font-extrabold uppercase tracking-[0.14em] text-indigo-700">
+                                Clear, honest guidance
+                            </p>
+                            <p className="mt-1.5 text-sm leading-6 text-slate-700">
+                                We do not guarantee visas or publish approval rates, and we do not give advice on work or migration visas. Visit a{" "}
+                                <TextLink href="/branches">branch near you</TextLink> or{" "}
+                                <TextLink href="/contact-us">contact us</TextLink> to book a counselling session.
+                            </p>
+                        </div>
+                    </section>
+                </div>
 
                 <FaqList
                     path={PATH}

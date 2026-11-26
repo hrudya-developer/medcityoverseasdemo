@@ -14,8 +14,6 @@ import {
 import germanFlag from "@/assets/germanFlag.png";
 
 const ACADEMY_URL = "https://medcityacademy.com/";
-const BRANCHES_URL =
-    "https://medcityacademy.com/centers/";
 const LANGUAGE_PROGRAM_URL =
     "https://medcityacademy.com/courses/";
 const MOBILE_APP_URL =
@@ -25,7 +23,7 @@ const WebsiteSwitchHorizontal = ({ onNavigate }) => {
     return (
         <nav
             aria-label="Quick website links"
-            className="relative flex w-full flex-row items-center justify-between gap-1 overflow-visible px-1.5 py-1.5 lg:hidden"
+            className="relative grid w-full grid-cols-2 items-stretch gap-2 overflow-visible px-1 py-1 sm:grid-cols-3 lg:hidden"
         >
             <HorizontalInternalLink
                 href="/"
@@ -43,8 +41,8 @@ const WebsiteSwitchHorizontal = ({ onNavigate }) => {
                 onNavigate={onNavigate}
             />
 
-            <HorizontalExternalLink
-                href={BRANCHES_URL}
+            <HorizontalInternalLink
+                href="/branches"
                 label="Our Branches"
                 icon={MapPin}
                 onNavigate={onNavigate}
@@ -201,7 +199,9 @@ const HorizontalLinkContent = ({
                 </span>
             )}
 
-            <Tooltip label={label} />
+            <span className="relative z-10 max-w-full whitespace-normal text-center text-[9px] font-semibold leading-tight text-white/80 min-[380px]:text-[10px]">
+                {label}
+            </span>
 
             {active ? (
                 <span
@@ -213,54 +213,41 @@ const HorizontalLinkContent = ({
     );
 };
 
-const Tooltip = ({ label }) => {
-    return (
-        <span
-            role="tooltip"
-            className="pointer-events-none absolute left-1/2 top-[calc(100%+8px)] z-[9999] -translate-x-1/2 translate-y-1 whitespace-nowrap rounded-full bg-slate-950 px-2.5 py-1.5 text-[10px] font-semibold text-white opacity-0 shadow-lg transition-all duration-200 group-hover:translate-y-0 group-hover:opacity-100 group-focus-visible:translate-y-0 group-focus-visible:opacity-100"
-        >
-            {label}
-
-            <span
-                aria-hidden="true"
-                className="absolute bottom-full left-1/2 -translate-x-1/2 border-[5px] border-transparent border-b-slate-950"
-            />
-        </span>
-    );
-};
-
 const getLinkClasses = (active) => `
   group
   relative
   flex
-  h-[38px]
-  w-[38px]
-  shrink-0
-  items-center
+  min-h-[72px]
+  w-full
+  min-w-0
+  flex-col
   justify-center
-  rounded-full
+  gap-1.5
+  rounded-xl
+  border
+  px-1.5
+  py-2
+  text-center
   transition-all
   duration-300
   focus-visible:outline-none
   focus-visible:ring-2
-  focus-visible:ring-primary/40
+  focus-visible:ring-logoYellow
   focus-visible:ring-offset-2
+  focus-visible:ring-offset-darkPrimary
 
   ${active
         ? `
-          bg-darkPrimary
-          text-white
-          shadow-[0_5px_12px_rgba(99,26,51,0.4)]
+          border-logoYellow/40
+          bg-white/[0.12]
+          shadow-[inset_0_1px_0_rgba(255,255,255,0.12)]
         `
         : `
-          border
-          border-white/15
-          bg-rose-100
-          text-primary
-          shadow-[0_3px_8px_rgba(15,23,42,0.14)]
+          border-white/10
+          bg-white/[0.045]
           hover:-translate-y-0.5
-          hover:bg-primary
-          hover:text-white
+          hover:border-white/20
+          hover:bg-white/[0.10]
         `
     }
 `;

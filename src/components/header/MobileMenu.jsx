@@ -34,10 +34,10 @@ const exploreItems = [
         name: "Add-on Services",
         path: "/add-on-services",
     },
-    {
-        name: "Branches",
-        path: "/branches",
-    },
+    // {
+    //     name: "Branches",
+    //     path: "/branches",
+    // },
 ];
 
 export default function MobileMenu({
@@ -314,9 +314,9 @@ export default function MobileMenu({
                                                         shadow-[0_10px_25px_rgba(0,0,0,0.22)]
                                                       `
                                                     : `
-                                                        border-white/[0.06]
-                                                        bg-white/[0.035]
-                                                        text-white/90
+                                                        border-none
+                                                        bg-transparent
+                                                        text-white
                                                         hover:border-white/15
                                                         hover:bg-white/[0.08]
                                                         hover:text-white
@@ -539,12 +539,12 @@ export default function MobileMenu({
                 <div
                     className="
                         relative
-                        mt-5
+                        mt-4
                         rounded-2xl
                         border
                         border-white/10
                         bg-white/[0.055]
-                        p-2
+                        p-2.5
                         shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_12px_30px_rgba(0,0,0,0.22)]
                         backdrop-blur-xl
                     "
@@ -563,6 +563,15 @@ export default function MobileMenu({
                             to-transparent
                         "
                     />
+
+                    <div className="mb-1 flex items-center justify-between px-1">
+                        <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-white/65">
+                            Quick links
+                        </p>
+                        <span className="text-[10px] font-medium text-white/40">
+                            Medcity services
+                        </span>
+                    </div>
 
                     <WebsiteSwitchHorizontal
                         onNavigate={
