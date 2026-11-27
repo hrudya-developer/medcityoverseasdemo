@@ -209,74 +209,83 @@ function Hero({ course, apiData }) {
   if (!course) return null;
 
   return (
-    <section className="relative isolate overflow-hidden bg-darkPrimary text-white">
-      {/* Main gradient */}
-      <div className="absolute inset-0 -z-20 bg-gradient-to-br from-darkPrimary via-[#151d42] to-[#c01f53]" />
+    
+<section className="relative isolate overflow-hidden bg-darkPrimary text-white">
 
-      {/* Grid pattern */}
-      <div
-        className="absolute inset-0 -z-10 opacity-[0.07]"
-        style={{
-          backgroundImage: `
-            linear-gradient(rgba(255,255,255,0.8) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(255,255,255,0.8) 1px, transparent 1px)
-          `,
-          backgroundSize: "45px 45px",
-        }}
-      />
+  {/* Background gradient */}
+  <div className="absolute inset-0 -z-20 bg-gradient-to-br from-darkPrimary via-[#171b3d] to-[#8f193f]" />
 
-      {/* Left glow */}
-      <div className="absolute -left-32 top-10 -z-10 h-72 w-72 rounded-full bg-primary/30 blur-3xl" />
+  {/* Subtle grid pattern */}
+  <div
+    className="absolute inset-0 -z-10 opacity-[0.045]"
+    style={{
+      backgroundImage: `
+        linear-gradient(rgba(255,255,255,0.8) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.8) 1px, transparent 1px)
+      `,
+      backgroundSize: "50px 50px",
+    }}
+  />
 
-      {/* Right glow */}
-      <div className="absolute -right-32 bottom-0 -z-10 h-96 w-96 rounded-full bg-yellow-400/20 blur-3xl" />
+  {/* Ambient glows */}
+  <div className="absolute -left-40 top-0 -z-10 h-72 w-72 rounded-full bg-primary/25 blur-[100px] sm:h-96 sm:w-96" />
 
-      {/* Decorative circles */}
-      <div className="absolute right-[8%] top-16 -z-10 h-48 w-48 rounded-full border border-white/10" />
+  <div className="absolute -right-32 bottom-0 -z-10 h-80 w-80 rounded-full bg-[#c01f53]/25 blur-[100px] sm:h-[450px] sm:w-[450px]" />
 
-      <div className="absolute right-[11%] top-24 -z-10 h-32 w-32 rounded-full border border-yellow-400/20" />
+  <div className="absolute right-[15%] top-0 -z-10 h-64 w-64 rounded-full bg-yellow-400/10 blur-[100px]" />
 
-      <div className="absolute bottom-10 left-[8%] -z-10 h-32 w-32 rounded-full border border-white/10" />
+  {/* Decorative circles */}
+  <div className="absolute -right-20 top-12 -z-10 h-56 w-56 rounded-full border border-white/[0.08] sm:right-[5%] sm:top-16 sm:h-72 sm:w-72" />
 
-      {/* Content */}
-      <div className="mx-auto flex min-h-[560px] max-w-5xl flex-col items-center justify-center px-5 py-16 text-center sm:px-8 sm:py-20 lg:px-10 lg:py-24">
+  <div className="absolute -right-10 top-24 -z-10 h-36 w-36 rounded-full border border-yellow-300/15 sm:right-[9%] sm:top-28 sm:h-48 sm:w-48" />
 
-      
+  <div className="absolute -bottom-20 -left-16 -z-10 h-48 w-48 rounded-full border border-white/[0.07] sm:bottom-10 sm:left-[7%] sm:h-64 sm:w-64" />
 
-        {/* Program badge */}
-        <div className="mb-7 inline-flex items-center gap-2 rounded-full border border-yellow-300/30 bg-yellow-300/10 px-5 py-2.5 text-sm font-bold text-yellow-300 backdrop-blur">
-          <span className="h-2 w-2 rounded-full bg-yellow-300" />
-          Germany Program
-        </div>
+  {/* Content */}
+  <div className="mx-auto flex min-h-[480px] max-w-7xl flex-col items-center justify-center px-5 py-20 text-center sm:min-h-[540px] sm:px-8 sm:py-24 lg:min-h-[580px] lg:px-12 lg:py-28">
 
-        {/* Title */}
-        <h1 className="max-w-4xl text-5xl font-black leading-[1.05] tracking-tight text-white sm:text-6xl lg:text-7xl">
-          {course.name}
-        </h1>
+    {/* Program badge */}
+    <div className="mb-7 inline-flex items-center gap-2.5 rounded-full border border-yellow-300/25 bg-yellow-300/[0.08] px-4 py-2 text-xs font-bold tracking-[0.15em] text-yellow-300 shadow-lg shadow-black/5 backdrop-blur-md sm:mb-9 sm:px-5 sm:py-2.5 sm:text-sm">
+      <span className="relative flex h-2 w-2">
+        <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-yellow-300 opacity-60" />
+        <span className="relative inline-flex h-2 w-2 rounded-full bg-yellow-300" />
+      </span>
+      GERMANY PROGRAM
+    </div>
 
-        {/* Subtitle */}
-        {course.titleWhy && (
-          <p className="mt-6 max-w-3xl text-lg font-semibold leading-8 text-yellow-300 sm:text-xl">
-            {course.titleWhy}
-          </p>
-        )}
+    {/* Main title */}
+    <h1 className="max-w-5xl break-words text-4xl font-black leading-[1.12] tracking-tight text-white sm:text-5xl md:text-6xl lg:text-7xl xl:text-[76px]">
+      {course.name}
+    </h1>
 
-        {/* Description */}
-        {course.why && (
-          <p className="mt-6 max-w-3xl text-base leading-8 text-white/75 sm:text-lg">
-            {course.why}
-          </p>
-        )}
+    {/* Subtitle */}
+    {course.titleWhy && (
+      <p className="mt-6 max-w-3xl text-base font-semibold leading-relaxed text-yellow-300 sm:mt-7 sm:text-xl md:text-2xl md:leading-relaxed">
+        {course.titleWhy}
+      </p>
+    )}
 
-        {/* Bottom decorative line */}
-        <div className="mt-10 flex items-center gap-3">
-          <span className="h-px w-10 bg-yellow-300/50" />
-          <span className="h-2 w-2 rounded-full bg-yellow-300" />
-          <span className="h-px w-10 bg-yellow-300/50" />
-        </div>
+    {/* Description */}
+    {course.why && (
+      <p className="mt-5 max-w-3xl text-sm leading-7 text-white/75 sm:mt-6 sm:text-base sm:leading-8 md:text-lg">
+        {course.why}
+      </p>
+    )}
 
-      </div>
-    </section>
+    {/* Decorative divider */}
+    <div className="mt-9 flex items-center gap-3 sm:mt-11">
+      <span className="h-px w-10 bg-gradient-to-r from-transparent to-yellow-300/70 sm:w-16" />
+      <span className="h-2.5 w-2.5 rotate-45 border border-yellow-300 bg-yellow-300/20" />
+      <span className="h-px w-10 bg-gradient-to-l from-transparent to-yellow-300/70 sm:w-16" />
+    </div>
+
+  </div>
+
+  {/* Bottom gradient separator */}
+  <div className="absolute bottom-0 left-0 h-px w-full bg-gradient-to-r from-transparent via-yellow-300/30 to-transparent" />
+
+</section>
+
   );
 }
 /* =========================================================
@@ -690,7 +699,7 @@ function Details({ details }) {
   if (!groups.length) return null;
 
   return (
-    <section className="bg-slate-50">
+    <section className="bg-blue-50">
       <div className="mx-auto max-w-9xl px-5 py-16 sm:px-8 lg:px-10">
 
         <div className="mb-12">

@@ -149,68 +149,178 @@ export default function NursingAusbildungPage() {
                 />
 
               
-<GuideSection title="Who can apply for nursing Ausbildung?" className={GUIDE_SECTION_SURFACE}>
-    <div className="relative overflow-hidden rounded-3xl border mt-4 border-slate-200/70 bg-gradient-to-br from-white via-white to-rose-50/50 p-4 sm:p-6 lg:p-8">
 
-        {/* Decorative background */}
-        <div className="pointer-events-none absolute -right-20 -top-20 h-52 w-52 rounded-full bg-pink-100/40 blur-3xl" />
-        <div className="pointer-events-none absolute -bottom-20 -left-16 h-48 w-48 rounded-full bg-rose-100/30 blur-3xl" />
+<GuideSection title="Who can apply for nursing Ausbildung?" className={GUIDE_SECTION_SURFACE}>
+    <div className="relative mt-4 overflow-hidden rounded-3xl border border-rose-100/80 bg-gradient-to-br from-white via-white to-rose-50/60 p-4 shadow-sm sm:p-6 lg:p-8">
+
+        {/* Background decoration */}
+        <div className="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full bg-pink-100/50 blur-3xl" />
+        <div className="pointer-events-none absolute -bottom-24 -left-20 h-64 w-64 rounded-full bg-rose-100/40 blur-3xl" />
 
         <div className="relative">
 
             {/* Intro */}
-            <div className="mb-6 sm:mb-8">
-                <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-pink-100 bg-pink-50 px-3 py-1.5 text-xs font-bold tracking-wider text-pink-600 sm:text-sm">
-                    <span className="h-1.5 w-1.5 rounded-full bg-pink-500" />
+            <div className="mb-7 sm:mb-9">
+                <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-rose-200/80 bg-rose-50 px-3.5 py-2 text-[11px] font-extrabold tracking-[0.15em] text-[#c01f53] sm:text-xs">
+                    <span className="h-2 w-2 rounded-full bg-[#c01f53] shadow-[0_0_0_4px_rgba(192,31,83,0.10)]" />
                     ELIGIBILITY REQUIREMENTS
                 </div>
 
-                <Prose>
-                    <p>
-                        Section 11 of the{" "}
-                        <SourceLink href={SRC.pflbg11}>
-                            Nursing Professions Act (PflBG)
-                        </SourceLink>{" "}
-                        sets the school education needed. Section 2 of the same act,
-                        which section 11 applies, adds reliability, health and German
-                        language. In plain terms:
-                    </p>
-                </Prose>
+                <div className="max-w-4xl">
+                    <Prose>
+                        <p>
+                            Section 11 of the{" "}
+                            <SourceLink href={SRC.pflbg11}>
+                                Nursing Professions Act (PflBG)
+                            </SourceLink>{" "}
+                            sets the school education needed. Section 2 of the same act,
+                            which section 11 applies, adds reliability, health and German
+                            language. In plain terms:
+                        </p>
+                    </Prose>
+                </div>
             </div>
 
-            {/* Requirements */}
-            <PointList
-                items={[
-                    {
-                        title: "School education",
-                        text: "a certificate equal to the German intermediate school certificate (mittlerer Schulabschluss), or ten years of general schooling, or a lower certificate together with a completed vocational training of at least two years.",
-                    },
-                    {
-                        title: "Reliability",
-                        text: "no conduct that shows you are unreliable for the profession.",
-                    },
-                    {
-                        title: "Health",
-                        text: "you must not be medically unfit to work as a nurse.",
-                    },
-                    {
-                        title: "German",
-                        text: "the German needed to practise the profession, built up during the training.",
-                    },
-                    {
-                        title: "A training place",
-                        text: "a signed training contract with a German hospital or care provider, plus the training plan, for the visa.",
-                    },
-                ]}
-            />
+            {/* Requirements Grid */}
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:gap-5">
 
-            {/* Closing note */}
-            <div className="mt-6 rounded-2xl border border-pink-100 bg-white/80 p-4 sm:mt-8 sm:p-5">
-                <div className="flex items-start gap-3">
-                    <div className="mt-1 h-2.5 w-2.5 shrink-0 rounded-full bg-pink-500 ring-4 ring-pink-100" />
+                {/* School Education */}
+                <div className="group relative overflow-hidden rounded-2xl border border-rose-100 bg-white/90 p-5 shadow-[0_4px_20px_rgba(15,23,42,0.03)] transition-all duration-300 hover:-translate-y-1 hover:border-rose-200 hover:shadow-[0_12px_30px_rgba(192,31,83,0.08)] sm:p-6">
 
-                    <div className="min-w-0">
-                        <h3 className="mb-2 text-sm font-bold text-slate-900 sm:text-base">
+                    <div className="mb-5 flex items-center justify-between">
+                        <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-rose-50 text-[#c01f53] transition-colors duration-300 group-hover:bg-[#c01f53] group-hover:text-white">
+                            <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.8" d="M12 14l9-5-9-5-9 5 9 5zm0 0v7m-7-9v5c0 1.5 3.1 3 7 3s7-1.5 7-3v-5" />
+                            </svg>
+                        </div>
+                        <span className="text-xs font-black tracking-widest text-rose-200">01</span>
+                    </div>
+
+                    <h3 className="mb-3 text-lg font-extrabold text-slate-900 sm:text-xl">
+                        School education
+                    </h3>
+                    <p className="text-sm leading-7 text-slate-600 sm:text-[15px]">
+                        a certificate equal to the German intermediate school certificate (mittlerer Schulabschluss), or ten years of general schooling, or a lower certificate together with a completed vocational training of at least two years.
+                    </p>
+
+                    <div className="absolute bottom-0 left-0 h-1 w-0 bg-[#c01f53] transition-all duration-300 group-hover:w-full" />
+                </div>
+
+                {/* Reliability */}
+                <div className="group relative overflow-hidden rounded-2xl border border-rose-100 bg-white/90 p-5 shadow-[0_4px_20px_rgba(15,23,42,0.03)] transition-all duration-300 hover:-translate-y-1 hover:border-rose-200 hover:shadow-[0_12px_30px_rgba(192,31,83,0.08)] sm:p-6">
+
+                    <div className="mb-5 flex items-center justify-between">
+                        <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-rose-50 text-[#c01f53] transition-colors duration-300 group-hover:bg-[#c01f53] group-hover:text-white">
+                            <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.8" d="M9 12l2 2 4-4m5-2a9 9 0 11-16 0 9 9 0 0116 0z" />
+                            </svg>
+                        </div>
+                        <span className="text-xs font-black tracking-widest text-rose-200">02</span>
+                    </div>
+
+                    <h3 className="mb-3 text-lg font-extrabold text-slate-900 sm:text-xl">
+                        Reliability
+                    </h3>
+                    <p className="text-sm leading-7 text-slate-600 sm:text-[15px]">
+                        no conduct that shows you are unreliable for the profession.
+                    </p>
+
+                    <div className="absolute bottom-0 left-0 h-1 w-0 bg-[#c01f53] transition-all duration-300 group-hover:w-full" />
+                </div>
+
+                {/* Health */}
+                <div className="group relative overflow-hidden rounded-2xl border border-rose-100 bg-white/90 p-5 shadow-[0_4px_20px_rgba(15,23,42,0.03)] transition-all duration-300 hover:-translate-y-1 hover:border-rose-200 hover:shadow-[0_12px_30px_rgba(192,31,83,0.08)] sm:p-6">
+
+                    <div className="mb-5 flex items-center justify-between">
+                        <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-rose-50 text-[#c01f53] transition-colors duration-300 group-hover:bg-[#c01f53] group-hover:text-white">
+                            <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.8" d="M12 21s-8-4.5-8-11a4.5 4.5 0 018-2.5A4.5 4.5 0 0120 10c0 6.5-8 11-8 11z" />
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.8" d="M8 12h2l1-2 2 4 1-2h2" />
+                            </svg>
+                        </div>
+                        <span className="text-xs font-black tracking-widest text-rose-200">03</span>
+                    </div>
+
+                    <h3 className="mb-3 text-lg font-extrabold text-slate-900 sm:text-xl">
+                        Health
+                    </h3>
+                    <p className="text-sm leading-7 text-slate-600 sm:text-[15px]">
+                        you must not be medically unfit to work as a nurse.
+                    </p>
+
+                    <div className="absolute bottom-0 left-0 h-1 w-0 bg-[#c01f53] transition-all duration-300 group-hover:w-full" />
+                </div>
+
+                {/* German Language */}
+                <div className="group relative overflow-hidden rounded-2xl border border-rose-100 bg-white/90 p-5 shadow-[0_4px_20px_rgba(15,23,42,0.03)] transition-all duration-300 hover:-translate-y-1 hover:border-rose-200 hover:shadow-[0_12px_30px_rgba(192,31,83,0.08)] sm:p-6">
+
+                    <div className="mb-5 flex items-center justify-between">
+                        <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-rose-50 text-[#c01f53] transition-colors duration-300 group-hover:bg-[#c01f53] group-hover:text-white">
+                            <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.8" d="M4 5h16M4 5v14m0-14l7 7m0-7L4 12m9-5h7m-7 4h7m-7 4h7m-7 4h7" />
+                            </svg>
+                        </div>
+                        <span className="text-xs font-black tracking-widest text-rose-200">04</span>
+                    </div>
+
+                    <h3 className="mb-3 text-lg font-extrabold text-slate-900 sm:text-xl">
+                        German language
+                    </h3>
+                    <p className="text-sm leading-7 text-slate-600 sm:text-[15px]">
+                        the German needed to practise the profession, built up during the training.
+                    </p>
+
+                    <div className="absolute bottom-0 left-0 h-1 w-0 bg-[#c01f53] transition-all duration-300 group-hover:w-full" />
+                </div>
+
+                {/* Training Place - Full Width */}
+                <div className="group relative overflow-hidden rounded-2xl border border-rose-200/80 bg-gradient-to-br from-rose-50/80 via-white to-white p-5 shadow-[0_4px_20px_rgba(15,23,42,0.03)] transition-all duration-300 hover:border-rose-300 hover:shadow-[0_12px_30px_rgba(192,31,83,0.08)] sm:col-span-2 sm:p-6">
+
+                    <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-6">
+
+                        <div className="flex shrink-0 items-center justify-between sm:w-16 sm:flex-col sm:items-center">
+                            <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#c01f53] text-white shadow-lg shadow-rose-200/70">
+                                <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.8" d="M3 21h18M5 21V7l8-4v18m6 0V11l-6-4M9 9v.01M9 12v.01M9 15v.01M9 18v.01M15 14v.01M15 17v.01" />
+                                </svg>
+                            </div>
+                            <span className="text-xs font-black tracking-widest text-rose-300 sm:mt-3">05</span>
+                        </div>
+
+                        <div className="min-w-0">
+                            <h3 className="mb-2 text-lg font-extrabold text-slate-900 sm:text-xl">
+                                A training place
+                            </h3>
+                            <p className="text-sm leading-7 text-slate-600 sm:text-[15px]">
+                                a signed training contract with a German hospital or care provider, plus the training plan, for the visa.
+                            </p>
+                        </div>
+
+                        <div className="hidden shrink-0 text-rose-200 sm:ml-auto sm:block">
+                            <svg className="h-12 w-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1" d="M3 21h18M5 21V7l8-4v18m6 0V11l-6-4" />
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            {/* Closing Note */}
+            <div className="relative mt-6 overflow-hidden rounded-2xl border border-rose-200/80 bg-white p-5 shadow-sm sm:mt-8 sm:p-6">
+
+                <div className="absolute bottom-0 left-0 top-0 w-1 bg-gradient-to-b from-[#c01f53] to-rose-200" />
+
+                <div className="flex items-start gap-4 pl-1">
+
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-rose-50 text-[#c01f53]">
+                        <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.8" d="M13 16h-1v-4h-1m1-4h.01M22 12a10 10 0 11-20 0 10 10 0 0120 0z" />
+                        </svg>
+                    </div>
+
+                    <div className="min-w-0 flex-1">
+                        <h3 className="mb-3 text-base font-extrabold text-slate-900 sm:text-lg">
                             What this means for Indian students
                         </h3>
 
@@ -226,12 +336,14 @@ export default function NursingAusbildungPage() {
                             </Prose>
                         </div>
                     </div>
+
                 </div>
             </div>
 
         </div>
     </div>
 </GuideSection>
+
 
 
               
@@ -341,52 +453,359 @@ export default function NursingAusbildungPage() {
 </GuideSection>
 
 
-                <GuideSection title="Is the training allowance paid every month?" className={GUIDE_SECTION_SURFACE}>
-                    <Prose>
-                        <p>
-                            Yes, you are paid while you train. Section 19 of the{" "}
-                            <SourceLink href={SRC.pflbg19}>Nursing Professions Act</SourceLink> says the training provider must pay a reasonable training allowance (Ausbildungsvergütung) for the whole training period, and trainees count as employees in training for social insurance.
-                        </p>
-                    </Prose>
-                    <PointList
-                        items={[
-                            "The amount is set by the employer, often through a collective agreement, and is written in your training contract.",
-                            "Meals or housing given by the employer can be counted against the pay only if the contract says so, and never above 75 percent of the gross allowance.",
-                            "Extra hours beyond the agreed training time are allowed only as an exception and must be paid extra or given back as time off.",
-                        ]}
-                    />
-                    <Prose>
-                        <p>
+               
+<GuideSection title="Is the training allowance paid every month?" className={GUIDE_SECTION_SURFACE}>
+
+    <div className="relative mt-4 overflow-hidden rounded-3xl border border-slate-200/80 bg-white shadow-[0_12px_45px_rgba(15,23,42,0.045)]">
+
+        {/* Top accent */}
+        <div className="h-1 w-full bg-gradient-to-r from-[#c01f53] via-rose-400 to-amber-300" />
+
+        <div className="p-5 sm:p-7 lg:p-9">
+
+            {/* Introduction */}
+            <div className="flex flex-col gap-5 sm:flex-row sm:items-start sm:gap-6">
+
+                <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-rose-50 text-[#c01f53] ring-1 ring-rose-100">
+                    <svg className="h-7 w-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7">
+                        <rect x="3" y="6" width="18" height="13" rx="2" />
+                        <path d="M3 10h18M7 15h3" strokeLinecap="round" />
+                        <path d="M16 3v3M8 3v3" strokeLinecap="round" />
+                    </svg>
+                </div>
+
+                <div className="min-w-0 flex-1">
+                    <div className="mb-2 flex flex-wrap items-center gap-2">
+                        <span className="text-[11px] font-extrabold uppercase tracking-[0.16em] text-[#c01f53]">
+                            Nursing Ausbildung
+                        </span>
+                        <span className="h-1 w-1 rounded-full bg-slate-300" />
+                        <span className="text-xs font-medium text-slate-400">
+                            Financial information
+                        </span>
+                    </div>
+
+                    <h3 className="mb-3 text-xl font-extrabold tracking-tight text-slate-900 sm:text-2xl">
+                        Yes, you receive an allowance during training.
+                    </h3>
+
+                    <div className="text-sm leading-7 text-slate-600 sm:text-base sm:leading-8">
+                        <Prose>
+                            <p>
+                                Section 19 of the{" "}
+                                <SourceLink href={SRC.pflbg19}>
+                                    Nursing Professions Act
+                                </SourceLink>{" "}
+                                says the training provider must pay a reasonable training allowance (Ausbildungsvergütung) for the whole training period, and trainees count as employees in training for social insurance.
+                            </p>
+                        </Prose>
+                    </div>
+                </div>
+
+            </div>
+
+            {/* Divider */}
+            <div className="my-7 h-px bg-slate-100 sm:my-8" />
+
+            {/* Details heading */}
+            <div className="mb-5 flex flex-wrap items-end justify-between gap-3">
+                <div>
+                    <span className="mb-1 block text-[11px] font-extrabold uppercase tracking-[0.16em] text-[#c01f53]">
+                        Understanding your pay
+                    </span>
+                    <h3 className="text-lg font-extrabold text-slate-900 sm:text-xl">
+                        Three important things to know
+                    </h3>
+                </div>
+
+                <span className="rounded-lg bg-slate-50 px-3 py-1.5 text-xs font-semibold text-slate-500">
+                    03 Key details
+                </span>
+            </div>
+
+            {/* Details grid */}
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+
+                {/* Allowance */}
+                <div className="group relative overflow-hidden rounded-2xl border border-slate-200 bg-slate-50/60 p-5 transition-all duration-300 hover:-translate-y-1 hover:border-rose-200 hover:bg-white hover:shadow-[0_12px_30px_rgba(192,31,83,0.07)] sm:p-6">
+
+                    <div className="mb-5 flex items-center justify-between">
+                        <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-white text-[#c01f53] shadow-sm ring-1 ring-slate-100 transition-colors group-hover:bg-[#c01f53] group-hover:text-white">
+                            <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+                                <circle cx="12" cy="12" r="9" />
+                                <path d="M12 7v5l3 2" strokeLinecap="round" />
+                            </svg>
+                        </div>
+                        <span className="text-xs font-bold tracking-widest text-slate-300">01</span>
+                    </div>
+
+                    <h4 className="mb-2 text-base font-extrabold text-slate-900">
+                        Allowance amount
+                    </h4>
+
+                    <p className="text-sm leading-7 text-slate-600">
+                        The amount is set by the employer, often through a collective agreement, and is written in your training contract.
+                    </p>
+
+                    <div className="mt-5 h-1 w-9 rounded-full bg-rose-200 transition-all duration-300 group-hover:w-16 group-hover:bg-[#c01f53]" />
+                </div>
+
+                {/* Meals and Housing */}
+                <div className="group relative overflow-hidden rounded-2xl border border-slate-200 bg-slate-50/60 p-5 transition-all duration-300 hover:-translate-y-1 hover:border-rose-200 hover:bg-white hover:shadow-[0_12px_30px_rgba(192,31,83,0.07)] sm:p-6">
+
+                    <div className="mb-5 flex items-center justify-between">
+                        <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-white text-[#c01f53] shadow-sm ring-1 ring-slate-100 transition-colors group-hover:bg-[#c01f53] group-hover:text-white">
+                            <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+                                <path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6M9 9h.01M15 9h.01" strokeLinecap="round" strokeLinejoin="round" />
+                            </svg>
+                        </div>
+                        <span className="text-xs font-bold tracking-widest text-slate-300">02</span>
+                    </div>
+
+                    <h4 className="mb-2 text-base font-extrabold text-slate-900">
+                        Meals & housing
+                    </h4>
+
+                    <p className="text-sm leading-7 text-slate-600">
+                        Meals or housing given by the employer can be counted against the pay only if the contract says so, and never above 75 percent of the gross allowance.
+                    </p>
+
+                    <div className="mt-5 h-1 w-9 rounded-full bg-rose-200 transition-all duration-300 group-hover:w-16 group-hover:bg-[#c01f53]" />
+                </div>
+
+                {/* Extra Hours */}
+                <div className="group relative overflow-hidden rounded-2xl border border-slate-200 bg-slate-50/60 p-5 transition-all duration-300 hover:-translate-y-1 hover:border-rose-200 hover:bg-white hover:shadow-[0_12px_30px_rgba(192,31,83,0.07)] sm:p-6 md:col-span-2 lg:col-span-1">
+
+                    <div className="mb-5 flex items-center justify-between">
+                        <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-white text-[#c01f53] shadow-sm ring-1 ring-slate-100 transition-colors group-hover:bg-[#c01f53] group-hover:text-white">
+                            <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+                                <circle cx="12" cy="12" r="9" />
+                                <path d="M12 7v5l3 2M8 3l-2 2m10-2 2 2" strokeLinecap="round" />
+                            </svg>
+                        </div>
+                        <span className="text-xs font-bold tracking-widest text-slate-300">03</span>
+                    </div>
+
+                    <h4 className="mb-2 text-base font-extrabold text-slate-900">
+                        Extra working hours
+                    </h4>
+
+                    <p className="text-sm leading-7 text-slate-600">
+                        Extra hours beyond the agreed training time are allowed only as an exception and must be paid extra or given back as time off.
+                    </p>
+
+                    <div className="mt-5 h-1 w-9 rounded-full bg-rose-200 transition-all duration-300 group-hover:w-16 group-hover:bg-[#c01f53]" />
+                </div>
+
+            </div>
+
+            {/* Practical advice */}
+            <div className="mt-7 overflow-hidden rounded-2xl border border-amber-200/70 bg-[#fffbf2] sm:mt-8">
+
+                <div className="flex flex-col gap-4 p-5 sm:flex-row sm:items-start sm:gap-5 sm:p-6">
+
+                    <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-amber-100 text-amber-700">
+                        <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+                            <path d="M12 3a7 7 0 00-4 12.75c.6.4 1 1.1 1 1.75h6c0-.65.4-1.35 1-1.75A7 7 0 0012 3z" strokeLinecap="round" strokeLinejoin="round" />
+                            <path d="M9 21h6m-5-3h4" strokeLinecap="round" />
+                        </svg>
+                    </div>
+
+                    <div className="min-w-0">
+                        <span className="mb-1 block text-[11px] font-extrabold uppercase tracking-[0.14em] text-amber-700">
+                            Practical advice
+                        </span>
+
+                        <h4 className="mb-2 text-base font-extrabold text-slate-900 sm:text-lg">
+                            Before signing your training contract
+                        </h4>
+
+                        <p className="text-sm leading-7 text-slate-600 sm:text-base">
                             We do not quote a standard amount here because it differs by employer and state. Ask for the gross monthly figure in writing and compare it with your rent and travel costs before you sign.
                         </p>
-                    </Prose>
-                </GuideSection>
+                    </div>
 
-                <GuideSection
-                    title="Step by step: from Kerala to your first day of training"
-                    intro="This is the usual order. The visa documents are from the German Missions in India checklist for vocational training."
-                    className={GUIDE_SECTION_SURFACE}
-                >
-                    <PointList
-                        ordered
-                        items={[
-                            { title: "Learn German", text: "reach at least B1 with a certificate. Start early: language is the longest step." },
-                            { title: "Prepare documents", text: "a passport issued in the last 10 years with at least 12 months validity, school certificates, a CV with your full education history and a motivation letter." },
-                            { title: "Apply for a training place", text: "apply to hospitals, care homes and nursing schools, attend interviews and receive an offer." },
-                            { title: "Sign the contract", text: "the training contract is signed by you and the employer, and comes with a training plan (Ausbildungsplan)." },
-                            { title: "Close any money gap", text: "if the monthly pay is below the limit in the checklist (927 euros for in company training with a vocational school, 903 euros for training fully at a school), cover the gap with a blocked account or a sponsor's formal obligation letter." },
-                            { title: "Apply for the visa", text: "book an appointment with two copies of each document, health insurance from the employer from your start date and travel health insurance until then. Federal Employment Agency pre-approval is not required but can shorten processing." },
-                            { title: "Travel and start", text: "register your address, open a bank account and begin at the nursing school and on the wards." },
-                        ]}
-                    />
-                    <Prose>
-                        <p>
-                            While you train, the{" "}
-                            <SourceLink href={SRC.makeIt}>Make it in Germany</SourceLink> portal notes that a separate side job of up to 20 hours a week is allowed if it is independent of your training. Read our{" "}
-                            <TextLink href="/student-visa-guidance">student visa guidance</TextLink> for how we prepare visa files.
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</GuideSection>
+
+
+            
+<GuideSection
+    title="Step by step: from Kerala to your first day of training"
+    intro="This is the usual order. The visa documents are from the German Missions in India checklist for vocational training."
+    className={GUIDE_SECTION_SURFACE}
+>
+    <div className="relative mt-5 overflow-hidden rounded-3xl border border-rose-100/80 bg-gradient-to-br from-white via-white to-rose-50/40 p-4 shadow-sm sm:p-6 lg:p-8">
+
+        {/* Background decoration */}
+        <div className="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full bg-rose-100/40 blur-3xl" />
+        <div className="pointer-events-none absolute -bottom-20 -left-20 h-64 w-64 rounded-full bg-pink-100/40 blur-3xl" />
+
+        <div className="relative">
+
+            {/* Journey introduction */}
+            <div className="mb-8 flex flex-col gap-5 rounded-2xl border border-rose-100 bg-white/90 p-5 shadow-sm sm:flex-row sm:items-center sm:justify-between sm:p-6">
+
+                <div className="flex items-start gap-4">
+                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-rose-50 text-[#c01f53]">
+                        <svg className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M2.5 19.5l6-6 4 4 9-9" />
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M15 8h6v6" />
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M3 4h5M3 8h3" />
+                        </svg>
+                    </div>
+
+                    <div className="min-w-0">
+                        <span className="mb-1 block text-[11px] font-extrabold uppercase tracking-[0.16em] text-[#c01f53]">
+                            Your journey to Germany
+                        </span>
+
+                        <h3 className="text-lg font-extrabold text-slate-900 sm:text-xl">
+                            7 steps to begin your nursing career
+                        </h3>
+
+                        <p className="mt-1 text-sm leading-6 text-slate-500">
+                            From your first German lesson to your first day of training.
                         </p>
-                    </Prose>
-                </GuideSection>
+                    </div>
+                </div>
+
+                <div className="flex w-fit items-center gap-2 rounded-full border border-rose-100 bg-rose-50 px-4 py-2">
+                    <span className="h-2 w-2 rounded-full bg-[#c01f53]" />
+                    <span className="text-xs font-bold text-[#c01f53]">
+                        7 KEY MILESTONES
+                    </span>
+                </div>
+
+            </div>
+
+            {/* Timeline heading */}
+            <div className="mb-6 flex items-center gap-3">
+                <div className="h-5 w-1 rounded-full bg-[#c01f53]" />
+                <h3 className="text-base font-extrabold text-slate-900 sm:text-lg">
+                    Your application journey
+                </h3>
+            </div>
+
+            {/* Ordered timeline */}
+            <div className="
+                relative rounded-2xl border border-slate-200/80 bg-white/80 p-3 shadow-sm
+                sm:p-5 lg:p-6
+                [&_ol]:relative
+                [&_ol]:ml-2
+                [&_ol]:space-y-4
+                [&_ol]:border-l-2
+                [&_ol]:border-rose-100
+                [&_ol]:pl-5
+                sm:[&_ol]:ml-3
+                sm:[&_ol]:space-y-5
+                sm:[&_ol]:pl-7
+                [&_li]:relative
+                [&_li]:rounded-xl
+                [&_li]:border
+                [&_li]:border-slate-100
+                [&_li]:bg-slate-50/70
+                [&_li]:p-4
+                [&_li]:transition-all
+                [&_li]:duration-300
+                hover:[&_li]:border-rose-200
+                hover:[&_li]:bg-white
+                hover:[&_li]:shadow-md
+                sm:[&_li]:p-5
+                [&_li]:marker:text-[#c01f53]
+                [&_li]:marker:font-extrabold
+            ">
+
+                <PointList
+                    ordered
+                    items={[
+                        { title: "Learn German", text: "reach at least B1 with a certificate. Start early: language is the longest step." },
+                        { title: "Prepare documents", text: "a passport issued in the last 10 years with at least 12 months validity, school certificates, a CV with your full education history and a motivation letter." },
+                        { title: "Apply for a training place", text: "apply to hospitals, care homes and nursing schools, attend interviews and receive an offer." },
+                        { title: "Sign the contract", text: "the training contract is signed by you and the employer, and comes with a training plan (Ausbildungsplan)." },
+                        { title: "Close any money gap", text: "if the monthly pay is below the limit in the checklist (927 euros for in company training with a vocational school, 903 euros for training fully at a school), cover the gap with a blocked account or a sponsor's formal obligation letter." },
+                        { title: "Apply for the visa", text: "book an appointment with two copies of each document, health insurance from the employer from your start date and travel health insurance until then. Federal Employment Agency pre-approval is not required but can shorten processing." },
+                        { title: "Travel and start", text: "register your address, open a bank account and begin at the nursing school and on the wards." },
+                    ]}
+                />
+
+            </div>
+
+            {/* Final destination */}
+            <div className="relative mt-6 overflow-hidden rounded-2xl bg-gradient-to-r from-[#a91848] via-[#c01f53] to-[#d13b70] p-5 text-white shadow-lg shadow-rose-200/40 sm:mt-8 sm:p-6">
+
+                <div className="pointer-events-none absolute -right-12 -top-16 h-48 w-48 rounded-full border border-white/10" />
+                <div className="pointer-events-none absolute -right-4 -top-8 h-32 w-32 rounded-full border border-white/10" />
+
+                <div className="relative flex items-center gap-4">
+
+                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-white/20 bg-white/15">
+                        <svg className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M12 21s7-5.5 7-12a7 7 0 10-14 0c0 6.5 7 12 7 12z" />
+                            <circle cx="12" cy="9" r="2.5" />
+                        </svg>
+                    </div>
+
+                    <div>
+                        <span className="text-[10px] font-extrabold uppercase tracking-[0.16em] text-white/70">
+                            Your destination
+                        </span>
+                        <h3 className="mt-1 text-lg font-extrabold sm:text-xl">
+                            Your first day in Germany
+                        </h3>
+                        <p className="mt-1 text-sm leading-6 text-white/80">
+                            A new chapter begins at your nursing school and training workplace.
+                        </p>
+                    </div>
+
+                </div>
+            </div>
+
+            {/* Additional guidance */}
+            <div className="mt-6 rounded-2xl border border-slate-200 bg-white p-5 sm:mt-8 sm:p-6">
+
+                <div className="flex items-start gap-4">
+
+                    <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-rose-50 text-[#c01f53]">
+                        <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+                            <circle cx="12" cy="12" r="9" />
+                            <path strokeLinecap="round" d="M12 11v5m0-8h.01" />
+                        </svg>
+                    </div>
+
+                    <div className="min-w-0">
+                        <span className="mb-1 block text-[11px] font-extrabold uppercase tracking-[0.15em] text-[#c01f53]">
+                            Additional information
+                        </span>
+
+                        <h3 className="mb-3 text-base font-extrabold text-slate-900 sm:text-lg">
+                            Can you work alongside your training?
+                        </h3>
+
+                        <div className="text-sm leading-7 text-slate-600 sm:text-base sm:leading-8">
+                            <Prose>
+                                <p>
+                                    While you train, the{" "}
+                                    <SourceLink href={SRC.makeIt}>Make it in Germany</SourceLink> portal notes that a separate side job of up to 20 hours a week is allowed if it is independent of your training. Read our{" "}
+                                    <TextLink href="/student-visa-guidance">student visa guidance</TextLink> for how we prepare visa files.
+                                </p>
+                            </Prose>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</GuideSection>
+
 
                 <GuideSection
                     title="Nursing Ausbildung or a nursing degree in India first?"
@@ -426,29 +845,188 @@ export default function NursingAusbildungPage() {
                     </Prose>
                 </GuideSection>
 
-                <GuideSection title="How Medcity Overseas helps" className={GUIDE_SECTION_SURFACE}>
-                    <Prose>
-                        <p>
-                            Medcity Overseas guides your applications. We do not promise a training place or a visa: employers choose their trainees and the German Mission decides on the visa.
-                        </p>
-                    </Prose>
-                    <PointList
-                        items={[
-                            "Pointing you to German classes, which are available at Medcity International Academy.",
-                            "A document checklist and help with your CV and motivation letter in the German style.",
-                            "Help applying to training places and preparing for interviews.",
-                            "Explaining your training contract and the visa checklist line by line.",
-                            "Pre-departure sessions on housing, registration and life on the wards.",
-                        ]}
-                    />
-                    <Prose>
-                        <p>
-                            Compare all our <TextLink href="/study-in-germany">Germany programmes</TextLink>, including general{" "}
-                            <TextLink href="/study-in-germany/ausbildung">Ausbildung</TextLink>, or visit one of our{" "}
-                            <TextLink href="/branches">branches in Kerala</TextLink>.
-                        </p>
-                    </Prose>
-                </GuideSection>
+             
+<GuideSection title="How Medcity Overseas helps" className={GUIDE_SECTION_SURFACE}>
+
+    <div className="relative mt-4 overflow-hidden rounded-3xl border border-slate-200/80 bg-white shadow-[0_12px_45px_rgba(15,23,42,0.045)]">
+
+        {/* Top accent */}
+        <div className="h-1 w-full bg-gradient-to-r from-secondary/75 via-secondary to-secondary" />
+
+        {/* Main content */}
+        <div className="relative p-5 sm:p-7 lg:p-9">
+
+            {/* Soft background decoration */}
+            <div className="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full bg-rose-50 blur-3xl" />
+            <div className="pointer-events-none absolute -bottom-24 -left-20 h-64 w-64 rounded-full bg-pink-50 blur-3xl" />
+
+            <div className="relative grid grid-cols-1 gap-8 lg:grid-cols-[0.85fr_1.15fr] lg:gap-10">
+
+                {/* Left Introduction */}
+                <div className="flex flex-col">
+
+                    <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-[#c01f53] text-white shadow-lg shadow-rose-200/60">
+                        <svg
+                            className="h-7 w-7"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="1.7"
+                        >
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2" />
+                            <circle cx="9" cy="7" r="4" />
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M20 8v6m3-3h-6" />
+                        </svg>
+                    </div>
+
+                    <span className="mb-3 text-[11px] font-extrabold uppercase tracking-[0.18em] text-[#c01f53]">
+                        Your trusted application partner
+                    </span>
+
+                    <h3 className="max-w-md text-2xl font-black leading-tight tracking-tight text-slate-900 sm:text-3xl lg:text-[34px]">
+                        Your Germany journey, <span className="text-[#c01f53]">guided at every step.</span>
+                    </h3>
+
+                    <div className="mt-5 max-w-lg text-sm leading-7 text-slate-600 sm:text-base sm:leading-8">
+                        <Prose>
+                            <p>
+                                Medcity Overseas guides your applications. We do not promise a training place or a visa: employers choose their trainees and the German Mission decides on the visa.
+                            </p>
+                        </Prose>
+                    </div>
+
+                    {/* Trust note */}
+                    <div className="mt-7 rounded-2xl border border-rose-100 bg-rose-50/60 p-4 sm:p-5">
+
+                        <div className="flex items-start gap-3">
+                            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white text-[#c01f53] shadow-sm">
+                                <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 22s8-4 8-11V5l-8-3-8 3v6c0 7 8 11 8 11z" />
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="m9 12 2 2 4-4" />
+                                </svg>
+                            </div>
+
+                            <div>
+                                <h4 className="text-sm font-extrabold text-slate-900">
+                                    Honest, guided support
+                                </h4>
+                                <p className="mt-1 text-xs leading-6 text-slate-600 sm:text-sm">
+                                    Practical guidance throughout your application, with clear expectations at every stage.
+                                </p>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                {/* Right Services */}
+                <div className="min-w-0">
+
+                    <div className="mb-5 flex items-center justify-between gap-3">
+                        <div>
+                            <span className="mb-1 block text-[11px] font-extrabold uppercase tracking-[0.16em] text-[#c01f53]">
+                                How we support you
+                            </span>
+                            <h3 className="text-lg font-extrabold text-slate-900 sm:text-xl">
+                                Our support services
+                            </h3>
+                        </div>
+
+                        <div className="hidden h-10 w-10 items-center justify-center rounded-xl bg-rose-50 text-[#c01f53] sm:flex">
+                            <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M4 5h16M4 12h16M4 19h16" />
+                            </svg>
+                        </div>
+                    </div>
+
+                    <div className="
+                        rounded-2xl border border-slate-200/80 bg-slate-50/60 p-3
+                        sm:p-4
+                        [&_ul]:space-y-2
+                        [&_ol]:space-y-2
+                        [&_li]:relative
+                        [&_li]:rounded-xl
+                        [&_li]:border
+                        [&_li]:border-transparent
+                        [&_li]:bg-white
+                        [&_li]:px-4
+                        [&_li]:py-3.5
+                        [&_li]:text-sm
+                        [&_li]:leading-7
+                        [&_li]:text-slate-600
+                        [&_li]:shadow-[0_2px_8px_rgba(15,23,42,0.025)]
+                        [&_li]:transition-all
+                        [&_li]:duration-300
+                        hover:[&_li]:border-rose-100
+                        hover:[&_li]:shadow-sm
+                        sm:[&_li]:px-5
+                        sm:[&_li]:py-4
+                    ">
+
+                        <PointList
+                            items={[
+                                "Pointing you to German classes, which are available at Medcity International Academy.",
+                                "A document checklist and help with your CV and motivation letter in the German style.",
+                                "Help applying to training places and preparing for interviews.",
+                                "Explaining your training contract and the visa checklist line by line.",
+                                "Pre-departure sessions on housing, registration and life on the wards.",
+                            ]}
+                        />
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            {/* Bottom navigation panel */}
+            <div className="relative mt-8 overflow-hidden rounded-2xl border border-rose-100 bg-gradient-to-br from-rose-50/80 via-white to-white p-5 sm:mt-10 sm:p-6">
+
+                <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
+
+                    <div className="flex items-start gap-3">
+                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white text-[#c01f53] shadow-sm ring-1 ring-rose-100">
+                            <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M12 3l2.5 6.5L21 12l-6.5 2.5L12 21l-2.5-6.5L3 12l6.5-2.5L12 3z" />
+                            </svg>
+                        </div>
+
+                        <div className="min-w-0">
+                            <h3 className="text-base font-extrabold text-slate-900 sm:text-lg">
+                                Explore more with Medcity
+                            </h3>
+                            <p className="mt-1 text-xs leading-6 text-slate-500 sm:text-sm">
+                                Discover programmes and find a branch near you.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div className="flex flex-wrap items-center gap-x-5 gap-y-3 text-sm font-bold">
+
+                        <TextLink href="/study-in-germany">
+                            Germany programmes
+                        </TextLink>
+
+                        <TextLink href="/study-in-germany/ausbildung">
+                            Ausbildung
+                        </TextLink>
+
+                        <TextLink href="/branches">
+                            Kerala branches
+                        </TextLink>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+</GuideSection>
+
 
                 <FaqList path={PATH} faqs={FAQS} schema={false} title="Nursing Ausbildung: frequently asked questions" />
 
