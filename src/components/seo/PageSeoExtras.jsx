@@ -56,7 +56,7 @@ export default async function PageSeoExtras() {
                 />
             )}
 
-            <div className="mx-auto max-w-5xl space-y-12 px-4 sm:px-6 lg:px-8">
+            <div className="mx-auto max-w-5xl space-y-10 px-4 sm:px-6 lg:px-8">
                 {seo.summary && (
                     <div className="rounded-2xl border border-secondary/20 bg-gradient-to-br from-secondary/[0.07] to-primary/[0.05] p-6">
                         <p className="flex items-center gap-2 text-xs font-extrabold uppercase tracking-[0.14em] text-secondary">

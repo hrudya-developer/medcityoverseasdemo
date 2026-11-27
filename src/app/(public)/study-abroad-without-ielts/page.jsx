@@ -147,12 +147,32 @@ export default async function WithoutIeltsPage() {
                 faqs={faqs}
             />
 
-            <GuideHero
-                eyebrow="English requirements"
-                title={TITLE}
-                breadcrumbs={BREADCRUMBS}
-                intro="Study abroad without IELTS is possible, but it rarely means without any English proof. Most routes swap IELTS for another test, a university's own assessment or English medium study. Here is what the visa rules in the UK, Ireland, Australia and Germany accept, and the universities we list that record other options."
-            />
+            <div
+                className="
+                    text-center
+                    [&>section>div:nth-child(2)]:!flex
+                    [&>section>div:nth-child(2)]:!flex-col
+                    [&>section>div:nth-child(2)]:!items-center
+
+                    [&>section>div>nav]:mx-auto
+                    [&>section>div>nav]:w-fit
+                    [&>section>div>nav]:max-w-full
+                    [&>section>div>nav>ol]:justify-center
+
+                    [&>section>div>h1]:mx-auto
+                    [&>section>div>h1+p]:mx-auto
+
+                    [&>section>div>div:last-child]:items-center
+                    [&>section>div>div:last-child]:justify-center
+                "
+            >
+                <GuideHero
+                    eyebrow="English requirements"
+                    title={TITLE}
+                    breadcrumbs={BREADCRUMBS}
+                    intro="Study abroad without IELTS is possible, but it rarely means without any English proof. Most routes swap IELTS for another test, a university's own assessment or English medium study. Here is what the visa rules in the UK, Ireland, Australia and Germany accept, and the universities we list that record other options."
+                />
+            </div>
 
             <div className="space-y-14 py-12 sm:py-14">
                 <QuickAnswer updated={UPDATED}>
@@ -170,7 +190,7 @@ export default async function WithoutIeltsPage() {
                     intro="From official and institutional pages, checked on 24 October 2026."
                 >
                     <TableWrap minWidth={760}>
-                        <thead className={theadClass}>
+                        <thead className={`{theadClass} bg-darkPrimary text-white`}>
                             <tr>
                                 <th scope="col" className={th}>Country</th>
                                 <th scope="col" className={th}>What the rules say</th>
@@ -207,7 +227,7 @@ export default async function WithoutIeltsPage() {
                 >
                     {universities.length ? (
                         <TableWrap minWidth={560}>
-                            <thead className={theadClass}>
+                            <thead className={`{theadClass} bg-darkPrimary text-white`}>
                                 <tr>
                                     <th scope="col" className={th}>University</th>
                                     <th scope="col" className={th}>Location</th>
@@ -247,7 +267,7 @@ export default async function WithoutIeltsPage() {
                 >
                     {courses.length ? (
                         <TableWrap minWidth={640}>
-                            <thead className={theadClass}>
+                            <thead className={`{theadClass} bg-darkPrimary text-white`}>
                                 <tr>
                                     <th scope="col" className={th}>Course</th>
                                     <th scope="col" className={th}>University</th>
@@ -289,23 +309,261 @@ export default async function WithoutIeltsPage() {
                     )}
                 </GuideSection>
 
-                <GuideSection title="Before you skip IELTS: a visa caution">
-                    <PointList
-                        items={[
-                            { title: "Admission and visa are separate", text: "a university can waive IELTS for admission while the visa still needs a test, as in Ireland, where the visa table applies for visa purposes." },
-                            { title: "Check the test format", text: "Australia does not accept at home or online versions of its listed tests." },
-                            { title: "Check the date", text: "Ireland asks for a certificate issued within 2 years of your course start date." },
-                            { title: "Keep proof of earlier study", text: "the UK exempts some students who hold a degree from one of the countries on its list, so check that list before you rely on it." },
-                        ]}
-                    />
-                    <Prose>
-                        <p>
-                            Our <TextLink href="/student-visa-guidance">student visa guidance</TextLink> explains each country&apos;s visa, and the country guides for the{" "}
-                            <TextLink href="/study-in-uk">UK</TextLink> and <TextLink href="/study-in-ireland">Ireland</TextLink> go further.
+              <GuideSection title="Before you skip IELTS: a visa caution">
+    <div className="relative overflow-hidden rounded-3xl mt-5 border border-slate-200/80 bg-gradient-to-br from-white via-slate-50 to-rose-50/50 p-5 shadow-sm sm:p-7 lg:p-8">
+
+        {/* Decorative background */}
+        <div className="pointer-events-none absolute -right-20 -top-20 h-60 w-60 rounded-full bg-primary/5 blur-3xl" />
+        <div className="pointer-events-none absolute -bottom-20 -left-20 h-48 w-48 rounded-full bg-amber-100/30 blur-3xl" />
+
+        <div className="relative">
+
+            {/* Intro */}
+            <div className="mb-7 flex items-start gap-4">
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-primary text-white shadow-lg shadow-primary/20 sm:h-14 sm:w-14">
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="25"
+                        height="25"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="1.8"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        aria-hidden="true"
+                    >
+                        <path d="M12 9v4" />
+                        <path d="M12 17h.01" />
+                        <path d="M10.3 3.9 2.8 17a2 2 0 0 0 1.7 3h15a2 2 0 0 0 1.7-3l-7.5-13.1a2 2 0 0 0-3.4 0Z" />
+                    </svg>
+                </div>
+
+                <div className="min-w-0">
+                    <h3 className="text-lg font-bold tracking-tight text-slate-900 sm:text-xl">
+                        Important visa precautions
+                    </h3>
+                    <p className="mt-1 text-sm leading-6 text-slate-500">
+                        Before relying on an IELTS waiver, verify these four important details.
+                    </p>
+                </div>
+            </div>
+
+            {/* Warning cards grid */}
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+
+                {/* Card 1 */}
+                <div className="group relative overflow-hidden rounded-2xl border border-rose-100 bg-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-rose-200 hover:shadow-md sm:p-6">
+                    <div className="absolute right-4 top-4 text-5xl font-black text-rose-100/80 transition-colors duration-300 group-hover:text-rose-100">
+                        01
+                    </div>
+
+                    <div className="relative">
+                        <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-rose-50 text-rose-600">
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="22"
+                                height="22"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="1.8"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                aria-hidden="true"
+                            >
+                                <path d="M4 4h16v16H4z" />
+                                <path d="M8 8h8" />
+                                <path d="M8 12h5" />
+                                <path d="m14 17 2 2 4-4" />
+                            </svg>
+                        </div>
+
+                        <h4 className="text-base font-bold text-slate-900 sm:text-lg">
+                            Admission and visa are separate
+                        </h4>
+
+                        <p className="mt-3 text-sm leading-7 text-slate-600">
+                            a university can waive IELTS for admission while the visa still needs a test, as in Ireland, where the visa table applies for visa purposes.
                         </p>
-                    </Prose>
-                    <AcademyNote lead="Need a test after all?" subjects="IELTS, PTE and OET" />
-                </GuideSection>
+                    </div>
+
+                    <div className="mt-5 h-1 w-10 rounded-full bg-rose-300 transition-all duration-300 group-hover:w-16" />
+                </div>
+
+                {/* Card 2 */}
+                <div className="group relative overflow-hidden rounded-2xl border border-amber-100 bg-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-amber-200 hover:shadow-md sm:p-6">
+                    <div className="absolute right-4 top-4 text-5xl font-black text-amber-100/80 transition-colors duration-300 group-hover:text-amber-100">
+                        02
+                    </div>
+
+                    <div className="relative">
+                        <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-amber-50 text-amber-700">
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="22"
+                                height="22"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="1.8"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                aria-hidden="true"
+                            >
+                                <rect x="3" y="4" width="18" height="16" rx="2" />
+                                <path d="M8 4v4" />
+                                <path d="M16 4v4" />
+                                <path d="M3 10h18" />
+                                <path d="m9 14 2 2 4-4" />
+                            </svg>
+                        </div>
+
+                        <h4 className="text-base font-bold text-slate-900 sm:text-lg">
+                            Check the test format
+                        </h4>
+
+                        <p className="mt-3 text-sm leading-7 text-slate-600">
+                            Australia does not accept at home or online versions of its listed tests.
+                        </p>
+                    </div>
+
+                    <div className="mt-5 h-1 w-10 rounded-full bg-amber-300 transition-all duration-300 group-hover:w-16" />
+                </div>
+
+                {/* Card 3 */}
+                <div className="group relative overflow-hidden rounded-2xl border border-blue-100 bg-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-blue-200 hover:shadow-md sm:p-6">
+                    <div className="absolute right-4 top-4 text-5xl font-black text-blue-100/80 transition-colors duration-300 group-hover:text-blue-100">
+                        03
+                    </div>
+
+                    <div className="relative">
+                        <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-blue-50 text-blue-700">
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="22"
+                                height="22"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="1.8"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                aria-hidden="true"
+                            >
+                                <circle cx="12" cy="12" r="10" />
+                                <path d="M12 6v6l4 2" />
+                            </svg>
+                        </div>
+
+                        <h4 className="text-base font-bold text-slate-900 sm:text-lg">
+                            Check the certificate date
+                        </h4>
+
+                        <p className="mt-3 text-sm leading-7 text-slate-600">
+                            Ireland asks for a certificate issued within 2 years of your course start date.
+                        </p>
+                    </div>
+
+                    <div className="mt-5 h-1 w-10 rounded-full bg-blue-300 transition-all duration-300 group-hover:w-16" />
+                </div>
+
+                {/* Card 4 */}
+                <div className="group relative overflow-hidden rounded-2xl border border-violet-100 bg-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-violet-200 hover:shadow-md sm:p-6">
+                    <div className="absolute right-4 top-4 text-5xl font-black text-violet-100/80 transition-colors duration-300 group-hover:text-violet-100">
+                        04
+                    </div>
+
+                    <div className="relative">
+                        <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-violet-50 text-violet-700">
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="22"
+                                height="22"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="1.8"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                aria-hidden="true"
+                            >
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                                <path d="M14 2v6h6" />
+                                <path d="M8 13h8" />
+                                <path d="M8 17h6" />
+                            </svg>
+                        </div>
+
+                        <h4 className="text-base font-bold text-slate-900 sm:text-lg">
+                            Keep proof of earlier study
+                        </h4>
+
+                        <p className="mt-3 text-sm leading-7 text-slate-600">
+                            the UK exempts some students who hold a degree from one of the countries on its list, so check that list before you rely on it.
+                        </p>
+                    </div>
+
+                    <div className="mt-5 h-1 w-10 rounded-full bg-violet-300 transition-all duration-300 group-hover:w-16" />
+                </div>
+
+            </div>
+
+            {/* Related guides */}
+            <div className="mt-6 rounded-2xl border border-slate-200/80 bg-white/90 p-5 sm:p-6">
+                <div className="flex flex-col gap-4 sm:flex-row sm:items-start">
+
+                    <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-slate-100 text-slate-700">
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="22"
+                            height="22"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="1.8"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            aria-hidden="true"
+                        >
+                            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+                            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+                            <path d="M8 7h8" />
+                            <path d="M8 11h8" />
+                        </svg>
+                    </div>
+
+                    <div className="min-w-0 flex-1">
+                        <h4 className="text-base font-bold text-slate-900">
+                            Explore visa guidance
+                        </h4>
+
+                        <Prose>
+                            <p className="text-sm leading-7 text-slate-600">
+                                Our{" "}
+                                <TextLink href="/student-visa-guidance">
+                                    student visa guidance
+                                </TextLink>{" "}
+                                explains each country&apos;s visa, and the country guides for the{" "}
+                                <TextLink href="/study-in-uk">
+                                    UK
+                                </TextLink>{" "}
+                                and{" "}
+                                <TextLink href="/study-in-ireland">
+                                    Ireland
+                                </TextLink>{" "}
+                                go further.
+                            </p>
+                        </Prose>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <AcademyNote lead="Need a test after all?" subjects="IELTS, PTE and OET" />
+</GuideSection>
 
                 <FaqList path={PATH} faqs={faqs} schema={false} title="Study abroad without IELTS: frequently asked questions" />
 

@@ -174,6 +174,9 @@ export default async function StudyAbroadForNursesPage() {
                     [&>section]:z-10
                     [&>section]:!bg-transparent
                     [&>section>div:first-child]:!hidden
+                    [&>section>div:nth-child(2)]:!flex
+                    [&>section>div:nth-child(2)]:!flex-col
+                    [&>section>div:nth-child(2)]:!items-center
                     [&>section>div:nth-child(2)]:!max-w-6xl
                     [&>section>div:nth-child(2)]:!pb-20
                     [&>section>div:nth-child(2)]:!pt-12
@@ -338,26 +341,330 @@ export default async function StudyAbroadForNursesPage() {
                     </Prose>
                 </GuideSection>
 
-                <GuideSection title="Registration with each regulator">
-                    <Prose>
-                        <p>
-                            Registering as a nurse in another country is decided by that country&apos;s regulator, listed in the table above; follow its own published steps. Medcity Overseas guides applications to study routes, such as the MSc on our{" "}
-                            <TextLink href="/placement-assistance-nursing">UK nursing pathway</TextLink>, and does not offer jobs or placements. See also{" "}
-                            <TextLink href="/nursing-in-germany-for-indian-nurses">nursing in Germany for Indian nurses</TextLink>.
-                        </p>
-                    </Prose>
-                </GuideSection>
+             <GuideSection title="Registration with each regulator">
+    <Prose>
+        <div className="relative overflow-hidden rounded-2xl border border-slate-200/80 bg-gradient-to-br from-white via-slate-50 to-blue-50/60 p-5 shadow-sm sm:p-7 lg:p-8">
+
+            {/* Decorative background */}
+            <div className="pointer-events-none absolute -right-12 -top-12 h-40 w-40 rounded-full bg-primary/5 blur-3xl" />
+
+            <div className="relative flex flex-col gap-5 sm:flex-row sm:items-start sm:gap-6">
+
+                {/* Icon */}
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-primary/10 bg-white text-primary shadow-sm sm:h-14 sm:w-14">
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="1.8"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        aria-hidden="true"
+                    >
+                        <path d="M12 22s8-4 8-11V5l-8-3-8 3v6c0 7 8 11 8 11z" />
+                        <path d="m9 12 2 2 4-4" />
+                    </svg>
+                </div>
+
+                {/* Content */}
+                <div className="min-w-0 flex-1">
+                    <p className="text-base leading-8 text-slate-700 sm:text-[17px] sm:leading-8">
+                        Registering as a nurse in another country is decided by that country&apos;s regulator, listed in the table above; follow its own published steps. Medcity Overseas guides applications to study routes, such as the MSc on our{" "}
+                        <TextLink href="/placement-assistance-nursing">
+                            UK nursing pathway
+                        </TextLink>
+                        , and does not offer jobs or placements. See also{" "}
+                        <TextLink href="/nursing-in-germany-for-indian-nurses">
+                            nursing in Germany for Indian nurses
+                        </TextLink>.
+                    </p>
+
+                    {/* Bottom accent */}
+                    <div className="mt-5 flex items-center gap-2">
+                        <span className="h-1 w-8 rounded-full bg-primary" />
+                        <span className="h-1 w-2 rounded-full bg-primary/30" />
+                        <span className="h-1 w-2 rounded-full bg-primary/15" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </Prose>
+</GuideSection>
 
                 <GuideSection title="English and German tests for nurses">
-                    <Prose>
-                        <p>
-                            English speaking regulators each set their own test scores, so check the regulator&apos;s page for the country you choose. Malta&apos;s{" "}
-                            <SourceLink href={REG.malta}>Council for Nurses and Midwives</SourceLink> is one example: IELTS Academic with an average of at least 6, or OET with grade B in speaking and C+ in writing, reading and listening. For Germany you need German, normally at B2 for recognition. On a UK Student visa you can usually{" "}
-                            <SourceLink href={REG.ukWork}>work up to 20 hours a week</SourceLink> in term time.
+    <Prose>
+        <div className="relative overflow-hidden rounded-3xl border border-slate-200/80 bg-gradient-to-br from-white via-slate-50 to-rose-50/60 p-5 shadow-sm sm:p-7 lg:p-8">
+
+            {/* Decorative elements */}
+            <div className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full bg-primary/5 blur-3xl" />
+            <div className="pointer-events-none absolute -bottom-16 -left-16 h-40 w-40 rounded-full bg-slate-200/30 blur-3xl" />
+
+            <div className="relative">
+
+                {/* Intro */}
+                <div className="mb-7 flex items-start gap-4">
+                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-primary text-white shadow-md shadow-primary/20 sm:h-14 sm:w-14">
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="25"
+                            height="25"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="1.8"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            aria-hidden="true"
+                        >
+                            <path d="m5 8 6 4 6-4" />
+                            <path d="M3 4h18v16H3z" />
+                            <path d="M7 16h4" />
+                            <path d="M14 16h3" />
+                        </svg>
+                    </div>
+
+                    <div className="min-w-0">
+                        <h3 className="text-lg font-bold tracking-tight text-slate-900 sm:text-xl">
+                            Language proficiency requirements
+                        </h3>
+                        <p className="mt-1 text-sm leading-6 text-slate-500">
+                            Language standards differ depending on the nursing regulator and destination.
                         </p>
-                    </Prose>
-                    <AcademyNote subjects="IELTS, OET and German" />
-                </GuideSection>
+                    </div>
+                </div>
+
+                {/* Grid */}
+                <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
+
+                    {/* English tests */}
+                    <div className="group relative overflow-hidden rounded-2xl border border-rose-100 bg-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-primary/20 hover:shadow-lg sm:p-6">
+
+                        <div className="mb-5 flex items-center justify-between">
+                            <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-rose-50 text-primary">
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="22"
+                                    height="22"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    strokeWidth="1.8"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    aria-hidden="true"
+                                >
+                                    <path d="M12 2a10 10 0 1 0 10 10" />
+                                    <path d="M12 6v6l4 2" />
+                                    <path d="M16 2h6v6" />
+                                    <path d="m22 2-7 7" />
+                                </svg>
+                            </div>
+
+                            <span className="rounded-full bg-rose-50 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-primary">
+                                English
+                            </span>
+                        </div>
+
+                        <h4 className="text-base font-bold text-slate-900">
+                            English language tests
+                        </h4>
+
+                        <p className="mt-2 text-sm leading-6 text-slate-600">
+                            English-speaking regulators set their own test-score requirements. Always verify the criteria for your chosen destination.
+                        </p>
+
+                        <div className="mt-4 space-y-3">
+
+                            <div className="rounded-xl bg-slate-50 p-4">
+                                <p className="text-xs font-bold uppercase tracking-wider text-slate-500">
+                                    IELTS Academic
+                                </p>
+                                <p className="mt-1 text-2xl font-black text-slate-900">
+                                    6 <span className="text-sm font-medium text-slate-500">average</span>
+                                </p>
+                            </div>
+
+                            <div className="rounded-xl bg-slate-50 p-4">
+                                <p className="text-xs font-bold uppercase tracking-wider text-slate-500">
+                                    OET
+                                </p>
+                                <p className="mt-2 text-sm font-semibold text-slate-800">
+                                    B <span className="font-normal text-slate-500">in Speaking</span>
+                                </p>
+                                <p className="mt-1 text-sm font-semibold text-slate-800">
+                                    C+ <span className="font-normal text-slate-500">in Writing, Reading & Listening</span>
+                                </p>
+                            </div>
+
+                        </div>
+
+                        <div className="mt-5 border-t border-slate-100 pt-4">
+                            <p className="text-xs leading-5 text-slate-500">
+                                Example requirements from Malta&apos;s{" "}
+                                <SourceLink href={REG.malta}>
+                                    Council for Nurses and Midwives
+                                </SourceLink>.
+                            </p>
+                        </div>
+                    </div>
+
+                    {/* German */}
+                    <div className="group relative overflow-hidden rounded-2xl border border-amber-100 bg-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-amber-200 hover:shadow-lg sm:p-6">
+
+                        <div className="mb-5 flex items-center justify-between">
+                            <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-amber-50 text-amber-700">
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="22"
+                                    height="22"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    strokeWidth="1.8"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    aria-hidden="true"
+                                >
+                                    <path d="M4 5h16" />
+                                    <path d="M4 19h16" />
+                                    <path d="M8 5v14" />
+                                    <path d="M16 5v14" />
+                                    <path d="m10 9 2 6 2-6" />
+                                </svg>
+                            </div>
+
+                            <span className="rounded-full bg-amber-50 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-amber-700">
+                                Germany
+                            </span>
+                        </div>
+
+                        <h4 className="text-base font-bold text-slate-900">
+                            German language proficiency
+                        </h4>
+
+                        <p className="mt-2 text-sm leading-6 text-slate-600">
+                            German language proficiency is required for nursing recognition in Germany.
+                        </p>
+
+                        <div className="mt-5 flex min-h-[155px] flex-col items-center justify-center rounded-2xl border border-amber-100 bg-gradient-to-br from-amber-50 to-orange-50/50 p-5 text-center">
+
+                            <span className="text-xs font-bold uppercase tracking-[0.2em] text-amber-700">
+                                Typical recognition level
+                            </span>
+
+                            <span className="mt-3 text-5xl font-black tracking-tight text-amber-800">
+                                B2
+                            </span>
+
+                            <span className="mt-2 text-sm font-medium text-amber-800/80">
+                                German language
+                            </span>
+                        </div>
+
+                        <div className="mt-5 border-t border-slate-100 pt-4">
+                            <p className="text-xs leading-5 text-slate-500">
+                                The required level and assessment may depend on the recognition process.
+                            </p>
+                        </div>
+                    </div>
+
+                    {/* UK work */}
+                    <div className="group relative overflow-hidden rounded-2xl border border-blue-100 bg-white p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-blue-200 hover:shadow-lg sm:p-6 md:col-span-2 xl:col-span-1">
+
+                        <div className="mb-5 flex items-center justify-between">
+                            <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-blue-50 text-blue-700">
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="22"
+                                    height="22"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    strokeWidth="1.8"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    aria-hidden="true"
+                                >
+                                    <circle cx="12" cy="12" r="10" />
+                                    <path d="M12 6v6l4 2" />
+                                </svg>
+                            </div>
+
+                            <span className="rounded-full bg-blue-50 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-blue-700">
+                                UK
+                            </span>
+                        </div>
+
+                        <h4 className="text-base font-bold text-slate-900">
+                            Student visa work allowance
+                        </h4>
+
+                        <p className="mt-2 text-sm leading-6 text-slate-600">
+                            Eligible students can usually work part-time during term time, subject to visa conditions.
+                        </p>
+
+                        <div className="mt-5 flex min-h-[155px] flex-col items-center justify-center rounded-2xl border border-blue-100 bg-gradient-to-br from-blue-50 to-indigo-50/50 p-5 text-center">
+
+                            <span className="text-xs font-bold uppercase tracking-[0.2em] text-blue-700">
+                                Term-time allowance
+                            </span>
+
+                            <span className="mt-3 text-5xl font-black tracking-tight text-blue-900">
+                                20
+                            </span>
+
+                            <span className="mt-1 text-sm font-semibold text-blue-800">
+                                hours per week
+                            </span>
+                        </div>
+
+                        <div className="mt-5 border-t border-slate-100 pt-4">
+                            <p className="text-xs leading-5 text-slate-500">
+                                Read the{" "}
+                                <SourceLink href={REG.ukWork}>
+                                    UK Student visa work rules
+                                </SourceLink>{" "}
+                                for the applicable restrictions.
+                            </p>
+                        </div>
+                    </div>
+
+                </div>
+
+                {/* Bottom note */}
+                <div className="mt-6 flex items-start gap-3 rounded-xl border border-slate-200/70 bg-white/80 p-4 sm:p-5">
+                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-slate-100 text-slate-600">
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="19"
+                            height="19"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="1.8"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            aria-hidden="true"
+                        >
+                            <circle cx="12" cy="12" r="10" />
+                            <path d="M12 16v-4" />
+                            <path d="M12 8h.01" />
+                        </svg>
+                    </div>
+
+                    <p className="text-sm leading-6 text-slate-600">
+                        Requirements can change. Always refer to the official regulator and visa guidance before applying.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </Prose>
+
+    <AcademyNote subjects="IELTS, OET and German" />
+</GuideSection>
 
                 <FaqList path={PATH} faqs={faqs} schema={false} title="Study abroad for nurses: " />
 
