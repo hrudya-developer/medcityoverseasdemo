@@ -422,7 +422,7 @@ export default function BlogArticle({ post, related, replacementBody = null, sou
                   )}
 
                   <OfficialSources
-                    className="mt-12 !px-0"
+                    className="mt-12 !px-10 [&>ul>li>a>div:nth-child(2)]:!hidden"
                     title="Official sources"
                     intro="Rules and requirements change. Check the latest details on these official websites."
                     links={sources}
