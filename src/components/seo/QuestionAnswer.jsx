@@ -63,7 +63,7 @@ export default function QuestionAnswer({
                 }`}
             >
                 {/* Decorative background */}
-                <div
+                {/* <div
                     aria-hidden="true"
                     className="pointer-events-none absolute inset-0 z-0"
                     style={{
@@ -73,7 +73,7 @@ export default function QuestionAnswer({
                         backgroundSize: "32px 32px",
                         maskImage: "linear-gradient(to bottom, black, transparent 95%)",
                     }}
-                />
+                /> */}
                 <div
                     aria-hidden="true"
                     className={`pointer-events-none absolute -right-16 -top-20 z-0 h-48 w-48 rounded-full blur-3xl sm:h-64 sm:w-64 ${
