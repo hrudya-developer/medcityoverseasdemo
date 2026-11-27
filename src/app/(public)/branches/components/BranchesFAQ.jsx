@@ -111,7 +111,7 @@ export default function BranchesFAQ() {
                     }
                     className="flex w-full items-center justify-between gap-5 px-5 py-5 text-left sm:px-6"
                   >
-                    <span className="text-base font-extrabold leading-7 text-slate-900 sm:text-lg">
+                    <span className="text-[14px] font-extrabold leading-7 text-slate-900 sm:text-[15px]">
                       {faq.question}
                     </span>
 

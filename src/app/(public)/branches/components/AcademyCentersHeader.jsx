@@ -520,11 +520,7 @@ export default function AcademyCentersHeader({
                   width={408}
                   height={612}
                   priority
-                  sizes="
-                    (max-width: 640px) 260px,
-                    (max-width: 1024px) 330px,
-                    360px
-                  "
+                  sizes="(max-width: 640px) 260px, (max-width: 1024px) 330px, 360px"
                   className="
                     h-auto
                     w-[260px]

@@ -968,13 +968,13 @@ export default async function BranchesPage() {
             />
 
             <section aria-labelledby="all-branches-heading" className="mx-auto max-w-6xl px-4 pb-14 sm:px-6 lg:px-8">
-              <h2 id="all-branches-heading" className="text-2xl font-black text-slate-900 sm:text-3xl">
+              <h2 id="all-branches-heading" className="text-2xl font-black text-slate-900 sm:text-3xl mt-10">
                 All {centers.length} Medcity branches
               </h2>
 
               <div className="mt-6 overflow-x-auto rounded-2xl border border-slate-200 bg-white">
                 <table className="w-full min-w-[640px] text-left text-sm">
-                  <thead className="bg-slate-50 text-xs font-extrabold uppercase tracking-[0.08em] text-slate-500">
+                  <thead className="bg-darkPrimary text-xs font-extrabold uppercase tracking-[0.08em] text-white">
                     <tr>
                       <th scope="col" className="px-4 py-3">Branch</th>
                       <th scope="col" className="px-4 py-3">Town</th>
