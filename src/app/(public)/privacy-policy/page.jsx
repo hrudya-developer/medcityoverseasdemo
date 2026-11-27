@@ -254,7 +254,7 @@ export default function PrivacyPolicyPage() {
                 />
 
                 <OfficialSources
-                    className="mt-12 !px-0"
+                    className="mt-12 !px-10"
                     title="Data protection in India"
                     intro="India's data protection law is administered by the Ministry of Electronics and Information Technology."
                     links={[
