@@ -1,4 +1,14 @@
 import Link from "next/link";
+import {
+    ArrowUpRight,
+    BookOpen,
+    Building2,
+    Compass,
+    GraduationCap,
+    MessageCircle,
+    Search,
+    Stethoscope,
+} from "lucide-react";
 
 import OfficialSources from "@/components/seo/OfficialSources";
 import QuickAnswer from "@/components/seo/QuickAnswer";
@@ -61,78 +71,104 @@ export function CourseLinks({ facts, universityPath, countrySlug, countryLive = 
             : { href: "/study-abroad-for-nurses", label: "Study abroad for nurses" }
         : null;
 
-    return (
-        <div className="space-y-12 bg-white py-14">
-            <section className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
-                <h2 className="text-2xl font-black text-slate-900 sm:text-3xl my-2 mb-10 text-center">More about {facts.university}</h2>
+    const links = [
+        ...(universityPath
+            ? [{
+                  href: universityPath,
+                  title: `All courses at ${facts.university}`,
+                  description: `Explore courses listed at ${facts.university}.`,
+                  icon: Building2,
+              }]
+            : []),
+        ...(countrySlug && universitiesIndexable
+            ? [{
+                  href: `/universities-in-${countrySlug}`,
+                  title: `Universities in ${facts.country}`,
+                  description: `Compare universities and find more study options in ${facts.country}.`,
+                  icon: GraduationCap,
+              }]
+            : []),
+        ...(countrySlug && countryLive
+            ? [{
+                  href: `/study-in-${countrySlug}`,
+                  title: `Study in ${facts.country} guide`,
+                  description: `Explore study information and guidance for ${facts.country}.`,
+                  icon: Compass,
+              }]
+            : []),
+        {
+            href: "/courses",
+            title: "Search all courses",
+            description: "Browse courses by subject, destination and level.",
+            icon: Search,
+        },
+        ...(courseGuide
+            ? [{
+                  href: courseGuide.href,
+                  title: `${courseGuide.label} for Indian students`,
+                  description: "Explore related courses and guidance for your study plans.",
+                  icon: BookOpen,
+              }]
+            : []),
+        ...(nursingGuide
+            ? [{
+                  href: nursingGuide.href,
+                  title: nursingGuide.label,
+                  description: "Compare nursing study routes and guidance for Indian students.",
+                  icon: Stethoscope,
+              }]
+            : []),
+        {
+            href: "/contact-us",
+            title: "Book a counselling session",
+            description: "Talk with our team about courses and your next steps.",
+            icon: MessageCircle,
+        },
+    ];
 
-                <ul className="mt-5 grid gap-3 sm:grid-cols-2">
-                    {universityPath && (
-                        <li>
+    return (
+        <div className="space-y-14 bg-gradient-to-b from-slate-50 via-white to-rose-50/40 py-16 sm:py-20">
+            <section className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+                <header className="mx-auto mb-10 max-w-2xl text-center sm:mb-12">
+                    <span className="inline-flex items-center gap-2 rounded-full border border-rose-100 bg-white px-4 py-2 text-xs font-bold uppercase tracking-[0.16em] text-primary shadow-sm">
+                        <BookOpen size={15} aria-hidden="true" />
+                        Explore more
+                    </span>
+                    <h2 className="mt-5 text-2xl font-black tracking-tight text-slate-900 sm:text-3xl lg:text-4xl">
+                        More about <span className="text-primary">{facts.university}</span>
+                    </h2>
+                    <p className="mt-4 text-sm leading-7 text-slate-600 sm:text-base">
+                        Find related courses, destination information and support for your next step.
+                    </p>
+                    <div aria-hidden="true" className="mx-auto mt-6 h-1 w-16 rounded-full bg-gradient-to-r from-primary to-orange-300" />
+                </header>
+
+                <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                    {links.map(({ href, title, description, icon: Icon }, index) => (
+                        <li key={`${href}-${index}`} className="h-full">
                             <Link
-                                href={universityPath}
-                                className="block rounded-2xl border border-slate-200 p-4 font-bold text-white text-center bg-darkPrimary transition hover:border-primary/30 hover:text-primary"
+                                href={href}
+                                className="group flex h-full min-h-44 flex-col rounded-2xl border border-slate-200/80 bg-white p-5 shadow-[0_8px_24px_rgba(15,23,42,0.06)] transition duration-300 hover:-translate-y-1 hover:border-primary/30 hover:shadow-[0_18px_40px_rgba(15,23,42,0.12)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 sm:p-6"
                             >
-                                All courses at {facts.university}
+                                <span className="flex items-start justify-between gap-4">
+                                    <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-rose-50 text-primary transition-colors group-hover:bg-primary group-hover:text-white">
+                                        <Icon size={22} strokeWidth={1.8} aria-hidden="true" />
+                                    </span>
+                                    <ArrowUpRight
+                                        size={19}
+                                        aria-hidden="true"
+                                        className="mt-1 shrink-0 text-slate-400 transition duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-primary"
+                                    />
+                                </span>
+                                <span className="mt-5 text-base font-bold leading-6 text-slate-900 transition-colors group-hover:text-primary">
+                                    {title}
+                                </span>
+                                <span className="mt-2 text-sm leading-6 text-slate-600">
+                                    {description}
+                                </span>
                             </Link>
                         </li>
-                    )}
-                    {countrySlug && universitiesIndexable && (
-                        <li>
-                            <Link
-                                href={`/universities-in-${countrySlug}`}
-                                className="block rounded-2xl border border-slate-200 p-4 font-bold text-white bg-darkPrimary text-center transition hover:border-primary/30 hover:text-primary"
-                            >
-                                Universities in {facts.country}
-                            </Link>
-                        </li>
-                    )}
-                    {countrySlug && countryLive && (
-                        <li>
-                            <Link
-                                href={`/study-in-${countrySlug}`}
-                                className="block rounded-2xl border border-slate-200 p-4 font-bold text-white bg-darkPrimary text-center transition hover:border-primary/30 hover:text-primary"
-                            >
-                                Study in {facts.country} guide
-                            </Link>
-                        </li>
-                    )}
-                    <li>
-                        <Link
-                            href="/courses"
-                            className="block rounded-2xl border border-slate-200 p-4 font-bold text-white bg-darkPrimary text-center transition hover:border-primary/30 hover:text-primary"
-                        >
-                            Search all courses
-                        </Link>
-                    </li>
-                    {courseGuide && (
-                        <li>
-                            <Link
-                                href={courseGuide.href}
-                                className="block rounded-2xl border border-slate-200 p-4 font-bold text-white bg-darkPrimary text-center transition hover:border-primary/30 hover:text-primary"
-                            >
-                                {courseGuide.label} for Indian students
-                            </Link>
-                        </li>
-                    )}
-                    {nursingGuide && (
-                        <li>
-                            <Link
-                                href={nursingGuide.href}
-                                className="block rounded-2xl border border-slate-200 p-4 font-bold text-white bg-darkPrimary text-center transition hover:border-primary/30 hover:text-primary"
-                            >
-                                {nursingGuide.label}
-                            </Link>
-                        </li>
-                    )}
-                    <li>
-                        <Link
-                            href="/contact-us"
-                            className="block rounded-2xl border border-slate-200 p-4 font-bold text-white bg-darkPrimary text-center transition hover:border-primary/30 hover:text-primary"
-                        >
-                            Book a counselling session
-                        </Link>
-                    </li>
+                    ))}
                 </ul>
             </section>
 
