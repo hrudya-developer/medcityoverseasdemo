@@ -44,7 +44,7 @@ export default function ProgramsSection() {
             aria-labelledby="programs-heading"
             className="scroll-mt-28 overflow-visible"
         >
-            <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 my-5">
                 <div
                     className="mb-14 w-full overflow-visible bg-contain bg-top bg-no-repeat pb-4"
                     style={{
