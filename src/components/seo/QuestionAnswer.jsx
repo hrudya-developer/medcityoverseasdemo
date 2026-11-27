@@ -56,7 +56,7 @@ export default function QuestionAnswer({
             className={`relative isolate mx-auto w-full min-w-0 max-w-7xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8 lg:py-10 ${className}`}
         >
             <div
-                className={`relative overflow-hidden rounded-[24px] border p-5 sm:rounded-[30px] sm:p-8 lg:p-10 ${
+                className={`relative isolate overflow-hidden rounded-[24px] border p-5 sm:rounded-[30px] sm:p-8 lg:p-10 ${
                     dark
                         ? "border-white/15 bg-white/[0.06] shadow-xl"
                         : "border-slate-100 bg-gradient-to-br from-white via-white to-pink-50/40 shadow-[0_12px_45px_rgba(15,23,42,0.06)]"
@@ -65,7 +65,18 @@ export default function QuestionAnswer({
                 {/* Decorative background */}
                 <div
                     aria-hidden="true"
-                    className={`pointer-events-none absolute -right-16 -top-20 h-48 w-48 rounded-full blur-3xl sm:h-64 sm:w-64 ${
+                    className="pointer-events-none absolute inset-0 z-0"
+                    style={{
+                        backgroundImage: dark
+                            ? "linear-gradient(rgba(255,255,255,0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.08) 1px, transparent 1px)"
+                            : "linear-gradient(rgba(148,163,184,0.12) 1px, transparent 1px), linear-gradient(90deg, rgba(148,163,184,0.12) 1px, transparent 1px)",
+                        backgroundSize: "32px 32px",
+                        maskImage: "linear-gradient(to bottom, black, transparent 95%)",
+                    }}
+                />
+                <div
+                    aria-hidden="true"
+                    className={`pointer-events-none absolute -right-16 -top-20 z-0 h-48 w-48 rounded-full blur-3xl sm:h-64 sm:w-64 ${
                         dark
                             ? "bg-pink-500/10"
                             : "bg-pink-100/40"
@@ -73,12 +84,12 @@ export default function QuestionAnswer({
                 />
 
                 {/* Accent line */}
-                <div className="mb-5 h-1.5 w-14 rounded-full bg-primary sm:mb-6 sm:w-16" />
+                <div className="relative z-10 mb-5 h-1.5 w-14 rounded-full bg-primary sm:mb-6 sm:w-16" />
 
                 {/* Eyebrow */}
                 {eyebrow && (
                     <p
-                        className={`mb-3 text-[11px] font-extrabold uppercase tracking-[0.16em] sm:text-xs sm:tracking-[0.2em] ${
+                        className={`relative z-10 mb-3 text-[11px] font-extrabold uppercase tracking-[0.16em] sm:text-xs sm:tracking-[0.2em] ${
                             dark
                                 ? "text-yellow-300"
                                 : "text-secondary"
@@ -90,7 +101,7 @@ export default function QuestionAnswer({
 
                 {/* Question */}
                 <h2
-                    className={`relative break-words text-[23px] font-black leading-[1.3] tracking-tight sm:text-3xl lg:text-[36px] ${
+                    className={`relative z-10 break-words text-[23px] font-black leading-[1.3] tracking-tight sm:text-3xl lg:text-[36px] ${
                         dark
                             ? "text-white"
                             : "text-[#071D49]"
@@ -101,7 +112,7 @@ export default function QuestionAnswer({
 
                 {/* Answer */}
                 <div
-                    className={`relative mt-5 rounded-2xl border-l-[3px] p-4 sm:mt-6 sm:p-6 ${
+                    className={`relative z-10 mt-5 rounded-2xl border-l-[3px] p-4 sm:mt-6 sm:p-6 ${
                         dark
                             ? "border-l-yellow-300 bg-white/10"
                             : "border-l-gray-200 bg-white shadow-[0_4px_20px_rgba(15,23,42,0.04)]"
@@ -121,7 +132,7 @@ export default function QuestionAnswer({
                 {/* Points */}
                 {points.length > 0 && (
                     <List
-                        className="relative mt-6 grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-5"
+                        className="relative z-10 mt-6 grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-5"
                     >
                         {points.map((point, index) => {
                             const style =

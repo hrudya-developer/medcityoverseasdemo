@@ -52,28 +52,28 @@ export default async function QuickAnswer({
       icon: GraduationCap,
       value: "10,000+",
       label: "Students Guided",
-      bg: "bg-[#fff0f5]",
+      gradient: "from-[#fff0f5] to-white",
       iconColor: "text-[#d41462]",
     },
     {
       icon: MapPin,
       value: "25+",
       label: "Study Destinations",
-      bg: "bg-[#eaf7ff]",
+      gradient: "from-[#eaf7ff] to-white",
       iconColor: "text-[#d41462]",
     },
     {
       icon: Award,
       value: "18",
       label: "Branches in South India",
-      bg: "bg-[#fff7ec]",
+      gradient: "from-[#fff7ec] to-white",
       iconColor: "text-[#d41462]",
     },
     {
       icon: Users,
       value: "Expert",
       label: "Visa & Admission Support",
-      bg: "bg-[#edf9f3]",
+      gradient: "from-[#edf9f3] to-white",
       iconColor: "text-[#d41462]",
     },
   ];
@@ -86,35 +86,45 @@ export default async function QuickAnswer({
       <div
         className="
           relative isolate overflow-hidden
-          rounded-[24px] sm:rounded-[32px]
-          border border-pink-100/70
+          rounded-[26px] sm:rounded-[32px]
+          border border-white/80
           bg-gradient-to-br
-          from-[#f4f4f4]
+          from-[#fff7fa]
           via-white
-          to-[#f4f4f4]
-          shadow-[0_18px_55px_rgba(22,39,72,0.08)]
+          to-[#f2f8ff]
+          shadow-[0_22px_65px_rgba(22,39,72,0.10)]
         " data-aos="fade-left" data-aos-delay="100" data-aos-duration="800"
       >
         {/* Decorative background */}
-        {/* <div
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 z-0"
+          style={{
+            backgroundImage:
+              "linear-gradient(rgba(148,163,184,0.11) 1px, transparent 1px), linear-gradient(90deg, rgba(148,163,184,0.11) 1px, transparent 1px)",
+            backgroundSize: "32px 32px",
+            maskImage: "linear-gradient(to bottom, black, transparent 96%)",
+          }}
+        />
+        <div
           aria-hidden="true"
           className="
             pointer-events-none absolute
-            -left-24 -top-24
+            -left-24 -top-28 z-0
             h-64 w-64 rounded-full
-            bg-pink-100/50 blur-3xl
+            bg-pink-200/25 blur-3xl
+            sm:h-80 sm:w-80
           "
-        /> */}
-
-        {/* <div
+        />
+        <div
           aria-hidden="true"
           className="
             pointer-events-none absolute
-            -right-20 top-0
+            -right-24 top-1/4 z-0
             h-72 w-72 rounded-full
-            bg-sky-100/60 blur-3xl
+            bg-sky-200/25 blur-3xl
           "
-        /> */}
+        />
 
         {/* Main content */}
         <div
@@ -135,25 +145,26 @@ export default async function QuickAnswer({
               className="
                 inline-flex items-center gap-2
                 rounded-full
-                bg-[#fce8f0]
+                border border-pink-100
+                bg-white/85
                 px-4 py-2
-                text-sm font-bold
+                text-xs font-extrabold uppercase tracking-[0.14em]
                 text-[#c81058]
+                shadow-sm
               "
             >
-              <Sparkles size={17} aria-hidden="true" />
+              <Sparkles size={16} aria-hidden="true" />
               In Short
             </div>
 
             <h2
               className="
                 mt-5
-                text-2xl font-extrabold
+                text-[1.65rem] font-black leading-tight
                 tracking-tight
                 text-[#102c4e]
                 sm:text-3xl
-                xl:text-[38px]
-                xl:leading-tight
+                xl:text-[40px]
               "
             >
               About{" "}
@@ -209,27 +220,27 @@ export default async function QuickAnswer({
                         group flex min-w-0
                         flex-col items-center
                         justify-center
-                        rounded-[20px]
-                        border border-white/80
-                        ${feature.bg}
-                        px-3 py-5
+                        rounded-[20px] sm:rounded-[24px]
+                        border border-white/90
+                        bg-gradient-to-br ${feature.gradient}
+                        px-2.5 py-4 sm:px-4 sm:py-5
                         text-center
+                        shadow-[0_8px_24px_rgba(15,23,42,0.05)]
                         transition-all duration-300
-                        hover:-translate-y-1
-                        hover:shadow-lg
-                        sm:min-h-[165px]
-                        sm:rounded-[24px]
-                        sm:p-6
+                        hover:-translate-y-1 hover:shadow-[0_14px_32px_rgba(15,23,42,0.10)]
+                        sm:min-h-[160px] sm:p-5
                       `}
                     >
                       <div
                         className={`
-                          mb-3
+                          mb-2.5 flex h-10 w-10 items-center justify-center
+                          rounded-xl border border-white/80 bg-white/80 shadow-sm
+                          sm:mb-3 sm:h-12 sm:w-12
                           ${feature.iconColor}
                         `}
                       >
                         <Icon
-                          size={30}
+                          size={25}
                           strokeWidth={1.8}
                           aria-hidden="true"
                         />
@@ -237,7 +248,7 @@ export default async function QuickAnswer({
 
                       <p
                         className="
-                          text-xl font-extrabold
+                          text-lg font-black leading-tight
                           text-[#102c4e]
                           sm:text-2xl
                           lg:text-[28px]
@@ -249,8 +260,8 @@ export default async function QuickAnswer({
                       <p
                         className="
                           mt-1
-                          text-xs font-medium
-                          leading-5 text-slate-700
+                          max-w-[14ch] text-[11px] font-semibold
+                          leading-5 text-slate-600
                           sm:text-sm
                         "
                       >
@@ -286,13 +297,15 @@ export default async function QuickAnswer({
             className="
               relative z-10
               mx-4 mb-4
-              rounded-[20px]
+              rounded-[22px]
               bg-gradient-to-r
               from-[#103e6b]
               via-[#102e52]
               to-[#0c2342]
               px-4 py-5
               text-white
+              shadow-[0_14px_35px_rgba(12,35,66,0.22)]
+              ring-1 ring-white/10
               sm:mx-6 sm:mb-6
               sm:px-6
               lg:mx-10 lg:mb-8
