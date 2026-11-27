@@ -36,7 +36,7 @@ import {
     return (
       <section
         aria-labelledby="why-study-germany-heading"
-        className="relative overflow-hidden bg-white px-4 py-16 sm:px-6 lg:px-8 lg:py-20"
+        className="relative overflow-hidden bg-[#d9baed17] px-4 py-16 sm:px-6 lg:px-8 lg:py-20"
       >
         {/* Decorative backgrounds */}
         <div
